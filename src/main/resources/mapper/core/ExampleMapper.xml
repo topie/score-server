@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.sbs.database.core.dao.ExampleMapper">
+  <resultMap id="BaseResultMap" type="com.orange.sbs.database.core.model.Example">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="o_text" jdbcType="VARCHAR" property="oText" />
+    <result column="o_hidden" jdbcType="VARCHAR" property="oHidden" />
+    <result column="o_date" jdbcType="TIMESTAMP" property="oDate" />
+    <result column="o_datetime" jdbcType="TIMESTAMP" property="oDatetime" />
+    <result column="o_image" jdbcType="VARCHAR" property="oImage" />
+    <result column="o_file" jdbcType="VARCHAR" property="oFile" />
+    <result column="o_tree" jdbcType="INTEGER" property="oTree" />
+    <result column="o_select" jdbcType="INTEGER" property="oSelect" />
+    <result column="o_radio" jdbcType="INTEGER" property="oRadio" />
+    <result column="o_checkbox" jdbcType="INTEGER" property="oCheckbox" />
+  </resultMap>
+</mapper>
