@@ -26,7 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@DependsOn("flywayInitializer")
+//@DependsOn("flywayInitializer")
 public class WebSecurityConfiger extends WebSecurityConfigurerAdapter {
 
     @Autowired
