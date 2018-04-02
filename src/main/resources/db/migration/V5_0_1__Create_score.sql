@@ -223,6 +223,19 @@ CREATE TABLE t_batch_conf (
   DEFAULT CHARSET = utf8
   COMMENT '受理预约批次设置表';
 
+DROP TABLE IF EXISTS t_accept_address;
+CREATE TABLE t_accept_address (
+  id             INT(11) NOT NULL AUTO_INCREMENT
+  COMMENT 'id:hidden',
+  address        VARCHAR(128)     DEFAULT ''
+  COMMENT '地址:text',
+  address_detail VARCHAR(255)     DEFAULT ''
+  COMMENT '详细地址:textarea',
+  PRIMARY KEY (id)
+)
+  DEFAULT CHARSET = utf8
+  COMMENT '地址基础表';
+
 DROP TABLE IF EXISTS t_accept_date_conf;
 CREATE TABLE t_accept_date_conf (
   id                 INT(11)    NOT NULL AUTO_INCREMENT

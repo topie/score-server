@@ -15,7 +15,7 @@
                 '<div class="row">' +
                 '<div class="col-md-12" >' +
                 '<div class="panel panel-default" >' +
-                '<div class="panel-heading">${modelNameUpperCamel}</div>' +
+                '<div class="panel-heading">列表</div>' +
                 '<div class="panel-body" id="grid"></div>' +
                 '</div>' +
                 '</div>' +
