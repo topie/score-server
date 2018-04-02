@@ -56,12 +56,23 @@ public class Indicator {
     @Transient
     private List<Integer> material;
 
+    @Transient
+    private List<Integer> department;
+
     public List<Integer> getMaterial() {
         return material;
     }
 
     public void setMaterial(List<Integer> material) {
         this.material = material;
+    }
+
+    public List<Integer> getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(List<Integer> department) {
+        this.department = department;
     }
 
     /**

@@ -28,6 +28,16 @@ public class FormItem implements Serializable {
 
     private Map config;
 
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public Boolean getCode() {
         return code;
     }

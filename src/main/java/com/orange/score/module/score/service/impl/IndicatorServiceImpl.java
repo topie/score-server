@@ -3,6 +3,7 @@ package com.orange.score.module.score.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.BaseService;
+import com.orange.score.common.utils.TreeNode;
 import com.orange.score.database.score.dao.IndicatorMapper;
 import com.orange.score.database.score.model.Indicator;
 import com.orange.score.module.score.service.IIndicatorService;
@@ -50,6 +51,26 @@ public class IndicatorServiceImpl extends BaseService<Indicator> implements IInd
     @Override
     public int deleteBindMaterial(Integer id) {
         return indicatorMapper.deleteBindMaterial(id);
+    }
+
+    @Override
+    public List<Integer> selectBindDepartmentIds(Integer id) {
+        return indicatorMapper.selectBindDepartmentIds(id);
+    }
+
+    @Override
+    public int deleteBindDepartment(Integer id) {
+        return indicatorMapper.deleteBindDepartment(id);
+    }
+
+    @Override
+    public int insertBindDepartment(Integer id, Integer dId) {
+        return indicatorMapper.insertBindDepartment(id,dId);
+    }
+
+    @Override
+    public List<TreeNode> selectDepartmentTreeNodes() {
+        return indicatorMapper.selectDepartmentTreeNodes();
     }
 
 }

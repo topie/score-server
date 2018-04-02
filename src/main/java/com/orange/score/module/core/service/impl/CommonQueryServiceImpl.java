@@ -117,7 +117,9 @@ public class CommonQueryServiceImpl extends BaseService<CommonQuery> implements 
                     if (object.getBoolean("code") != null) {
                         item.setCode(true);
                     }
-
+                    if (StringUtils.isNotEmpty(object.getString("url"))) {
+                        item.setUrl(object.getString("url"));
+                    }
                     if (object.getJSONArray("items") != null) {
                         List<Option> options = new ArrayList<>();
                         for (Object i : object.getJSONArray("items")) {

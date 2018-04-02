@@ -5,6 +5,7 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.TreeNode;
 import com.orange.score.database.score.model.Indicator;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.score.service.IIndicatorService;
@@ -70,15 +71,29 @@ public class IndicatorController {
                 iIndicatorService.insertBindMaterial(indicator.getId(), mId);
             }
         }
+        if (CollectionUtils.isNotEmpty(indicator.getDepartment())) {
+            iIndicatorService.deleteBindDepartment(indicator.getId());
+            for (Integer dId : indicator.getDepartment()) {
+                iIndicatorService.insertBindDepartment(indicator.getId(), dId);
+            }
+        }
+
         return ResponseUtil.success();
     }
 
     @GetMapping("/detail")
     public Result detail(@RequestParam Integer id) {
         Indicator indicator = iIndicatorService.findById(id);
-        List<Integer> mtids = iIndicatorService.selectBindMaterialIds(id);
-        indicator.setMaterial(mtids);
+        List<Integer> mtIds = iIndicatorService.selectBindMaterialIds(id);
+        List<Integer> depIds = iIndicatorService.selectBindDepartmentIds(id);
+        indicator.setMaterial(mtIds);
+        indicator.setDepartment(depIds);
         return ResponseUtil.success(indicator);
+    }
 
+    @RequestMapping(value = "/department/treeNodes", method = RequestMethod.POST)
+    @ResponseBody
+    public List<TreeNode> treeNodes() {
+        return iIndicatorService.selectDepartmentTreeNodes();
     }
 }

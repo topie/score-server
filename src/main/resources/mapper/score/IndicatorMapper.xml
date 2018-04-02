@@ -17,11 +17,23 @@
     <insert id="insertBindMaterial">
         insert into t_relate_indicator_material(indicator_id,material_id) values(#{id},#{mId})
     </insert>
+    <insert id="insertBindDepartment">
+        insert into t_relate_indicator_role(indicator_id,role_id) values(#{id},#{dId})
+    </insert>
     <delete id="deleteBindMaterial">
         delete from t_relate_indicator_material where indicator_id=#{id}
     </delete>
+    <delete id="deleteBindDepartment">
+        delete from t_relate_indicator_role where indicator_id=#{id}
+    </delete>
     <select id="selectBindMaterialIds" resultType="int">
         select material_id from t_relate_indicator_material where indicator_id=#{id}
+    </select>
+    <select id="selectBindDepartmentIds" resultType="java.lang.Integer">
+        select role_id from t_relate_indicator_role where indicator_id=#{id}
+    </select>
+    <select id="selectDepartmentTreeNodes" resultType="com.orange.score.common.utils.TreeNode">
+        select id,role_name name,0 pId from d_role where id>2
     </select>
 
 </mapper>

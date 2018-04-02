@@ -20,4 +20,13 @@ public interface IIndicatorService extends IService<Indicator> {
     int insertBindMaterial(Integer id, Integer mId);
 
     int deleteBindMaterial(Integer id);
+
+    List<Integer> selectBindDepartmentIds(Integer id);
+
+    int deleteBindDepartment(Integer id);
+
+    int insertBindDepartment(Integer id, Integer dId);
+
+    List<TreeNode> selectDepartmentTreeNodes();
+
 }
