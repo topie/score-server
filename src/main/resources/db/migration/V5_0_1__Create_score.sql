@@ -22,34 +22,39 @@ CREATE TABLE t_person_info (
 
 DROP TABLE IF EXISTS t_material_info;
 CREATE TABLE t_material_info (
-  id     INT(11)      NOT NULL AUTO_INCREMENT
+  id          INT(11)      NOT NULL AUTO_INCREMENT
   COMMENT 'id',
-  name   VARCHAR(255) NOT NULL DEFAULT ''
-  COMMENT '材料名称',
-  c_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+  name        VARCHAR(255) NOT NULL DEFAULT ''
+  COMMENT '材料名',
+  note        VARCHAR(255)          DEFAULT ''
+  COMMENT '备注',
+  create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
+  add_user    VARCHAR(64)           DEFAULT ''
+  COMMENT '创建用户',
   PRIMARY KEY (id)
 )
   DEFAULT CHARSET = utf8
   COMMENT '材料信息表';
 
-
 DROP TABLE IF EXISTS t_indicator;
 CREATE TABLE t_indicator (
-  id        INT(11)      NOT NULL AUTO_INCREMENT
+  id          INT(11)      NOT NULL AUTO_INCREMENT
   COMMENT 'id',
-  category  VARCHAR(16)  NOT NULL DEFAULT ''
+  category    VARCHAR(16)  NOT NULL DEFAULT ''
   COMMENT '类别',
-  index_num INT(11)      NOT NULL DEFAULT 0
+  index_num   INT(11)      NOT NULL DEFAULT 0
   COMMENT '序号',
-  name      VARCHAR(64)  NOT NULL DEFAULT ''
+  name        VARCHAR(64)  NOT NULL DEFAULT ''
   COMMENT '指标',
-  note      VARCHAR(255) NOT NULL DEFAULT ''
+  note        VARCHAR(255) NOT NULL DEFAULT ''
   COMMENT '备注',
-  item_type INT(11)      NOT NULL DEFAULT 0
+  item_type   INT(11)      NOT NULL DEFAULT 0
   COMMENT '选项类型  0：单选题，1：填空题',
-  c_time    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+  create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
+  add_user    VARCHAR(64)           DEFAULT ''
+  COMMENT '创建用户',
   PRIMARY KEY (id)
 )
   DEFAULT CHARSET = utf8

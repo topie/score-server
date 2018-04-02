@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.orange.sbs.database.core.dao.CommonQueryMapper">
-    <resultMap id="BaseResultMap" type="com.orange.sbs.database.core.model.CommonQuery">
+<mapper namespace="com.orange.score.database.core.dao.CommonQueryMapper">
+    <resultMap id="BaseResultMap" type="com.orange.score.database.core.model.CommonQuery">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="query_name" property="queryName" jdbcType="VARCHAR"/>
         <result column="table_alias" property="tableAlias" jdbcType="VARCHAR"/>
@@ -15,6 +15,7 @@
     </resultMap>
     <select id="selectColumnsByTable" resultType="java.util.Map">
         select
+        distinct
         COLUMN_NAME dataColumn,
         DATA_TYPE dataType,
         COLUMN_COMMENT dataComment

@@ -42,7 +42,6 @@
                             };
                             columns.push(column);
                         }
-
                     });
                     var grid;
                     var options = {
@@ -66,7 +65,7 @@
                             cls: "btn-primary btn-sm",
                             handle: function (index, d) {
                                 var modal = $.orangeModal({
-                                    id: "edit_form",
+                                    id: "edit_form_modal",
                                     title: "编辑",
                                     destroy: true
                                 }).show();
@@ -133,7 +132,7 @@
                                 icon: "fa fa-plus",
                                 handle: function (grid) {
                                     var modal = $.orangeModal({
-                                        id: "add_modal",
+                                        id: "add_form_modal",
                                         title: "添加",
                                         destroy: true
                                     }).show();

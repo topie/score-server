@@ -28,7 +28,7 @@ public class ${modelNameUpperCamel}ServiceImpl extends BaseService<${modelNameUp
     @Override
     public PageInfo<${modelNameUpperCamel}> selectByFilterAndPage(${modelNameUpperCamel} ${modelNameLowerCamel}, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<${modelNameUpperCamel}> list = selectByFilter(example);
+        List<${modelNameUpperCamel}> list = selectByFilter(${modelNameLowerCamel});
         return new PageInfo<>(list);
     }
 

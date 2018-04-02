@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.orange.sbs.database.security.dao.RoleMapper">
-    <resultMap id="BaseResultMap" type="com.orange.sbs.database.security.model.Role">
+<mapper namespace="com.orange.score.database.security.dao.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.orange.score.database.security.model.Role">
         <!--
           WARNING - @mbggenerated
         -->
@@ -13,12 +13,12 @@
         <result column="insert_time" property="insertTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
-    <resultMap id="TreeNodeMap" type="com.orange.sbs.common.utils.TreeNode">
+    <resultMap id="TreeNodeMap" type="com.orange.score.common.utils.TreeNode">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="parent_id" property="pId" jdbcType="INTEGER"/>
         <result column="role_name" property="name" jdbcType="VARCHAR"/>
     </resultMap>
-    <resultMap id="HasRoleUser" type="com.orange.sbs.module.security.dto.HasRoleUserDTO">
+    <resultMap id="HasRoleUser" type="com.orange.score.module.security.dto.HasRoleUserDTO">
         <id column="user_id" property="userId" jdbcType="INTEGER"/>
         <result column="role_id" property="roleId" jdbcType="INTEGER"/>
         <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
@@ -92,7 +92,7 @@
     <select id="selectRoleIdByRoleName" resultType="java.lang.Integer">
         select id from d_role where role_name=#{roleName}
     </select>
-    <select id="selectRoleFunctions" resultType="com.orange.sbs.common.utils.TreeNode">
+    <select id="selectRoleFunctions" resultType="com.orange.score.common.utils.TreeNode">
         select distinct f.id,f.parent_id pid,f.function_name name
         from d_role_function rf left join d_function f
         on rf.function_id = f.id

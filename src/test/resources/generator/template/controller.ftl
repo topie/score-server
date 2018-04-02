@@ -1,13 +1,13 @@
 package ${basePackage}.module.${module}.controller;
 
 import com.github.pagehelper.PageInfo;
-import ${basePackage}.common.${module}.Result;
+import ${basePackage}.common.core.Result;
 import ${basePackage}.common.tools.plugins.FormItem;
 import ${basePackage}.common.utils.PageConvertUtil;
 import ${basePackage}.common.utils.ResponseUtil;
-import ${basePackage}.database.${module}.model.Example;
-import ${basePackage}.module.${module}.service.ICommonQueryService;
-import ${basePackage}.module.${module}.service.IExampleService;
+import ${basePackage}.database.${module}.model.${modelNameUpperCamel};
+import ${basePackage}.module.core.service.ICommonQueryService;
+import ${basePackage}.module.${module}.service.I${modelNameUpperCamel}Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
