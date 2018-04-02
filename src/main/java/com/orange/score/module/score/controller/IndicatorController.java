@@ -8,14 +8,15 @@ import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.Indicator;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.score.service.IIndicatorService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
-* Created by chenJz1012 on 2018-04-02.
-*/
+ * Created by chenJz1012 on 2018-04-02.
+ */
 @RestController
 @RequestMapping("/api/score/indicator")
 public class IndicatorController {
@@ -29,9 +30,9 @@ public class IndicatorController {
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(Indicator indicator,
-    @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-    @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-    PageInfo<Indicator> pageInfo = iIndicatorService.selectByFilterAndPage(indicator, pageNum, pageSize);
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        PageInfo<Indicator> pageInfo = iIndicatorService.selectByFilterAndPage(indicator, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -45,24 +46,39 @@ public class IndicatorController {
     @PostMapping("/insert")
     public Result insert(Indicator indicator) {
         iIndicatorService.save(indicator);
+        if (CollectionUtils.isNotEmpty(indicator.getMaterial())) {
+            for (Integer mId : indicator.getMaterial()) {
+                iIndicatorService.insertBindMaterial(indicator.getId(), mId);
+            }
+        }
         return ResponseUtil.success();
     }
 
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
         iIndicatorService.deleteById(id);
+        iIndicatorService.deleteBindMaterial(id);
         return ResponseUtil.success();
     }
 
     @PostMapping("/update")
     public Result update(Indicator indicator) {
         iIndicatorService.update(indicator);
+        if (CollectionUtils.isNotEmpty(indicator.getMaterial())) {
+            iIndicatorService.deleteBindMaterial(indicator.getId());
+            for (Integer mId : indicator.getMaterial()) {
+                iIndicatorService.insertBindMaterial(indicator.getId(), mId);
+            }
+        }
         return ResponseUtil.success();
     }
 
     @GetMapping("/detail")
     public Result detail(@RequestParam Integer id) {
-        Indicator modelNameLowerCamel = iIndicatorService.findById(id);
-        return ResponseUtil.success(modelNameLowerCamel);
+        Indicator indicator = iIndicatorService.findById(id);
+        List<Integer> mtids = iIndicatorService.selectBindMaterialIds(id);
+        indicator.setMaterial(mtids);
+        return ResponseUtil.success(indicator);
+
     }
 }

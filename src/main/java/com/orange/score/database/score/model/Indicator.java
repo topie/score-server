@@ -1,10 +1,12 @@
 package com.orange.score.database.score.model;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Table(name = "t_indicator")
 public class Indicator {
+
     /**
      * id
      */
@@ -50,6 +52,17 @@ public class Indicator {
      */
     @Column(name = "add_user")
     private String addUser;
+
+    @Transient
+    private List<Integer> material;
+
+    public List<Integer> getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(List<Integer> material) {
+        this.material = material;
+    }
 
     /**
      * 获取id

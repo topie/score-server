@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.orange.score.database.score.dao.IndicatorMapper">
-  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.Indicator">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="category" jdbcType="VARCHAR" property="category" />
-    <result column="index_num" jdbcType="INTEGER" property="indexNum" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="note" jdbcType="VARCHAR" property="note" />
-    <result column="item_type" jdbcType="INTEGER" property="itemType" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="add_user" jdbcType="VARCHAR" property="addUser" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.Indicator">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="category" jdbcType="VARCHAR" property="category"/>
+        <result column="index_num" jdbcType="INTEGER" property="indexNum"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="note" jdbcType="VARCHAR" property="note"/>
+        <result column="item_type" jdbcType="INTEGER" property="itemType"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="add_user" jdbcType="VARCHAR" property="addUser"/>
+    </resultMap>
+    <insert id="insertBindMaterial">
+        insert into t_relate_indicator_material(indicator_id,material_id) values(#{id},#{mId})
+    </insert>
+    <delete id="deleteBindMaterial">
+        delete from t_relate_indicator_material where indicator_id=#{id}
+    </delete>
+    <select id="selectBindMaterialIds" resultType="int">
+        select material_id from t_relate_indicator_material where indicator_id=#{id}
+    </select>
+
 </mapper>

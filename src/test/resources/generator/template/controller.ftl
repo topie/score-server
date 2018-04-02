@@ -62,7 +62,7 @@ public class ${modelNameUpperCamel}Controller {
 
     @GetMapping("/detail")
     public Result detail(@RequestParam Integer id) {
-        ${modelNameUpperCamel} modelNameLowerCamel = i${modelNameUpperCamel}Service.findById(id);
-        return ResponseUtil.success(modelNameLowerCamel);
+        ${modelNameUpperCamel} ${modelNameLowerCamel} = i${modelNameUpperCamel}Service.findById(id);
+        return ResponseUtil.success(${modelNameLowerCamel});
     }
 }

@@ -23,15 +23,15 @@ CREATE TABLE t_person_info (
 DROP TABLE IF EXISTS t_material_info;
 CREATE TABLE t_material_info (
   id          INT(11)      NOT NULL AUTO_INCREMENT
-  COMMENT 'id',
+  COMMENT 'id:hidden',
   name        VARCHAR(255) NOT NULL DEFAULT ''
-  COMMENT '材料名',
+  COMMENT '材料名:text',
   note        VARCHAR(255)          DEFAULT ''
-  COMMENT '备注',
+  COMMENT '备注:textarea',
   create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
-  COMMENT '创建时间',
+  COMMENT '创建时间:skip',
   add_user    VARCHAR(64)           DEFAULT ''
-  COMMENT '创建用户',
+  COMMENT '创建用户:skip',
   PRIMARY KEY (id)
 )
   DEFAULT CHARSET = utf8
@@ -83,8 +83,10 @@ CREATE TABLE t_indicator_item (
   COMMENT '分数',
   score_function VARCHAR(255)          DEFAULT ''
   COMMENT '分数计算',
-  c_time         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+  create_time    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
+  add_user       VARCHAR(64)           DEFAULT ''
+  COMMENT '创建用户',
   PRIMARY KEY (id)
 )
   DEFAULT CHARSET = utf8

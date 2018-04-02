@@ -2,18 +2,16 @@ package com.orange.score.module.score.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.orange.score.common.core.BaseService;
 import com.orange.score.database.score.dao.IndicatorMapper;
 import com.orange.score.database.score.model.Indicator;
 import com.orange.score.module.score.service.IIndicatorService;
-import com.orange.score.common.core.BaseService;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.util.List;
-
-
 
 /**
  * Created by chenJz1012 on 2018-04-02.
@@ -38,5 +36,21 @@ public class IndicatorServiceImpl extends BaseService<Indicator> implements IInd
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         return indicatorMapper.selectByCondition(condition);
     }
+
+    @Override
+    public List<Integer> selectBindMaterialIds(Integer id) {
+        return indicatorMapper.selectBindMaterialIds(id);
+    }
+
+    @Override
+    public int insertBindMaterial(Integer id, Integer mId) {
+        return indicatorMapper.insertBindMaterial(id, mId);
+    }
+
+    @Override
+    public int deleteBindMaterial(Integer id) {
+        return indicatorMapper.deleteBindMaterial(id);
+    }
+
 }
 
