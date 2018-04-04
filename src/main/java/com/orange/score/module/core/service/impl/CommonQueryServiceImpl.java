@@ -1,7 +1,6 @@
 package com.orange.score.module.core.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.BaseService;
@@ -89,8 +88,8 @@ public class CommonQueryServiceImpl extends BaseService<CommonQuery> implements 
     }
 
     @Override
-    public List<FormItem> selectFormItemsByTable(String table) {
-        List<FormItem> items = new ArrayList<>();
+    public List selectFormItemsByTable(String table) {
+        List items = new ArrayList<>();
         List<Map> list = new ArrayList<>();
         ColumnJson columnJson = new ColumnJson();
         columnJson.setTableName(table);
@@ -100,36 +99,7 @@ public class CommonQueryServiceImpl extends BaseService<CommonQuery> implements 
             JSONArray jsonArray = JSONArray.parseArray(columnJson.getColumnJson());
             if (columnJson.getType() == 0) {
                 for (Object o : jsonArray) {
-                    FormItem item = new FormItem();
-                    JSONObject object = (JSONObject) o;
-                    if (StringUtils.isNotEmpty(object.getString("id"))) {
-                        item.setId(object.getString("id"));
-                    }
-                    if (StringUtils.isNotEmpty(object.getString("name"))) {
-                        item.setName(object.getString("name"));
-                    }
-                    if (StringUtils.isNotEmpty(object.getString("type"))) {
-                        item.setType(object.getString("type"));
-                    }
-                    if (StringUtils.isNotEmpty(object.getString("label"))) {
-                        item.setLabel(object.getString("label"));
-                    }
-                    if (object.getBoolean("code") != null) {
-                        item.setCode(true);
-                    }
-                    if (StringUtils.isNotEmpty(object.getString("url"))) {
-                        item.setUrl(object.getString("url"));
-                    }
-                    if (object.getJSONArray("items") != null) {
-                        List<Option> options = new ArrayList<>();
-                        for (Object i : object.getJSONArray("items")) {
-                            Option option = new Option(((JSONObject) i).getString("text"),
-                                    ((JSONObject) i).get("value"));
-                            options.add(option);
-                        }
-                        item.setItems(options);
-                    }
-                    items.add(item);
+                    items.add(o);
                 }
                 return items;
             }

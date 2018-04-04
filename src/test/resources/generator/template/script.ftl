@@ -42,6 +42,10 @@
                             };
                             columns.push(column);
                         }
+                        if(dd.itemsUrl!='')
+                            dd.itemsUrl = App.href + dd.itemsUrl;
+                        if(dd.url!='')
+                            dd.url = App.href + dd.url;
                     });
                     var grid;
                     var options = {

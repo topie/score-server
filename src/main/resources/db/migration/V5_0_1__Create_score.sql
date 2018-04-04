@@ -1,24 +1,78 @@
 DROP TABLE IF EXISTS t_company_info;
 CREATE TABLE t_company_info (
-  id     INT(11)   NOT NULL AUTO_INCREMENT
-  COMMENT 'id',
-  c_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  id               INT(11)      NOT NULL AUTO_INCREMENT
+  COMMENT '主键ID',
+  user_name        VARCHAR(64)  NOT NULL DEFAULT ''
+  COMMENT '用户名',
+  password         VARCHAR(128) NOT NULL DEFAULT ''
+  COMMENT '用户密码',
+  company_name     VARCHAR(128) NOT NULL DEFAULT ''
+  COMMENT '企业名称',
+  company_type     INT(11)      NOT NULL DEFAULT 0
+  COMMENT '单位类型，1、企事业单位；2、个体工商户',
+  society_code     VARCHAR(128) NOT NULL DEFAULT ''
+  COMMENT '统一社会信用代码',
+  company_mobile   VARCHAR(32)  NOT NULL DEFAULT ''
+  COMMENT '单位联系电话',
+  operator         VARCHAR(64)  NOT NULL DEFAULT ''
+  COMMENT '经办人姓名',
+  operator_mobile  VARCHAR(32)  NOT NULL DEFAULT ''
+  COMMENT '经办人联系手机',
+  operator_address VARCHAR(255) NOT NULL DEFAULT ''
+  COMMENT '经办人联系地址',
+  remark           TEXT         NOT NULL
+  COMMENT '备注说明',
+  create_time      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
+  add_user         VARCHAR(64)           DEFAULT ''
+  COMMENT '创建用户',
+  status           INT(11)               DEFAULT 0
+  COMMENT '状态',
   PRIMARY KEY (id)
 )
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8
-  COMMENT '企业信息表';
+  COMMENT ='企业信息表';
+
 
 DROP TABLE IF EXISTS t_person_info;
 CREATE TABLE t_person_info (
-  id     INT(11)   NOT NULL AUTO_INCREMENT
-  COMMENT 'id',
-  c_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  id               INT(11)      NOT NULL AUTO_INCREMENT
+  COMMENT '主键ID',
+  id_number        VARCHAR(64)  NOT NULL DEFAULT ''
+  COMMENT '身份证号',
+  company_id       INT(11)      NOT NULL DEFAULT 0
+  COMMENT '单位ID',
+  id_card_positive VARCHAR(255) NOT NULL DEFAULT ''
+  COMMENT '身份证正面图片',
+  id_card_opposite VARCHAR(255) NOT NULL DEFAULT ''
+  COMMENT '身份证反面图片',
+  name             VARCHAR(64)  NOT NULL DEFAULT ''
+  COMMENT '姓名',
+  sex              INT(11)      NOT NULL DEFAULT '0'
+  COMMENT '性别：1、男；2、女',
+  birthday         DATE                  DEFAULT '0000-00-00'
+  COMMENT '出生日期',
+  age              INT(11)      NOT NULL DEFAULT '0'
+  COMMENT '年龄',
+  nation           VARCHAR(32)  NOT NULL DEFAULT ''
+  COMMENT '民族',
+  region           INT(11)      NOT NULL DEFAULT '0'
+  COMMENT '拟落户地区',
+  create_time      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
-  PRIMARY KEY (id)
+  update_time      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  COMMENT '更新时间',
+  add_user         VARCHAR(64)           DEFAULT ''
+  COMMENT '创建用户',
+  PRIMARY KEY (id),
+  KEY idx_id_number (id_number)
 )
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8
-  COMMENT '申请人信息表';
+  COMMENT ='申请人身份信息';
 
 DROP TABLE IF EXISTS t_material_info;
 CREATE TABLE t_material_info (
@@ -51,6 +105,8 @@ CREATE TABLE t_indicator (
   COMMENT '备注',
   item_type   INT(11)      NOT NULL DEFAULT 0
   COMMENT '选项类型  0：单选题，1：填空题',
+  score_rule  INT(11)      NOT NULL DEFAULT 0
+  COMMENT '打分类型  0：单一部门打分，1：取最高分，2：同分则给分，3：累加计分',
   create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
   add_user    VARCHAR(64)           DEFAULT ''
@@ -210,18 +266,30 @@ CREATE TABLE t_batch_conf (
   COMMENT '受理开始日期',
   accept_end        DATE                 DEFAULT '0000-00-00'
   COMMENT '受理结束日期',
-  accept_address_id INT(11)     NOT NULL DEFAULT 0
-  COMMENT '受理地点',
+  publish_begin     DATE                 DEFAULT '0000-00-00'
+  COMMENT '发布开始日期',
+  publish_end       DATE                 DEFAULT '0000-00-00'
+  COMMENT '发布结束日期',
+  notice_begin      DATE                 DEFAULT '0000-00-00'
+  COMMENT '公示开始日期',
+  notice_end        DATE                 DEFAULT '0000-00-00'
+  COMMENT '公示结束日期',
+  self_score_end    DATE                 DEFAULT '0000-00-00'
+  COMMENT '自测结束日期',
   indicator_type    INT(11)     NOT NULL DEFAULT 0
   COMMENT '指标方式 0:总人数选取 1:分数线选取',
   indicator_value   INT(11)              DEFAULT 0
   COMMENT '指标值',
   accept_user_count INT(11)              DEFAULT 0
   COMMENT '设置受理人数',
+  status            INT(11)              DEFAULT 0
+  COMMENT '当前状态',
+  process           INT(11)              DEFAULT 0
+  COMMENT '当前进程',
   PRIMARY KEY (id)
 )
   DEFAULT CHARSET = utf8
-  COMMENT '受理预约批次设置表';
+  COMMENT '批次设置表';
 
 DROP TABLE IF EXISTS t_accept_address;
 CREATE TABLE t_accept_address (
@@ -234,7 +302,7 @@ CREATE TABLE t_accept_address (
   PRIMARY KEY (id)
 )
   DEFAULT CHARSET = utf8
-  COMMENT '地址基础表';
+  COMMENT '受理地址基础表';
 
 DROP TABLE IF EXISTS t_accept_date_conf;
 CREATE TABLE t_accept_date_conf (
@@ -317,6 +385,34 @@ CREATE TABLE score_server.t_person_accept_info (
   COMMENT ='本期受理人员信息表';
 
 
+DROP TABLE IF EXISTS t_fake_record;
+CREATE TABLE t_fake_record (
+  id           INT(11)     NOT NULL AUTO_INCREMENT
+  COMMENT 'id',
+  user_name    VARCHAR(64) NOT NULL DEFAULT ''
+  COMMENT '姓名',
+  id_number    VARCHAR(32) NOT NULL DEFAULT ''
+  COMMENT '身份证号',
+  company_id   INT(11)     NOT NULL DEFAULT 0
+  COMMENT '企业ID',
+  company_name VARCHAR(128)         DEFAULT ''
+  COMMENT '企业名称',
+  company_code VARCHAR(128)         DEFAULT ''
+  COMMENT '企业代码',
+  batch_code   VARCHAR(64)          DEFAULT ''
+  COMMENT '批次号',
+  fake_content VARCHAR(255)         DEFAULT ''
+  COMMENT '虚假内容',
+  record_date  DATE                 DEFAULT '0000-00-00'
+  COMMENT '违规日期',
+  create_time  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  add_user     VARCHAR(64)          DEFAULT ''
+  COMMENT '创建用户',
+  PRIMARY KEY (id)
+)
+  DEFAULT CHARSET = utf8
+  COMMENT '虚假材料信息库';
 
 
 

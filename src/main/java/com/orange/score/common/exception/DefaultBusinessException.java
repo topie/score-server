@@ -14,6 +14,6 @@ public class DefaultBusinessException extends BusinessException {
 
     @Override
     protected String getPropertiesPath() {
-        return "/config/properties/business_code.properties";
+        return "business_code.properties";
     }
 }

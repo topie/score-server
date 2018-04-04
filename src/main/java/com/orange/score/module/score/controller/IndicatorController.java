@@ -48,8 +48,15 @@ public class IndicatorController {
     public Result insert(Indicator indicator) {
         iIndicatorService.save(indicator);
         if (CollectionUtils.isNotEmpty(indicator.getMaterial())) {
+            iIndicatorService.deleteBindMaterial(indicator.getId());
             for (Integer mId : indicator.getMaterial()) {
                 iIndicatorService.insertBindMaterial(indicator.getId(), mId);
+            }
+        }
+        if (CollectionUtils.isNotEmpty(indicator.getDepartment())) {
+            iIndicatorService.deleteBindDepartment(indicator.getId());
+            for (Integer dId : indicator.getDepartment()) {
+                iIndicatorService.insertBindDepartment(indicator.getId(), dId);
             }
         }
         return ResponseUtil.success();
@@ -77,7 +84,6 @@ public class IndicatorController {
                 iIndicatorService.insertBindDepartment(indicator.getId(), dId);
             }
         }
-
         return ResponseUtil.success();
     }
 

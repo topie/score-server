@@ -41,6 +41,9 @@ public class Indicator {
     @Column(name = "item_type")
     private Integer itemType;
 
+    @Column(name = "score_rule")
+    private Integer scoreRule;
+
     /**
      * 创建时间
      */
@@ -58,6 +61,14 @@ public class Indicator {
 
     @Transient
     private List<Integer> department;
+
+    public Integer getScoreRule() {
+        return scoreRule;
+    }
+
+    public void setScoreRule(Integer scoreRule) {
+        this.scoreRule = scoreRule;
+    }
 
     public List<Integer> getMaterial() {
         return material;

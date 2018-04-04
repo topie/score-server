@@ -13,28 +13,8 @@ public class BaseController {
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Date.class, new DateEditor());
         binder.registerCustomEditor(Double.class, new DoubleEditor());
         binder.registerCustomEditor(Integer.class, new IntegerEditor());
-    }
-
-    private class DateEditor extends PropertyEditorSupport {
-
-        @Override
-        public void setAsText(String text) throws IllegalArgumentException {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = null;
-            try {
-                date = format.parse(text);
-            } catch (ParseException e) {
-                format = new SimpleDateFormat("yyyy-MM-dd");
-                try {
-                    date = format.parse(text);
-                } catch (ParseException ignored) {
-                }
-            }
-            setValue(date);
-        }
     }
 
     public class DoubleEditor extends PropertiesEditor {

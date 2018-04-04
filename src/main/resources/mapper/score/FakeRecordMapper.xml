@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.FakeRecordMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.FakeRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="batch_code" jdbcType="VARCHAR" property="batchCode" />
+    <result column="fake_content" jdbcType="VARCHAR" property="fakeContent" />
+    <result column="record_date" jdbcType="DATE" property="recordDate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="add_user" jdbcType="VARCHAR" property="addUser" />
+  </resultMap>
+</mapper>

@@ -7,7 +7,7 @@ package com.orange.score.common.exception;
 public class AuthBusinessException extends BusinessException {
     @Override
     protected String getPropertiesPath() {
-        return "/config/properties/business_code.properties";
+        return "business_code.properties";
     }
 
     public AuthBusinessException(int errCode) {
