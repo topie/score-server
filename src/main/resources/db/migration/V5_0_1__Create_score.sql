@@ -35,45 +35,6 @@ CREATE TABLE t_company_info (
   DEFAULT CHARSET = utf8
   COMMENT ='企业信息表';
 
-
-DROP TABLE IF EXISTS t_person_info;
-CREATE TABLE t_person_info (
-  id               INT(11)      NOT NULL AUTO_INCREMENT
-  COMMENT '主键ID',
-  id_number        VARCHAR(64)  NOT NULL DEFAULT ''
-  COMMENT '身份证号',
-  company_id       INT(11)      NOT NULL DEFAULT 0
-  COMMENT '单位ID',
-  id_card_positive VARCHAR(255) NOT NULL DEFAULT ''
-  COMMENT '身份证正面图片',
-  id_card_opposite VARCHAR(255) NOT NULL DEFAULT ''
-  COMMENT '身份证反面图片',
-  name             VARCHAR(64)  NOT NULL DEFAULT ''
-  COMMENT '姓名',
-  sex              INT(11)      NOT NULL DEFAULT '0'
-  COMMENT '性别：1、男；2、女',
-  birthday         DATE                  DEFAULT '0000-00-00'
-  COMMENT '出生日期',
-  age              INT(11)      NOT NULL DEFAULT '0'
-  COMMENT '年龄',
-  nation           VARCHAR(32)  NOT NULL DEFAULT ''
-  COMMENT '民族',
-  region           INT(11)      NOT NULL DEFAULT '0'
-  COMMENT '拟落户地区',
-  create_time      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
-  COMMENT '创建时间',
-  update_time      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  COMMENT '更新时间',
-  add_user         VARCHAR(64)           DEFAULT ''
-  COMMENT '创建用户',
-  PRIMARY KEY (id),
-  KEY idx_id_number (id_number)
-)
-  ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8
-  COMMENT ='申请人身份信息';
-
 DROP TABLE IF EXISTS t_material_info;
 CREATE TABLE t_material_info (
   id          INT(11)      NOT NULL AUTO_INCREMENT

@@ -2,7 +2,6 @@ package com.orange.score.module.core.service;
 
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.IService;
-import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.database.core.model.CommonQuery;
 import com.orange.score.module.core.dto.CommonQueryDto;
 
@@ -20,6 +19,7 @@ public interface ICommonQueryService extends IService<CommonQuery> {
 
     void export(CommonQueryDto commonQueryDto, String path) throws IOException;
 
-    List<FormItem> selectFormItemsByTable(String table);
+    List selectFormItemsByTable(String table);
 
+    List selectSearchItemsByTable(String table);
 }

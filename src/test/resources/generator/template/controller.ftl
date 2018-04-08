@@ -11,7 +11,9 @@ import ${basePackage}.module.${module}.service.I${modelNameUpperCamel}Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
 * Created by ${author} on ${date}.
@@ -38,8 +40,12 @@ public class ${modelNameUpperCamel}Controller {
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
-        List<FormItem> list = iCommonQueryService.selectFormItemsByTable("${tableName}");
-        return ResponseUtil.success(list);
+        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("${tableName}");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("${tableName}");
+        Map result = new HashMap<>();
+        result.put("formItems", formItems);
+        result.put("searchItems", searchItems);
+        return ResponseUtil.success(result);
     }
 
     @PostMapping("/insert")

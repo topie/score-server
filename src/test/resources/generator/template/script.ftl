@@ -32,7 +32,10 @@
             url: App.href + "/api/${module}/${modelNameLowerCamel}/formItems",
             success: function (fd) {
                 if (fd.code === 200) {
-                    var formItems = fd.data;
+                    var formItems = fd.data.formItems;
+                    var searchItems = fd.data.searchItems;
+                    if (searchItems == null)
+                        searchItems = []
                     var columns = [];
                     $.each(formItems, function (ii, dd) {
                         if (dd.type === 'text' || dd.name==='${idField}') {
@@ -42,10 +45,12 @@
                             };
                             columns.push(column);
                         }
-                        if(dd.itemsUrl!='')
+                        if (dd.itemsUrl !== undefined){
                             dd.itemsUrl = App.href + dd.itemsUrl;
-                        if(dd.url!='')
+                        }
+                        if (dd.url !== undefined){
                             dd.url = App.href + dd.url;
+                        }
                     });
                     var grid;
                     var options = {
@@ -172,14 +177,7 @@
                         search: {
                             rowEleNum: 2,
                             //搜索栏元素
-                            items: [
-                                {
-                                    type: "text",
-                                    label: "ID",
-                                    name: "${idField}",
-                                    placeholder: "输入ID"
-                                }
-                            ]
+                            items: searchItems
                         }
                     };
                     grid = window.App.content.find("#grid").orangeGrid(options);

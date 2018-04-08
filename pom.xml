@@ -186,7 +186,7 @@
     </dependencies>
 
     <build>
-        <finalName>spring_boot_server</finalName>
+        <finalName>score-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

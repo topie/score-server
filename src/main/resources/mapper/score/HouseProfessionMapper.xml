@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.HouseProfessionMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.HouseProfession">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="identity_info_id" jdbcType="INTEGER" property="identityInfoId" />
+    <result column="profession_type" jdbcType="INTEGER" property="professionType" />
+    <result column="job_title_level" jdbcType="INTEGER" property="jobTitleLevel" />
+    <result column="job_position" jdbcType="VARCHAR" property="jobPosition" />
+    <result column="issuing_authority" jdbcType="VARCHAR" property="issuingAuthority" />
+    <result column="issuing_date" jdbcType="VARCHAR" property="issuingDate" />
+    <result column="certificate_code" jdbcType="VARCHAR" property="certificateCode" />
+    <result column="job_level" jdbcType="INTEGER" property="jobLevel" />
+    <result column="job_type" jdbcType="INTEGER" property="jobType" />
+    <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
+  </resultMap>
+</mapper>

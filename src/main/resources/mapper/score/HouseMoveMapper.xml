@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.HouseMoveMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.HouseMove">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="identity_info_id" jdbcType="INTEGER" property="identityInfoId" />
+    <result column="move_province" jdbcType="INTEGER" property="moveProvince" />
+    <result column="move_city" jdbcType="INTEGER" property="moveCity" />
+    <result column="move_region" jdbcType="INTEGER" property="moveRegion" />
+    <result column="move_address" jdbcType="VARCHAR" property="moveAddress" />
+    <result column="move_registered_office" jdbcType="VARCHAR" property="moveRegisteredOffice" />
+    <result column="house_nature" jdbcType="INTEGER" property="houseNature" />
+    <result column="settled_nature" jdbcType="INTEGER" property="settledNature" />
+    <result column="registered_office" jdbcType="VARCHAR" property="registeredOffice" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="witness" jdbcType="VARCHAR" property="witness" />
+    <result column="witness_phone" jdbcType="VARCHAR" property="witnessPhone" />
+    <result column="witness_address" jdbcType="VARCHAR" property="witnessAddress" />
+    <result column="region" jdbcType="INTEGER" property="region" />
+    <result column="marriage_status" jdbcType="INTEGER" property="marriageStatus" />
+    <result column="have_son" jdbcType="INTEGER" property="haveSon" />
+    <result column="son_number" jdbcType="INTEGER" property="sonNumber" />
+    <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
+  </resultMap>
+</mapper>

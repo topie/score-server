@@ -166,4 +166,19 @@ public class CommonQueryServiceImpl extends BaseService<CommonQuery> implements 
         return items;
     }
 
+    @Override
+    public List selectSearchItemsByTable(String table) {
+        List items = new ArrayList<>();
+        ColumnJson columnJson = new ColumnJson();
+        columnJson.setTableName(table);
+        List<ColumnJson> columnJsons = iColumnJsonService.selectByFilter(columnJson);
+        if (columnJsons.size() > 0) {
+            columnJson = columnJsons.get(0);
+            JSONArray jsonArray = JSONArray.parseArray(columnJson.getSearchConf());
+            items.addAll(jsonArray);
+            return items;
+        }
+        return null;
+    }
+
 }

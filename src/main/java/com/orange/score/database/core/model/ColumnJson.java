@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Table(name = "d_column_json")
 public class ColumnJson {
+
     /**
      * ID
      */
@@ -30,6 +31,17 @@ public class ColumnJson {
      */
     @Column(name = "column_info")
     private String columnInfo;
+
+    @Column(name = "search_conf")
+    private String searchConf;
+
+    public String getSearchConf() {
+        return searchConf;
+    }
+
+    public void setSearchConf(String searchConf) {
+        this.searchConf = searchConf;
+    }
 
     /**
      * 获取ID

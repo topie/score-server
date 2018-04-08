@@ -53,7 +53,7 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCodeByCustomModelName("t_company_info", "CompanyInfo", "id");
+        genCodeByCustomModelName("t_house_profession", "HouseProfession", "id");
     }
 
     /**
@@ -228,18 +228,20 @@ public class CodeGenerator {
             data.put("baseRequestMapping", modelNameConvertMappingPath(modelNameUpperCamel));
             data.put("modelNameUpperCamel", modelNameUpperCamel);
             String modelNameLowerCamel = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel);
+            String modelNameSnake = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, modelNameLowerCamel);
+            modelNameSnake = modelNameSnake.replaceAll("_", "-");
             data.put("modelNameLowerCamel", modelNameLowerCamel);
             data.put("basePackage", BASE_PACKAGE);
             data.put("module", MODULE);
             data.put("idField", idField);
 
-            File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_CONTROLLER + modelNameLowerCamel + ".js");
+            File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_CONTROLLER + modelNameSnake + ".js");
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
             cfg.getTemplate("script.ftl").process(data, new FileWriter(file));
 
-            System.out.println(modelNameLowerCamel + ".js 生成成功");
+            System.out.println(modelNameSnake + ".js 生成成功");
         } catch (Exception e) {
             throw new RuntimeException("生成Script失败", e);
         }

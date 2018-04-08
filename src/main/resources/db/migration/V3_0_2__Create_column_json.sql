@@ -10,6 +10,8 @@ CREATE TABLE d_column_json (
   COMMENT 'json:code',
   column_info TEXT         NULL
   COMMENT 'info:code',
+  search_conf TEXT NULL
+  COMMENT '搜索配置:code',
   PRIMARY KEY (id),
   UNIQUE KEY (table_name)
 )

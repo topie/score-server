@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.HouseOtherMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.HouseOther">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="identity_info_id" jdbcType="INTEGER" property="identityInfoId" />
+    <result column="applicant_type" jdbcType="INTEGER" property="applicantType" />
+    <result column="political_status" jdbcType="INTEGER" property="politicalStatus" />
+    <result column="soldier_meritorious" jdbcType="INTEGER" property="soldierMeritorious" />
+    <result column="culture_degree" jdbcType="INTEGER" property="cultureDegree" />
+    <result column="degree" jdbcType="INTEGER" property="degree" />
+    <result column="profession" jdbcType="VARCHAR" property="profession" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+    <result column="company_phone" jdbcType="VARCHAR" property="companyPhone" />
+    <result column="self_phone" jdbcType="VARCHAR" property="selfPhone" />
+    <result column="application_date" jdbcType="VARCHAR" property="applicationDate" />
+    <result column="social_security_pay" jdbcType="BIT" property="socialSecurityPay" />
+    <result column="provident_fund" jdbcType="BIT" property="providentFund" />
+    <result column="taxes" jdbcType="BIT" property="taxes" />
+    <result column="detention" jdbcType="BIT" property="detention" />
+    <result column="penalty" jdbcType="BIT" property="penalty" />
+    <result column="awards_title" jdbcType="INTEGER" property="awardsTitle" />
+    <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
+  </resultMap>
+</mapper>
