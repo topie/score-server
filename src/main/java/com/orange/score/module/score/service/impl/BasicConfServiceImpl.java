@@ -2,9 +2,9 @@ package com.orange.score.module.score.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.orange.score.database.score.dao.HouseProfessionMapper;
-import com.orange.score.database.score.model.HouseProfession;
-import com.orange.score.module.score.service.IHouseProfessionService;
+import com.orange.score.database.score.dao.BasicConfMapper;
+import com.orange.score.database.score.model.BasicConf;
+import com.orange.score.module.score.service.IBasicConfService;
 import com.orange.score.common.core.BaseService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,28 +30,28 @@ import com.orange.score.module.core.service.IColumnJsonService;
  */
 @Service
 @Transactional
-public class HouseProfessionServiceImpl extends BaseService<HouseProfession> implements IHouseProfessionService {
+public class BasicConfServiceImpl extends BaseService<BasicConf> implements IBasicConfService {
 
     @Autowired
-    private HouseProfessionMapper houseProfessionMapper;
+    private BasicConfMapper basicConfMapper;
 
     @Autowired
     private IColumnJsonService iColumnJsonService;
 
     @Override
-    public PageInfo<HouseProfession> selectByFilterAndPage(HouseProfession houseProfession, int pageNum, int pageSize) {
+    public PageInfo<BasicConf> selectByFilterAndPage(BasicConf basicConf, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<HouseProfession> list = selectByFilter(houseProfession);
+        List<BasicConf> list = selectByFilter(basicConf);
         return new PageInfo<>(list);
     }
 
     @Override
-    public List<HouseProfession> selectByFilter(HouseProfession houseProfession) {
-        Condition condition = new Condition(HouseProfession.class);
+    public List<BasicConf> selectByFilter(BasicConf basicConf) {
+        Condition condition = new Condition(BasicConf.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        if (houseProfession != null) {
+        if (basicConf != null) {
             ColumnJson columnJson = new ColumnJson();
-            columnJson.setTableName("t_house_profession");
+            columnJson.setTableName("t_basic_conf");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
             if (list.size() > 0) {
                 List<SearchItem> searchItems = new ArrayList<>();
@@ -65,7 +65,7 @@ public class HouseProfessionServiceImpl extends BaseService<HouseProfession> imp
                     searchItem.setType(((JSONObject) o).getString("type"));
                     searchItem.setSearchType(((JSONObject) o).getString("searchType"));
                     if (StringUtils.isNotEmpty(searchItem.getName())) {
-                        Object value = MethodUtil.invokeGet(houseProfession, searchItem.getName());
+                        Object value = MethodUtil.invokeGet(basicConf, searchItem.getName());
                         if (value != null) {
                             if (value instanceof String) {
                                 if (StringUtils.isNotEmpty((String) value)) searchItem.setValue(value);
@@ -79,7 +79,7 @@ public class HouseProfessionServiceImpl extends BaseService<HouseProfession> imp
                 SearchUtil.convert(criteria, searchItems);
             }
         }
-        return houseProfessionMapper.selectByCondition(condition);
+        return basicConfMapper.selectByCondition(condition);
     }
 }
 

@@ -1,57 +1,54 @@
-package com.orange.score.module.score.service.impl;
+package com.orange.score.module.core.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.orange.score.database.score.dao.HouseProfessionMapper;
-import com.orange.score.database.score.model.HouseProfession;
-import com.orange.score.module.score.service.IHouseProfessionService;
 import com.orange.score.common.core.BaseService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Condition;
-
-import java.util.List;
 import com.orange.score.common.utils.MethodUtil;
 import com.orange.score.common.utils.SearchItem;
 import com.orange.score.common.utils.SearchUtil;
+import com.orange.score.database.core.dao.DictMapper;
 import com.orange.score.database.core.model.ColumnJson;
+import com.orange.score.database.core.model.Dict;
+import com.orange.score.module.core.service.IColumnJsonService;
+import com.orange.score.module.core.service.IDictService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Condition;
+
 import java.util.ArrayList;
 import java.util.List;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.orange.score.module.core.service.IColumnJsonService;
-
-
 
 /**
  * Created by chenJz1012 on 2018-04-08.
  */
 @Service
 @Transactional
-public class HouseProfessionServiceImpl extends BaseService<HouseProfession> implements IHouseProfessionService {
+public class DictServiceImpl extends BaseService<Dict> implements IDictService {
 
     @Autowired
-    private HouseProfessionMapper houseProfessionMapper;
+    private DictMapper dictMapper;
 
     @Autowired
     private IColumnJsonService iColumnJsonService;
 
     @Override
-    public PageInfo<HouseProfession> selectByFilterAndPage(HouseProfession houseProfession, int pageNum, int pageSize) {
+    public PageInfo<Dict> selectByFilterAndPage(Dict dict, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<HouseProfession> list = selectByFilter(houseProfession);
+        List<Dict> list = selectByFilter(dict);
         return new PageInfo<>(list);
     }
 
     @Override
-    public List<HouseProfession> selectByFilter(HouseProfession houseProfession) {
-        Condition condition = new Condition(HouseProfession.class);
+    public List<Dict> selectByFilter(Dict dict) {
+        Condition condition = new Condition(Dict.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        if (houseProfession != null) {
+        if (dict != null) {
             ColumnJson columnJson = new ColumnJson();
-            columnJson.setTableName("t_house_profession");
+            columnJson.setTableName("d_dict");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
             if (list.size() > 0) {
                 List<SearchItem> searchItems = new ArrayList<>();
@@ -65,7 +62,7 @@ public class HouseProfessionServiceImpl extends BaseService<HouseProfession> imp
                     searchItem.setType(((JSONObject) o).getString("type"));
                     searchItem.setSearchType(((JSONObject) o).getString("searchType"));
                     if (StringUtils.isNotEmpty(searchItem.getName())) {
-                        Object value = MethodUtil.invokeGet(houseProfession, searchItem.getName());
+                        Object value = MethodUtil.invokeGet(dict, searchItem.getName());
                         if (value != null) {
                             if (value instanceof String) {
                                 if (StringUtils.isNotEmpty((String) value)) searchItem.setValue(value);
@@ -78,8 +75,11 @@ public class HouseProfessionServiceImpl extends BaseService<HouseProfession> imp
                 }
                 SearchUtil.convert(criteria, searchItems);
             }
+            if (StringUtils.isNotEmpty(dict.getAlias())) {
+                criteria.andEqualTo("alias", dict.getAlias());
+            }
         }
-        return houseProfessionMapper.selectByCondition(condition);
+        return dictMapper.selectByCondition(condition);
     }
 }
 

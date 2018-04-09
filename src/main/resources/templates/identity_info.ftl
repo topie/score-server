@@ -3,13 +3,21 @@
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">用人单位信息</div>
-            <div class="panel-body">
+            <div class="panel-body" id="companyInfo">
 
             </div>
         </div>
         <div class="panel panel-default">
             <!-- Default panel contents -->
-            <div class="panel-heading">申请人及随迁子女信息</div>
+            <div class="panel-heading">申请人基本信息</div>
+            <!-- Table -->
+            <div class="panel-body" id="identityInfo">
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">随迁信息</div>
             <!-- Table -->
             <div class="panel-body">
 

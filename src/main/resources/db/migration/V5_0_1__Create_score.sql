@@ -291,8 +291,20 @@ CREATE TABLE t_accept_date_conf (
 
 DROP TABLE IF EXISTS t_basic_conf;
 CREATE TABLE t_basic_conf (
-  id INT(11) NOT NULL AUTO_INCREMENT
-  COMMENT 'id',
+  id                   INT(11) NOT NULL AUTO_INCREMENT
+  COMMENT 'id:hidden',
+  self_test_score_line DECIMAL(8, 4)    DEFAULT 0
+  COMMENT '自测合格分数',
+  self_test_limit      INT(11)          DEFAULT 0
+  COMMENT '自测评次数限制',
+  appointment_limit    INT(11)          DEFAULT 0
+  COMMENT '预约限制次数',
+  company_edit_limit   INT(11)          DEFAULT 0
+  COMMENT '经办人信息修改次数限制',
+  publish_day          INT(11)          DEFAULT 0
+  COMMENT '发布天数',
+  notice_day           INT(11)          DEFAULT 0
+  COMMENT '公示天数',
   PRIMARY KEY (id)
 )
   DEFAULT CHARSET = utf8
