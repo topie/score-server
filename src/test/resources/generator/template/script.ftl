@@ -35,7 +35,7 @@
                     var formItems = fd.data.formItems;
                     var searchItems = fd.data.searchItems;
                     if (searchItems == null)
-                        searchItems = []
+                        searchItems = [];
                     var columns = [];
                     $.each(formItems, function (ii, dd) {
                         if (dd.type === 'text' || dd.name==='${idField}') {

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.BasicConfMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.BasicConf">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="self_test_score_line" jdbcType="DECIMAL" property="selfTestScoreLine" />
+    <result column="self_test_limit" jdbcType="INTEGER" property="selfTestLimit" />
+    <result column="appointment_limit" jdbcType="INTEGER" property="appointmentLimit" />
+    <result column="company_edit_limit" jdbcType="INTEGER" property="companyEditLimit" />
+    <result column="publish_day" jdbcType="INTEGER" property="publishDay" />
+    <result column="notice_day" jdbcType="INTEGER" property="noticeDay" />
+  </resultMap>
+</mapper>

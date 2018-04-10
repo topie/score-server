@@ -6,7 +6,7 @@ import com.orange.score.database.score.model.HouseMove;
 import java.util.List;
 
 /**
-* Created by chenJz1012 on 2018-04-08.
+* Created by chenJz1012 on 2018-04-10.
 */
 public interface IHouseMoveService extends IService<HouseMove> {
 

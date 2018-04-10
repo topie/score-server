@@ -6,15 +6,21 @@ import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.database.score.model.HouseMove;
+import com.orange.score.database.score.model.HouseOther;
+import com.orange.score.database.score.model.HouseProfession;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.core.service.ICommonQueryService;
+import com.orange.score.module.score.service.IHouseMoveService;
+import com.orange.score.module.score.service.IHouseOtherService;
+import com.orange.score.module.score.service.IHouseProfessionService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +37,15 @@ public class IdentityInfoController {
 
     @Autowired
     private ICommonQueryService iCommonQueryService;
+
+    @Autowired
+    private IHouseMoveService iHouseMoveService;
+
+    @Autowired
+    private IHouseProfessionService iHouseProfessionService;
+
+    @Autowired
+    private IHouseOtherService iHouseOtherService;
 
     @GetMapping(value = "/list")
     @ResponseBody
@@ -55,6 +70,18 @@ public class IdentityInfoController {
     @PostMapping("/insert")
     public Result insert(IdentityInfo identityInfo) {
         iIdentityInfoService.save(identityInfo);
+        HouseProfession houseProfession = new HouseProfession();
+        houseProfession.setIdentityInfoId(identityInfo.getId());
+        houseProfession.setcTime(new Date());
+        iHouseProfessionService.save(houseProfession);
+        HouseMove houseMove = new HouseMove();
+        houseMove.setIdentityInfoId(identityInfo.getId());
+        houseMove.setcTime(new Date());
+        iHouseMoveService.save(houseMove);
+        HouseOther houseOther = new HouseOther();
+        houseOther.setIdentityInfoId(identityInfo.getId());
+        houseOther.setcTime(new Date());
+        iHouseOtherService.save(houseOther);
         return ResponseUtil.success();
     }
 
@@ -83,7 +110,7 @@ public class IdentityInfoController {
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "identity_info.ftl", params);
         Map result = new HashMap();
-        result.put("html",html);
+        result.put("html", html);
         return ResponseUtil.success(result);
     }
 }

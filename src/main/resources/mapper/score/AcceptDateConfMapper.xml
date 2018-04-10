@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.AcceptDateConfMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.AcceptDateConf">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="batch_id" jdbcType="INTEGER" property="batchId" />
+    <result column="accept_date" jdbcType="DATE" property="acceptDate" />
+    <result column="week_day" jdbcType="VARCHAR" property="weekDay" />
+    <result column="am_user_count" jdbcType="INTEGER" property="amUserCount" />
+    <result column="pm_user_count" jdbcType="INTEGER" property="pmUserCount" />
+    <result column="am_remaining_count" jdbcType="INTEGER" property="amRemainingCount" />
+    <result column="pm_remaining_count" jdbcType="INTEGER" property="pmRemainingCount" />
+  </resultMap>
+</mapper>

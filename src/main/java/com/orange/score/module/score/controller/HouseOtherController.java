@@ -11,10 +11,12 @@ import com.orange.score.module.score.service.IHouseOtherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
-* Created by chenJz1012 on 2018-04-08.
+* Created by chenJz1012 on 2018-04-10.
 */
 @RestController
 @RequestMapping("/api/score/houseOther")
@@ -38,8 +40,12 @@ public class HouseOtherController {
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
-        List<FormItem> list = iCommonQueryService.selectFormItemsByTable("t_house_other");
-        return ResponseUtil.success(list);
+        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_house_other");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_house_other");
+        Map result = new HashMap<>();
+        result.put("formItems", formItems);
+        result.put("searchItems", searchItems);
+        return ResponseUtil.success(result);
     }
 
     @PostMapping("/insert")
