@@ -1,5 +1,7 @@
 package com.orange.score.module.security.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.BaseService;
 import com.orange.score.common.utils.TreeNode;
 import com.orange.score.database.security.dao.RoleMapper;
@@ -8,8 +10,6 @@ import com.orange.score.module.security.SecurityMetadataSourceImpl;
 import com.orange.score.module.security.UserCache;
 import com.orange.score.module.security.dto.HasRoleUserDTO;
 import com.orange.score.module.security.service.RoleService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +39,7 @@ public class RoleServiceImpl extends BaseService<Role> implements RoleService {
                 }
             }
         }
+        refreshAuthAndResource(role.getId());
         return result;
     }
 
@@ -53,6 +54,7 @@ public class RoleServiceImpl extends BaseService<Role> implements RoleService {
                 }
             }
         }
+        refreshAuthAndResource(role.getId());
         return result;
     }
 
