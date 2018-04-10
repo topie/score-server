@@ -49,6 +49,9 @@ public class HouseMoveServiceImpl extends BaseService<HouseMove> implements IHou
     public List<HouseMove> selectByFilter(HouseMove houseMove) {
         Condition condition = new Condition(HouseMove.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        if (houseMove.getIdentityInfoId() != null) {
+            criteria.andEqualTo("identityInfoId", houseMove.getIdentityInfoId());
+        }
         if (houseMove != null) {
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_house_move");

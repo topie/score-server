@@ -49,6 +49,9 @@ public class HouseOtherServiceImpl extends BaseService<HouseOther> implements IH
     public List<HouseOther> selectByFilter(HouseOther houseOther) {
         Condition condition = new Condition(HouseOther.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        if (houseOther.getIdentityInfoId() != null) {
+            criteria.andEqualTo("identityInfoId", houseOther.getIdentityInfoId());
+        }
         if (houseOther != null) {
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_house_other");

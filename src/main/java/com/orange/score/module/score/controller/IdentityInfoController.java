@@ -6,9 +6,6 @@ import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
-import com.orange.score.database.score.model.HouseMove;
-import com.orange.score.database.score.model.HouseOther;
-import com.orange.score.database.score.model.HouseProfession;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.score.service.IHouseMoveService;
@@ -20,7 +17,6 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,19 +66,7 @@ public class IdentityInfoController {
     @PostMapping("/insert")
     public Result insert(IdentityInfo identityInfo) {
         iIdentityInfoService.save(identityInfo);
-        HouseProfession houseProfession = new HouseProfession();
-        houseProfession.setIdentityInfoId(identityInfo.getId());
-        houseProfession.setcTime(new Date());
-        iHouseProfessionService.save(houseProfession);
-        HouseMove houseMove = new HouseMove();
-        houseMove.setIdentityInfoId(identityInfo.getId());
-        houseMove.setcTime(new Date());
-        iHouseMoveService.save(houseMove);
-        HouseOther houseOther = new HouseOther();
-        houseOther.setIdentityInfoId(identityInfo.getId());
-        houseOther.setcTime(new Date());
-        iHouseOtherService.save(houseOther);
-        return ResponseUtil.success();
+        return ResponseUtil.success(identityInfo.getId());
     }
 
     @PostMapping("/delete")

@@ -1,29 +1,26 @@
 package com.orange.score.module.score.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.orange.score.database.score.dao.HouseProfessionMapper;
-import com.orange.score.database.score.model.HouseProfession;
-import com.orange.score.module.score.service.IHouseProfessionService;
 import com.orange.score.common.core.BaseService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Condition;
-
-import java.util.List;
 import com.orange.score.common.utils.MethodUtil;
 import com.orange.score.common.utils.SearchItem;
 import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.database.core.model.ColumnJson;
+import com.orange.score.database.score.dao.HouseProfessionMapper;
+import com.orange.score.database.score.model.HouseProfession;
+import com.orange.score.module.core.service.IColumnJsonService;
+import com.orange.score.module.score.service.IHouseProfessionService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Condition;
+
 import java.util.ArrayList;
 import java.util.List;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.orange.score.module.core.service.IColumnJsonService;
-
-
 
 /**
  * Created by chenJz1012 on 2018-04-08.
@@ -49,6 +46,9 @@ public class HouseProfessionServiceImpl extends BaseService<HouseProfession> imp
     public List<HouseProfession> selectByFilter(HouseProfession houseProfession) {
         Condition condition = new Condition(HouseProfession.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        if (houseProfession.getIdentityInfoId() != null) {
+            criteria.andEqualTo("identityInfoId", houseProfession.getIdentityInfoId());
+        }
         if (houseProfession != null) {
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_house_profession");

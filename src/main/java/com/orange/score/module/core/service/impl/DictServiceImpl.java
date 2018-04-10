@@ -79,6 +79,7 @@ public class DictServiceImpl extends BaseService<Dict> implements IDictService {
                 criteria.andEqualTo("alias", dict.getAlias());
             }
         }
+        condition.orderBy("alias").asc().orderBy("sort").asc();
         return dictMapper.selectByCondition(condition);
     }
 }
