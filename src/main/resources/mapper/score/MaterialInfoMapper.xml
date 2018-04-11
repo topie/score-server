@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.orange.score.database.score.dao.MaterialInfoMapper">
-    <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.MaterialInfo">
-        <!--
-          WARNING - @mbg.generated
-        -->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="note" jdbcType="VARCHAR" property="note"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="add_user" jdbcType="VARCHAR" property="addUser"/>
-    </resultMap>
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.MaterialInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="add_user" jdbcType="VARCHAR" property="addUser" />
+    <result column="title_id" jdbcType="INTEGER" property="titleId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+  </resultMap>
     <select id="selectMaterialTreeNodes" resultType="com.orange.score.common.utils.TreeNode">
       select id,name,0 pId from t_material_info
     </select>

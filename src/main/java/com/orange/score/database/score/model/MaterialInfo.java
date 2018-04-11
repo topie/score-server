@@ -23,16 +23,27 @@ public class MaterialInfo {
     private String note;
 
     /**
-     * 创建时间
+     * 创建时间:skip
      */
     @Column(name = "create_time")
     private Date createTime;
 
     /**
-     * 创建用户
+     * 创建用户:skip
      */
     @Column(name = "add_user")
     private String addUser;
+
+    /**
+     * 材料标题ID
+     */
+    @Column(name = "title_id")
+    private Integer titleId;
+
+    /**
+     * 材料标题
+     */
+    private String title;
 
     /**
      * 获取id:hidden
@@ -89,38 +100,74 @@ public class MaterialInfo {
     }
 
     /**
-     * 获取创建时间
+     * 获取创建时间:skip
      *
-     * @return create_time - 创建时间
+     * @return create_time - 创建时间:skip
      */
     public Date getCreateTime() {
         return createTime;
     }
 
     /**
-     * 设置创建时间
+     * 设置创建时间:skip
      *
-     * @param createTime 创建时间
+     * @param createTime 创建时间:skip
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
     /**
-     * 获取创建用户
+     * 获取创建用户:skip
      *
-     * @return add_user - 创建用户
+     * @return add_user - 创建用户:skip
      */
     public String getAddUser() {
         return addUser;
     }
 
     /**
-     * 设置创建用户
+     * 设置创建用户:skip
      *
-     * @param addUser 创建用户
+     * @param addUser 创建用户:skip
      */
     public void setAddUser(String addUser) {
         this.addUser = addUser;
+    }
+
+    /**
+     * 获取材料标题ID
+     *
+     * @return title_id - 材料标题ID
+     */
+    public Integer getTitleId() {
+        return titleId;
+    }
+
+    /**
+     * 设置材料标题ID
+     *
+     * @param titleId 材料标题ID
+     */
+    public void setTitleId(Integer titleId) {
+        this.titleId = titleId;
+    }
+
+    /**
+     * 获取材料标题
+     *
+     * @return title - 材料标题
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * 设置材料标题
+     *
+     * @param title 材料标题
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

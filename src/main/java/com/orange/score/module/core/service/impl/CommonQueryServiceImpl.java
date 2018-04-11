@@ -172,10 +172,12 @@ public class CommonQueryServiceImpl extends BaseService<CommonQuery> implements 
         ColumnJson columnJson = new ColumnJson();
         columnJson.setTableName(table);
         List<ColumnJson> columnJsons = iColumnJsonService.selectByFilter(columnJson);
-        if (columnJsons.size() > 0 && StringUtils.isNotEmpty(columnJson.getSearchConf())) {
+        if (columnJsons.size() > 0) {
             columnJson = columnJsons.get(0);
-            JSONArray jsonArray = JSONArray.parseArray(columnJson.getSearchConf());
-            items.addAll(jsonArray);
+            if (StringUtils.isNotEmpty(columnJson.getSearchConf())) {
+                JSONArray jsonArray = JSONArray.parseArray(columnJson.getSearchConf());
+                items.addAll(jsonArray);
+            }
             return items;
         }
         return null;

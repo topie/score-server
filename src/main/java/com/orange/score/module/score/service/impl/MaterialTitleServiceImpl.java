@@ -1,58 +1,57 @@
 package com.orange.score.module.score.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.orange.score.database.score.dao.MaterialTitleMapper;
+import com.orange.score.database.score.model.MaterialTitle;
+import com.orange.score.module.score.service.IMaterialTitleService;
 import com.orange.score.common.core.BaseService;
-import com.orange.score.common.utils.MethodUtil;
-import com.orange.score.common.utils.SearchItem;
-import com.orange.score.common.utils.SearchUtil;
-import com.orange.score.common.utils.TreeNode;
-import com.orange.score.database.core.model.ColumnJson;
-import com.orange.score.database.score.dao.MaterialInfoMapper;
-import com.orange.score.database.score.model.MaterialInfo;
-import com.orange.score.module.core.service.IColumnJsonService;
-import com.orange.score.module.score.service.IMaterialInfoService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.util.List;
+import com.orange.score.common.utils.MethodUtil;
+import com.orange.score.common.utils.SearchItem;
+import com.orange.score.common.utils.SearchUtil;
+import com.orange.score.database.core.model.ColumnJson;
+import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.orange.score.module.core.service.IColumnJsonService;
+
+
 
 /**
  * Created by chenJz1012 on 2018-04-11.
  */
 @Service
 @Transactional
-public class MaterialInfoServiceImpl extends BaseService<MaterialInfo> implements IMaterialInfoService {
+public class MaterialTitleServiceImpl extends BaseService<MaterialTitle> implements IMaterialTitleService {
 
     @Autowired
-    private MaterialInfoMapper materialInfoMapper;
+    private MaterialTitleMapper materialTitleMapper;
 
     @Autowired
     private IColumnJsonService iColumnJsonService;
 
     @Override
-    public PageInfo<MaterialInfo> selectByFilterAndPage(MaterialInfo materialInfo, int pageNum, int pageSize) {
+    public PageInfo<MaterialTitle> selectByFilterAndPage(MaterialTitle materialTitle, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<MaterialInfo> list = selectByFilter(materialInfo);
+        List<MaterialTitle> list = selectByFilter(materialTitle);
         return new PageInfo<>(list);
     }
 
     @Override
-    public List<MaterialInfo> selectByFilter(MaterialInfo materialInfo) {
-        Condition condition = new Condition(MaterialInfo.class);
+    public List<MaterialTitle> selectByFilter(MaterialTitle materialTitle) {
+        Condition condition = new Condition(MaterialTitle.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        if (materialInfo != null) {
-            if (materialInfo.getTitleId() != null) {
-                criteria.andEqualTo("titleId", materialInfo.getTitleId());
-            }
+        if (materialTitle != null) {
             ColumnJson columnJson = new ColumnJson();
-            columnJson.setTableName("t_material_info");
+            columnJson.setTableName("t_material_title");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
             if (list.size() > 0) {
                 List<SearchItem> searchItems = new ArrayList<>();
@@ -66,7 +65,7 @@ public class MaterialInfoServiceImpl extends BaseService<MaterialInfo> implement
                     searchItem.setType(((JSONObject) o).getString("type"));
                     searchItem.setSearchType(((JSONObject) o).getString("searchType"));
                     if (StringUtils.isNotEmpty(searchItem.getName())) {
-                        Object value = MethodUtil.invokeGet(materialInfo, searchItem.getName());
+                        Object value = MethodUtil.invokeGet(materialTitle, searchItem.getName());
                         if (value != null) {
                             if (value instanceof String) {
                                 if (StringUtils.isNotEmpty((String) value)) searchItem.setValue(value);
@@ -80,12 +79,7 @@ public class MaterialInfoServiceImpl extends BaseService<MaterialInfo> implement
                 SearchUtil.convert(criteria, searchItems);
             }
         }
-        return materialInfoMapper.selectByCondition(condition);
-    }
-
-    @Override
-    public List<TreeNode> selectMaterialTreeNodes() {
-        return materialInfoMapper.selectMaterialTreeNodes();
+        return materialTitleMapper.selectByCondition(condition);
     }
 }
 

@@ -7,7 +7,7 @@ import com.orange.score.database.score.model.MaterialInfo;
 import java.util.List;
 
 /**
-* Created by chenJz1012 on 2018-04-02.
+* Created by chenJz1012 on 2018-04-11.
 */
 public interface IMaterialInfoService extends IService<MaterialInfo> {
 

@@ -35,12 +35,31 @@ CREATE TABLE t_company_info (
   DEFAULT CHARSET = utf8
   COMMENT ='企业信息表';
 
+DROP TABLE IF EXISTS t_material_title;
+CREATE TABLE t_material_title (
+  id          INT(11)      NOT NULL AUTO_INCREMENT
+  COMMENT 'id:hidden',
+  title       VARCHAR(255) NOT NULL DEFAULT ''
+  COMMENT '材料标题:text',
+  create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间:skip',
+  add_user    VARCHAR(64)           DEFAULT ''
+  COMMENT '创建用户:skip',
+  PRIMARY KEY (id)
+)
+  DEFAULT CHARSET = utf8
+  COMMENT '材料信息标题表';
+
 DROP TABLE IF EXISTS t_material_info;
 CREATE TABLE t_material_info (
   id          INT(11)      NOT NULL AUTO_INCREMENT
   COMMENT 'id:hidden',
   name        VARCHAR(255) NOT NULL DEFAULT ''
   COMMENT '材料名:text',
+  title_id    INT(11)      NOT NULL DEFAULT 0
+  COMMENT '材料标题ID',
+  title    VARCHAR(255)      NOT NULL DEFAULT 0
+  COMMENT '材料标题',
   note        VARCHAR(255)          DEFAULT ''
   COMMENT '备注:textarea',
   create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP

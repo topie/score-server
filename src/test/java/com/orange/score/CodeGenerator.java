@@ -53,7 +53,7 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCodeByCustomModelName("t_house_other", "HouseOther", "id");
+        genCodeByCustomModelName("t_material_info", "MaterialInfo", "id");
     }
 
     /**
@@ -78,9 +78,9 @@ public class CodeGenerator {
     public static void genCodeByCustomModelName(String tableName, String modelName, String idField) {
         if (StringUtils.isEmpty(idField)) idField = "id";
         genModelAndMapper(tableName, modelName, idField);
-        genService(tableName, modelName);
-        genController(tableName, modelName);
-        genScript(tableName, modelName, idField);
+        //genService(tableName, modelName);
+        //genController(tableName, modelName);
+        //genScript(tableName, modelName, idField);
     }
 
     public static void genModelAndMapper(String tableName, String modelName, String idField) {
