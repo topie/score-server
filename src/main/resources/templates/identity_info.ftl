@@ -32,32 +32,17 @@
                             </div>
                             <div class="panel panel-default">
                                 <!-- Default panel contents -->
-                                <div class="panel-heading">申请人基本信息</div>
-                                <!-- Table -->
+                                <div class="panel-heading">随迁信息</div>
+
                                 <div class="panel-body" id="identityInfo">
 
                                 </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <!-- Default panel contents -->
-                                <div class="panel-heading">随迁信息</div>
-                                <!-- Table -->
                                 <div class="panel-body" id="houseMove">
 
                                 </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <!-- Default panel contents -->
-                                <div class="panel-heading">申请人职业证书信息</div>
-                                <!-- Table -->
                                 <div class="panel-body" id="houseProfession">
 
                                 </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <!-- Default panel contents -->
-                                <div class="panel-heading">申请人其它信息</div>
-                                <!-- Table -->
                                 <div class="panel-body" id="houseOther">
 
                                 </div>

@@ -11,7 +11,7 @@ CREATE TABLE t_identity_info (
   COMMENT '身份证正面图片',
   `id_card_opposite` VARCHAR(255) NOT NULL DEFAULT ''
   COMMENT '身份证反面图片',
-  `name`             VARCHAR(64) NOT NULL DEFAULT ''
+  `name`             VARCHAR(64)  NOT NULL DEFAULT ''
   COMMENT '姓名',
   `sex`              INT(11)      NOT NULL DEFAULT '0'
   COMMENT '性别：1、男；2、女',
@@ -191,3 +191,21 @@ CREATE TABLE t_house_profession (
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8
   COMMENT ='职业资格证书';
+
+
+DROP TABLE IF EXISTS t_region;
+CREATE TABLE t_region (
+  `id`        INT(11)      NOT NULL AUTO_INCREMENT
+  COMMENT '主键ID',
+  `name`      VARCHAR(100) NOT NULL DEFAULT ''
+  COMMENT '地区名称',
+  `parent_id` INT(11)      NOT NULL DEFAULT '0'
+  COMMENT '上级地区ID',
+  `level`     INT(11)      NOT NULL DEFAULT '0'
+  COMMENT '等级, 1、省；2、市；3、区',
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8
+  COMMENT ='地区信息表';

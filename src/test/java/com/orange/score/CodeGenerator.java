@@ -38,7 +38,7 @@ public class CodeGenerator {
 
     private static final String RESOURCES_PATH = "/src/main/resources";//资源文件路径
 
-    private static final String MODULE = "score";
+    private static final String MODULE = "core";
 
     private static final String PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE, MODULE);//生成的Service存放路径
 
@@ -53,7 +53,7 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCodeByCustomModelName("t_material_info", "MaterialInfo", "id");
+        genCodeByCustomModelName("d_column_json", "ColumnJson", "id");
     }
 
     /**
@@ -78,9 +78,9 @@ public class CodeGenerator {
     public static void genCodeByCustomModelName(String tableName, String modelName, String idField) {
         if (StringUtils.isEmpty(idField)) idField = "id";
         genModelAndMapper(tableName, modelName, idField);
-        //genService(tableName, modelName);
-        //genController(tableName, modelName);
-        //genScript(tableName, modelName, idField);
+        genService(tableName, modelName);
+        genController(tableName, modelName);
+        genScript(tableName, modelName, idField);
     }
 
     public static void genModelAndMapper(String tableName, String modelName, String idField) {
