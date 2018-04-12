@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* Created by chenJz1012 on 2018-04-10.
-*/
+ * Created by chenJz1012 on 2018-04-10.
+ */
 @RestController
 @RequestMapping("/api/score/houseOther")
 public class HouseOtherController {
@@ -31,9 +31,9 @@ public class HouseOtherController {
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(HouseOther houseOther,
-    @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-    @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-    PageInfo<HouseOther> pageInfo = iHouseOtherService.selectByFilterAndPage(houseOther, pageNum, pageSize);
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        PageInfo<HouseOther> pageInfo = iHouseOtherService.selectByFilterAndPage(houseOther, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -69,6 +69,12 @@ public class HouseOtherController {
     @GetMapping("/detail")
     public Result detail(@RequestParam Integer id) {
         HouseOther houseOther = iHouseOtherService.findById(id);
+        return ResponseUtil.success(houseOther);
+    }
+
+    @GetMapping("/detailByIdentityId")
+    public Result detailByIdentityId(@RequestParam(value = "identityInfoId") Integer identityInfoId) {
+        HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfoId);
         return ResponseUtil.success(houseOther);
     }
 }

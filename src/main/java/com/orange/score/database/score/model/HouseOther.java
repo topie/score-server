@@ -86,28 +86,28 @@ public class HouseOther {
      * 是否缴纳社保, 1、是；2、否
      */
     @Column(name = "social_security_pay")
-    private Boolean socialSecurityPay;
+    private Integer socialSecurityPay;
 
     /**
      * 是否参加住房公积金, 1、是；2、否
      */
     @Column(name = "provident_fund")
-    private Boolean providentFund;
+    private Integer providentFund;
 
     /**
      * 纳税情况, 1、是；2、否
      */
-    private Boolean taxes;
+    private Integer taxes;
 
     /**
      * 拘留情况, 1、是；2、否
      */
-    private Boolean detention;
+    private Integer detention;
 
     /**
      * 获刑情况, 1、是；2、否
      */
-    private Boolean penalty;
+    private Integer penalty;
 
     /**
      * 奖项荣誉称号,1、拥有有效的中国发明专利；2、获得党中央、国务院授予的奖项和荣誉称号；3、获得省（自治区、直辖市）党委、政府或中央和国家机关部委等授予的奖项和荣誉称号；4、获得省（自治区、直辖市）党委、政府或中央和国家机关部委等授予的劳动模范或先进工作者荣誉称号，并享受省部级劳动模范或先进工作者待遇
@@ -360,7 +360,7 @@ public class HouseOther {
      *
      * @return social_security_pay - 是否缴纳社保, 1、是；2、否
      */
-    public Boolean getSocialSecurityPay() {
+    public Integer getSocialSecurityPay() {
         return socialSecurityPay;
     }
 
@@ -369,7 +369,7 @@ public class HouseOther {
      *
      * @param socialSecurityPay 是否缴纳社保, 1、是；2、否
      */
-    public void setSocialSecurityPay(Boolean socialSecurityPay) {
+    public void setSocialSecurityPay(Integer socialSecurityPay) {
         this.socialSecurityPay = socialSecurityPay;
     }
 
@@ -378,7 +378,7 @@ public class HouseOther {
      *
      * @return provident_fund - 是否参加住房公积金, 1、是；2、否
      */
-    public Boolean getProvidentFund() {
+    public Integer getProvidentFund() {
         return providentFund;
     }
 
@@ -387,7 +387,7 @@ public class HouseOther {
      *
      * @param providentFund 是否参加住房公积金, 1、是；2、否
      */
-    public void setProvidentFund(Boolean providentFund) {
+    public void setProvidentFund(Integer providentFund) {
         this.providentFund = providentFund;
     }
 
@@ -396,7 +396,7 @@ public class HouseOther {
      *
      * @return taxes - 纳税情况, 1、是；2、否
      */
-    public Boolean getTaxes() {
+    public Integer getTaxes() {
         return taxes;
     }
 
@@ -405,7 +405,7 @@ public class HouseOther {
      *
      * @param taxes 纳税情况, 1、是；2、否
      */
-    public void setTaxes(Boolean taxes) {
+    public void setTaxes(Integer taxes) {
         this.taxes = taxes;
     }
 
@@ -414,7 +414,7 @@ public class HouseOther {
      *
      * @return detention - 拘留情况, 1、是；2、否
      */
-    public Boolean getDetention() {
+    public Integer getDetention() {
         return detention;
     }
 
@@ -423,7 +423,7 @@ public class HouseOther {
      *
      * @param detention 拘留情况, 1、是；2、否
      */
-    public void setDetention(Boolean detention) {
+    public void setDetention(Integer detention) {
         this.detention = detention;
     }
 
@@ -432,7 +432,7 @@ public class HouseOther {
      *
      * @return penalty - 获刑情况, 1、是；2、否
      */
-    public Boolean getPenalty() {
+    public Integer getPenalty() {
         return penalty;
     }
 
@@ -441,7 +441,7 @@ public class HouseOther {
      *
      * @param penalty 获刑情况, 1、是；2、否
      */
-    public void setPenalty(Boolean penalty) {
+    public void setPenalty(Integer penalty) {
         this.penalty = penalty;
     }
 

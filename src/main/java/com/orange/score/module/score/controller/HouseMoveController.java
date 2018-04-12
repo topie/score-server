@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* Created by chenJz1012 on 2018-04-10.
-*/
+ * Created by chenJz1012 on 2018-04-10.
+ */
 @RestController
 @RequestMapping("/api/score/houseMove")
 public class HouseMoveController {
@@ -31,9 +31,9 @@ public class HouseMoveController {
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(HouseMove houseMove,
-    @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-    @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-    PageInfo<HouseMove> pageInfo = iHouseMoveService.selectByFilterAndPage(houseMove, pageNum, pageSize);
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        PageInfo<HouseMove> pageInfo = iHouseMoveService.selectByFilterAndPage(houseMove, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -69,6 +69,12 @@ public class HouseMoveController {
     @GetMapping("/detail")
     public Result detail(@RequestParam Integer id) {
         HouseMove houseMove = iHouseMoveService.findById(id);
+        return ResponseUtil.success(houseMove);
+    }
+
+    @GetMapping("/detailByIdentityId")
+    public Result detailByIdentityId(@RequestParam(value = "identityInfoId") Integer identityInfoId) {
+        HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", identityInfoId);
         return ResponseUtil.success(houseMove);
     }
 }
