@@ -1,10 +1,11 @@
 package com.orange.score.database.score.model;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "t_identity_info")
 public class IdentityInfo {
+
     /**
      * 主键ID
      */
@@ -17,6 +18,9 @@ public class IdentityInfo {
      */
     @Column(name = "id_number")
     private String idNumber;
+
+    @Column(name = "batch_id")
+    private Integer batchId;
 
     /**
      * 单位ID
@@ -66,6 +70,18 @@ public class IdentityInfo {
      */
     private Integer region;
 
+    @Column(name = "reservation_status")
+    private Integer reservationStatus;
+
+    @Column(name = "hall_status")
+    private Integer hallStatus;
+
+    @Column(name = "union_approve_status_1")
+    private Integer unionApproveStatus1;
+
+    @Column(name = "union_approve_status_2")
+    private Integer unionApproveStatus2;
+
     /**
      * 创建时间
      */
@@ -77,6 +93,46 @@ public class IdentityInfo {
      */
     @Column(name = "u_time")
     private Date uTime;
+
+    public Integer getReservationStatus() {
+        return reservationStatus;
+    }
+
+    public void setReservationStatus(Integer reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
+
+    public Integer getHallStatus() {
+        return hallStatus;
+    }
+
+    public void setHallStatus(Integer hallStatus) {
+        this.hallStatus = hallStatus;
+    }
+
+    public Integer getUnionApproveStatus1() {
+        return unionApproveStatus1;
+    }
+
+    public void setUnionApproveStatus1(Integer unionApproveStatus1) {
+        this.unionApproveStatus1 = unionApproveStatus1;
+    }
+
+    public Integer getUnionApproveStatus2() {
+        return unionApproveStatus2;
+    }
+
+    public void setUnionApproveStatus2(Integer unionApproveStatus2) {
+        this.unionApproveStatus2 = unionApproveStatus2;
+    }
+
+    public Integer getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(Integer batchId) {
+        this.batchId = batchId;
+    }
 
     /**
      * 获取主键ID

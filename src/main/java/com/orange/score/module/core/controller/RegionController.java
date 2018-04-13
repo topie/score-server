@@ -3,6 +3,7 @@ package com.orange.score.module.core.controller;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
+import com.orange.score.common.utils.Option;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.TreeNode;
@@ -12,13 +13,14 @@ import com.orange.score.module.core.service.IRegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
-* Created by chenJz1012 on 2018-04-12.
-*/
+ * Created by chenJz1012 on 2018-04-12.
+ */
 @RestController
 @RequestMapping("/api/core/region")
 public class RegionController {
@@ -32,9 +34,9 @@ public class RegionController {
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(Region region,
-    @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-    @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-    PageInfo<Region> pageInfo = iRegionService.selectByFilterAndPage(region, pageNum, pageSize);
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        PageInfo<Region> pageInfo = iRegionService.selectByFilterAndPage(region, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -77,5 +79,16 @@ public class RegionController {
     @ResponseBody
     public List<TreeNode> treeNodes() {
         return iRegionService.selectTreeNodes();
+    }
+
+    @RequestMapping(value = "/options")
+    @ResponseBody
+    public List<Option> options(Region region) {
+        List<Option> options = new ArrayList<>();
+        List<Region> list = iRegionService.selectByFilter(region);
+        for (Region item : list) {
+            options.add(new Option(item.getName(), item.getId()));
+        }
+        return options;
     }
 }

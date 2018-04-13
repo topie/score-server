@@ -35,8 +35,10 @@ public class CompanyInfoServiceImpl extends BaseService<CompanyInfo> implements 
     public List<CompanyInfo> selectByFilter(CompanyInfo companyInfo) {
         Condition condition = new Condition(CompanyInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        if (StringUtils.isNotEmpty(companyInfo.getCompanyName())) {
-            criteria.andLike("companyName", "%" + companyInfo.getCompanyName() + "%");
+        if(companyInfo!=null){
+            if (StringUtils.isNotEmpty(companyInfo.getCompanyName())) {
+                criteria.andLike("companyName", "%" + companyInfo.getCompanyName() + "%");
+            }
         }
         return companyInfoMapper.selectByCondition(condition);
     }

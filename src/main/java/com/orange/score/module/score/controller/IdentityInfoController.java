@@ -8,9 +8,7 @@ import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.core.service.ICommonQueryService;
-import com.orange.score.module.score.service.IHouseMoveService;
-import com.orange.score.module.score.service.IHouseOtherService;
-import com.orange.score.module.score.service.IHouseProfessionService;
+import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
@@ -35,13 +33,7 @@ public class IdentityInfoController {
     private ICommonQueryService iCommonQueryService;
 
     @Autowired
-    private IHouseMoveService iHouseMoveService;
-
-    @Autowired
-    private IHouseProfessionService iHouseProfessionService;
-
-    @Autowired
-    private IHouseOtherService iHouseOtherService;
+    private IDictService iDictService;
 
     @GetMapping(value = "/list")
     @ResponseBody
@@ -60,6 +52,8 @@ public class IdentityInfoController {
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);
+        Map reservationStatus = iDictService.selectMapByAlias("reservationStatus");
+        result.put("reservationStatus", reservationStatus);
         return ResponseUtil.success(result);
     }
 

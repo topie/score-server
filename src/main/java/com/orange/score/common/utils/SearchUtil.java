@@ -13,7 +13,7 @@ public class SearchUtil {
     }
 
     private static void convert(Example.Criteria criteria, SearchItem searchItem) {
-        if (searchItem.getValue() == null) return;
+        if (searchItem.getSearchType()==null || searchItem.getValue() == null) return;
         switch (searchItem.getSearchType()) {
             case "like":
                 criteria.andLike(searchItem.getName(), "%" + searchItem.getValue() + "%");

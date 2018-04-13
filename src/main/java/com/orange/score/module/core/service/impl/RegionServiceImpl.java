@@ -52,6 +52,9 @@ public class RegionServiceImpl extends BaseService<Region> implements IRegionSer
         Condition condition = new Condition(Region.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (region != null) {
+            if (region.getParentId() != null) {
+                criteria.andEqualTo("parentId", region.getParentId());
+            }
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_region");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);

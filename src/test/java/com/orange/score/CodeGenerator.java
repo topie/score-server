@@ -38,7 +38,7 @@ public class CodeGenerator {
 
     private static final String RESOURCES_PATH = "/src/main/resources";//资源文件路径
 
-    private static final String MODULE = "core";
+    private static final String MODULE = "score";
 
     private static final String PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE, MODULE);//生成的Service存放路径
 
@@ -53,7 +53,7 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCodeByCustomModelName("d_column_json", "ColumnJson", "id");
+        genCodeByCustomModelName("t_person_batch_status_info", "PersonBatchStatusInfo", "id");
     }
 
     /**

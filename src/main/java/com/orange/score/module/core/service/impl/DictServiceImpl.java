@@ -8,6 +8,7 @@ import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.SqlUtil;
 import com.orange.score.common.core.BaseService;
 import com.orange.score.common.utils.MethodUtil;
+import com.orange.score.common.utils.Option;
 import com.orange.score.common.utils.SearchItem;
 import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.database.core.dao.DictMapper;
@@ -23,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chenJz1012 on 2018-04-08.
@@ -87,6 +90,30 @@ public class DictServiceImpl extends BaseService<Dict> implements IDictService {
         if (tmp != null) SqlUtil.setLocalPage(tmp);
         condition.orderBy("alias").asc().orderBy("sort").asc();
         return dictMapper.selectByCondition(condition);
+    }
+
+    @Override
+    public List<Option> selectOptionsByAlias(String alias) {
+        List<Option> options = new ArrayList<>();
+        Dict dict = new Dict();
+        dict.setAlias(alias);
+        List<Dict> list = selectByFilter(dict);
+        for (Dict item : list) {
+            options.add(new Option(item.getText(), item.getValue()));
+        }
+        return options;
+    }
+
+    @Override
+    public Map selectMapByAlias(String alias) {
+        Map map = new HashMap();
+        Dict dict = new Dict();
+        dict.setAlias(alias);
+        List<Dict> list = selectByFilter(dict);
+        for (Dict item : list) {
+            map.put(item.getValue(), item.getText());
+        }
+        return map;
     }
 }
 

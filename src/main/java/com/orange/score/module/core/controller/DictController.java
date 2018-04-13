@@ -42,16 +42,30 @@ public class DictController {
     @ResponseBody
     public Result formItems() {
         List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("d_dict");
+        List<FormItem> batchFormItems = iCommonQueryService.selectFormItemsByTable("d_dict-batch");
         List searchItems = iCommonQueryService.selectSearchItemsByTable("d_dict");
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);
+        result.put("batchFormItems", batchFormItems);
         return ResponseUtil.success(result);
     }
 
     @PostMapping("/insert")
     public Result insert(Dict dict) {
         iDictService.save(dict);
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/insertBatch")
+    public Result insertBatch(Dict dict, String[] textList, String[] valueList, String[] sortList) {
+        for (int i = 0; i < textList.length; i++) {
+            dict.setId(null);
+            dict.setText(textList[i]);
+            dict.setValue(Integer.valueOf(valueList[i]));
+            dict.setSort(Integer.valueOf(sortList[i]));
+            iDictService.save(dict);
+        }
         return ResponseUtil.success();
     }
 
@@ -76,13 +90,6 @@ public class DictController {
     @RequestMapping(value = "/{alias}/options")
     @ResponseBody
     public List<Option> options(@PathVariable("alias") String alias) {
-        List<Option> options = new ArrayList<>();
-        Dict dict = new Dict();
-        dict.setAlias(alias);
-        List<Dict> list = iDictService.selectByFilter(dict);
-        for (Dict item : list) {
-            options.add(new Option(item.getText(), item.getValue()));
-        }
-        return options;
+        return iDictService.selectOptionsByAlias(alias);
     }
 }
