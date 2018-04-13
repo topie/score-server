@@ -55,6 +55,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             if(identityInfo.getUnionApproveStatus1()!=null){
                 criteria.andEqualTo("unionApproveStatus1",identityInfo.getUnionApproveStatus1());
             }
+            if(identityInfo.getUnionApproveStatus2()!=null){
+                criteria.andEqualTo("unionApproveStatus2",identityInfo.getUnionApproveStatus2());
+            }
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_identity_info");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
