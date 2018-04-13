@@ -2,8 +2,10 @@ package com.orange.score.module.core.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.util.SqlUtil;
 import com.orange.score.common.core.BaseService;
 import com.orange.score.common.utils.MethodUtil;
 import com.orange.score.common.utils.SearchItem;
@@ -11,6 +13,7 @@ import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.database.core.dao.DictMapper;
 import com.orange.score.database.core.model.ColumnJson;
 import com.orange.score.database.core.model.Dict;
+import com.orange.score.database.core.model.Region;
 import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.core.service.IDictService;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +47,8 @@ public class DictServiceImpl extends BaseService<Dict> implements IDictService {
 
     @Override
     public List<Dict> selectByFilter(Dict dict) {
+        Page<Region> tmp = SqlUtil.getLocalPage();
+        SqlUtil.clearLocalPage();
         Condition condition = new Condition(Dict.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (dict != null) {
@@ -79,6 +84,7 @@ public class DictServiceImpl extends BaseService<Dict> implements IDictService {
                 criteria.andEqualTo("alias", dict.getAlias());
             }
         }
+        if (tmp != null) SqlUtil.setLocalPage(tmp);
         condition.orderBy("alias").asc().orderBy("sort").asc();
         return dictMapper.selectByCondition(condition);
     }

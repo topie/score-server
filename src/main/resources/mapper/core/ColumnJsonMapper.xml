@@ -10,5 +10,6 @@
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="column_json" jdbcType="LONGVARCHAR" property="columnJson" />
     <result column="column_info" jdbcType="LONGVARCHAR" property="columnInfo" />
+    <result column="search_conf" jdbcType="LONGVARCHAR" property="searchConf" />
   </resultMap>
 </mapper>

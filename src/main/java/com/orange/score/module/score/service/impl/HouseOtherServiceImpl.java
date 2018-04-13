@@ -1,7 +1,10 @@
 package com.orange.score.module.score.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.util.SqlUtil;
+import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.dao.HouseOtherMapper;
 import com.orange.score.database.score.model.HouseOther;
 import com.orange.score.module.score.service.IHouseOtherService;
@@ -47,6 +50,8 @@ public class HouseOtherServiceImpl extends BaseService<HouseOther> implements IH
 
     @Override
     public List<HouseOther> selectByFilter(HouseOther houseOther) {
+        Page<Region> tmp = SqlUtil.getLocalPage();
+        SqlUtil.clearLocalPage();
         Condition condition = new Condition(HouseOther.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (houseOther.getIdentityInfoId() != null) {
@@ -82,6 +87,7 @@ public class HouseOtherServiceImpl extends BaseService<HouseOther> implements IH
                 SearchUtil.convert(criteria, searchItems);
             }
         }
+        if (tmp != null) SqlUtil.setLocalPage(tmp);
         return houseOtherMapper.selectByCondition(condition);
     }
 }

@@ -2,14 +2,17 @@ package com.orange.score.module.score.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.util.SqlUtil;
 import com.orange.score.common.core.BaseService;
 import com.orange.score.common.utils.MethodUtil;
 import com.orange.score.common.utils.SearchItem;
 import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.common.utils.TreeNode;
 import com.orange.score.database.core.model.ColumnJson;
+import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.dao.MaterialInfoMapper;
 import com.orange.score.database.score.model.MaterialInfo;
 import com.orange.score.module.core.service.IColumnJsonService;
@@ -45,6 +48,8 @@ public class MaterialInfoServiceImpl extends BaseService<MaterialInfo> implement
 
     @Override
     public List<MaterialInfo> selectByFilter(MaterialInfo materialInfo) {
+        Page<Region> tmp = SqlUtil.getLocalPage();
+        SqlUtil.clearLocalPage();
         Condition condition = new Condition(MaterialInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (materialInfo != null) {
@@ -80,6 +85,7 @@ public class MaterialInfoServiceImpl extends BaseService<MaterialInfo> implement
                 SearchUtil.convert(criteria, searchItems);
             }
         }
+        if (tmp != null) SqlUtil.setLocalPage(tmp);
         return materialInfoMapper.selectByCondition(condition);
     }
 

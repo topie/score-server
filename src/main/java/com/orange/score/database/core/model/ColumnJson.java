@@ -4,14 +4,16 @@ import javax.persistence.*;
 
 @Table(name = "d_column_json")
 public class ColumnJson {
-
     /**
-     * ID
+     * ID:hidden
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * 表名称
+     */
     @Column(name = "table_name")
     private String tableName;
 
@@ -21,55 +23,54 @@ public class ColumnJson {
     private Integer type;
 
     /**
-     * column的json数据:textarea
+     * column的json数据:code
      */
     @Column(name = "column_json")
     private String columnJson;
 
     /**
-     * column的表信息:textarea
+     * column的表信息:code
      */
     @Column(name = "column_info")
     private String columnInfo;
 
+    /**
+     * 搜索配置:code
+     */
     @Column(name = "search_conf")
     private String searchConf;
 
-    public String getSearchConf() {
-        return searchConf;
-    }
-
-    public void setSearchConf(String searchConf) {
-        this.searchConf = searchConf;
-    }
-
     /**
-     * 获取ID
+     * 获取ID:hidden
      *
-     * @return id - ID
+     * @return id - ID:hidden
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 设置ID
+     * 设置ID:hidden
      *
-     * @param id ID
+     * @param id ID:hidden
      */
     public void setId(Integer id) {
         this.id = id;
     }
 
     /**
-     * @return table_name
+     * 获取表名称
+     *
+     * @return table_name - 表名称
      */
     public String getTableName() {
         return tableName;
     }
 
     /**
-     * @param tableName
+     * 设置表名称
+     *
+     * @param tableName 表名称
      */
     public void setTableName(String tableName) {
         this.tableName = tableName;
@@ -94,38 +95,56 @@ public class ColumnJson {
     }
 
     /**
-     * 获取column的json数据:textarea
+     * 获取column的json数据:code
      *
-     * @return column_json - column的json数据:textarea
+     * @return column_json - column的json数据:code
      */
     public String getColumnJson() {
         return columnJson;
     }
 
     /**
-     * 设置column的json数据:textarea
+     * 设置column的json数据:code
      *
-     * @param columnJson column的json数据:textarea
+     * @param columnJson column的json数据:code
      */
     public void setColumnJson(String columnJson) {
         this.columnJson = columnJson;
     }
 
     /**
-     * 获取column的表信息:textarea
+     * 获取column的表信息:code
      *
-     * @return column_info - column的表信息:textarea
+     * @return column_info - column的表信息:code
      */
     public String getColumnInfo() {
         return columnInfo;
     }
 
     /**
-     * 设置column的表信息:textarea
+     * 设置column的表信息:code
      *
-     * @param columnInfo column的表信息:textarea
+     * @param columnInfo column的表信息:code
      */
     public void setColumnInfo(String columnInfo) {
         this.columnInfo = columnInfo;
+    }
+
+    /**
+     * 获取搜索配置:code
+     *
+     * @return search_conf - 搜索配置:code
+     */
+    public String getSearchConf() {
+        return searchConf;
+    }
+
+    /**
+     * 设置搜索配置:code
+     *
+     * @param searchConf 搜索配置:code
+     */
+    public void setSearchConf(String searchConf) {
+        this.searchConf = searchConf;
     }
 }

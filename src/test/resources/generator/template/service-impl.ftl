@@ -1,7 +1,9 @@
 package ${basePackage}.module.${module}.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.util.SqlUtil;
 import ${basePackage}.database.${module}.dao.${modelNameUpperCamel}Mapper;
 import ${basePackage}.database.${module}.model.${modelNameUpperCamel};
 import ${basePackage}.module.${module}.service.I${modelNameUpperCamel}Service;
@@ -18,10 +20,10 @@ import ${basePackage}.common.utils.SearchUtil;
 import ${basePackage}.database.core.model.ColumnJson;
 import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
-import java.util.List;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import ${basePackage}.module.core.service.IColumnJsonService;
+import org.apache.commons.lang3.StringUtils;
 
 
 
@@ -47,6 +49,8 @@ public class ${modelNameUpperCamel}ServiceImpl extends BaseService<${modelNameUp
 
     @Override
     public List<${modelNameUpperCamel}> selectByFilter(${modelNameUpperCamel} ${modelNameLowerCamel}) {
+        Page<${modelNameUpperCamel}> tmp = SqlUtil.getLocalPage();
+        SqlUtil.clearLocalPage();
         Condition condition = new Condition(${modelNameUpperCamel}.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (${modelNameLowerCamel} != null) {
@@ -57,28 +61,31 @@ public class ${modelNameUpperCamel}ServiceImpl extends BaseService<${modelNameUp
                 List<SearchItem> searchItems = new ArrayList<>();
                 columnJson = list.get(0);
                 JSONArray jsonArray = JSONArray.parseArray(columnJson.getSearchConf());
-                for (Object o : jsonArray) {
-                    o = (JSONObject) o;
-                    SearchItem searchItem = new SearchItem();
-                    searchItem.setLabel(((JSONObject) o).getString("label"));
-                    searchItem.setName(((JSONObject) o).getString("name"));
-                    searchItem.setType(((JSONObject) o).getString("type"));
-                    searchItem.setSearchType(((JSONObject) o).getString("searchType"));
-                    if (StringUtils.isNotEmpty(searchItem.getName())) {
-                        Object value = MethodUtil.invokeGet(${modelNameLowerCamel}, searchItem.getName());
-                        if (value != null) {
-                            if (value instanceof String) {
-                                if (StringUtils.isNotEmpty((String) value)) searchItem.setValue(value);
-                            } else {
-                                searchItem.setValue(value);
+                if(StringUtils.isNotEmpty(columnJson.getSearchConf())){
+                    for (Object o : jsonArray) {
+                        o = (JSONObject) o;
+                        SearchItem searchItem = new SearchItem();
+                        searchItem.setLabel(((JSONObject) o).getString("label"));
+                        searchItem.setName(((JSONObject) o).getString("name"));
+                        searchItem.setType(((JSONObject) o).getString("type"));
+                        searchItem.setSearchType(((JSONObject) o).getString("searchType"));
+                        if (StringUtils.isNotEmpty(searchItem.getName())) {
+                            Object value = MethodUtil.invokeGet(${modelNameLowerCamel}, searchItem.getName());
+                            if (value != null) {
+                                if (value instanceof String) {
+                                    if (StringUtils.isNotEmpty((String) value)) searchItem.setValue(value);
+                                } else {
+                                    searchItem.setValue(value);
+                                }
                             }
                         }
+                        searchItems.add(searchItem);
                     }
-                    searchItems.add(searchItem);
                 }
                 SearchUtil.convert(criteria, searchItems);
             }
         }
+        if (tmp != null) SqlUtil.setLocalPage(tmp);
         return ${modelNameLowerCamel}Mapper.selectByCondition(condition);
     }
 }

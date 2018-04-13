@@ -6,16 +6,18 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.core.model.ColumnJson;
-import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.core.service.ICommonQueryService;
+import com.orange.score.module.core.service.IColumnJsonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by chenJz1012 on 2018-04-02.
- */
+* Created by chenJz1012 on 2018-04-12.
+*/
 @RestController
 @RequestMapping("/api/core/columnJson")
 public class ColumnJsonController {
@@ -29,44 +31,44 @@ public class ColumnJsonController {
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(ColumnJson columnJson,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        PageInfo<ColumnJson> pageInfo = iColumnJsonService.selectByFilterAndPage(columnJson, pageNum, pageSize);
+    @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+    PageInfo<ColumnJson> pageInfo = iColumnJsonService.selectByFilterAndPage(columnJson, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
-        List<FormItem> list = iCommonQueryService.selectFormItemsByTable("d_column_json");
-        return ResponseUtil.success(list);
+        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("d_column_json");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("d_column_json");
+        Map result = new HashMap<>();
+        result.put("formItems", formItems);
+        result.put("searchItems", searchItems);
+        return ResponseUtil.success(result);
     }
 
     @PostMapping("/insert")
-    @ResponseBody
     public Result insert(ColumnJson columnJson) {
         iColumnJsonService.save(columnJson);
         return ResponseUtil.success();
     }
 
     @PostMapping("/delete")
-    @ResponseBody
     public Result delete(@RequestParam Integer id) {
         iColumnJsonService.deleteById(id);
         return ResponseUtil.success();
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping("/update")
     public Result update(ColumnJson columnJson) {
         iColumnJsonService.update(columnJson);
         return ResponseUtil.success();
     }
 
     @GetMapping("/detail")
-    @ResponseBody
     public Result detail(@RequestParam Integer id) {
-        ColumnJson modelNameLowerCamel = iColumnJsonService.findById(id);
-        return ResponseUtil.success(modelNameLowerCamel);
+        ColumnJson columnJson = iColumnJsonService.findById(id);
+        return ResponseUtil.success(columnJson);
     }
 }

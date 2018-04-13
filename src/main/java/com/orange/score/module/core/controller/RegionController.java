@@ -5,6 +5,7 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.TreeNode;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IRegionService;
@@ -70,5 +71,11 @@ public class RegionController {
     public Result detail(@RequestParam Integer id) {
         Region region = iRegionService.findById(id);
         return ResponseUtil.success(region);
+    }
+
+    @RequestMapping(value = "/treeNodes", method = RequestMethod.POST)
+    @ResponseBody
+    public List<TreeNode> treeNodes() {
+        return iRegionService.selectTreeNodes();
     }
 }

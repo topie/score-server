@@ -6,7 +6,7 @@ import com.orange.score.database.core.model.ColumnJson;
 import java.util.List;
 
 /**
-* Created by chenJz1012 on 2018-04-02.
+* Created by chenJz1012 on 2018-04-12.
 */
 public interface IColumnJsonService extends IService<ColumnJson> {
 

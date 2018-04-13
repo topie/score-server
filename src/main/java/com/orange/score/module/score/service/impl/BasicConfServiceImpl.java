@@ -1,7 +1,10 @@
 package com.orange.score.module.score.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.util.SqlUtil;
+import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.dao.BasicConfMapper;
 import com.orange.score.database.score.model.BasicConf;
 import com.orange.score.module.score.service.IBasicConfService;
@@ -47,6 +50,8 @@ public class BasicConfServiceImpl extends BaseService<BasicConf> implements IBas
 
     @Override
     public List<BasicConf> selectByFilter(BasicConf basicConf) {
+        Page<Region> tmp = SqlUtil.getLocalPage();
+        SqlUtil.clearLocalPage();
         Condition condition = new Condition(BasicConf.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (basicConf != null) {
@@ -79,6 +84,7 @@ public class BasicConfServiceImpl extends BaseService<BasicConf> implements IBas
                 SearchUtil.convert(criteria, searchItems);
             }
         }
+        if (tmp != null) SqlUtil.setLocalPage(tmp);
         return basicConfMapper.selectByCondition(condition);
     }
 }
