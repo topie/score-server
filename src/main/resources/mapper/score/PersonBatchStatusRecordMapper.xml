@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.PersonBatchStatusRecordMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.PersonBatchStatusRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="batch_id" jdbcType="INTEGER" property="batchId" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="status_dict_alias" jdbcType="VARCHAR" property="statusDictAlias" />
+    <result column="status_int" jdbcType="INTEGER" property="statusInt" />
+    <result column="status_str" jdbcType="VARCHAR" property="statusStr" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="status_reason" jdbcType="VARCHAR" property="statusReason" />
+  </resultMap>
+</mapper>

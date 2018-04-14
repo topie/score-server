@@ -86,6 +86,9 @@ public class DictServiceImpl extends BaseService<Dict> implements IDictService {
             if (StringUtils.isNotEmpty(dict.getAlias())) {
                 criteria.andEqualTo("alias", dict.getAlias());
             }
+            if (dict.getValue() != null) {
+                criteria.andEqualTo("value", dict.getValue());
+            }
         }
         if (tmp != null) SqlUtil.setLocalPage(tmp);
         condition.orderBy("alias").asc().orderBy("sort").asc();

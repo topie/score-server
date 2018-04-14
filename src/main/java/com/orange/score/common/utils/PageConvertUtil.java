@@ -18,6 +18,13 @@ public class PageConvertUtil {
         return map;
     }
 
+    public static Map emptyGrid() {
+        Map map = new HashMap();
+        map.put("total", 0);
+        map.put("data", null);
+        return map;
+    }
+
     public static Map grid(SimplePageInfo<?> info) {
         Map map = new HashMap();
         map.put("total", info.getTotal());

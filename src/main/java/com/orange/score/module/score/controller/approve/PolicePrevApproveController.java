@@ -9,6 +9,7 @@ import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IIdentityInfoService;
+import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,9 @@ public class PolicePrevApproveController {
 
     @Autowired
     private IDictService iDictService;
+
+    @Autowired
+    private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -73,6 +77,40 @@ public class PolicePrevApproveController {
         identityInfo.setUnionApproveStatus1(3);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+    @PostMapping("/agree")
+    public Result agree(@RequestParam Integer id) {
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (identityInfo != null) {
+            identityInfo.setUnionApproveStatus1(2);
+            iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus1", 2);
+        }
+        identityInfo = iIdentityInfoService.findById(id);
+        if (identityInfo.getUnionApproveStatus1() == 2 && identityInfo.getUnionApproveStatus2() == 2) {
+            identityInfo.setReservationStatus(10);
+            iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 10);
+        }
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/disAgree")
+    public Result disAgree(@RequestParam Integer id) {
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (identityInfo != null) {
+            identityInfo.setUnionApproveStatus1(3);
+            identityInfo.setReservationStatus(9);
+            iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus1", 3);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 9);
+        }
+        return ResponseUtil.success();
     }
 
 }

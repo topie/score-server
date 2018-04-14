@@ -53,7 +53,7 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCodeByCustomModelName("t_person_batch_status_info", "PersonBatchStatusInfo", "id");
+        genCodeByCustomModelName("t_person_batch_status_record", "PersonBatchStatusRecord", "id");
     }
 
     /**
