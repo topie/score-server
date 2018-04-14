@@ -1,29 +1,29 @@
 -- 积分申请人身份信息 --
 DROP TABLE IF EXISTS t_identity_info;
 CREATE TABLE t_identity_info (
-  id                   INT(11)      NOT NULL AUTO_INCREMENT
+  id                     INT(11)      NOT NULL AUTO_INCREMENT
   COMMENT '主键ID',
-  id_number            VARCHAR(64)  NOT NULL DEFAULT ''
+  id_number              VARCHAR(64)  NOT NULL DEFAULT ''
   COMMENT '身份证号',
-  batch_id             INT(11)      NOT NULL DEFAULT 0
+  batch_id               INT(11)      NOT NULL DEFAULT 0
   COMMENT '批次ID',
-  company_id           INT(11)      NOT NULL DEFAULT 0
+  company_id             INT(11)      NOT NULL DEFAULT 0
   COMMENT '单位ID',
-  id_card_positive     VARCHAR(255) NOT NULL DEFAULT ''
+  id_card_positive       VARCHAR(255) NOT NULL DEFAULT ''
   COMMENT '身份证正面图片',
-  id_card_opposite     VARCHAR(255) NOT NULL DEFAULT ''
+  id_card_opposite       VARCHAR(255) NOT NULL DEFAULT ''
   COMMENT '身份证反面图片',
-  name                 VARCHAR(64)  NOT NULL DEFAULT ''
+  name                   VARCHAR(64)  NOT NULL DEFAULT ''
   COMMENT '姓名',
-  sex                  INT(11)      NOT NULL DEFAULT '0'
+  sex                    INT(11)      NOT NULL DEFAULT '0'
   COMMENT '性别：1、男；2、女',
-  birthday             VARCHAR(32)  NOT NULL DEFAULT ''
+  birthday               VARCHAR(32)  NOT NULL DEFAULT ''
   COMMENT '出生日期',
-  age                  INT(11)      NOT NULL DEFAULT '0'
+  age                    INT(11)      NOT NULL DEFAULT '0'
   COMMENT '年龄',
-  nation               VARCHAR(64)  NOT NULL DEFAULT ''
+  nation                 VARCHAR(64)  NOT NULL DEFAULT ''
   COMMENT '民族',
-  region               INT(11)      NOT NULL DEFAULT '0'
+  region                 INT(11)      NOT NULL DEFAULT '0'
   COMMENT '拟落户地区',
   reservation_status     INT(11)               DEFAULT 0
   COMMENT '申请预约状态',
@@ -33,9 +33,9 @@ CREATE TABLE t_identity_info (
   COMMENT '公安预审状态',
   union_approve_status_2 INT(11)               DEFAULT 0
   COMMENT '人社预审状态',
-  c_time               TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+  c_time                 TIMESTAMP
   COMMENT '创建时间',
-  u_time               TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  u_time                 TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   COMMENT '更新时间',
   PRIMARY KEY (id),
   UNIQUE KEY idx_id_number (batch_id, id_number)

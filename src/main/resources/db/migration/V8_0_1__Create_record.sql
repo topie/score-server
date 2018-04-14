@@ -97,3 +97,21 @@ CREATE TABLE t_person_material_accept_record (
 )
   DEFAULT CHARSET = utf8
   COMMENT '申请人材料送达记录表';
+
+
+DROP TABLE IF EXISTS t_indicator_json;
+CREATE TABLE t_indicator_json (
+  id          INT(11)   NOT NULL AUTO_INCREMENT
+  COMMENT 'id',
+  batch_id    INT(11)   NOT NULL DEFAULT 0
+  COMMENT '批次ID',
+  json        TEXT               DEFAULT NULL
+  COMMENT '指标json',
+  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  add_user    VARCHAR(64)        DEFAULT ''
+  COMMENT '创建用户',
+  PRIMARY KEY (id)
+)
+  DEFAULT CHARSET = utf8
+  COMMENT '指标Json信息表';

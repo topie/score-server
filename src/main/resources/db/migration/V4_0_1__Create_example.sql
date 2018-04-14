@@ -6,7 +6,7 @@ CREATE TABLE d_example (
   COMMENT '文本:text',
   o_hidden   VARCHAR(64)           DEFAULT ''
   COMMENT '文本:hidden',
-  o_date     TIMESTAMP NULL        DEFAULT CURRENT_TIMESTAMP
+  o_date     TIMESTAMP
   COMMENT '日期:date',
   o_datetime TIMESTAMP NULL        DEFAULT CURRENT_TIMESTAMP
   COMMENT '时间:datetime',

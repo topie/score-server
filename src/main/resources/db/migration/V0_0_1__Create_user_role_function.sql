@@ -15,7 +15,7 @@ CREATE TABLE `d_function` (
   COMMENT '请求路径',
   `function_desc` INT(11)      NOT NULL DEFAULT 0
   COMMENT '排序号',
-  `insert_time`   TIMESTAMP             DEFAULT CURRENT_TIMESTAMP
+  `insert_time`   TIMESTAMP
   COMMENT '插入时间',
   `update_time`   TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   COMMENT '更新时间',
@@ -35,7 +35,7 @@ CREATE TABLE `d_role` (
   COMMENT '角色默认跳转function(非rest用)',
   `state`          INT(1)               DEFAULT '1'
   COMMENT '是否启用，0=不启用，1=启用',
-  `insert_time`    TIMESTAMP            DEFAULT CURRENT_TIMESTAMP
+  `insert_time`    TIMESTAMP
   COMMENT '生成时间',
   `update_time`    TIMESTAMP            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   COMMENT '更新时间',
@@ -79,7 +79,7 @@ CREATE TABLE `d_user` (
   COMMENT '邮箱',
   `contact_phone`           VARCHAR(32)           DEFAULT ''
   COMMENT '电话',
-  `insert_time`             TIMESTAMP             DEFAULT CURRENT_TIMESTAMP
+  `insert_time`             TIMESTAMP
   COMMENT '插入时间',
   `update_time`             TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   COMMENT '更新时间',
