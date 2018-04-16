@@ -28,3 +28,21 @@ CREATE TABLE t_person_batch_status_record (
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8
   COMMENT ='申请人批次状态记录';
+
+DROP TABLE IF EXISTS t_sms_send_config;
+CREATE TABLE t_sms_send_config (
+  id                INT(11) NOT NULL  AUTO_INCREMENT
+  COMMENT 'ID:hidden',
+  status_dict_alias VARCHAR(64)       DEFAULT ''
+  COMMENT '状态字典alias:text',
+  status_int        INT(11)           DEFAULT 0
+  COMMENT '状态值:text',
+  template_str      VARCHAR(255)      DEFAULT ''
+  COMMENT '短信模板内容:textarea',
+  PRIMARY KEY (id),
+  UNIQUE KEY (status_dict_alias, status_int)
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8
+  COMMENT ='短信发送设置';

@@ -12,7 +12,6 @@ import com.orange.score.module.core.service.IDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +84,12 @@ public class DictController {
     public Result detail(@RequestParam Integer id) {
         Dict dict = iDictService.findById(id);
         return ResponseUtil.success(dict);
+    }
+
+    @RequestMapping(value = "/alias")
+    @ResponseBody
+    public List<Option> alias() {
+        return iDictService.selectDistinctAliasOptions();
     }
 
     @RequestMapping(value = "/{alias}/options")

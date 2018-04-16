@@ -118,5 +118,10 @@ public class DictServiceImpl extends BaseService<Dict> implements IDictService {
         }
         return map;
     }
+
+    @Override
+    public List<Option> selectDistinctAliasOptions() {
+        return dictMapper.selectDistinctAliasOptions();
+    }
 }
 

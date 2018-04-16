@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.SqlUtil;
 import com.orange.score.common.core.BaseService;
+import com.orange.score.common.exception.DefaultBusinessException;
 import com.orange.score.common.utils.MethodUtil;
 import com.orange.score.common.utils.SearchItem;
 import com.orange.score.common.utils.SearchUtil;
@@ -15,10 +16,12 @@ import com.orange.score.database.core.model.Dict;
 import com.orange.score.database.score.dao.PersonBatchStatusRecordMapper;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.PersonBatchStatusRecord;
+import com.orange.score.database.score.model.SmsSendConfig;
 import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
+import com.orange.score.module.score.service.ISmsSendConfigService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,9 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
 
     @Autowired
     private IIdentityInfoService iIdentityInfoService;
+
+    @Autowired
+    private ISmsSendConfigService iSmsSendConfigService;
 
     @Override
     public PageInfo<PersonBatchStatusRecord> selectByFilterAndPage(PersonBatchStatusRecord personBatchStatusRecord,
@@ -105,9 +111,10 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
         personBatchStatusRecord.setBatchId(batchId);
         personBatchStatusRecord.setPersonId(personId);
         IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
-        if (identityInfo != null) {
-            personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        if (identityInfo == null) {
+            throw new DefaultBusinessException("用户信息不存在!");
         }
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
         personBatchStatusRecord.setStatusDictAlias(alias);
         personBatchStatusRecord.setStatusInt(status);
         personBatchStatusRecord.setStatusTime(new Date());
@@ -120,6 +127,14 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
             personBatchStatusRecord.setStatusTypeDesc(dicts.get(0).getAliasName());
         }
         save(personBatchStatusRecord);
+        SmsSendConfig smsSendConfig = new SmsSendConfig();
+        smsSendConfig.setStatusDictAlias(alias);
+        smsSendConfig.setStatusInt(status);
+        List<SmsSendConfig> smsSendConfigs = iSmsSendConfigService.selectByFilter(smsSendConfig);
+        if (smsSendConfigs.size() > 0) {
+            String template = smsSendConfigs.get(0).getTemplateStr();
+
+        }
     }
 }
 

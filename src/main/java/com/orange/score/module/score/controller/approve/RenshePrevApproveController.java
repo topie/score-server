@@ -2,6 +2,7 @@ package com.orange.score.module.score.controller.approve;
 
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
+import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
@@ -11,8 +12,10 @@ import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,5 +116,16 @@ public class RenshePrevApproveController {
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 9);
         }
         return ResponseUtil.success();
+    }
+
+    @GetMapping("/detailAll")
+    public Result detailAll(@RequestParam Integer id) throws FileNotFoundException {
+        Map params = new HashMap();
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "preapprove_identity_info.ftl", params);
+        Map result = new HashMap();
+        result.put("html", html);
+        return ResponseUtil.success(result);
     }
 }

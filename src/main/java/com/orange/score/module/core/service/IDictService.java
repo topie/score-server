@@ -19,4 +19,7 @@ public interface IDictService extends IService<Dict> {
     List<Option> selectOptionsByAlias(String alias);
 
     Map selectMapByAlias(String alias);
+
+    List<Option> selectDistinctAliasOptions();
+
 }
