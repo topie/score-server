@@ -126,7 +126,18 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
             personBatchStatusRecord.setStatusStr(dicts.get(0).getText());
             personBatchStatusRecord.setStatusTypeDesc(dicts.get(0).getAliasName());
         }
-        save(personBatchStatusRecord);
+        PersonBatchStatusRecord search = new PersonBatchStatusRecord();
+        search.setBatchId(batchId);
+        search.setPersonId(personId);
+        search.setStatusDictAlias(alias);
+        search.setStatusInt(status);
+        List<PersonBatchStatusRecord> searchList = selectByFilter(search);
+        if(searchList.size()>0){
+            personBatchStatusRecord.setId(searchList.get(0).getId());
+            update(personBatchStatusRecord);
+        }else{
+            save(personBatchStatusRecord);
+        }
         SmsSendConfig smsSendConfig = new SmsSendConfig();
         smsSendConfig.setStatusDictAlias(alias);
         smsSendConfig.setStatusInt(status);

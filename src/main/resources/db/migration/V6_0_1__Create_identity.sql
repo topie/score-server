@@ -70,6 +70,12 @@ CREATE TABLE t_identity_info (
   COMMENT '公安预审状态',
   union_approve_status_2 INT(11)               DEFAULT 0
   COMMENT '人社预审状态',
+  police_approve_status  INT(11)               DEFAULT 0
+  COMMENT '公安前置预审状态',
+  renshe_accept_status   INT(11)               DEFAULT 0
+  COMMENT '人社受理状态',
+  cancel_status           INT(11)               DEFAULT 0
+  COMMENT '资格取消状态',
   c_time                 TIMESTAMP
   COMMENT '创建时间',
   u_time                 TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

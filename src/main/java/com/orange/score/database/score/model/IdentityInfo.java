@@ -82,6 +82,15 @@ public class IdentityInfo {
     @Column(name = "union_approve_status_2")
     private Integer unionApproveStatus2;
 
+    @Column(name = "police_approve_status")
+    private Integer policeApproveStatus;
+
+    @Column(name = "renshe_accept_status")
+    private Integer rensheAcceptStatus;
+
+    @Column(name = "cancel_status")
+    private Integer cancelStatus;
+
     /**
      * 创建时间
      */
@@ -93,6 +102,30 @@ public class IdentityInfo {
      */
     @Column(name = "u_time")
     private Date uTime;
+
+    public Integer getCancelStatus() {
+        return cancelStatus;
+    }
+
+    public void setCancelStatus(Integer cancelStatus) {
+        this.cancelStatus = cancelStatus;
+    }
+
+    public Integer getPoliceApproveStatus() {
+        return policeApproveStatus;
+    }
+
+    public void setPoliceApproveStatus(Integer policeApproveStatus) {
+        this.policeApproveStatus = policeApproveStatus;
+    }
+
+    public Integer getRensheAcceptStatus() {
+        return rensheAcceptStatus;
+    }
+
+    public void setRensheAcceptStatus(Integer rensheAcceptStatus) {
+        this.rensheAcceptStatus = rensheAcceptStatus;
+    }
 
     public Integer getReservationStatus() {
         return reservationStatus;

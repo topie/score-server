@@ -52,11 +52,23 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (identityInfo != null) {
-            if(identityInfo.getUnionApproveStatus1()!=null){
-                criteria.andEqualTo("unionApproveStatus1",identityInfo.getUnionApproveStatus1());
+            if (identityInfo.getUnionApproveStatus1() != null) {
+                criteria.andEqualTo("unionApproveStatus1", identityInfo.getUnionApproveStatus1());
             }
-            if(identityInfo.getUnionApproveStatus2()!=null){
-                criteria.andEqualTo("unionApproveStatus2",identityInfo.getUnionApproveStatus2());
+            if (identityInfo.getUnionApproveStatus2() != null) {
+                criteria.andEqualTo("unionApproveStatus2", identityInfo.getUnionApproveStatus2());
+            }
+            if (identityInfo.getHallStatus() != null) {
+                criteria.andEqualTo("hallStatus", identityInfo.getHallStatus());
+            }
+            if (identityInfo.getPoliceApproveStatus() != null) {
+                criteria.andEqualTo("policeApproveStatus", identityInfo.getPoliceApproveStatus());
+            }
+            if (identityInfo.getRensheAcceptStatus() != null) {
+                criteria.andEqualTo("rensheAcceptStatus", identityInfo.getRensheAcceptStatus());
+            }
+            if (identityInfo.getCancelStatus() != null) {
+                criteria.andEqualTo("cancelStatus", identityInfo.getCancelStatus());
             }
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_identity_info");
