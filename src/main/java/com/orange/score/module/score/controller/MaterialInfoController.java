@@ -3,6 +3,7 @@ package com.orange.score.module.score.controller;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
+import com.orange.score.common.utils.Option;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.TreeNode;
@@ -14,6 +15,7 @@ import com.orange.score.module.score.service.IMaterialTitleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,5 +92,16 @@ public class MaterialInfoController {
     @ResponseBody
     public List<TreeNode> treeNodes() {
         return iMaterialInfoService.selectMaterialTreeNodes();
+    }
+
+    @RequestMapping(value = "/options")
+    @ResponseBody
+    public List<Option> options() {
+        List<Option> options = new ArrayList<>();
+        List<MaterialInfo> list = iMaterialInfoService.selectByFilter(null);
+        for (MaterialInfo item : list) {
+            options.add(new Option(item.getName(), item.getId()));
+        }
+        return options;
     }
 }

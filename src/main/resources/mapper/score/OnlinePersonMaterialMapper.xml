@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.OnlinePersonMaterialMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.OnlinePersonMaterial">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="batch_id" jdbcType="INTEGER" property="batchId" />
+    <result column="material_id" jdbcType="INTEGER" property="materialId" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="material_uri" jdbcType="VARCHAR" property="materialUri" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
+  </resultMap>
+</mapper>

@@ -1,3 +1,40 @@
+DROP TABLE IF EXISTS t_company_info;
+CREATE TABLE t_company_info (
+  id               INT(11)      NOT NULL AUTO_INCREMENT
+  COMMENT '主键ID',
+  user_name        VARCHAR(64)  NOT NULL DEFAULT ''
+  COMMENT '用户名',
+  password         VARCHAR(128) NOT NULL DEFAULT ''
+  COMMENT '用户密码',
+  company_name     VARCHAR(128) NOT NULL DEFAULT ''
+  COMMENT '企业名称',
+  company_type     INT(11)      NOT NULL DEFAULT 0
+  COMMENT '单位类型，1、企事业单位；2、个体工商户',
+  society_code     VARCHAR(128) NOT NULL DEFAULT ''
+  COMMENT '统一社会信用代码',
+  company_mobile   VARCHAR(32)  NOT NULL DEFAULT ''
+  COMMENT '单位联系电话',
+  operator         VARCHAR(64)  NOT NULL DEFAULT ''
+  COMMENT '经办人姓名',
+  operator_mobile  VARCHAR(32)  NOT NULL DEFAULT ''
+  COMMENT '经办人联系手机',
+  operator_address VARCHAR(255) NOT NULL DEFAULT ''
+  COMMENT '经办人联系地址',
+  remark           TEXT         NOT NULL
+  COMMENT '备注说明',
+  create_time      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  add_user         VARCHAR(64)           DEFAULT ''
+  COMMENT '创建用户',
+  status           INT(11)               DEFAULT 0
+  COMMENT '状态',
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8
+  COMMENT ='企业信息表';
+
 -- 积分申请人身份信息 --
 DROP TABLE IF EXISTS t_identity_info;
 CREATE TABLE t_identity_info (
