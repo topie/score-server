@@ -29,4 +29,5 @@ public interface IIndicatorService extends IService<Indicator> {
 
     List<TreeNode> selectDepartmentTreeNodes();
 
+    List<Integer> selectDistinctIndicatorIdByMids(String[] mIds);
 }

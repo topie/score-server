@@ -5,11 +5,12 @@ import com.orange.score.common.core.IService;
 import com.orange.score.database.score.model.ScoreRecord;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
-* Created by chenJz1012 on 2018-04-16.
-*/
+ * Created by chenJz1012 on 2018-04-16.
+ */
 public interface IScoreRecordService extends IService<ScoreRecord> {
 
     PageInfo<ScoreRecord> selectByFilterAndPage(ScoreRecord scoreRecord, int pageNum, int pageSize);
@@ -21,4 +22,8 @@ public interface IScoreRecordService extends IService<ScoreRecord> {
     List<ScoreRecord> selectByFilter(Condition condition);
 
     void insertToInitRecords(Integer batchId, Integer personId);
+
+    void insertToGetScoreResult(Integer batchId, Integer personId);
+
+    void updateToScore(Integer batchId, Integer personId, Integer indicatorId,Integer roleId, Integer itemId, BigDecimal scoreValue);
 }

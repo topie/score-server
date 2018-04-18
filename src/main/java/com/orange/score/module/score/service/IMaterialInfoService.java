@@ -17,4 +17,5 @@ public interface IMaterialInfoService extends IService<MaterialInfo> {
 
     List<TreeNode> selectMaterialTreeNodes();
 
+    List<MaterialInfo> findByIndicatorId(Integer indicatorId);
 }

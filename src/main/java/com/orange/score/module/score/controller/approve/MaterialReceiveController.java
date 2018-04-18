@@ -1,4 +1,4 @@
-package com.orange.score.module.score.controller;
+package com.orange.score.module.score.controller.approve;
 
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
@@ -12,6 +12,7 @@ import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUtil;
+import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -29,8 +30,8 @@ import java.util.Map;
  * Created by chenJz1012 on 2018-04-16.
  */
 @RestController
-@RequestMapping("/api/score/scoreRecord")
-public class ScoreRecordController {
+@RequestMapping("/api/score/materialReceive")
+public class MaterialReceiveController {
 
     @Autowired
     private IScoreRecordService iScoreRecordService;
@@ -68,17 +69,35 @@ public class ScoreRecordController {
     @Autowired
     private ICompanyInfoService iCompanyInfoService;
 
-    @GetMapping(value = "/list")
+    @Autowired
+    private IMaterialAcceptRecordService iMaterialAcceptRecordService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @GetMapping(value = "/receiving")
     @ResponseBody
-    public Result list(ScoreRecord scoreRecord,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public Result receiving(@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Condition condition = new Condition(ScoreRecord.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserRoleByUserId(userId);
+        criteria.andEqualTo("status", 2);
         criteria.andIn("opRoleId", roles);
+        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+    @GetMapping(value = "/received")
+    @ResponseBody
+    public Result received(ScoreRecord scoreRecord,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("status", 3);
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -209,27 +228,37 @@ public class ScoreRecordController {
         return ResponseUtil.success(result);
     }
 
-    @PostMapping("/insert")
-    public Result insert(ScoreRecord scoreRecord) {
-        iScoreRecordService.save(scoreRecord);
+    @PostMapping("/confirmReceived")
+    public Result update(@RequestParam("personId") Integer personId, String[] mIds) {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
+        IdentityInfo person = iIdentityInfoService.findById(personId);
+        for (String mId : mIds) {
+            MaterialInfo materialInfo = iMaterialInfoService.findById(Integer.valueOf(mId));
+            MaterialAcceptRecord materialAcceptRecord = new MaterialAcceptRecord();
+            materialAcceptRecord.setBatchId(person.getBatchId());
+            materialAcceptRecord.setPersonId(personId);
+            materialAcceptRecord.setRoleId(roles.get(0));
+            materialAcceptRecord.setMaterialName(materialInfo.getName());
+            materialAcceptRecord.setMaterialId(materialInfo.getId());
+            materialAcceptRecord.setStatus(1);
+            iMaterialAcceptRecordService.save(materialAcceptRecord);
+        }
+        List<Integer> ids = iIndicatorService.selectDistinctIndicatorIdByMids(mIds);
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andIn("indicatorId", ids);
+        criteria.andEqualTo("personId", personId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        criteria.andEqualTo("opRoleId", roles.get(0));
+        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+        for (ScoreRecord scoreRecord : scoreRecords) {
+            scoreRecord.setStatus(3);
+            iScoreRecordService.update(scoreRecord);
+        }
         return ResponseUtil.success();
     }
 
-    @PostMapping("/delete")
-    public Result delete(@RequestParam Integer id) {
-        iScoreRecordService.deleteById(id);
-        return ResponseUtil.success();
-    }
-
-    @PostMapping("/update")
-    public Result update(ScoreRecord scoreRecord) {
-        iScoreRecordService.update(scoreRecord);
-        return ResponseUtil.success();
-    }
-
-    @GetMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
-        ScoreRecord scoreRecord = iScoreRecordService.findById(id);
-        return ResponseUtil.success(scoreRecord);
-    }
 }

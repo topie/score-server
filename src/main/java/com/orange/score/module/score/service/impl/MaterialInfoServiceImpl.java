@@ -93,5 +93,10 @@ public class MaterialInfoServiceImpl extends BaseService<MaterialInfo> implement
     public List<TreeNode> selectMaterialTreeNodes() {
         return materialInfoMapper.selectMaterialTreeNodes();
     }
+
+    @Override
+    public List<MaterialInfo> findByIndicatorId(Integer indicatorId) {
+        return materialInfoMapper.findByIndicatorId(indicatorId);
+    }
 }
 

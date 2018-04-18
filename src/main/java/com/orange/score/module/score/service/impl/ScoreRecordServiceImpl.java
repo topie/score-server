@@ -12,20 +12,19 @@ import com.orange.score.common.utils.SearchItem;
 import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.database.core.model.ColumnJson;
 import com.orange.score.database.score.dao.ScoreRecordMapper;
-import com.orange.score.database.score.model.CompanyInfo;
-import com.orange.score.database.score.model.IdentityInfo;
-import com.orange.score.database.score.model.Indicator;
-import com.orange.score.database.score.model.ScoreRecord;
+import com.orange.score.database.score.model.*;
 import com.orange.score.database.security.model.Role;
 import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.service.RoleService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +56,9 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private IScoreResultService iScoreResultService;
 
     @Override
     public PageInfo<ScoreRecord> selectByFilterAndPage(ScoreRecord scoreRecord, int pageNum, int pageSize) {
@@ -158,6 +160,168 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
             }
 
         }
+    }
+
+    @Override
+    public void insertToGetScoreResult(Integer batchId, Integer personId) {
+        IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        Condition condition = new Condition(Indicator.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("scoreRule", 0);
+        List<Indicator> indicators = iIndicatorService.findByCondition(condition);
+        for (Indicator indicator : indicators) {
+            BigDecimal resultValue = findScoreRecordResultType0(batchId, personId, indicator.getId());
+            if (resultValue == null) continue;
+            ScoreResult scoreResult = new ScoreResult();
+            scoreResult.setIndicatorId(indicator.getId());
+            scoreResult.setIndicatorName(indicator.getName());
+            scoreResult.setPersonId(personId);
+            scoreResult.setBatchId(batchId);
+            scoreResult.setPersonIdNum(identityInfo.getIdNumber());
+            scoreResult.setPersonName(identityInfo.getName());
+            scoreResult.setScoreValue(resultValue);
+            scoreResult.setcTime(new Date());
+            iScoreResultService.save(scoreResult);
+        }
+        criteria.andEqualTo("scoreRule", 1);
+        indicators = iIndicatorService.findByCondition(condition);
+        for (Indicator indicator : indicators) {
+            BigDecimal resultValue = findScoreRecordResultType1(batchId, personId, indicator.getId());
+            if (resultValue == null) continue;
+            ScoreResult scoreResult = new ScoreResult();
+            scoreResult.setIndicatorId(indicator.getId());
+            scoreResult.setIndicatorName(indicator.getName());
+            scoreResult.setPersonId(personId);
+            scoreResult.setBatchId(batchId);
+            scoreResult.setPersonIdNum(identityInfo.getIdNumber());
+            scoreResult.setPersonName(identityInfo.getName());
+            scoreResult.setScoreValue(resultValue);
+            scoreResult.setcTime(new Date());
+            iScoreResultService.save(scoreResult);
+        }
+        criteria.andEqualTo("scoreRule", 2);
+        indicators = iIndicatorService.findByCondition(condition);
+        for (Indicator indicator : indicators) {
+            BigDecimal resultValue = findScoreRecordResultType2(batchId, personId, indicator.getId());
+            if (resultValue == null) continue;
+            ScoreResult scoreResult = new ScoreResult();
+            scoreResult.setIndicatorId(indicator.getId());
+            scoreResult.setIndicatorName(indicator.getName());
+            scoreResult.setPersonId(personId);
+            scoreResult.setBatchId(batchId);
+            scoreResult.setPersonIdNum(identityInfo.getIdNumber());
+            scoreResult.setPersonName(identityInfo.getName());
+            scoreResult.setScoreValue(resultValue);
+            scoreResult.setcTime(new Date());
+            iScoreResultService.save(scoreResult);
+        }
+
+        criteria.andEqualTo("scoreRule", 3);
+        indicators = iIndicatorService.findByCondition(condition);
+        for (Indicator indicator : indicators) {
+            BigDecimal resultValue = findScoreRecordResultType3(batchId, personId, indicator.getId());
+            if (resultValue == null) continue;
+            ScoreResult scoreResult = new ScoreResult();
+            scoreResult.setIndicatorId(indicator.getId());
+            scoreResult.setIndicatorName(indicator.getName());
+            scoreResult.setPersonId(personId);
+            scoreResult.setBatchId(batchId);
+            scoreResult.setPersonIdNum(identityInfo.getIdNumber());
+            scoreResult.setPersonName(identityInfo.getName());
+            scoreResult.setcTime(new Date());
+            scoreResult.setScoreValue(resultValue);
+            iScoreResultService.save(scoreResult);
+        }
+    }
+
+    @Override
+    public void updateToScore(Integer batchId, Integer personId, Integer indicatorId, Integer roleId, Integer itemId,
+            BigDecimal scoreValue) {
+        ScoreRecord scoreRecord = new ScoreRecord();
+        scoreRecord.setBatchId(batchId);
+        scoreRecord.setPersonId(personId);
+        scoreRecord.setIndicatorId(indicatorId);
+        scoreRecord.setOpRoleId(roleId);
+        scoreRecord = scoreRecordMapper.selectOne(scoreRecord);
+        if (scoreRecord != null) {
+            scoreRecord.setItemId(itemId);
+            scoreRecord.setScoreValue(scoreValue);
+            update(scoreRecord);
+        }
+    }
+
+    private BigDecimal findScoreRecordResultType0(Integer batchId, Integer personId, Integer indicatorId) {
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", batchId);
+        criteria.andEqualTo("personId", personId);
+        criteria.andEqualTo("indicatorId", indicatorId);
+        List<ScoreRecord> list = findByCondition(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        } else {
+            return list.get(0).getScoreValue() == null ? BigDecimal.ZERO : list.get(0).getScoreValue();
+        }
+    }
+
+    private BigDecimal findScoreRecordResultType1(Integer batchId, Integer personId, Integer indicatorId) {
+        BigDecimal max = BigDecimal.ZERO;
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", batchId);
+        criteria.andEqualTo("personId", personId);
+        criteria.andEqualTo("indicatorId", indicatorId);
+        List<ScoreRecord> list = findByCondition(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        } else {
+            for (ScoreRecord scoreRecord : list) {
+                if (scoreRecord.getScoreValue().floatValue() >= max.floatValue()) {
+                    max = scoreRecord.getScoreValue();
+                }
+            }
+        }
+        return max;
+    }
+
+    private BigDecimal findScoreRecordResultType2(Integer batchId, Integer personId, Integer indicatorId) {
+        BigDecimal value = BigDecimal.ZERO;
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", batchId);
+        criteria.andEqualTo("personId", personId);
+        criteria.andEqualTo("indicatorId", indicatorId);
+        List<ScoreRecord> list = findByCondition(condition);
+        boolean flag = true;
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        } else {
+            value = list.get(0).getScoreValue();
+            for (ScoreRecord scoreRecord : list) {
+                if (scoreRecord.getScoreValue().floatValue() != value.floatValue()) {
+                    flag = false;
+                }
+            }
+        }
+        return flag ? value : BigDecimal.ZERO;
+    }
+
+    private BigDecimal findScoreRecordResultType3(Integer batchId, Integer personId, Integer indicatorId) {
+        BigDecimal value = BigDecimal.ZERO;
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", batchId);
+        criteria.andEqualTo("personId", personId);
+        criteria.andEqualTo("indicatorId", indicatorId);
+        List<ScoreRecord> list = findByCondition(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        } else {
+            for (ScoreRecord scoreRecord : list) {
+                value = value.add(scoreRecord.getScoreValue());
+            }
+        }
+        return value;
     }
 }
 

@@ -154,23 +154,23 @@ CREATE TABLE t_person_batch_score_record (
 
 DROP TABLE IF EXISTS t_person_material_accept_record;
 CREATE TABLE t_person_material_accept_record (
-  id            INT(11)      NOT NULL AUTO_INCREMENT
+  id            INT(11)      NOT NULL  AUTO_INCREMENT
   COMMENT 'id',
-  batch_id      INT(11)      NOT NULL DEFAULT 0
+  batch_id      INT(11)      NOT NULL  DEFAULT 0
   COMMENT '批次ID',
-  person_id     INT(11)      NOT NULL DEFAULT 0
+  person_id     INT(11)      NOT NULL  DEFAULT 0
   COMMENT '申请人ID',
-  role_id       INT(11)      NOT NULL DEFAULT 0
+  role_id       INT(11)      NOT NULL  DEFAULT 0
   COMMENT '部门ID',
-  indicator_id        INT(11)     NOT NULL  DEFAULT 0
+  indicator_id  INT(11)      NOT NULL  DEFAULT 0
   COMMENT '指标ID',
-  material_id   INT(11)      NOT NULL DEFAULT 0
+  material_id   INT(11)      NOT NULL  DEFAULT 0
   COMMENT '材料ID',
-  material_name VARCHAR(255) NOT NULL DEFAULT ''
+  material_name VARCHAR(255) NOT NULL  DEFAULT ''
   COMMENT '材料名称',
-  status        INT(11)               DEFAULT 0
+  status        INT(11)                DEFAULT 0
   COMMENT '送达状态',
-  c_time        TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+  c_time        TIMESTAMP    NOT NULL  DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
   PRIMARY KEY (id),
   UNIQUE KEY (batch_id, person_id, role_id, material_id)
@@ -195,5 +195,36 @@ CREATE TABLE t_indicator_json (
 )
   DEFAULT CHARSET = utf8
   COMMENT '指标Json信息表';
+
+
+DROP TABLE IF EXISTS t_person_batch_score_result;
+CREATE TABLE t_person_batch_score_result (
+  id             INT(11)     NOT NULL  AUTO_INCREMENT
+  COMMENT 'id',
+  batch_id       INT(11)     NOT NULL  DEFAULT 0
+  COMMENT '批次ID',
+  indicator_id   INT(11)     NOT NULL  DEFAULT 0
+  COMMENT '指标ID',
+  indicator_name VARCHAR(64)           DEFAULT ''
+  COMMENT '指标名称',
+  person_id      INT(11)     NOT NULL  DEFAULT 0
+  COMMENT '申请人ID',
+  person_name    VARCHAR(64) NOT NULL  DEFAULT ''
+  COMMENT '申请人',
+  person_id_num  VARCHAR(32) NOT NULL  DEFAULT ''
+  COMMENT '申请人身份证',
+  score_value    DECIMAL(8, 4)         DEFAULT 0
+  COMMENT '分数',
+  score_detail   VARCHAR(255)          DEFAULT ''
+  COMMENT '打分说明',
+  c_time         TIMESTAMP   NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  COMMENT '创建时间',
+  PRIMARY KEY (id),
+  KEY k_batch(batch_id),
+  KEY k_indicator(indicator_id),
+  UNIQUE KEY (batch_id, person_id, indicator_id)
+)
+  DEFAULT CHARSET = utf8
+  COMMENT '申请人打分结果';
 
 
