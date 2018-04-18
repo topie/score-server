@@ -3,12 +3,13 @@ package com.orange.score.database.score.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "t_person_batch_score_record")
 public class ScoreRecord {
+
     /**
      * id
      */
@@ -21,6 +22,9 @@ public class ScoreRecord {
      */
     @Column(name = "accept_number")
     private String acceptNumber;
+
+    @Column(name = "batch_id")
+    private Integer batchId;
 
     /**
      * 指标ID
@@ -137,6 +141,14 @@ public class ScoreRecord {
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    public Integer getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(Integer batchId) {
+        this.batchId = batchId;
+    }
 
     /**
      * 获取id

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
+import com.orange.score.common.utils.Option;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.TreeNode;
@@ -19,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,5 +158,16 @@ public class IndicatorController {
             iIndicatorJsonService.save(json);
         }
         return ResponseUtil.success(result);
+    }
+
+    @RequestMapping(value = "/options")
+    @ResponseBody
+    public List<Option> options() {
+        List<Option> options = new ArrayList<>();
+        List<Indicator> list = iIndicatorService.selectByFilter(null);
+        for (Indicator item : list) {
+            options.add(new Option(item.getName(), item.getId()));
+        }
+        return options;
     }
 }

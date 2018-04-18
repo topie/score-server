@@ -100,6 +100,8 @@ CREATE TABLE t_person_batch_score_record (
   COMMENT 'id',
   accept_number       VARCHAR(32) NOT NULL  DEFAULT ''
   COMMENT '受理编号',
+  batch_id            INT(11)     NOT NULL  DEFAULT 0
+  COMMENT '批次ID',
   indicator_id        INT(11)     NOT NULL  DEFAULT 0
   COMMENT '指标ID',
   indicator_name      VARCHAR(64)           DEFAULT ''
@@ -122,11 +124,11 @@ CREATE TABLE t_person_batch_score_record (
   COMMENT '分数',
   item_id             INT(11)               DEFAULT 0
   COMMENT '打分选项ID',
-  accept_date         DATE                  DEFAULT '0000-00-00'
+  accept_date         DATE                  DEFAULT NULL
   COMMENT '受理日期',
-  submit_date         DATE                  DEFAULT '0000-00-00'
+  submit_date         DATE                  DEFAULT NULL
   COMMENT '送达日期',
-  score_date          DATE                  DEFAULT '0000-00-00'
+  score_date          DATE                  DEFAULT NULL
   COMMENT '打分日期',
   op_user_id          INT(11)               DEFAULT 0
   COMMENT '审核人id',
@@ -141,9 +143,11 @@ CREATE TABLE t_person_batch_score_record (
   c_time              TIMESTAMP   NOT NULL  DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
   PRIMARY KEY (id),
+  KEY k_batch(batch_id),
   KEY k_number(person_id_num),
   KEY k_company(company_id),
-  KEY k_indicator(indicator_id)
+  KEY k_indicator(indicator_id),
+  UNIQUE KEY (batch_id, person_id, indicator_id, op_role_id)
 )
   DEFAULT CHARSET = utf8
   COMMENT '申请人打分信息记录表';
@@ -158,6 +162,8 @@ CREATE TABLE t_person_material_accept_record (
   COMMENT '申请人ID',
   role_id       INT(11)      NOT NULL DEFAULT 0
   COMMENT '部门ID',
+  indicator_id        INT(11)     NOT NULL  DEFAULT 0
+  COMMENT '指标ID',
   material_id   INT(11)      NOT NULL DEFAULT 0
   COMMENT '材料ID',
   material_name VARCHAR(255) NOT NULL DEFAULT ''

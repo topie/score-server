@@ -11,6 +11,7 @@ import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
+import com.orange.score.module.score.service.IScoreRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,9 @@ public class RensheAcceptController {
 
     @Autowired
     private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
+
+    @Autowired
+    private IScoreRecordService iScoreRecordService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -103,6 +107,7 @@ public class RensheAcceptController {
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 5);
+            iScoreRecordService.insertToInitRecords(identityInfo.getBatchId(),identityInfo.getId());
         }
         return ResponseUtil.success();
     }
