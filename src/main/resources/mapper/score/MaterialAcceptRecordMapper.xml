@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.MaterialAcceptRecordMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.MaterialAcceptRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="batch_id" jdbcType="INTEGER" property="batchId" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="indicator_id" jdbcType="INTEGER" property="indicatorId" />
+    <result column="material_id" jdbcType="INTEGER" property="materialId" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
+  </resultMap>
+</mapper>
