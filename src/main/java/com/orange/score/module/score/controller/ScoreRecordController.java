@@ -11,6 +11,7 @@ import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
+import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-16.
@@ -66,11 +65,14 @@ public class ScoreRecordController {
     private IIndicatorService iIndicatorService;
 
     @Autowired
+    private IIndicatorItemService iIndicatorItemService;
+
+    @Autowired
     private ICompanyInfoService iCompanyInfoService;
 
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/scoring")
     @ResponseBody
-    public Result list(ScoreRecord scoreRecord,
+    public Result scoring(ScoreRecord scoreRecord,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Condition condition = new Condition(ScoreRecord.class);
@@ -79,6 +81,23 @@ public class ScoreRecordController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         criteria.andIn("opRoleId", roles);
+        criteria.andEqualTo("status", 3);
+        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+    @GetMapping(value = "/scored")
+    @ResponseBody
+    public Result scored(ScoreRecord scoreRecord,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        criteria.andIn("opRoleId", roles);
+        criteria.andEqualTo("status", 4);
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -93,17 +112,21 @@ public class ScoreRecordController {
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         criteria.andEqualTo("personId", identityInfoId);
         criteria.andIn("opRoleId", roles);
+        criteria.andEqualTo("status", 3);
         List<ScoreRecord> records = iScoreRecordService.findByCondition(condition);
-        List<Map> mList = new ArrayList<>();
+        List<Map> scoreList = new ArrayList<>();
         for (ScoreRecord record : records) {
             Map msMap = new HashMap();
             Indicator indicator = iIndicatorService.findById(record.getIndicatorId());
             msMap.put("indicator", indicator);
-            List<MaterialInfo> materialInfos = iMaterialInfoService.findByIndicatorId(record.getIndicatorId());
-            msMap.put("materialInfos", materialInfos);
-            mList.add(msMap);
+            condition = new Condition(IndicatorItem.class);
+            criteria = condition.createCriteria();
+            criteria.andEqualTo("indicatorId", record.getIndicatorId());
+            List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition);
+            msMap.put("indicatorItems", indicatorItems);
+            scoreList.add(msMap);
         }
-        params.put("mlist", mList);
+        params.put("scoreList", scoreList);
         IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
         if (person == null) {
             person = new IdentityInfo();
@@ -138,8 +161,29 @@ public class ScoreRecordController {
         }
         params.put("relation", relationshipList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
-        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_info.ftl", params);
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "score_info.ftl", params);
         Map result = new HashMap();
+
+        List<String> sCheckList = new ArrayList<>();
+        List<String> sTextList = new ArrayList<>();
+        condition = new Condition(ScoreRecord.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("opRoleId", roles.get(0));
+        criteria.andEqualTo("personId", identityInfoId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+        for (ScoreRecord item : scoreRecords) {
+            if (item.getStatus() == 4) {
+                Indicator indicator1 = iIndicatorService.findById(item.getIndicatorId());
+                if (indicator1.getItemType() == 0) {
+                    sCheckList.add(item.getIndicatorId() + "_" + item.getItemId());
+                } else {
+                    sTextList.add(item.getIndicatorId() + "_" + item.getScoreValue());
+                }
+            }
+        }
+        result.put("sCheckList", sCheckList);
+        result.put("sTextList", sTextList);
         result.put("html", html);
         return ResponseUtil.success(result);
     }
@@ -147,15 +191,21 @@ public class ScoreRecordController {
     @GetMapping("/detailAll")
     public Result detailAll(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId)
             throws FileNotFoundException {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(userId);
         Map params = new HashMap();
-        List<Map> mlist = new ArrayList<>();
+        List<Map> scoreList = new ArrayList<>();
         Map msMap = new HashMap();
         Indicator indicator = iIndicatorService.findById(indicatorId);
         msMap.put("indicator", indicator);
-        List<MaterialInfo> materialInfos = iMaterialInfoService.findByIndicatorId(indicatorId);
-        msMap.put("materialInfos", materialInfos);
-        mlist.add(msMap);
-        params.put("mlist", mlist);
+        Condition condition = new Condition(IndicatorItem.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("indicatorId", indicatorId);
+        List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition);
+        msMap.put("indicatorItems", indicatorItems);
+        scoreList.add(msMap);
+        params.put("scoreList", scoreList);
         IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
         if (person == null) {
             person = new IdentityInfo();
@@ -181,8 +231,8 @@ public class ScoreRecordController {
             houseMove = new HouseMove();
         }
         params.put("move", houseMove);
-        Condition condition = new Condition(HouseRelationship.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        condition = new Condition(HouseRelationship.class);
+        criteria = condition.createCriteria();
         criteria.andEqualTo("identityInfoId", identityInfoId);
         List<HouseRelationship> relationshipList = iHouseRelationshipService.findByCondition(condition);
         if (CollectionUtils.isEmpty(relationshipList)) {
@@ -190,8 +240,29 @@ public class ScoreRecordController {
         }
         params.put("relation", relationshipList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
-        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_info.ftl", params);
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "score_info.ftl", params);
         Map result = new HashMap();
+        List<String> sCheckList = new ArrayList<>();
+        List<String> sTextList = new ArrayList<>();
+        condition = new Condition(ScoreRecord.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("opRoleId", roles.get(0));
+        criteria.andEqualTo("personId", identityInfoId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        criteria.andEqualTo("indicatorId", indicatorId);
+        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+        for (ScoreRecord item : scoreRecords) {
+            if (item.getStatus() == 4) {
+                Indicator indicator1 = iIndicatorService.findById(item.getIndicatorId());
+                if (indicator1.getItemType() == 0) {
+                    sCheckList.add(item.getIndicatorId() + "_" + item.getItemId());
+                } else {
+                    sTextList.add(item.getIndicatorId() + "_" + item.getScoreValue());
+                }
+            }
+        }
+        result.put("sCheckList", sCheckList);
+        result.put("sTextList", sTextList);
         result.put("html", html);
         return ResponseUtil.success(result);
     }
@@ -207,6 +278,70 @@ public class ScoreRecordController {
         Map scoreRecordStatus = iDictService.selectMapByAlias("scoreRecordStatus");
         result.put("scoreRecordStatus", scoreRecordStatus);
         return ResponseUtil.success(result);
+    }
+
+    @PostMapping("/score")
+    public Result score(@RequestParam("personId") Integer personId,
+            @RequestParam(value = "sIds", required = false) String[] sIds,
+            @RequestParam(value = "sAns", required = false) String[] sAns) {
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        Integer userId = user.getId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
+        IdentityInfo person = iIdentityInfoService.findById(personId);
+        if (sAns != null) {
+            for (String sAn : sAns) {
+                String[] sAnArr = sAn.split("_");
+                Integer indicatorId = Integer.valueOf(sAnArr[0]);
+                BigDecimal scoreValue = BigDecimal.valueOf(Float.valueOf(sAnArr[1]));
+                Condition condition = new Condition(ScoreRecord.class);
+                tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+                criteria.andEqualTo("indicatorId", indicatorId);
+                criteria.andEqualTo("personId", personId);
+                criteria.andEqualTo("batchId", person.getBatchId());
+                criteria.andEqualTo("opRoleId", roles.get(0));
+                List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+                for (ScoreRecord scoreRecord : scoreRecords) {
+                    scoreRecord.setItemId(0);
+                    scoreRecord.setScoreDate(new Date());
+                    scoreRecord.setOpUserId(userId);
+                    scoreRecord.setOpUser(user.getDisplayName());
+                    scoreRecord.setScoreValue(scoreValue);
+                    scoreRecord.setStatus(4);
+                    iScoreRecordService.update(scoreRecord);
+                }
+            }
+        }
+        if (sIds != null) {
+            for (String sId : sIds) {
+                String[] sIdArr = sId.split("_");
+                Integer indicatorId = Integer.valueOf(sIdArr[0]);
+                Integer itemId = Integer.valueOf(sIdArr[1]);
+                Condition condition = new Condition(ScoreRecord.class);
+                tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+                criteria.andEqualTo("indicatorId", indicatorId);
+                criteria.andEqualTo("personId", personId);
+                criteria.andEqualTo("batchId", person.getBatchId());
+                criteria.andEqualTo("opRoleId", roles.get(0));
+                List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+                for (ScoreRecord scoreRecord : scoreRecords) {
+                    scoreRecord.setItemId(itemId);
+                    scoreRecord.setScoreDate(new Date());
+                    scoreRecord.setOpUserId(userId);
+                    scoreRecord.setOpUser(user.getDisplayName());
+                    if (itemId == 0) {
+                        scoreRecord.setScoreValue(BigDecimal.ZERO);
+                    } else {
+                        IndicatorItem item = iIndicatorItemService.findById(itemId);
+                        scoreRecord.setScoreValue(BigDecimal.valueOf(item.getScore()));
+                    }
+                    scoreRecord.setStatus(4);
+                    iScoreRecordService.update(scoreRecord);
+                }
+            }
+        }
+        return ResponseUtil.success();
     }
 
     @PostMapping("/insert")

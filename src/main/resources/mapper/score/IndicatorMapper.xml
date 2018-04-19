@@ -41,5 +41,8 @@
             #{item}
         </foreach>
     </select>
+    <select id="selectIndicatorIdByMaterialId" resultType="java.lang.Integer">
+        select indicator_id from t_relate_indicator_material where material_id=#{materialId}
+    </select>
 
 </mapper>

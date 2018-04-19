@@ -61,38 +61,6 @@ CREATE TABLE t_indicator_self_test_record (
   DEFAULT CHARSET = utf8
   COMMENT '用户自测得分';
 
-DROP TABLE IF EXISTS t_person_batch_accept_info;
-CREATE TABLE t_person_batch_accept_info (
-  id                  INT(11)      NOT NULL  AUTO_INCREMENT
-  COMMENT '主键ID',
-  batch_id            INT(11)      NOT NULL  DEFAULT '0'
-  COMMENT '批次ID',
-  person_info_id      INT(11)      NOT NULL  DEFAULT '0'
-  COMMENT '申请人身份信息id',
-  person_name         VARCHAR(64)  NOT NULL  DEFAULT ''
-  COMMENT '申请人',
-  person_id_num       VARCHAR(32)  NOT NULL  DEFAULT ''
-  COMMENT '申请人身份证',
-  person_mobile_phone VARCHAR(32)  NOT NULL  DEFAULT ''
-  COMMENT '申请人手机号',
-  accept_number       VARCHAR(64)  NOT NULL  DEFAULT ''
-  COMMENT '受理编号',
-  accept_address_id   INT(11)      NOT NULL  DEFAULT '0'
-  COMMENT '受理地点1、市级行政许可中心，2、滨海新区行政服务中心',
-  accept_address      VARCHAR(128) NOT NULL  DEFAULT ''
-  COMMENT '受理地点',
-  reservaion_date     INT(11)      NOT NULL  DEFAULT '0'
-  COMMENT '预约日期',
-  reservaion_m        INT(11)      NOT NULL  DEFAULT '0'
-  COMMENT '上午，下午',
-  c_time              TIMESTAMP    NOT NULL  DEFAULT CURRENT_TIMESTAMP
-  COMMENT '创建时间',
-  PRIMARY KEY (id)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COMMENT ='本期受理人员信息表';
-
 
 DROP TABLE IF EXISTS t_person_batch_score_record;
 CREATE TABLE t_person_batch_score_record (
@@ -173,7 +141,7 @@ CREATE TABLE t_person_material_accept_record (
   c_time        TIMESTAMP    NOT NULL  DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
   PRIMARY KEY (id),
-  UNIQUE KEY (batch_id, person_id, role_id, material_id)
+  UNIQUE KEY (batch_id, person_id, role_id, indicator_id, material_id)
 )
   DEFAULT CHARSET = utf8
   COMMENT '申请人材料送达记录表';

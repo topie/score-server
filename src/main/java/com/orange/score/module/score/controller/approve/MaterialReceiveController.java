@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-16.
@@ -97,7 +94,7 @@ public class MaterialReceiveController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Condition condition = new Condition(ScoreRecord.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria.andEqualTo("status", 3);
+        criteria.andGreaterThanOrEqualTo("status", 3);
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -159,6 +156,17 @@ public class MaterialReceiveController {
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_info.ftl", params);
         Map result = new HashMap();
+        List<String> mCheckList = new ArrayList<>();
+        condition = new Condition(MaterialAcceptRecord.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("roleId", roles.get(0));
+        criteria.andEqualTo("personId", identityInfoId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
+        for (MaterialAcceptRecord item : materials) {
+            mCheckList.add(item.getIndicatorId() + "_" + item.getMaterialId());
+        }
+        result.put("mCheckList", mCheckList);
         result.put("html", html);
         return ResponseUtil.success(result);
     }
@@ -166,6 +174,10 @@ public class MaterialReceiveController {
     @GetMapping("/detailAll")
     public Result detailAll(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId)
             throws FileNotFoundException {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
         Map params = new HashMap();
         List<Map> mlist = new ArrayList<>();
         Map msMap = new HashMap();
@@ -208,9 +220,21 @@ public class MaterialReceiveController {
             relationshipList = new ArrayList<>();
         }
         params.put("relation", relationshipList);
+        Map result = new HashMap();
+        List<String> mCheckList = new ArrayList<>();
+        condition = new Condition(MaterialAcceptRecord.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("roleId", roles.get(0));
+        criteria.andEqualTo("personId", identityInfoId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        criteria.andEqualTo("indicatorId", indicatorId);
+        List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
+        for (MaterialAcceptRecord item : materials) {
+            mCheckList.add(item.getIndicatorId() + "_" + item.getMaterialId());
+        }
+        result.put("mCheckList", mCheckList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_info.ftl", params);
-        Map result = new HashMap();
         result.put("html", html);
         return ResponseUtil.success(result);
     }
@@ -235,9 +259,13 @@ public class MaterialReceiveController {
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
         IdentityInfo person = iIdentityInfoService.findById(personId);
+        Set<Integer> indicatorIdSet = new HashSet<>();
         for (String mId : mIds) {
-            MaterialInfo materialInfo = iMaterialInfoService.findById(Integer.valueOf(mId));
+            String[] mIdArr = mId.split("_");
+            MaterialInfo materialInfo = iMaterialInfoService.findById(Integer.valueOf(mIdArr[1]));
+            indicatorIdSet.add(Integer.valueOf(mIdArr[0]));
             MaterialAcceptRecord materialAcceptRecord = new MaterialAcceptRecord();
+            materialAcceptRecord.setIndicatorId(Integer.valueOf(mIdArr[0]));
             materialAcceptRecord.setBatchId(person.getBatchId());
             materialAcceptRecord.setPersonId(personId);
             materialAcceptRecord.setRoleId(roles.get(0));
@@ -246,16 +274,16 @@ public class MaterialReceiveController {
             materialAcceptRecord.setStatus(1);
             iMaterialAcceptRecordService.save(materialAcceptRecord);
         }
-        List<Integer> ids = iIndicatorService.selectDistinctIndicatorIdByMids(mIds);
         Condition condition = new Condition(ScoreRecord.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria.andIn("indicatorId", ids);
+        criteria.andIn("indicatorId", indicatorIdSet);
         criteria.andEqualTo("personId", personId);
         criteria.andEqualTo("batchId", person.getBatchId());
         criteria.andEqualTo("opRoleId", roles.get(0));
         List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
         for (ScoreRecord scoreRecord : scoreRecords) {
             scoreRecord.setStatus(3);
+            scoreRecord.setSubmitDate(new Date());
             iScoreRecordService.update(scoreRecord);
         }
         return ResponseUtil.success();

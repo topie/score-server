@@ -78,5 +78,10 @@ public class IndicatorServiceImpl extends BaseService<Indicator> implements IInd
         return indicatorMapper.selectDistinctIndicatorIdByMids(mIds);
     }
 
+    @Override
+    public Integer selectIndicatorIdByMaterialId(Integer materialId) {
+        return indicatorMapper.selectIndicatorIdByMaterialId(materialId);
+    }
+
 }
 

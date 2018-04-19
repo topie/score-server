@@ -74,11 +74,21 @@ CREATE TABLE t_identity_info (
   COMMENT '公安前置预审状态',
   renshe_accept_status   INT(11)               DEFAULT 0
   COMMENT '人社受理状态',
-  cancel_status           INT(11)               DEFAULT 0
+  cancel_status          INT(11)               DEFAULT 0
   COMMENT '资格取消状态',
-  c_time                 TIMESTAMP
+  `accept_number`        VARCHAR(64)  NOT NULL DEFAULT ''
+  COMMENT '受理编号',
+  `accept_address_id`    INT(11)      NOT NULL DEFAULT '0'
+  COMMENT '受理地点1、市级行政许可中心，2、滨海新区行政服务中心',
+  `accept_address`       VARCHAR(128) NOT NULL DEFAULT ''
+  COMMENT '受理地点',
+  `reservaion_date`      INT(11)      NOT NULL DEFAULT '0'
+  COMMENT '预约日期',
+  `reservaion_m`         INT(11)      NOT NULL DEFAULT '0'
+  COMMENT '上午，下午',
+  c_time                 TIMESTAMP    NULL
   COMMENT '创建时间',
-  u_time                 TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  u_time                 TIMESTAMP    NULL
   COMMENT '更新时间',
   PRIMARY KEY (id),
   UNIQUE KEY idx_id_number (batch_id, id_number)
@@ -262,3 +272,5 @@ CREATE TABLE t_region (
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8
   COMMENT ='地区信息表';
+
+

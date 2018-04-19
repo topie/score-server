@@ -23,5 +23,7 @@ public interface IndicatorMapper extends Mapper<Indicator> {
 
     List<TreeNode> selectDepartmentTreeNodes();
 
-    List<Integer> selectDistinctIndicatorIdByMids(@Param("mIds")String[] mIds);
+    List<Integer> selectDistinctIndicatorIdByMids(@Param("mIds") String[] mIds);
+
+    Integer selectIndicatorIdByMaterialId(@Param("materialId") Integer materialId);
 }
