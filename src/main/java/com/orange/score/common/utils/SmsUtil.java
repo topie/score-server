@@ -11,13 +11,14 @@ public class SmsUtil {
         requestPairs.add(RequestPairBuilder.build("SpCode", "222803"));
         requestPairs.add(RequestPairBuilder.build("LoginName", "taiji"));
         requestPairs.add(RequestPairBuilder.build("Password", "taiji1234"));
-        requestPairs.add(RequestPairBuilder.build("MessageContent", "content"));
-        requestPairs.add(RequestPairBuilder.build("UserNumber", "mobile"));
+        requestPairs.add(RequestPairBuilder.build("MessageContent", content));
+        requestPairs.add(RequestPairBuilder.build("UserNumber", mobile));
+        requestPairs.add(RequestPairBuilder.build("SerialNumber", System.currentTimeMillis()));
         String result = OkHttpUtil.postForm("http://sms.api.ums86.com:8899/sms/Api/Send.do", requestPairs);
         System.out.println(result);
     }
 
     public static void main(String[] args) throws IOException {
-        send("18600200791", "18600200791用户您在天津市居住证积分申报网站注册的用户已经成功");
+        send("18600200791", "你有一项编号为123456789的事务需要处理");
     }
 }

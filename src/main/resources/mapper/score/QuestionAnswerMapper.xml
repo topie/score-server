@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.QuestionAnswerMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.QuestionAnswer">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="question" jdbcType="VARCHAR" property="question" />
+    <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
+    <result column="answer" jdbcType="LONGVARCHAR" property="answer" />
+  </resultMap>
+</mapper>
