@@ -57,11 +57,9 @@ public class ApplyCancelController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
         Condition condition = new Condition(ApplyCancel.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 0);
-        if (roles.get(0) != 3) criteria.andEqualTo("applyRoleId", roles.get(0));
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -73,11 +71,9 @@ public class ApplyCancelController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
         Condition condition = new Condition(ApplyCancel.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 1);
-        if (roles.get(0) != 3) criteria.andEqualTo("applyRoleId", roles.get(0));
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -89,11 +85,9 @@ public class ApplyCancelController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
         Condition condition = new Condition(ApplyCancel.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 2);
-        if (roles.get(0) != 3) criteria.andEqualTo("applyRoleId", roles.get(0));
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

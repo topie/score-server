@@ -57,7 +57,6 @@ public class ApplyScoreController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 0);
@@ -72,7 +71,6 @@ public class ApplyScoreController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 1);
@@ -87,7 +85,6 @@ public class ApplyScoreController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 2);
