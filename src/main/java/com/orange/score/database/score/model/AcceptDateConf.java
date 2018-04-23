@@ -35,6 +35,9 @@ public class AcceptDateConf {
     @Column(name = "week_day")
     private String weekDay;
 
+    @Column(name = "address_id")
+    private Integer addressId;
+
     /**
      * 上午发放人数
      */
@@ -58,6 +61,14 @@ public class AcceptDateConf {
      */
     @Column(name = "pm_remaining_count")
     private Integer pmRemainingCount;
+
+    public Integer getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Integer addressId) {
+        this.addressId = addressId;
+    }
 
     /**
      * 获取id

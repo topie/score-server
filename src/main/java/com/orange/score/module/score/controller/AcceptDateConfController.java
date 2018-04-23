@@ -6,8 +6,10 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.date.DateUtil;
+import com.orange.score.database.score.model.AcceptAddress;
 import com.orange.score.database.score.model.AcceptDateConf;
 import com.orange.score.module.core.service.ICommonQueryService;
+import com.orange.score.module.score.service.IAcceptAddressService;
 import com.orange.score.module.score.service.IAcceptDateConfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,9 @@ public class AcceptDateConfController {
     private IAcceptDateConfService iAcceptDateConfService;
 
     @Autowired
+    private IAcceptAddressService iAcceptAddressService;
+
+    @Autowired
     private ICommonQueryService iCommonQueryService;
 
     @GetMapping(value = "/list")
@@ -44,9 +49,16 @@ public class AcceptDateConfController {
     public Result formItems() {
         List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_accept_date_conf");
         List searchItems = iCommonQueryService.selectSearchItemsByTable("t_accept_date_conf");
+
+        List<AcceptAddress> list = iAcceptAddressService.selectByFilter(null);
+        Map addressMap = new HashMap();
+        for (AcceptAddress acceptAddress : list) {
+            addressMap.put(acceptAddress.getId(),acceptAddress.getAddress());
+        }
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);
+        result.put("addressMap", addressMap);
         return ResponseUtil.success(result);
     }
 

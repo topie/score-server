@@ -3,6 +3,7 @@ package com.orange.score.module.score.controller;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
+import com.orange.score.common.utils.Option;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.AcceptAddress;
@@ -11,11 +12,12 @@ import com.orange.score.module.score.service.IAcceptAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
-* Created by chenJz1012 on 2018-04-02.
-*/
+ * Created by chenJz1012 on 2018-04-02.
+ */
 @RestController
 @RequestMapping("/api/score/acceptAddress")
 public class AcceptAddressController {
@@ -29,9 +31,10 @@ public class AcceptAddressController {
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(AcceptAddress acceptAddress,
-    @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-    @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-    PageInfo<AcceptAddress> pageInfo = iAcceptAddressService.selectByFilterAndPage(acceptAddress, pageNum, pageSize);
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        PageInfo<AcceptAddress> pageInfo = iAcceptAddressService
+                .selectByFilterAndPage(acceptAddress, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -64,5 +67,16 @@ public class AcceptAddressController {
     public Result detail(@RequestParam Integer id) {
         AcceptAddress acceptAddress = iAcceptAddressService.findById(id);
         return ResponseUtil.success(acceptAddress);
+    }
+
+    @RequestMapping(value = "/options")
+    @ResponseBody
+    public List<Option> options() {
+        List<Option> options = new ArrayList<>();
+        List<AcceptAddress> list = iAcceptAddressService.selectByFilter(null);
+        for (AcceptAddress item : list) {
+            options.add(new Option(item.getAddress(), item.getId()));
+        }
+        return options;
     }
 }

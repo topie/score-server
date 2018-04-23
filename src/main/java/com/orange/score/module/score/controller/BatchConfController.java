@@ -75,7 +75,7 @@ public class BatchConfController extends BaseController {
         List<Option> options = new ArrayList<>();
         List<BatchConf> list = iBatchConfService.selectByFilter(null);
         for (BatchConf item : list) {
-            options.add(new Option(item.getBatchNumber(), item.getBatchNumber()));
+            options.add(new Option(item.getBatchNumber(), item.getId()));
         }
         return options;
     }
