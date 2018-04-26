@@ -91,6 +91,9 @@ public class IdentityInfo {
     @Column(name = "cancel_status")
     private Integer cancelStatus;
 
+    @Column(name = "result_status")
+    private Integer resultStatus;
+
     /**
      * 创建时间
      */
@@ -102,6 +105,14 @@ public class IdentityInfo {
      */
     @Column(name = "u_time")
     private Date uTime;
+
+    public Integer getResultStatus() {
+        return resultStatus;
+    }
+
+    public void setResultStatus(Integer resultStatus) {
+        this.resultStatus = resultStatus;
+    }
 
     public Integer getCancelStatus() {
         return cancelStatus;

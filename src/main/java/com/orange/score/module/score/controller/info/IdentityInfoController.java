@@ -1,4 +1,4 @@
-package com.orange.score.module.score.controller;
+package com.orange.score.module.score.controller.info;
 
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
@@ -12,7 +12,6 @@ import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUtil;
-import com.orange.score.module.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
@@ -29,7 +28,7 @@ import java.util.Map;
  * Created by chenJz1012 on 2018-04-08.
  */
 @RestController
-@RequestMapping("/api/score/identityInfo")
+@RequestMapping("/api/score/info/identityInfo")
 public class IdentityInfoController {
 
     @Autowired
@@ -40,9 +39,6 @@ public class IdentityInfoController {
 
     @Autowired
     private IDictService iDictService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private IHouseOtherService iHouseOtherService;
@@ -60,16 +56,7 @@ public class IdentityInfoController {
     private IMaterialInfoService iMaterialInfoService;
 
     @Autowired
-    private IIndicatorService iIndicatorService;
-
-    @Autowired
-    private IIndicatorItemService iIndicatorItemService;
-
-    @Autowired
     private ICompanyInfoService iCompanyInfoService;
-
-    @Autowired
-    private IScoreRecordService iScoreRecordService;
 
     @Autowired
     private IOnlinePersonMaterialService iOnlinePersonMaterialService;
