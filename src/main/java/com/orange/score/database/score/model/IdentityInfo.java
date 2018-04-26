@@ -1,5 +1,8 @@
 package com.orange.score.database.score.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -39,6 +42,22 @@ public class IdentityInfo {
      */
     @Column(name = "id_card_opposite")
     private String idCardOpposite;
+
+    @Column(name = "accept_number")
+    private String acceptNumber;
+
+    @Column(name = "accept_address_id")
+    private Integer acceptAddress_id;
+
+    @Column(name = "accept_address")
+    private String acceptAddress;
+
+    @Column(name = "reservaion_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date reservaionDate;
+
+    @Column(name = "reservaion_m")
+    private Integer reservaionM;
 
     /**
      * 姓名
@@ -105,6 +124,47 @@ public class IdentityInfo {
      */
     @Column(name = "u_time")
     private Date uTime;
+
+    public String getAcceptNumber() {
+        return acceptNumber;
+    }
+
+    public void setAcceptNumber(String acceptNumber) {
+        this.acceptNumber = acceptNumber;
+    }
+
+    public Integer getAcceptAddress_id() {
+        return acceptAddress_id;
+    }
+
+    public void setAcceptAddress_id(Integer acceptAddress_id) {
+        this.acceptAddress_id = acceptAddress_id;
+    }
+
+    public String getAcceptAddress() {
+        return acceptAddress;
+    }
+
+    public void setAcceptAddress(String acceptAddress) {
+        this.acceptAddress = acceptAddress;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")
+    public Date getReservaionDate() {
+        return reservaionDate;
+    }
+
+    public void setReservaionDate(Date reservaionDate) {
+        this.reservaionDate = reservaionDate;
+    }
+
+    public Integer getReservaionM() {
+        return reservaionM;
+    }
+
+    public void setReservaionM(Integer reservaionM) {
+        this.reservaionM = reservaionM;
+    }
 
     public Integer getResultStatus() {
         return resultStatus;

@@ -9,12 +9,15 @@ import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.BatchConf;
 import com.orange.score.module.core.service.ICommonQueryService;
+import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IBatchConfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chenJz1012 on 2018-04-04.
@@ -29,6 +32,9 @@ public class BatchConfController extends BaseController {
     @Autowired
     private ICommonQueryService iCommonQueryService;
 
+    @Autowired
+    private IDictService iDictService;
+
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(BatchConf batchConf,
@@ -41,8 +47,16 @@ public class BatchConfController extends BaseController {
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
-        List<FormItem> list = iCommonQueryService.selectFormItemsByTable("t_batch_conf");
-        return ResponseUtil.success(list);
+        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_batch_conf");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_batch_conf");
+        Map result = new HashMap<>();
+        result.put("formItems", formItems);
+        result.put("searchItems", searchItems);
+        Map batchStatus = iDictService.selectMapByAlias("batchStatus");
+        result.put("batchStatus", batchStatus);
+        Map batchProcess = iDictService.selectMapByAlias("batchProcess");
+        result.put("batchProcess", batchProcess);
+        return ResponseUtil.success(result);
     }
 
     @PostMapping("/insert")
@@ -78,5 +92,15 @@ public class BatchConfController extends BaseController {
             options.add(new Option(item.getBatchNumber(), item.getId()));
         }
         return options;
+    }
+
+
+    @PostMapping("/updateStatus")
+    public Result updateStatus(BatchConf batchConf) {
+        if(batchConf.getStatus()==1){
+            batchConf.setProcess(1);
+        }
+        iBatchConfService.update(batchConf);
+        return ResponseUtil.success();
     }
 }

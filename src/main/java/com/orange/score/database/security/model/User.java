@@ -1,5 +1,6 @@
 package com.orange.score.database.security.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.orange.score.common.utils.Sortable;
 import org.hibernate.validator.constraints.Email;
@@ -32,7 +33,7 @@ public class User extends Sortable {
      */
 
     @NotEmpty
-    @Size(min = 8, max = 64)
+    @Size(min = 6, max = 20)
     @JsonIgnore
     private String password;
 
@@ -95,18 +96,21 @@ public class User extends Sortable {
      * 插入时间
      */
     @Column(name = "insert_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date insertTime;
 
     /**
      * 更新时间
      */
     @Column(name = "update_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date updateTime;
 
     /**
      * 上次密码重置时间
      */
     @Column(name = "last_password_reset")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date lastPasswordReset;
 
     /**
@@ -278,6 +282,7 @@ public class User extends Sortable {
      *
      * @return last_login_time - 最后登陆时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     public Date getLastLoginTime() {
         return lastLoginTime;
     }
@@ -332,6 +337,7 @@ public class User extends Sortable {
      *
      * @return insert_time - 插入时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     public Date getInsertTime() {
         return insertTime;
     }
@@ -350,6 +356,7 @@ public class User extends Sortable {
      *
      * @return update_time - 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     public Date getUpdateTime() {
         return updateTime;
     }

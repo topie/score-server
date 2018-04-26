@@ -7,6 +7,7 @@ import com.orange.score.common.utils.TreeNode;
 import com.orange.score.database.score.dao.IndicatorMapper;
 import com.orange.score.database.score.model.Indicator;
 import com.orange.score.module.score.service.IIndicatorService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,9 @@ public class IndicatorServiceImpl extends BaseService<Indicator> implements IInd
     public List<Indicator> selectByFilter(Indicator indicator) {
         Condition condition = new Condition(Indicator.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        if (StringUtils.isNotEmpty(indicator.getName())) {
+            criteria.andLike("name", "%" + indicator.getName() + "%");
+        }
         return indicatorMapper.selectByCondition(condition);
     }
 
@@ -65,7 +69,7 @@ public class IndicatorServiceImpl extends BaseService<Indicator> implements IInd
 
     @Override
     public int insertBindDepartment(Integer id, Integer dId) {
-        return indicatorMapper.insertBindDepartment(id,dId);
+        return indicatorMapper.insertBindDepartment(id, dId);
     }
 
     @Override

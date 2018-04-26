@@ -13,6 +13,7 @@ import com.orange.score.database.score.model.Indicator;
 import com.orange.score.database.score.model.IndicatorItem;
 import com.orange.score.database.score.model.IndicatorJson;
 import com.orange.score.module.core.service.ICommonQueryService;
+import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IIndicatorItemService;
 import com.orange.score.module.score.service.IIndicatorJsonService;
 import com.orange.score.module.score.service.IIndicatorService;
@@ -44,6 +45,9 @@ public class IndicatorController {
     @Autowired
     private IIndicatorJsonService iIndicatorJsonService;
 
+    @Autowired
+    private IDictService iDictService;
+
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(Indicator indicator,
@@ -56,8 +60,14 @@ public class IndicatorController {
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
-        List<FormItem> list = iCommonQueryService.selectFormItemsByTable("t_indicator");
-        return ResponseUtil.success(list);
+        List formItems = iCommonQueryService.selectFormItemsByTable("t_indicator");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_indicator");
+        Map result = new HashMap<>();
+        result.put("formItems", formItems);
+        result.put("searchItems", searchItems);
+        Map scoreRule = iDictService.selectMapByAlias("scoreRule");
+        result.put("scoreRule", scoreRule);
+        return ResponseUtil.success(result);
     }
 
     @PostMapping("/insert")
@@ -87,13 +97,14 @@ public class IndicatorController {
 
     @PostMapping("/update")
     public Result update(Indicator indicator) {
+        iIndicatorService.deleteBindMaterial(indicator.getId());
         iIndicatorService.update(indicator);
         if (CollectionUtils.isNotEmpty(indicator.getMaterial())) {
-            iIndicatorService.deleteBindMaterial(indicator.getId());
             for (Integer mId : indicator.getMaterial()) {
                 iIndicatorService.insertBindMaterial(indicator.getId(), mId);
             }
         }
+        iIndicatorService.deleteBindDepartment(indicator.getId());
         if (CollectionUtils.isNotEmpty(indicator.getDepartment())) {
             iIndicatorService.deleteBindDepartment(indicator.getId());
             for (Integer dId : indicator.getDepartment()) {

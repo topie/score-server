@@ -45,19 +45,15 @@ public class ListInfoController {
     @ResponseBody
     public Result formItems() {
         List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_batch_conf");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_batch_conf");
         Map result = new HashMap<>();
         result.put("formItems", formItems);
+        result.put("searchItems", searchItems);
         Map batchStatus = iDictService.selectMapByAlias("batchStatus");
         result.put("batchStatus", batchStatus);
         Map batchProcess = iDictService.selectMapByAlias("batchProcess");
         result.put("batchProcess", batchProcess);
         return ResponseUtil.success(result);
-    }
-
-    @PostMapping("/updateStatus")
-    public Result updateStatus(BatchConf batchConf) {
-        iBatchConfService.update(batchConf);
-        return ResponseUtil.success();
     }
 
 }
