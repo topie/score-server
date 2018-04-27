@@ -14,6 +14,7 @@ import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
@@ -74,7 +75,8 @@ public class MaterialReceiveController {
 
     @GetMapping(value = "/receiving")
     @ResponseBody
-    public Result receiving(@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public Result receiving(ScoreRecord scoreRecord,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Condition condition = new Condition(ScoreRecord.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
@@ -83,6 +85,15 @@ public class MaterialReceiveController {
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         criteria.andEqualTo("status", 2);
         criteria.andIn("opRoleId", roles);
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
+            criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
+        }
+        if (scoreRecord.getBatchId() != null) {
+            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+        }
+        if (scoreRecord.getIndicatorId() != null) {
+            criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
+        }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -99,6 +110,15 @@ public class MaterialReceiveController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         criteria.andIn("opRoleId", roles);
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
+            criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
+        }
+        if (scoreRecord.getBatchId() != null) {
+            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+        }
+        if (scoreRecord.getIndicatorId() != null) {
+            criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
+        }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -120,7 +140,7 @@ public class MaterialReceiveController {
             Indicator indicator = iIndicatorService.findById(record.getIndicatorId());
             msMap.put("indicator", indicator);
             List<MaterialInfo> materialInfos = iMaterialInfoService.findByIndicatorId(record.getIndicatorId());
-            msMap.put("materialInfos", materialInfos);
+            if (materialInfos.size() > 0) msMap.put("materialInfos", materialInfos);
             mList.add(msMap);
         }
         params.put("mlist", mList);

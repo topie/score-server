@@ -30,7 +30,7 @@
         <div class="widget-main">
             <div class="tab-content">
                 <div id="info-tab" class="row tab-pane active">
-                    <div class="col-md-12 col-sx-12">
+                    <div class="col-md-7 col-sx-12">
                         <div class="panel panel-default">
                             <!-- Default panel contents -->
                             <div class="panel-heading">用人单位信息</div>
@@ -248,82 +248,101 @@
                             </table>
                         </div>
                     </div>
+                    <div class="col-md-5 col-sx-12">
+                    <#list scoreList as item>
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">部门审核打分</div>
+                            <!-- Table -->
+                            <table class="table table-hover table-bordered table-condensed">
+                                <tr class="info">
+                                    <th>指标序号：</th>
+                                    <th>${item.indicator.indexNum}</th>
+                                    <th>指标类别：</th>
+                                    <th colspan="2">${item.indicator.category}</th>
+                                </tr>
+                                <tr class="info">
+                                    <th>指标名称：</th>
+                                    <th colspan="4">${item.indicator.name}</th>
+                                </tr>
+                                <tr class="info">
+                                    <th>打分部门：</th>
+                                    <th colspan="4">${item.opRole}</th>
+                                </tr>
+                                <tr class="info">
+                                    <th>打分人：</th>
+                                    <th>${item.opUser}</th>
+                                    <th>打分时间：</th>
+                                    <th colspan="2"><#if item.submitDate??>${item.submitDater?string("yyyy-MM-dd")}</#if></th>
+                                </tr>
+                                <tr class="info">
+                                    <td>状态：</td>
+                                    <td style="color: red">${item.scoreStatus}</td>
+                                    <td>打分结果：</td>
+                                    <td style="color: red" colspan="2">${item.scoreValue?default("-")}</td>
+                                </tr>
+                            </table>
+                            <table class="table table-hover table-bordered table-condensed">
+                                <#if item.indicator.itemType==0>
+                                    <tr class="info">
+                                        <th>选择</th>
+                                        <th style="width: 60%" colspan="3">指标选项</th>
+                                        <th>分值</th>
+                                    </tr>
+                                    <#list item.indicatorItems as sitem>
+                                        <tr>
+                                            <td class="text-center">
+                                                <input type="radio"
+                                                       value="${item.opRoleId}_${item.indicator.id}_${sitem.id}"
+                                                       name="score">
+                                            </td>
+                                            <td style="width: 60%" colspan="3">${sitem.content}</td>
+                                            <td class="text-danger">${sitem.score}分</td>
+                                        </tr>
+                                    </#list>
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="radio"
+                                                   value="${item.opRoleId}_${item.indicator.id}_0"
+                                                   name="score">
+                                        </td>
+                                        <td style="width: 60%" colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
+                                        <td class="text-danger">0分</td>
+                                    </tr>
+                                <#else>
+                                    <tr class="info">
+                                        <th colspan="4">输入框</th>
+                                        <th>分值</th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-danger">
+                                            <input type="text" value=""
+                                                   d-indicator="${item.opRoleId}_${item.indicator.id}"
+                                                   name="score">
+                                        </td>
+                                        <td class="text-danger">手动输入</td>
+                                    </tr>
+                                </#if>
+                                <tr>
+                                    <td class="check_desc" colspan="5">
+                                        <div class="text-info">审核打分说明：</div>
+                                        <textarea class="form-control" rows="3" disabled>
+                                        ${item.indicator.note}
+                                        </textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-danger fontweight600" colspan="5">
+                                        <div class="alert alert-warning">请您按照指标体系要求打分</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </#list>
+                    </div>
                 </div>
                 <div id="material-tab" class="main-cont clearfix tab-pane">
                     <div>
-                        <div class="panel panel-default">
-                            <!-- Default panel contents -->
-                            <div class="panel-heading">
-                                申请人提交材料确认（<span class="text-danger">请勾选确认申请人送达的材料</span>）
-                            </div>
-                        <#list scoreList as item>
-                            <div class="panel panel-default">
-                                <!-- Default panel contents -->
-                                <div class="panel-heading">部门审核打分</div>
-                                <!-- Table -->
-                                <table class="table table-hover table-bordered table-condensed">
-                                    <tr class="info">
-                                        <th>指标序号：</th>
-                                        <th>${item.indicator.indexNum}</th>
-                                        <th>指标类别：</th>
-                                        <th colspan="2">${item.indicator.category}</th>
-                                    </tr>
-                                    <tr class="info">
-                                        <th>指标名称：</th>
-                                        <th colspan="4">${item.indicator.name}</th>
-                                    </tr>
-                                    <#if item.indicator.itemType==0>
-                                        <tr class="info">
-                                            <th>选择</th>
-                                            <th colspan="3">指标选项</th>
-                                            <th>分值</th>
-                                        </tr>
-                                        <#list item.indicatorItems as sitem>
-                                            <tr>
-                                                <td class="text-center">
-                                                    <input type="radio" value="${item.indicator.id}_${sitem.id}"
-                                                           name="score">
-                                                </td>
-                                                <td colspan="3">${sitem.content}</td>
-                                                <td class="text-danger">${sitem.score}分</td>
-                                            </tr>
-                                        </#list>
-                                        <tr>
-                                            <td class="text-center">
-                                                <input type="radio" value="${item.indicator.id}_0" name="score">
-                                            </td>
-                                            <td colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
-                                            <td class="text-danger">0分</td>
-                                        </tr>
-                                    <#else>
-                                        <tr class="info">
-                                            <th colspan="4">输入框</th>
-                                            <th>分值</th>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" class="text-danger">
-                                                <input type="text" value="" d-indicator="${item.indicator.id}"
-                                                       name="score">
-                                            </td>
-                                            <td class="text-danger">手动输入</td>
-                                        </tr>
-                                    </#if>
-                                    <tr>
-                                        <td class="check_desc" colspan="5">
-                                            <div class="text-info">审核打分说明：</div>
-                                            <textarea class="form-control" rows="3">
-                                        </textarea>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-danger fontweight600" colspan="5">
-                                            <div class="alert alert-warning">请您按照指标体系要求打分</div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </#list>
-                        </div>
                         <div class="panel panel-default">
                             <!-- Default panel contents -->
                             <div class="panel-heading">

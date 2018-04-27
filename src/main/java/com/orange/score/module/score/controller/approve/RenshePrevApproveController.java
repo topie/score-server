@@ -51,6 +51,8 @@ public class RenshePrevApproveController {
         result.put("unionApproveStatus1", unionApproveStatus1);
         Map unionApproveStatus2 = iDictService.selectMapByAlias("unionApproveStatus2");
         result.put("unionApproveStatus2", unionApproveStatus2);
+        Map reservationStatus = iDictService.selectMapByAlias("reservationStatus");
+        result.put("reservationStatus", reservationStatus);
         return ResponseUtil.success(result);
     }
 
@@ -60,6 +62,7 @@ public class RenshePrevApproveController {
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         identityInfo.setUnionApproveStatus2(1);
+        identityInfo.setCancelStatus(0);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

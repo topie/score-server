@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -82,6 +83,11 @@ public class AcceptDateConfServiceImpl extends BaseService<AcceptDateConf> imple
             }
         }
         return acceptDateConfMapper.selectByCondition(condition);
+    }
+
+    @Override
+    public List<Date> selectDistinctDateList(AcceptDateConf acceptDateConf) {
+        return acceptDateConfMapper.selectDistinctDateList(acceptDateConf);
     }
 }
 

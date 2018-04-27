@@ -36,7 +36,7 @@ public class IndicatorServiceImpl extends BaseService<Indicator> implements IInd
     public List<Indicator> selectByFilter(Indicator indicator) {
         Condition condition = new Condition(Indicator.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        if (StringUtils.isNotEmpty(indicator.getName())) {
+        if (indicator!=null && StringUtils.isNotEmpty(indicator.getName())) {
             criteria.andLike("name", "%" + indicator.getName() + "%");
         }
         return indicatorMapper.selectByCondition(condition);

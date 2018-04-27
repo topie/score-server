@@ -32,18 +32,18 @@ public class ListInfoController {
     @Autowired
     private IDictService iDictService;
 
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/batch/list")
     @ResponseBody
-    public Result list(BatchConf batchConf,
+    public Result batchList(BatchConf batchConf,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         PageInfo<BatchConf> pageInfo = iBatchConfService.selectByFilterAndPage(batchConf, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
-    @GetMapping(value = "/formItems")
+    @GetMapping(value = "/batch/formItems")
     @ResponseBody
-    public Result formItems() {
+    public Result batchFormItems() {
         List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_batch_conf");
         List searchItems = iCommonQueryService.selectSearchItemsByTable("t_batch_conf");
         Map result = new HashMap<>();

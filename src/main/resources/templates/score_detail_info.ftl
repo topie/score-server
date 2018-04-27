@@ -63,7 +63,7 @@
                                     <th>打分人：</th>
                                     <th>${item.opUser}</th>
                                     <th>打分时间：</th>
-                                    <th colspan="2"><#if item.submitDate??>${item.submitDate}</#if></th>
+                                    <th colspan="2"><#if item.submitDate??>${item.submitDater?string("yyyy-MM-dd")}</#if></th>
                                 </tr>
                                 <tr class="info">
                                     <td>状态：</td>
@@ -71,30 +71,32 @@
                                     <td>打分结果：</td>
                                     <td style="color: red" colspan="2">${item.scoreValue?default("-")}</td>
                                 </tr>
+                            </table>
+                            <table class="table table-hover table-bordered table-condensed">
                                 <#if item.indicator.itemType==0>
                                     <tr class="info">
                                         <th>选择</th>
-                                        <th colspan="3">指标选项</th>
+                                        <th style="width: 60%" colspan="3">指标选项</th>
                                         <th>分值</th>
                                     </tr>
                                     <#list item.indicatorItems as sitem>
                                         <tr>
                                             <td class="text-center">
-                                                <input readonly="readonly" type="radio"
+                                                <input type="radio"
                                                        value="${item.opRoleId}_${item.indicator.id}_${sitem.id}"
                                                        name="score">
                                             </td>
-                                            <td colspan="3">${sitem.content}</td>
+                                            <td style="width: 60%" colspan="3">${sitem.content}</td>
                                             <td class="text-danger">${sitem.score}分</td>
                                         </tr>
                                     </#list>
                                     <tr>
                                         <td class="text-center">
-                                            <input readonly="readonly" type="radio"
+                                            <input type="radio"
                                                    value="${item.opRoleId}_${item.indicator.id}_0"
                                                    name="score">
                                         </td>
-                                        <td colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
+                                        <td style="width: 60%" colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
                                         <td class="text-danger">0分</td>
                                     </tr>
                                 <#else>
@@ -104,7 +106,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="text-danger">
-                                            <input readonly="readonly" type="text" value=""
+                                            <input type="text" value=""
                                                    d-indicator="${item.opRoleId}_${item.indicator.id}"
                                                    name="score">
                                         </td>

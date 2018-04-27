@@ -26,31 +26,16 @@
                             <table style="font-size: 12px;" class="table table-hover table-condensed">
                                 <!-- 两组数据信息的 -->
                                 <tr>
-                                    <td colspan="2">单位名称：</td>
-                                    <td colspan="4">
-                                        <strong>${company.companyName}</strong>
-                                    </td>
-                                    <td colspan="2">机构代码：</td>
-                                    <td colspan="4">
-                                        <strong>${company.societyCode}</strong>
-                                    </td>
+                                    <td colspan="6">单位名称：${company.companyName}</td>
+                                    <td colspan="6">机构代码：<strong>${company.societyCode}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">联系人：</td>
-                                    <td colspan="4">
-                                        <strong>${company.operator}</strong>
-                                    </td>
-                                    <td colspan="2">联系电话：</td>
-                                    <td colspan="4">
-                                        <strong>${company.operatorMobile}</strong>
-                                    </td>
+                                    <td colspan="6">联系人：<strong>${company.operator}</strong></td>
+                                    <td colspan="6">联系电话：<strong>${company.operatorMobile}</strong></td>
                                 </tr>
                                 <!-- 一组数据信息的 -->
                                 <tr>
-                                    <td colspan="2">联系地址：</td>
-                                    <td colspan="10">
-                                        <strong>${company.operatorAddress}</strong>
-                                    </td>
+                                    <td colspan="12">联系地址：<strong>${company.operatorAddress}</strong></td>
                                 </tr>
                             </table>
                         </div>
@@ -58,159 +43,69 @@
                             <div class="panel-heading">申请人及随迁子女信息</div>
                             <table style="font-size: 12px;" class="table table-hover table-condensed">
                                 <tr>
-                                    <td colspan="2">居住证号（身份证号）：
-                                    </td>
-                                    <td colspan="10">
-                                        <strong>${person.idNumber}</strong>
+                                    <td colspan="12">居住证号（身份证号）：<strong>${person.idNumber}</strong>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">申请人类型：</td>
-                                    <td colspan="4">
-                                        <strong>${other.applicantTypeStr}</strong>
-                                    </td>
-                                    <td colspan="2">居住证申领日期：</td>
-                                    <td colspan="4">
-                                        <strong>${other.applicationDate}</strong>
-                                    </td>
+                                    <td colspan="6">申请人类型：<strong>${other.applicantTypeStr}</strong></td>
+                                    <td colspan="6">居住证申领日期：<strong>${other.applicationDate}</strong></td>
                                 </tr>
                                 <!-- 三组数据信息的 -->
                                 <tr>
-                                    <td colspan="2">姓名：</td>
-                                    <td colspan="2">
-                                        <strong>${person.name}</strong>
-                                    </td>
-                                    <td colspan="2">性别：</td>
-                                    <td colspan="2">
-                                        <strong>${person.sex}</strong>
-                                    </td>
-                                    <td colspan="2">民族：</td>
-                                    <td colspan="2">
-                                        <strong>${person.nation}</strong>
+                                    <td colspan="4">姓名：<strong>${person.name}</strong></td>
+                                    <td colspan="4">性别：<strong>${person.sex}</strong></td>
+                                    <td colspan="4">民族：<strong>${person.nation}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">出生日期：<strong>${person.birthday}</strong></td>
+                                    <td colspan="4">政治面貌：<strong>${other.politicalStatusStr}</strong></td>
+                                    <td colspan="4">婚姻状况：<strong>${move.marriageStatusStr}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">文化程度：<strong>${other.cultureDegreeStr}</strong></td>
+                                    <td colspan="4">学位：<strong>${other.degreeStr}</strong></td>
+                                    <td colspan="4">年龄：<strong>${person.age}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12"><strong>${other.profession}</strong>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="1">出生日期：</td>
-                                    <td colspan="3">
-                                        <strong>${person.birthday}</strong>
-                                    </td>
-                                    <td colspan="1">政治面貌：</td>
-                                    <td colspan="3">
-                                        <strong>${other.politicalStatusStr}</strong>
-                                    </td>
-                                    <td colspan="1">婚姻状况：</td>
-                                    <td colspan="3">
-                                        <strong>${move.marriageStatusStr}</strong>
+                                    <td colspan="6">职业资格：<strong>${profession.professionTypeStr}</strong></td>
+                                    <td colspan="6">工种：<strong>${profession.jobTypeStr}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">户口所在地：<strong>${move.moveRegisteredOffice}</strong></td>
+                                    <td colspan="6">户口性质：<strong>${move.houseNatureStr}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">单位名称：<strong>${other.companyName}</strong></td>
+                                    <td colspan="6">单位电话：<strong>${other.companyPhone}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">单位地址：<strong>${other.companyAddress}</strong></td>
+                                    <td colspan="6">本人电话：<strong>${other.selfPhone}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">拟落户地址：<strong></strong>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="1">文化程度：</td>
-                                    <td colspan="3">
-                                        <strong>${other.cultureDegreeStr}</strong>
-                                    </td>
-                                    <td colspan="1">学位：</td>
-                                    <td colspan="3">
-                                        <strong>${other.degreeStr}</strong>
-                                    </td>
-                                    <td colspan="1">年龄：</td>
-                                    <td colspan="3">
-                                        <strong>${person.age}</strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">专业：
-                                    </td>
-                                    <td colspan="10">
-                                        <strong>${other.profession}</strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">职业资格：</td>
-                                    <td colspan="4">
-                                        <strong>${profession.professionTypeStr}</strong>
-                                    </td>
-                                    <td colspan="2">工种：</td>
-                                    <td colspan="4">
-                                        <strong>${profession.jobTypeStr}</strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">户口所在地：</td>
-                                    <td colspan="4">
-                                        <strong>${move.moveRegisteredOffice}</strong>
-                                    </td>
-                                    <td colspan="2">户口性质：</td>
-                                    <td colspan="4">
-                                        <strong>${move.houseNatureStr}</strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">单位名称：</td>
-                                    <td colspan="4">
-                                        <strong>${other.companyName}</strong>
-                                    </td>
-                                    <td colspan="2">单位电话：</td>
-                                    <td colspan="4">
-                                        <strong>${other.companyPhone}</strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">单位地址：</td>
-                                    <td colspan="4">
-                                        <strong>${other.companyAddress}</strong>
-                                    </td>
-                                    <td colspan="2">本人电话：</td>
-                                    <td colspan="4">
-                                        <strong>${other.selfPhone}</strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">拟落户地址：
-                                    </td>
-                                    <td colspan="10">
-                                        <strong></strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">拟落户地区：</td>
-                                    <td colspan="4">
-                                        <strong>${move.region}</strong>
-                                    </td>
-                                    <td colspan="4">是否社保缴纳：</td>
-                                    <td colspan="2">
-                                        <strong>${other.socialSecurityPayStr}</strong>
-                                    </td>
+                                    <td colspan="6">拟落户地区：<strong>${move.region}</strong></td>
+                                    <td colspan="6">是否社保缴纳：<strong>${other.socialSecurityPayStr}</strong></td>
                                 </tr>
                                 <!-- 标题特变长的分为特殊的两组 -->
                                 <tr>
-                                    <td colspan="4">积分期间有无行政拘留记录：</td>
-                                    <td colspan="2">
-                                        <strong>${other.detentionStr}</strong>
-                                    </td>
-                                    <td colspan="4">积分期间有无行政拘留记录：</td>
-                                    <td colspan="2">
-                                        <strong>${other.penaltyStr}</strong>
-                                    </td>
+                                    <td colspan="6">积分期间有无行政拘留记录：<strong>${other.detentionStr}</strong></td>
+                                    <td colspan="6">积分期间有无行政拘留记录：<strong>${other.penaltyStr}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">资格证书级别：</td>
-                                    <td colspan="4">
-                                        <strong>${profession.jobLevelStr}</strong>
-                                    </td>
-                                    <td colspan="4">证书编号：</td>
-                                    <td colspan="2">
-                                        <strong>${profession.certificateCode}</strong>
-                                    </td>
+                                    <td colspan="6">资格证书级别：<strong>${profession.jobLevelStr}</strong></td>
+                                    <td colspan="6">证书编号：<strong>${profession.certificateCode}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">发证机关：</td>
-                                    <td colspan="4">
-                                        <strong>${profession.issuingAuthority}</strong>
-                                    </td>
-                                    <td colspan="4">发证日期：</td>
-                                    <td colspan="2">
-                                        <strong>${profession.issuingDate}</strong>
-                                    </td>
+                                    <td colspan="6">发证机关：<strong>${profession.issuingAuthority}</strong></td>
+                                    <td colspan="6">发证日期：<strong>${profession.issuingDate}</strong></td>
                                 </tr>
                                 <!-- 内表格 -->
                                 <tr>

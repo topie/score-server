@@ -49,6 +49,10 @@ public class PolicePrevApproveController {
         result.put("searchItems", searchItems);
         Map unionApproveStatus1 = iDictService.selectMapByAlias("unionApproveStatus1");
         result.put("unionApproveStatus1", unionApproveStatus1);
+        Map unionApproveStatus2 = iDictService.selectMapByAlias("unionApproveStatus2");
+        result.put("unionApproveStatus2", unionApproveStatus2);
+        Map reservationStatus = iDictService.selectMapByAlias("reservationStatus");
+        result.put("reservationStatus", reservationStatus);
         return ResponseUtil.success(result);
     }
 
@@ -114,17 +118,6 @@ public class PolicePrevApproveController {
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 9);
         }
         return ResponseUtil.success();
-    }
-
-    @GetMapping("/detailAll")
-    public Result detailAll(@RequestParam Integer id) throws FileNotFoundException {
-        Map params = new HashMap();
-        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
-        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "preapprove_identity_info.ftl", params);
-        Map result = new HashMap();
-        result.put("html", html);
-        return ResponseUtil.success(result);
     }
 
 }

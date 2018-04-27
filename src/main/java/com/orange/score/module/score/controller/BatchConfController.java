@@ -3,21 +3,23 @@ package com.orange.score.module.score.controller;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.BaseController;
 import com.orange.score.common.core.Result;
+import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.Option;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.database.score.model.AcceptDateConf;
 import com.orange.score.database.score.model.BatchConf;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
+import com.orange.score.module.score.service.IAcceptDateConfService;
 import com.orange.score.module.score.service.IBatchConfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-04.
@@ -34,6 +36,9 @@ public class BatchConfController extends BaseController {
 
     @Autowired
     private IDictService iDictService;
+
+    @Autowired
+    private IAcceptDateConfService iAcceptDateConfService;
 
     @GetMapping(value = "/list")
     @ResponseBody
@@ -94,13 +99,27 @@ public class BatchConfController extends BaseController {
         return options;
     }
 
-
     @PostMapping("/updateStatus")
     public Result updateStatus(BatchConf batchConf) {
-        if(batchConf.getStatus()==1){
+        if (batchConf.getStatus() == 1) {
             batchConf.setProcess(1);
         }
         iBatchConfService.update(batchConf);
         return ResponseUtil.success();
+    }
+
+    @GetMapping(value = "/acceptDateList")
+    @ResponseBody
+    public Result acceptDateList(AcceptDateConf acceptDateConf) throws FileNotFoundException {
+        Map params = new HashMap();
+        List<AcceptDateConf> list = iAcceptDateConfService.selectByFilter(acceptDateConf);
+        params.put("list", list);
+        List<Date> dateList = iAcceptDateConfService.selectDistinctDateList(acceptDateConf);
+        params.put("dateList", dateList);
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "batch_reservation.ftl", params);
+        Map result = new HashMap();
+        result.put("html",html);
+        return ResponseUtil.success(result);
     }
 }

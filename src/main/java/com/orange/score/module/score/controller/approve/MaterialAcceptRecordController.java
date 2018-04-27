@@ -1,4 +1,4 @@
-package com.orange.score.module.score.controller;
+package com.orange.score.module.score.controller.approve;
 
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;

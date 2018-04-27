@@ -5,6 +5,7 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.database.score.model.BatchConf;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
@@ -33,6 +34,9 @@ public class CheckInfoController {
     private IDictService iDictService;
 
     @Autowired
+    private IBatchConfService iBatchConfService;
+
+    @Autowired
     private IHouseOtherService iHouseOtherService;
 
     @Autowired
@@ -53,12 +57,36 @@ public class CheckInfoController {
     @Autowired
     private IOnlinePersonMaterialService iOnlinePersonMaterialService;
 
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/batch/list")
     @ResponseBody
-    public Result list(IdentityInfo checkInfo,
+    public Result batchList(BatchConf batchConf,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(checkInfo, pageNum, pageSize);
+        PageInfo<BatchConf> pageInfo = iBatchConfService.selectByFilterAndPage(batchConf, pageNum, pageSize);
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+    @GetMapping(value = "/batch/formItems")
+    @ResponseBody
+    public Result batchFormItems() {
+        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_batch_conf");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_batch_conf");
+        Map result = new HashMap<>();
+        result.put("formItems", formItems);
+        result.put("searchItems", searchItems);
+        Map batchStatus = iDictService.selectMapByAlias("batchStatus");
+        result.put("batchStatus", batchStatus);
+        Map batchProcess = iDictService.selectMapByAlias("batchProcess");
+        result.put("batchProcess", batchProcess);
+        return ResponseUtil.success(result);
+    }
+
+    @GetMapping(value = "/list")
+    @ResponseBody
+    public Result list(IdentityInfo identityInfo,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 

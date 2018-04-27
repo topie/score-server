@@ -84,9 +84,9 @@ CREATE TABLE t_identity_info (
   COMMENT '受理地点1、市级行政许可中心，2、滨海新区行政服务中心',
   accept_address         VARCHAR(128) NOT NULL DEFAULT ''
   COMMENT '受理地点',
-  reservaion_date        INT(11)      NOT NULL DEFAULT '0'
+  reservation_date        INT(11)      NOT NULL DEFAULT '0'
   COMMENT '预约日期',
-  reservaion_m           INT(11)      NOT NULL DEFAULT '0'
+  reservation_m           INT(11)      NOT NULL DEFAULT '0'
   COMMENT '上午，下午',
   c_time                 TIMESTAMP    NULL
   COMMENT '创建时间',

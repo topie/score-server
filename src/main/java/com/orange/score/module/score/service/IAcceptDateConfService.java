@@ -3,6 +3,8 @@ package com.orange.score.module.score.service;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.IService;
 import com.orange.score.database.score.model.AcceptDateConf;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,4 +15,6 @@ public interface IAcceptDateConfService extends IService<AcceptDateConf> {
     PageInfo<AcceptDateConf> selectByFilterAndPage(AcceptDateConf acceptDateConf, int pageNum, int pageSize);
 
     List<AcceptDateConf> selectByFilter(AcceptDateConf acceptDateConf);
+
+    List<Date> selectDistinctDateList(AcceptDateConf acceptDateConf);
 }

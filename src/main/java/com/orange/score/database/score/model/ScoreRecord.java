@@ -56,6 +56,9 @@ public class ScoreRecord {
     @Column(name = "person_id_num")
     private String personIdNum;
 
+    @Column(name = "person_id_num")
+    private String personMobilePhone;
+
     /**
      * 企业ID
      */
@@ -141,6 +144,14 @@ public class ScoreRecord {
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    public String getPersonMobilePhone() {
+        return personMobilePhone;
+    }
+
+    public void setPersonMobilePhone(String personMobilePhone) {
+        this.personMobilePhone = personMobilePhone;
+    }
 
     public Integer getBatchId() {
         return batchId;

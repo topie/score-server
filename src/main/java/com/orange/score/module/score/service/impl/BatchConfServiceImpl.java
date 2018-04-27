@@ -35,7 +35,7 @@ public class BatchConfServiceImpl extends BaseService<BatchConf> implements IBat
     public List<BatchConf> selectByFilter(BatchConf batchConf) {
         Condition condition = new Condition(BatchConf.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        if (StringUtils.isNotEmpty(batchConf.getBatchName())) {
+        if (batchConf!=null && StringUtils.isNotEmpty(batchConf.getBatchName())) {
             criteria.andLike("batchName", "%" + batchConf.getBatchName() + "%");
         }
         condition.orderBy("status").desc();

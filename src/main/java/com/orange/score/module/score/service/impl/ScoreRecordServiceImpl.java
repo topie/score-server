@@ -46,7 +46,7 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
     private IIndicatorService iIndicatorService;
 
     @Autowired
-    private IBatchConfService iBatchConfService;
+    private IHouseOtherService iHouseOtherService;
 
     @Autowired
     private IIdentityInfoService iIdentityInfoService;
@@ -129,6 +129,7 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
         criteria.andEqualTo("personId", personId);
         scoreRecordMapper.deleteByCondition(condition);
         IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", personId);
         CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getId());
         List<Indicator> indicators = iIndicatorService.findAll();
         for (Indicator indicator : indicators) {
@@ -140,6 +141,7 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
             record.setIndicatorName(indicator.getName());
             record.setcTime(new Date());
             record.setPersonName(identityInfo.getName());
+            record.setPersonMobilePhone(houseOther.getSelfPhone());
             record.setPersonId(identityInfo.getId());
             record.setPersonIdNum(identityInfo.getIdNumber());
             record.setCompanyId(companyInfo.getId());

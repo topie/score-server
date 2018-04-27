@@ -52,12 +52,12 @@ public class IdentityInfo {
     @Column(name = "accept_address")
     private String acceptAddress;
 
-    @Column(name = "reservaion_date")
+    @Column(name = "reservation_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date reservaionDate;
+    private Date reservationDate;
 
-    @Column(name = "reservaion_m")
-    private Integer reservaionM;
+    @Column(name = "reservation_m")
+    private Integer reservationM;
 
     /**
      * 姓名
@@ -150,20 +150,20 @@ public class IdentityInfo {
     }
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")
-    public Date getReservaionDate() {
-        return reservaionDate;
+    public Date getReservationDate() {
+        return reservationDate;
     }
 
-    public void setReservaionDate(Date reservaionDate) {
-        this.reservaionDate = reservaionDate;
+    public void setReservationDate(Date reservationDate) {
+        this.reservationDate = reservationDate;
     }
 
-    public Integer getReservaionM() {
-        return reservaionM;
+    public Integer getReservationM() {
+        return reservationM;
     }
 
-    public void setReservaionM(Integer reservaionM) {
-        this.reservaionM = reservaionM;
+    public void setReservationM(Integer reservationM) {
+        this.reservationM = reservationM;
     }
 
     public Integer getResultStatus() {

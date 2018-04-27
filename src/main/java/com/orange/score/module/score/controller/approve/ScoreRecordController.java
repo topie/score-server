@@ -1,4 +1,4 @@
-package com.orange.score.module.score.controller;
+package com.orange.score.module.score.controller.approve;
 
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
@@ -14,6 +14,7 @@ import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
@@ -81,7 +82,15 @@ public class ScoreRecordController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         criteria.andIn("opRoleId", roles);
-        criteria.andEqualTo("status", 3);
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
+            criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
+        }
+        if (scoreRecord.getBatchId() != null) {
+            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+        }
+        if (scoreRecord.getIndicatorId() != null) {
+            criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
+        }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -98,6 +107,15 @@ public class ScoreRecordController {
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         criteria.andIn("opRoleId", roles);
         criteria.andEqualTo("status", 4);
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
+            criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
+        }
+        if (scoreRecord.getBatchId() != null) {
+            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+        }
+        if (scoreRecord.getIndicatorId() != null) {
+            criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
+        }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
