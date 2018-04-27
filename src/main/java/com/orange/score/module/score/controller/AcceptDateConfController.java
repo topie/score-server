@@ -53,7 +53,7 @@ public class AcceptDateConfController {
         List<AcceptAddress> list = iAcceptAddressService.selectByFilter(null);
         Map addressMap = new HashMap();
         for (AcceptAddress acceptAddress : list) {
-            addressMap.put(acceptAddress.getId(),acceptAddress.getAddress());
+            addressMap.put(acceptAddress.getId(), acceptAddress.getAddress());
         }
         Map result = new HashMap<>();
         result.put("formItems", formItems);
@@ -67,6 +67,8 @@ public class AcceptDateConfController {
         if (acceptDateConf.getAcceptDate() != null) {
             acceptDateConf.setWeekDay(DateUtil.getWeek(acceptDateConf.getAcceptDate()).getChineseName());
         }
+        acceptDateConf.setAmRemainingCount(acceptDateConf.getAmUserCount());
+        acceptDateConf.setPmRemainingCount(acceptDateConf.getPmUserCount());
         iAcceptDateConfService.save(acceptDateConf);
         return ResponseUtil.success();
     }
