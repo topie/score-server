@@ -82,6 +82,8 @@ public class ScoreRecordController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         criteria.andIn("opRoleId", roles);
+        Integer[] integers = new Integer[] { 1, 3 };
+        criteria.andIn("status", CollectionUtils.arrayToList(integers));
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
         }
