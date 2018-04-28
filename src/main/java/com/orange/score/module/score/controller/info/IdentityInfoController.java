@@ -80,6 +80,8 @@ public class IdentityInfoController {
         result.put("searchItems", searchItems);
         Map reservationStatus = iDictService.selectMapByAlias("reservationStatus");
         result.put("reservationStatus", reservationStatus);
+        Map hallStatus = iDictService.selectMapByAlias("hallStatus");
+        result.put("hallStatus", hallStatus);
         return ResponseUtil.success(result);
     }
 

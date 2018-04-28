@@ -63,7 +63,7 @@
                                     <th>打分人：</th>
                                     <th>${item.opUser}</th>
                                     <th>打分时间：</th>
-                                    <th colspan="2"><#if item.submitDate??>${item.submitDater?string("yyyy-MM-dd")}</#if></th>
+                                    <th colspan="2"><#if item.submitDate??>${item.submitDate?string("yyyy-MM-dd")}</#if></th>
                                 </tr>
                                 <tr class="info">
                                     <td>状态：</td>
