@@ -160,6 +160,8 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
             scoreResult.setBatchId(identityInfo.getBatchId());
             scoreResult.setcTime(new Date());
             iScoreResultService.save(scoreResult);
+            identityInfo.setResultStatus(1);
+            iIdentityInfoService.update(identityInfo);
         }
     }
 }
