@@ -7,11 +7,16 @@ import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.BatchConf;
 import com.orange.score.database.score.model.IdentityInfo;
+import com.orange.score.database.score.model.Indicator;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
-import com.orange.score.module.score.service.*;
+import com.orange.score.module.score.service.IBatchConfService;
+import com.orange.score.module.score.service.IIdentityInfoService;
+import com.orange.score.module.score.service.IIndicatorService;
+import com.orange.score.module.score.service.IScoreResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Condition;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,25 +42,10 @@ public class CheckInfoController {
     private IBatchConfService iBatchConfService;
 
     @Autowired
-    private IHouseOtherService iHouseOtherService;
+    private IScoreResultService iScoreResultService;
 
     @Autowired
-    private IHouseMoveService iHouseMoveService;
-
-    @Autowired
-    private IHouseProfessionService iHouseProfessionService;
-
-    @Autowired
-    private IHouseRelationshipService iHouseRelationshipService;
-
-    @Autowired
-    private IMaterialInfoService iMaterialInfoService;
-
-    @Autowired
-    private ICompanyInfoService iCompanyInfoService;
-
-    @Autowired
-    private IOnlinePersonMaterialService iOnlinePersonMaterialService;
+    private IIndicatorService iIndicatorService;
 
     @GetMapping(value = "/batch/list")
     @ResponseBody
@@ -101,6 +91,38 @@ public class CheckInfoController {
         Map reservationStatus = iDictService.selectMapByAlias("reservationStatus");
         result.put("reservationStatus", reservationStatus);
         return ResponseUtil.success(result);
+    }
+
+    @PostMapping("/checkPerson")
+    public Result checkPerson(@RequestParam Integer identityInfoId) {
+        List<Indicator> indicators = iIndicatorService.findAll();
+        Map<Integer, Integer> iMap = new HashMap();
+        Map<Integer, Indicator> indicatorMap = new HashMap();
+        for (Indicator indicator : indicators) {
+            iMap.put(indicator.getId(), indicator.getScoreRule());
+            indicatorMap.put(indicator.getId(), indicator);
+        }
+        iScoreResultService.insertToCheckIdentity(identityInfoId, iMap, indicatorMap);
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/checkBatch")
+    public Result checkBatch(@RequestParam Integer batchId) {
+        List<Indicator> indicators = iIndicatorService.findAll();
+        Map<Integer, Integer> iMap = new HashMap();
+        Map<Integer, Indicator> indicatorMap = new HashMap();
+        for (Indicator indicator : indicators) {
+            iMap.put(indicator.getId(), indicator.getScoreRule());
+            indicatorMap.put(indicator.getId(), indicator);
+        }
+        Condition condition = new Condition(IdentityInfo.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", batchId);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        for (IdentityInfo identityInfo : identityInfos) {
+            iScoreResultService.insertToCheckIdentity(identityInfo.getId(), iMap, indicatorMap);
+        }
+        return ResponseUtil.success();
     }
 
 }
