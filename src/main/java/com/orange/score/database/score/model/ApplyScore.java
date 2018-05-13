@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Table(name = "t_apply_score")
 public class ApplyScore {
+
     /**
      * 主键ID
      */
@@ -54,10 +55,16 @@ public class ApplyScore {
     private String applyUser;
 
     /**
+     * 申请人
+     */
+    @Column(name = "apply_user_id")
+    private Integer applyUserId;
+
+    /**
      * 申请人部门ID
      */
     @Column(name = "apply_role_id")
-    private String applyRoleId;
+    private Integer applyRoleId;
 
     /**
      * 申请人部门
@@ -224,21 +231,19 @@ public class ApplyScore {
         this.applyUser = applyUser;
     }
 
-    /**
-     * 获取申请人部门ID
-     *
-     * @return apply_role_id - 申请人部门ID
-     */
-    public String getApplyRoleId() {
+    public Integer getApplyUserId() {
+        return applyUserId;
+    }
+
+    public void setApplyUserId(Integer applyUserId) {
+        this.applyUserId = applyUserId;
+    }
+
+    public Integer getApplyRoleId() {
         return applyRoleId;
     }
 
-    /**
-     * 设置申请人部门ID
-     *
-     * @param applyRoleId 申请人部门ID
-     */
-    public void setApplyRoleId(String applyRoleId) {
+    public void setApplyRoleId(Integer applyRoleId) {
         this.applyRoleId = applyRoleId;
     }
 

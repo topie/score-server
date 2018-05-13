@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Table(name = "t_apply_cancel")
 public class ApplyCancel {
+
     /**
      * 主键ID
      */
@@ -35,6 +36,9 @@ public class ApplyCancel {
     @Column(name = "apply_reason")
     private String applyReason;
 
+    @Column(name = "apply_user_id")
+    private Integer applyUserId;
+
     /**
      * 申请人
      */
@@ -45,7 +49,7 @@ public class ApplyCancel {
      * 申请人部门ID
      */
     @Column(name = "apply_role_id")
-    private String applyRoleId;
+    private Integer applyRoleId;
 
     /**
      * 申请人部门
@@ -176,21 +180,19 @@ public class ApplyCancel {
         this.applyUser = applyUser;
     }
 
-    /**
-     * 获取申请人部门ID
-     *
-     * @return apply_role_id - 申请人部门ID
-     */
-    public String getApplyRoleId() {
+    public Integer getApplyUserId() {
+        return applyUserId;
+    }
+
+    public void setApplyUserId(Integer applyUserId) {
+        this.applyUserId = applyUserId;
+    }
+
+    public Integer getApplyRoleId() {
         return applyRoleId;
     }
 
-    /**
-     * 设置申请人部门ID
-     *
-     * @param applyRoleId 申请人部门ID
-     */
-    public void setApplyRoleId(String applyRoleId) {
+    public void setApplyRoleId(Integer applyRoleId) {
         this.applyRoleId = applyRoleId;
     }
 
