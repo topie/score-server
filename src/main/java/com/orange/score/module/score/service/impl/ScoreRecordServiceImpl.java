@@ -144,8 +144,10 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
             record.setPersonMobilePhone(houseOther.getSelfPhone());
             record.setPersonId(identityInfo.getId());
             record.setPersonIdNum(identityInfo.getIdNumber());
-            record.setCompanyId(companyInfo.getId());
-            record.setCompanyName(companyInfo.getCompanyName());
+            if(companyInfo!=null){
+                record.setCompanyId(companyInfo.getId());
+                record.setCompanyName(companyInfo.getCompanyName());
+            }
             List<Integer> materialList = iIndicatorService.selectBindMaterialIds(indicator.getId());
             if (materialList.size() > 0) {
                 record.setStatus(2);

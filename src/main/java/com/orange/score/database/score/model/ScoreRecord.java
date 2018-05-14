@@ -56,7 +56,7 @@ public class ScoreRecord {
     @Column(name = "person_id_num")
     private String personIdNum;
 
-    @Column(name = "person_id_num")
+    @Column(name = "person_mobile_phone")
     private String personMobilePhone;
 
     /**
