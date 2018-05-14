@@ -6,9 +6,11 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.BatchConf;
+import com.orange.score.database.score.model.ScoreResult;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IBatchConfService;
+import com.orange.score.module.score.service.IScoreResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +34,9 @@ public class ListInfoController {
     @Autowired
     private IDictService iDictService;
 
+    @Autowired
+    private IScoreResultService iScoreResultService;
+
     @GetMapping(value = "/batch/list")
     @ResponseBody
     public Result batchList(BatchConf batchConf,
@@ -54,6 +59,15 @@ public class ListInfoController {
         Map batchProcess = iDictService.selectMapByAlias("batchProcess");
         result.put("batchProcess", batchProcess);
         return ResponseUtil.success(result);
+    }
+
+    @GetMapping(value = "/rank")
+    @ResponseBody
+    public Result batchList(@RequestParam("batchId") Integer batchId,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        PageInfo<ScoreResult> pageInfo = iScoreResultService.selectRankByBatchId(batchId,pageNum,pageSize);
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
 }

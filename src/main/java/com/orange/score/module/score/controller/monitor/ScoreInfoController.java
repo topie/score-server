@@ -188,53 +188,6 @@ public class ScoreInfoController {
     public Result scoreDetail(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId)
             throws FileNotFoundException {
         Map params = new HashMap();
-        List<Map> scoreList = new ArrayList<>();
-        Map msMap = new HashMap();
-        IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
-        if (person == null) {
-            person = new IdentityInfo();
-        }
-        params.put("person", person);
-        Indicator indicator = iIndicatorService.findById(indicatorId);
-        msMap.put("indicator", indicator);
-        Condition condition = new Condition(IndicatorItem.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria.andEqualTo("indicatorId", indicatorId);
-        List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition);
-        msMap.put("indicatorItems", indicatorItems);
-        scoreList.add(msMap);
-        params.put("scoreList", scoreList);
-        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
-        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "score_detail_info.ftl", params);
-        Map result = new HashMap();
-        List<String> sCheckList = new ArrayList<>();
-        List<String> sTextList = new ArrayList<>();
-        condition = new Condition(ScoreRecord.class);
-        criteria = condition.createCriteria();
-        criteria.andEqualTo("personId", identityInfoId);
-        criteria.andEqualTo("batchId", person.getBatchId());
-        criteria.andEqualTo("indicatorId", indicatorId);
-        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
-        for (ScoreRecord item : scoreRecords) {
-            if (item.getStatus() == 4) {
-                Indicator indicator1 = iIndicatorService.findById(item.getIndicatorId());
-                if (indicator1.getItemType() == 0) {
-                    sCheckList.add(item.getIndicatorId() + "_" + item.getItemId());
-                } else {
-                    sTextList.add(item.getIndicatorId() + "_" + item.getScoreValue());
-                }
-            }
-        }
-        result.put("sCheckList", sCheckList);
-        result.put("sTextList", sTextList);
-        result.put("html", html);
-        return ResponseUtil.success(result);
-    }
-
-    @GetMapping("/scoreDetail2")
-    public Result scoreDetail2(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId)
-            throws FileNotFoundException {
-        Map params = new HashMap();
         IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
         if (person == null) {
             person = new IdentityInfo();

@@ -164,5 +164,12 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
             iIdentityInfoService.update(identityInfo);
         }
     }
+
+    @Override
+    public PageInfo<ScoreResult> selectRankByBatchId(Integer batchId, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ScoreResult> list = scoreResultMapper.selectRankByBatchId(batchId);
+        return new PageInfo<>(list);
+    }
 }
 

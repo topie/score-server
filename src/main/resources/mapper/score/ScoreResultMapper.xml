@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.orange.score.database.score.dao.ScoreResultMapper">
-  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.ScoreResult">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="batch_id" jdbcType="INTEGER" property="batchId" />
-    <result column="indicator_id" jdbcType="INTEGER" property="indicatorId" />
-    <result column="indicator_name" jdbcType="VARCHAR" property="indicatorName" />
-    <result column="person_id" jdbcType="INTEGER" property="personId" />
-    <result column="person_name" jdbcType="VARCHAR" property="personName" />
-    <result column="person_id_num" jdbcType="VARCHAR" property="personIdNum" />
-    <result column="score_value" jdbcType="DECIMAL" property="scoreValue" />
-    <result column="score_detail" jdbcType="VARCHAR" property="scoreDetail" />
-    <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.ScoreResult">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="batch_id" jdbcType="INTEGER" property="batchId"/>
+        <result column="indicator_id" jdbcType="INTEGER" property="indicatorId"/>
+        <result column="indicator_name" jdbcType="VARCHAR" property="indicatorName"/>
+        <result column="person_id" jdbcType="INTEGER" property="personId"/>
+        <result column="person_name" jdbcType="VARCHAR" property="personName"/>
+        <result column="person_id_num" jdbcType="VARCHAR" property="personIdNum"/>
+        <result column="score_value" jdbcType="DECIMAL" property="scoreValue"/>
+        <result column="score_detail" jdbcType="VARCHAR" property="scoreDetail"/>
+        <result column="c_time" jdbcType="TIMESTAMP" property="cTime"/>
+    </resultMap>
+    <select id="selectRankByBatchId" resultMap="BaseResultMap">
+      select
+      person_id,
+      person_name,
+      person_id_num,
+      ifnull(sum(score_value),0) score_value
+      from t_person_batch_score_result
+      where batch_id=#{batchId}
+      group by person_id
+      order by score_value desc
+    </select>
 </mapper>
