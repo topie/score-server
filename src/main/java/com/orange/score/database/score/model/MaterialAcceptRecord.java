@@ -3,7 +3,7 @@ package com.orange.score.database.score.model;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "t_person_material_accept_record")
+@Table(name = "t_accept_record")
 public class MaterialAcceptRecord {
     /**
      * id
