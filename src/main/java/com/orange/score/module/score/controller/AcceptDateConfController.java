@@ -13,6 +13,7 @@ import com.orange.score.module.score.service.IAcceptAddressService;
 import com.orange.score.module.score.service.IAcceptDateConfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Condition;
 
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +65,15 @@ public class AcceptDateConfController {
 
     @PostMapping("/insert")
     public Result insert(AcceptDateConf acceptDateConf) {
+        Condition condition = new Condition(AcceptDateConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", acceptDateConf.getBatchId());
+        criteria.andEqualTo("addressId", acceptDateConf.getAddressId());
+        criteria.andEqualTo("acceptDate", acceptDateConf.getAcceptDate());
+        List<AcceptDateConf> confs = iAcceptDateConfService.findByCondition(condition);
+        if(confs.size()>0){
+            return ResponseUtil.error("受理日期重复！");
+        }
         if (acceptDateConf.getAcceptDate() != null) {
             acceptDateConf.setWeekDay(DateUtil.getWeek(acceptDateConf.getAcceptDate()).getChineseName());
         }
@@ -81,6 +91,16 @@ public class AcceptDateConfController {
 
     @PostMapping("/update")
     public Result update(AcceptDateConf acceptDateConf) {
+        Condition condition = new Condition(AcceptDateConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", acceptDateConf.getBatchId());
+        criteria.andEqualTo("addressId", acceptDateConf.getAddressId());
+        criteria.andEqualTo("acceptDate", acceptDateConf.getAcceptDate());
+        criteria.andNotEqualTo("id", acceptDateConf.getId());
+        List<AcceptDateConf> confs = iAcceptDateConfService.findByCondition(condition);
+        if(confs.size()>0){
+            return ResponseUtil.error("受理日期重复！");
+        }
         if (acceptDateConf.getAcceptDate() != null) {
             acceptDateConf.setWeekDay(DateUtil.getWeek(acceptDateConf.getAcceptDate()).getChineseName());
         }

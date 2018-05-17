@@ -103,6 +103,7 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             }
         }
         if (tmp != null) SqlUtil.setLocalPage(tmp);
+        condition.orderBy("id").desc();
         return identityInfoMapper.selectByCondition(condition);
     }
 }

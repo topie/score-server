@@ -15,6 +15,8 @@ public class Option implements Serializable {
 
     private Object hiddenValue;
 
+    private String selected;
+
     public Option() {
     }
 
@@ -27,6 +29,14 @@ public class Option implements Serializable {
         this.text = text;
         this.value = value;
         this.hiddenValue = hiddenValue;
+    }
+
+    public String getSelected() {
+        return selected;
+    }
+
+    public void setSelected(String selected) {
+        this.selected = selected;
     }
 
     public Object getHiddenValue() {

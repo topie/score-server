@@ -66,6 +66,7 @@ public class BatchConfController extends BaseController {
 
     @PostMapping("/insert")
     public Result insert(BatchConf batchConf) {
+
         iBatchConfService.save(batchConf);
         return ResponseUtil.success();
     }
@@ -94,7 +95,11 @@ public class BatchConfController extends BaseController {
         List<Option> options = new ArrayList<>();
         List<BatchConf> list = iBatchConfService.selectByFilter(null);
         for (BatchConf item : list) {
-            options.add(new Option(item.getBatchNumber(), item.getId()));
+            Option option = new Option(item.getBatchNumber(), item.getId());
+            if (item.getStatus() == 1) {
+                option.setSelected("selected");
+            }
+            options.add(option);
         }
         return options;
     }
@@ -119,7 +124,7 @@ public class BatchConfController extends BaseController {
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "batch_reservation.ftl", params);
         Map result = new HashMap();
-        result.put("html",html);
+        result.put("html", html);
         return ResponseUtil.success(result);
     }
 }
