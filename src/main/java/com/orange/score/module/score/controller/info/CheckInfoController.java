@@ -108,6 +108,8 @@ public class CheckInfoController {
 
     @PostMapping("/checkBatch")
     public Result checkBatch(@RequestParam Integer batchId) {
+        BatchConf batchConf = iBatchConfService.findById(batchId);
+        if (batchConf == null) return ResponseUtil.error("批次不存在");
         List<Indicator> indicators = iIndicatorService.findAll();
         Map<Integer, Integer> iMap = new HashMap();
         Map<Integer, Indicator> indicatorMap = new HashMap();
@@ -122,6 +124,8 @@ public class CheckInfoController {
         for (IdentityInfo identityInfo : identityInfos) {
             iScoreResultService.insertToCheckIdentity(identityInfo.getId(), iMap, indicatorMap);
         }
+        batchConf.setProcess(2);
+        iBatchConfService.update(batchConf);
         return ResponseUtil.success();
     }
 
