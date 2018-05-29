@@ -144,7 +144,7 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
             record.setPersonMobilePhone(houseOther.getSelfPhone());
             record.setPersonId(identityInfo.getId());
             record.setPersonIdNum(identityInfo.getIdNumber());
-            if(companyInfo!=null){
+            if (companyInfo != null) {
                 record.setCompanyId(companyInfo.getId());
                 record.setCompanyName(companyInfo.getCompanyName());
             }
@@ -253,6 +253,11 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
             scoreRecord.setScoreValue(scoreValue);
             update(scoreRecord);
         }
+    }
+
+    @Override
+    public ScoreRecord selectOne(ScoreRecord scoreRecord) {
+        return scoreRecordMapper.selectOne(scoreRecord);
     }
 
     private BigDecimal findScoreRecordResultType0(Integer batchId, Integer personId, Integer indicatorId) {

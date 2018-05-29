@@ -181,7 +181,7 @@ public class ScoreRecordController {
         }
         params.put("relation", relationshipList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
-        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "score_info.ftl", params);
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "identity_info.ftl", params);
         Map result = new HashMap();
 
         List<String> sCheckList = new ArrayList<>();

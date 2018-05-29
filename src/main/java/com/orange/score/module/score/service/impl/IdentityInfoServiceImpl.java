@@ -13,8 +13,10 @@ import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.database.core.model.ColumnJson;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.dao.IdentityInfoMapper;
+import com.orange.score.database.score.model.CompanyInfo;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.core.service.IColumnJsonService;
+import com.orange.score.module.score.dto.SearchDto;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +107,13 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
         if (tmp != null) SqlUtil.setLocalPage(tmp);
         condition.orderBy("id").desc();
         return identityInfoMapper.selectByCondition(condition);
+    }
+
+    @Override
+    public PageInfo<IdentityInfo> selectByCompany(SearchDto searchDto,Integer pageNum,Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<IdentityInfo> list = identityInfoMapper.selectByCompany(searchDto);
+        return new PageInfo<>(list);
     }
 }
 

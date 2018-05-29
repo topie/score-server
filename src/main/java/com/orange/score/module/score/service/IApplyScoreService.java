@@ -19,4 +19,5 @@ public interface IApplyScoreService extends IService<ApplyScore> {
     List<ApplyScore> selectByFilter(ApplyScore applyScore);
 
     List<ApplyScore> selectByFilter(Condition condition);
+
 }

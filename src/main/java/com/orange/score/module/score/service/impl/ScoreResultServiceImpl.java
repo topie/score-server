@@ -171,5 +171,10 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
         List<ScoreResult> list = scoreResultMapper.selectRankByBatchId(batchId);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public int selectCountByFilter(ScoreRecord scoreRecord) {
+        return scoreResultMapper.selectCountByFilter(scoreRecord);
+    }
 }
 

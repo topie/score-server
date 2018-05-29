@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,6 +146,15 @@ public class ApplyScoreController {
         applyScore.setApproveStatus(1);
         applyScore.setApproveUser(userName);
         iApplyScoreService.update(applyScore);
+        ScoreRecord scoreRecord = new ScoreRecord();
+        scoreRecord.setIndicatorId(applyScore.getIndicatorId());
+        scoreRecord.setBatchId(applyScore.getBatchId());
+        scoreRecord.setPersonId(applyScore.getPersonId());
+        scoreRecord = iScoreRecordService.selectOne(scoreRecord);
+        scoreRecord.setScoreValue(BigDecimal.ZERO);
+        scoreRecord.setItemId(0);
+        scoreRecord.setStatus(3);
+        if (scoreRecord != null) iScoreRecordService.update(scoreRecord);
         return ResponseUtil.success();
     }
 

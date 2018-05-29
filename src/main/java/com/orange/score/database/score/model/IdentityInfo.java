@@ -59,6 +59,28 @@ public class IdentityInfo {
     @Column(name = "reservation_m")
     private Integer reservationM;
 
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    @Column(name = "region_name")
+    private String regionName;
+
+    public Integer getAcceptAddressId() {
+        return acceptAddressId;
+    }
+
+    public void setAcceptAddressId(Integer acceptAddressId) {
+        this.acceptAddressId = acceptAddressId;
+    }
+
+    @Column(name = "accept_address_id")
+    private Integer acceptAddressId;
+
     /**
      * 姓名
      */

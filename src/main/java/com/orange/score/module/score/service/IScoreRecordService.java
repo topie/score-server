@@ -26,4 +26,6 @@ public interface IScoreRecordService extends IService<ScoreRecord> {
     void insertToGetScoreResult(Integer batchId, Integer personId);
 
     void updateToScore(Integer batchId, Integer personId, Integer indicatorId,Integer roleId, Integer itemId, BigDecimal scoreValue);
+
+    ScoreRecord selectOne(ScoreRecord scoreRecord);
 }

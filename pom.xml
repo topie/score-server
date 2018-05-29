@@ -53,6 +53,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-ws</artifactId>
+            <version>1.4.7.RELEASE</version>
+        </dependency>
         <!--常用库依赖-->
         <dependency>
             <groupId>commons-codec</groupId>
@@ -190,7 +195,6 @@
             <version>1.0.6</version>
         </dependency>
 
-
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
@@ -207,6 +211,11 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>3.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
         </dependency>
 
     </dependencies>

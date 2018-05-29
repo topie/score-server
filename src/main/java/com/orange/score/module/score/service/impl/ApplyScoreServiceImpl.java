@@ -97,5 +97,7 @@ public class ApplyScoreServiceImpl extends BaseService<ApplyScore> implements IA
     public List<ApplyScore> selectByFilter(Condition condition) {
         return applyScoreMapper.selectByCondition(condition);
     }
+
+
 }
 

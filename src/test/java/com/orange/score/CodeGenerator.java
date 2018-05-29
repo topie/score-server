@@ -22,11 +22,11 @@ public class CodeGenerator {
 
     //JDBC配置，请修改为你项目的实际配置
 
-    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/score_server";
+    private static final String JDBC_URL = "jdbc:mysql://139.129.230.107:3306/score_server";
 
-    private static final String JDBC_USERNAME = "root";
+    private static final String JDBC_USERNAME = "admin";
 
-    private static final String JDBC_PASSWORD = "root1234";
+    private static final String JDBC_PASSWORD = "admin";
 
     private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
 
@@ -53,7 +53,7 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCodeByCustomModelName("t_apply_score", "ApplyScore", "id");
+        genCodeByCustomModelName("t_identity_info", "InInfo", "id");
     }
 
     /**

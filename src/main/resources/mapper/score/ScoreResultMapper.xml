@@ -27,4 +27,10 @@
       group by person_id
       order by score_value desc
     </select>
+    <select id="selectCountByFilter" resultType="java.lang.Integer">
+        select count(distinct person_id) from t_person_batch_score_record
+        where batch_id=#{item.batchId}
+        and indicator_id=#{item.indicatorId}
+        and item_id=#{item.itemId}
+    </select>
 </mapper>

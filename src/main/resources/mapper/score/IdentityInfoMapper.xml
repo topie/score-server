@@ -5,19 +5,47 @@
         <!--
           WARNING - @mbg.generated
         -->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="id_number" jdbcType="VARCHAR" property="idNumber"/>
-        <result column="batch_id" jdbcType="INTEGER" property="batchId"/>
-        <result column="company_id" jdbcType="INTEGER" property="companyId"/>
-        <result column="id_card_positive" jdbcType="VARCHAR" property="idCardPositive"/>
-        <result column="id_card_opposite" jdbcType="VARCHAR" property="idCardOpposite"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="sex" jdbcType="INTEGER" property="sex"/>
-        <result column="birthday" jdbcType="VARCHAR" property="birthday"/>
-        <result column="age" jdbcType="INTEGER" property="age"/>
-        <result column="nation" jdbcType="VARCHAR" property="nation"/>
-        <result column="region" jdbcType="INTEGER" property="region"/>
-        <result column="c_time" jdbcType="TIMESTAMP" property="cTime"/>
-        <result column="u_time" jdbcType="TIMESTAMP" property="uTime"/>
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+        <result column="batch_id" jdbcType="INTEGER" property="batchId" />
+        <result column="company_id" jdbcType="INTEGER" property="companyId" />
+        <result column="id_card_positive" jdbcType="VARCHAR" property="idCardPositive" />
+        <result column="id_card_opposite" jdbcType="VARCHAR" property="idCardOpposite" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="sex" jdbcType="INTEGER" property="sex" />
+        <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+        <result column="age" jdbcType="INTEGER" property="age" />
+        <result column="nation" jdbcType="VARCHAR" property="nation" />
+        <result column="region" jdbcType="INTEGER" property="region" />
+        <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+        <result column="reservation_status" jdbcType="INTEGER" property="reservationStatus" />
+        <result column="hall_status" jdbcType="INTEGER" property="hallStatus" />
+        <result column="union_approve_status_1" jdbcType="INTEGER" property="unionApproveStatus1" />
+        <result column="union_approve_status_2" jdbcType="INTEGER" property="unionApproveStatus2" />
+        <result column="police_approve_status" jdbcType="INTEGER" property="policeApproveStatus" />
+        <result column="renshe_accept_status" jdbcType="INTEGER" property="rensheAcceptStatus" />
+        <result column="cancel_status" jdbcType="INTEGER" property="cancelStatus" />
+        <result column="accept_number" jdbcType="VARCHAR" property="acceptNumber" />
+        <result column="accept_address_id" jdbcType="INTEGER" property="acceptAddressId" />
+        <result column="accept_address" jdbcType="VARCHAR" property="acceptAddress" />
+        <result column="reservation_date" jdbcType="TIMESTAMP" property="reservationDate" />
+        <result column="reservation_m" jdbcType="INTEGER" property="reservationM" />
+        <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
+        <result column="u_time" jdbcType="TIMESTAMP" property="uTime" />
+        <result column="result_status" jdbcType="INTEGER" property="resultStatus" />
     </resultMap>
+    <select id="selectByCompany" resultMap="BaseResultMap">
+        select i.* from t_identity_info i inner join score_server.t_company_info c on i.company_id=c.id
+        <where>
+            <if test="search.companyId!=null">
+                and c.id=#{search.companyId}
+            </if>
+            <if test="search.societyCode!=null and search.societyCode!=''">
+                and c.society_code=#{search.societyCode}
+            </if>
+            <if test="search.batchId!=null">
+                and i.batch_id=#{search.batchId}
+            </if>
+        </where>
+    </select>
 </mapper>

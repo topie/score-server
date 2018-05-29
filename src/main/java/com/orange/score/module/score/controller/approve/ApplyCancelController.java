@@ -7,9 +7,14 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.ApplyCancel;
+import com.orange.score.database.score.model.IdentityInfo;
+import com.orange.score.database.security.model.Role;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.score.service.IApplyCancelService;
+import com.orange.score.module.score.service.IIdentityInfoService;
+import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
+import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +38,13 @@ public class ApplyCancelController {
     private ICommonQueryService iCommonQueryService;
 
     @Autowired
+    private IIdentityInfoService iIdentityInfoService;
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
 
     @GetMapping(value = "/mine")
     @ResponseBody
@@ -92,6 +103,54 @@ public class ApplyCancelController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
+    @PostMapping("/apply")
+    public Result apply(@RequestParam("personId") Integer personId, @RequestParam("reason") String reason) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(securityUser.getId());
+        IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        ApplyCancel applyCancel = new ApplyCancel();
+        applyCancel.setBatchId(identityInfo.getBatchId());
+        applyCancel.setPersonId(personId);
+        applyCancel.setPersonIdNumber(identityInfo.getIdNumber());
+        applyCancel.setApplyUserId(securityUser.getId());
+        applyCancel.setApplyUser(securityUser.getDisplayName());
+        applyCancel.setApplyRoleId(roles.get(0));
+        Role role = roleService.findRoleById(roles.get(0));
+        applyCancel.setApplyRole(role.getRoleName());
+        applyCancel.setApproveStatus(0);
+        applyCancel.setApplyReason(reason);
+        iApplyCancelService.save(applyCancel);
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/agree")
+    public Result agree(@RequestParam Integer id) {
+        String userName = SecurityUtil.getCurrentUserName();
+        if (userName == null) throw new AuthBusinessException("用户未登录");
+        ApplyCancel applyCancel = iApplyCancelService.findById(id);
+        applyCancel.setApproveContent("同意");
+        applyCancel.setApproveStatus(1);
+        applyCancel.setApproveUser(userName);
+        iApplyCancelService.update(applyCancel);
+        IdentityInfo identityInfo = iIdentityInfoService.findById(applyCancel.getPersonId());
+        identityInfo.setCancelStatus(1);
+        iIdentityInfoService.update(identityInfo);
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/disAgree")
+    public Result disAgree(@RequestParam Integer id, @RequestParam("approveContent") String approveContent) {
+        String userName = SecurityUtil.getCurrentUserName();
+        if (userName == null) throw new AuthBusinessException("用户未登录");
+        ApplyCancel applyCancel = iApplyCancelService.findById(id);
+        applyCancel.setApproveContent(approveContent);
+        applyCancel.setApproveStatus(2);
+        applyCancel.setApproveUser(userName);
+        iApplyCancelService.update(applyCancel);
+        return ResponseUtil.success();
+    }
+
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
@@ -103,21 +162,9 @@ public class ApplyCancelController {
         return ResponseUtil.success(result);
     }
 
-    @PostMapping("/insert")
-    public Result insert(ApplyCancel applyCancel) {
-        iApplyCancelService.save(applyCancel);
-        return ResponseUtil.success();
-    }
-
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
         iApplyCancelService.deleteById(id);
-        return ResponseUtil.success();
-    }
-
-    @PostMapping("/update")
-    public Result update(ApplyCancel applyCancel) {
-        iApplyCancelService.update(applyCancel);
         return ResponseUtil.success();
     }
 

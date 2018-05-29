@@ -3,6 +3,7 @@ package com.orange.score.module.score.service;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.IService;
 import com.orange.score.database.score.model.Indicator;
+import com.orange.score.database.score.model.ScoreRecord;
 import com.orange.score.database.score.model.ScoreResult;
 
 import java.util.List;
@@ -21,4 +22,7 @@ public interface IScoreResultService extends IService<ScoreResult> {
             Map<Integer, Indicator> indicatorMap);
 
     PageInfo<ScoreResult> selectRankByBatchId(Integer batchId, Integer pageNum, Integer pageSize);
+
+    int selectCountByFilter(ScoreRecord scoreRecord);
+
 }
