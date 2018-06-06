@@ -17,7 +17,7 @@ public class WebServiceClientTest {
 
     @Test
     public void testWS2WSWithDispath() throws Exception {
-        String ns = "http://hc.wsprocess.csb.alibaba.com/";
+        String ns = "http://service.webinterface.yzym.si.sl.neusoft.com/";
 
         String wsdlWS2WSAddr = "http://172.30.1.59:9081/juZhuZhengJiFen/1.0.0/ws2ws?wsdl";
 
