@@ -18,19 +18,12 @@ public class WebServiceClientTest {
     @Test
     public void testWS2WSWithDispath() throws Exception {
         String ns = "http://service.webinterface.yzym.si.sl.neusoft.com/";
-
         String wsdlWS2WSAddr = "http://172.30.1.59:9081/juZhuZhengJiFen/1.0.0/ws2ws?wsdl";
-
         QName serviceName = new QName(ns, "NeuWebService");
-
-        QName portName = new QName(ns, "NeuWebServicePort");
-
+        QName portName = new QName(ns, "NeuWebServicePortType");
         Service service = Service.create(serviceName);
-
         service.addPort(portName, SOAPBinding.SOAP11HTTP_BINDING, wsdlWS2WSAddr);
-
         Dispatch<SOAPMessage> dispatch = service.createDispatch(portName, SOAPMessage.class, Service.Mode.MESSAGE);
-
         String req =
                 "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">"
                         + "   <soapenv:Header/>" + "   <soapenv:Body>" + "      <ser:RsResidentJFRDBusinessRev>"
@@ -42,10 +35,8 @@ public class WebServiceClientTest {
                         + "         <!--content:-->"
                         + "         <ser:arg5><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ROOT><QUERY_PRAMS><idNumber>12010719660201662X</idNumber><busType>1</busType></QUERY_PRAMS></ROOT>]]></ser:arg5>"
                         + "      </ser:RsResidentJFRDBusinessRev>" + "   </soapenv:Body>" + "</soapenv:Envelope>";
-
         InputStream is = new ByteArrayInputStream(req.getBytes());
         SOAPMessage request = MessageFactory.newInstance().createMessage(null, is);
-
         dispatch = WSClientSDK
                 .bind(dispatch, "3b12cb12fdf54a9296988ef3479fdf44", "j0R2XYM2mJjJ+dNNyc3rWdsVpAQ=", "juZhuZhengJiFen",
                         "1.0.0");
