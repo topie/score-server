@@ -46,11 +46,12 @@ public class WebServiceClientTest {
         InputStream is = new ByteArrayInputStream(req.getBytes());
         SOAPMessage request = MessageFactory.newInstance().createMessage(null, is);
 
-        dispatch = WSClientSDK.bind(dispatch, "3b12cb12fdf54a9296988ef3479fdf44", "j0R2XYM2mJjJ+dNNyc3rWdsVpAQ=", "juZhuZhengJiFen", "1.0.0");
+        dispatch = WSClientSDK
+                .bind(dispatch, "3b12cb12fdf54a9296988ef3479fdf44", "j0R2XYM2mJjJ+dNNyc3rWdsVpAQ=", "juZhuZhengJiFen",
+                        "1.0.0");
         System.out.println("Send out the request: " + req);
 
         SOAPMessage reply = dispatch.invoke(request);
-        reply = dispatch.invoke(request);
 
         if (reply != null)
             System.out.println("Response from invoke:" + DumpSoapUtil.dumpSoapMessage("response", reply));
