@@ -21,9 +21,9 @@ public class WebServiceClientTest {
 
         String wsdlWS2WSAddr = "http://172.30.1.59:9081/juZhuZhengJiFen/1.0.0/ws2ws?wsdl";
 
-        QName serviceName = new QName(ns, "WSHealthCheckServiceService");
+        QName serviceName = new QName(ns, "NeuWebService");
 
-        QName portName = new QName(ns, "WSHealthCheckServicePort");
+        QName portName = new QName(ns, "NeuWebServicePort");
 
         Service service = Service.create(serviceName);
 
@@ -46,7 +46,7 @@ public class WebServiceClientTest {
         InputStream is = new ByteArrayInputStream(req.getBytes());
         SOAPMessage request = MessageFactory.newInstance().createMessage(null, is);
 
-        dispatch = WSClientSDK.bind(dispatch, "ak", "sk", "PING", "vcsb.ws");
+        dispatch = WSClientSDK.bind(dispatch, "3b12cb12fdf54a9296988ef3479fdf44", "j0R2XYM2mJjJ+dNNyc3rWdsVpAQ=", "juZhuZhengJiFen", "1.0.0");
         System.out.println("Send out the request: " + req);
 
         SOAPMessage reply = dispatch.invoke(request);
