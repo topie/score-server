@@ -14,18 +14,10 @@ import java.io.InputStream;
 
 public class WebServiceClient {
 
-    private static final String ak = "ak";
-
-    private static final String sk = "sk";
-
-    private String host = System.getProperty("bhost");
-
-    private String port = System.getProperty("broker.wsport", "9081");
-
     public void testWS2WSWithDispath() throws Exception {
         String ns = "http://hc.wsprocess.csb.alibaba.com/";
 
-        String wsdlWS2WSAddr = String.format("http://%s:%s/PING/vcsb.ws/ws2ws?wsdl", host, port);
+        String wsdlWS2WSAddr = "http://172.30.1.59:9081/juZhuZhengJiFen/1.0.0/ws2ws?wsdl";
 
         // Service Qname as defined in the WSDL.
         QName serviceName = new QName(ns, "WSHealthCheckServiceService");
@@ -45,16 +37,21 @@ public class WebServiceClient {
 
         // covert string to soap message
 
-        String req = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" "
-                + "xmlns:hc=\"http://hc.wsprocess.csb.alibaba.com/\"> \n" + "<soapenv:Header/>\n" + "<soapenv:Body>\n"
-                + "<hc:ping>\n" + "<arg0>wiseking</arg0>\n" + "</hc:ping>\n" + "</soapenv:Body>\n"
-                + "</soapenv:Envelope>";
+        String req = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">\n"
+                + "   <soapenv:Header/>\n" + "   <soapenv:Body>\n" + "      <ser:RsResidentJFRDBusinessRev>\n"
+                + "         <!--ticket:-->\n" + "         <ser:arg0>NEUSERVICE_GGFW_TICKET_12</ser:arg0>\n"
+                + "         <!--buzzNumb:-->\n" + "         <ser:arg1>TJZSYL_JFRDXT_001</ser:arg1>\n"
+                + "         <!--sender:-->\n" + "         <ser:arg2>JFRDXT</ser:arg2>\n" + "         <!--reciver:-->\n"
+                + "         <ser:arg3>TJZSYL</ser:arg3>\n" + "         <!--operatorName:-->\n"
+                + "         <ser:arg4>经办人校验测试操作员</ser:arg4>\n" + "         <!--content:-->\n"
+                + "         <ser:arg5><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ROOT><QUERY_PRAMS><idNumber>12010719660201662X</idNumber><busType>1</busType></QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
+                + "      </ser:RsResidentJFRDBusinessRev>\n" + "   </soapenv:Body>\n" + "</soapenv:Envelope>";
 
         InputStream is = new ByteArrayInputStream(req.getBytes());
         SOAPMessage request = MessageFactory.newInstance().createMessage(null, is);
 
         // 使用SDK给dispatch设置 ak和sk !!!
-        dispatch = WSClientSDK.bind(dispatch, ak, sk, "PING", "vcsb.ws");
+        dispatch = WSClientSDK.bind(dispatch, "ak", "sk", "PING", "vcsb.ws");
         System.out.println("Send out the request: " + req);
 
         // Invoke the endpoint synchronously

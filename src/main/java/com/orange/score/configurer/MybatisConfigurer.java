@@ -5,6 +5,7 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -20,8 +21,11 @@ import java.util.Properties;
 @Configuration
 public class MybatisConfigurer {
 
+    private static String DB_TYPE;
+
     @Bean
-    public static SqlSessionFactory sqlSessionFactoryBean(@Qualifier("dataSource") DataSource dataSource) throws Exception {
+    public static SqlSessionFactory sqlSessionFactoryBean(@Qualifier("dataSource") DataSource dataSource)
+            throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(dataSource);
         factory.setTypeAliasesPackage("com.orange.score.database.*.model");
@@ -48,15 +52,17 @@ public class MybatisConfigurer {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
         mapperScannerConfigurer.setBasePackage("com.orange.score.database.*.dao");
-
-        //配置通用Mapper，详情请查阅官方文档
         Properties properties = new Properties();
         properties.setProperty("mappers", "com.orange.score.common.core.Mapper");
-        properties.setProperty("notEmpty",
-                "false");//insert、update是否判断字符串类型!='' 即 test="str != null"表达式内是否追加 and str != ''
-        properties.setProperty("IDENTITY", "MYSQL");
+        properties.setProperty("notEmpty", "false");
+        properties.setProperty("IDENTITY", DB_TYPE);
         mapperScannerConfigurer.setProperties(properties);
         return mapperScannerConfigurer;
+    }
+
+    @Value("${datasource.dbtype}")
+    public void setDbType(String dbType) {
+        DB_TYPE = dbType;
     }
 
 }
