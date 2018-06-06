@@ -23,7 +23,7 @@ public class WebServiceClientTest {
 
         QName serviceName = new QName(ns, "NeuWebService");
 
-        QName portName = new QName(ns, "NeuWebServicePort");
+        QName portName = new QName(ns, "NeuWebServicePortType");
 
         Service service = Service.create(serviceName);
 
