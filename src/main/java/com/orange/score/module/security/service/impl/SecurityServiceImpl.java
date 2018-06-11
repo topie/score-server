@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -79,7 +80,9 @@ public class SecurityServiceImpl implements SecurityService {
         if (roleFunctions != null && roleFunctions.size() > 0) {
             for (Map roleFunction : roleFunctions) {
                 String url = (String) roleFunction.get("function");
+                if (url == null) url = (String) roleFunction.get("function".toUpperCase());
                 Integer role = (Integer) roleFunction.get("role");
+                if (role == null) role = ((BigDecimal) roleFunction.get("role".toUpperCase())).intValue();
                 Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
                 if (!resourceMap.containsKey(url)) {
                     configAttributes.add(new SecurityConfig(String.valueOf(role)));
