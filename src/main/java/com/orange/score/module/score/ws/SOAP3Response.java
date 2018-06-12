@@ -5,7 +5,7 @@ import org.dom4j.*;
 
 import java.util.Iterator;
 
-public class SOAPResponse extends VisitorSupport {
+public class SOAP3Response extends VisitorSupport {
 
     private String appCode;
 
@@ -38,7 +38,7 @@ public class SOAPResponse extends VisitorSupport {
                         + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
                         + "</ser:RsResidentJFRDBusinessRev>\n" + "</soapenv:Body>\n" + "</soapenv:Envelope>";
 
-        SOAPResponse util = new SOAPResponse();
+        SOAP3Response util = new SOAP3Response();
         try {
             util.analysis(soapResponse);
         } catch (DocumentException e) {

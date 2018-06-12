@@ -2,7 +2,7 @@ package com.orange.score.ws;
 
 import com.alibaba.csb.ws.sdk.DumpSoapUtil;
 import com.alibaba.csb.ws.sdk.WSClientSDK;
-import com.orange.score.module.score.ws.SOAPResponse;
+import com.orange.score.module.score.ws.SOAP3Response;
 import org.dom4j.DocumentException;
 import org.junit.Test;
 
@@ -13,7 +13,6 @@ import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Iterator;
 
 public class WebServiceClientTest {
 
@@ -63,7 +62,7 @@ public class WebServiceClientTest {
             System.out.println("Response from invoke:" + DumpSoapUtil.dumpSoapMessage("response", reply));
         else System.out.println("Response from invoke is null");
 
-        SOAPResponse util = new SOAPResponse();
+        SOAP3Response util = new SOAP3Response();
         try {
             util.analysis(DumpSoapUtil.dumpSoapMessage("response", reply));
         } catch (DocumentException e) {

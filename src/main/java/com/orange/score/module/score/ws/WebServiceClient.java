@@ -17,7 +17,7 @@ import java.io.InputStream;
 
 public class WebServiceClient {
 
-    public static SOAPResponse action(String req) throws SOAPException, IOException, DocumentException {
+    public static SOAP3Response action(String req) throws SOAPException, IOException, DocumentException {
         String ns = "http://service.webinterface.yzym.si.sl.neusoft.com/";
         String wsdlWS2WSAddr = "http://172.30.1.59:9081/juZhuZhengJiFen/1.0.0/ws2ws?wsdl";
         QName serviceName = new QName(ns, "NeuWebService");
@@ -33,10 +33,12 @@ public class WebServiceClient {
         System.out.println("Send out the request: " + req);
         SOAPMessage reply = dispatch.invoke(request);
         if (reply != null) {
-            SOAPResponse response = new SOAPResponse();
+            SOAP3Response response = new SOAP3Response();
             response.analysis(DumpSoapUtil.dumpSoapMessage("response", reply));
             return response;
         }
         return null;
     }
+
+
 }

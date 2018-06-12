@@ -11,17 +11,22 @@ import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
+import com.orange.score.module.score.ws.SOAP3Response;
+import com.orange.score.module.score.ws.WebServiceClient;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import javax.xml.soap.SOAPException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -362,6 +367,34 @@ public class ScoreRecordController {
             }
         }
         return ResponseUtil.success();
+    }
+
+    @PostMapping("/rensheAutoScore")
+    public Result rensheAutoScore(@RequestParam(value = "idNumber", required = false) String idNumber,
+            @RequestParam(value = "partnerIdNumber", required = false) String partnerIdNumber,
+            @RequestParam(value = "canAdd", required = false) Integer canAdd)
+            throws DocumentException, SOAPException, IOException {
+        if (StringUtils.isNotEmpty(partnerIdNumber)) {
+            partnerIdNumber = "";
+        }
+        if (canAdd == null) {
+            canAdd = 0;
+        }
+        String req = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" \n"
+                + "xmlns:ser=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">\n" + "   <soapenv:Header/>\n"
+                + "   <soapenv:Body>\n" + "      <ser:RsResidentJFRDBusinessRev>\n" + "         <!--ticket:-->\n"
+                + "         <ser:arg0>NEUSERVICE_GGFW_TICKET_12</ser:arg0>\n" + "         <!--buzzNumb:-->\n"
+                + "         <ser:arg1>TJZSYL_JFRDXT_003</ser:arg1>\n" + "         <!--sender:-->\n"
+                + "         <ser:arg2>JFRDXT</ser:arg2>\n" + "         <!--reciver:-->\n"
+                + "         <ser:arg3>TJZSYL</ser:arg3>\n" + "         <!--operatorName:-->\n"
+                + "         <ser:arg4>自动打分操作员</ser:arg4>\n" + "         <!--content:-->\n"
+                + "         <ser:arg5><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+                + "<ROOT><QUERY_PRAMS><idNumber>" + idNumber + "</idNumber>" + "<partnerIdNnumber>" + partnerIdNumber
+                + "</partnerIdNnumber>" + "<lessThan35>0</lessThan35>" + "<canAdd>" + canAdd + "</canAdd>"
+                + "<busType>3</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
+                + "</ser:RsResidentJFRDBusinessRev></soapenv:Body></soapenv:Envelope>";
+        SOAP3Response soapResponse = WebServiceClient.action(req);
+        return ResponseUtil.success(soapResponse);
     }
 
     @PostMapping("/insert")

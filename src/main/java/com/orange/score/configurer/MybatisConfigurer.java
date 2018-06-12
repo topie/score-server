@@ -21,8 +21,6 @@ import java.util.Properties;
 @Configuration
 public class MybatisConfigurer {
 
-    private static String DB_TYPE;
-
     @Bean
     public static SqlSessionFactory sqlSessionFactoryBean(@Qualifier("dataSource") DataSource dataSource)
             throws Exception {
@@ -55,15 +53,9 @@ public class MybatisConfigurer {
         Properties properties = new Properties();
         properties.setProperty("mappers", "com.orange.score.common.core.Mapper");
         properties.setProperty("notEmpty", "false");
-        properties.setProperty("IDENTITY", DB_TYPE);
+        properties.setProperty("IDENTITY", "ORACLE");
         mapperScannerConfigurer.setProperties(properties);
         return mapperScannerConfigurer;
     }
-
-    @Value("${datasource.dbtype}")
-    public void setDbType(String dbType) {
-        DB_TYPE = dbType;
-    }
-
 }
 
