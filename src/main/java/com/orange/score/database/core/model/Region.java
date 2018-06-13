@@ -25,6 +25,7 @@ public class Region {
     /**
      * 等级, 1、省；2、市；3、区
      */
+    @Column(name = "level_type")
     private Integer level;
 
     /**

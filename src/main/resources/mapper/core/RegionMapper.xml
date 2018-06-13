@@ -8,9 +8,9 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
-        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="level_type" jdbcType="INTEGER" property="level"/>
     </resultMap>
     <select id="selectTreeNodes" resultType="com.orange.score.common.utils.TreeNode">
-      select id,name,parent_id pId from t_region
+      select id,name,parent_id as pId from t_region
     </select>
 </mapper>
