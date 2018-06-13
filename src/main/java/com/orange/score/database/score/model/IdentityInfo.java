@@ -13,7 +13,7 @@ public class IdentityInfo {
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select seq_id.nextval from dual")
     private Integer id;
 
     /**
@@ -46,9 +46,6 @@ public class IdentityInfo {
     @Column(name = "accept_number")
     private String acceptNumber;
 
-    @Column(name = "accept_address_id")
-    private Integer acceptAddress_id;
-
     @Column(name = "accept_address")
     private String acceptAddress;
 
@@ -59,24 +56,8 @@ public class IdentityInfo {
     @Column(name = "reservation_m")
     private Integer reservationM;
 
-    public String getRegionName() {
-        return regionName;
-    }
-
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
-    }
-
     @Column(name = "region_name")
     private String regionName;
-
-    public Integer getAcceptAddressId() {
-        return acceptAddressId;
-    }
-
-    public void setAcceptAddressId(Integer acceptAddressId) {
-        this.acceptAddressId = acceptAddressId;
-    }
 
     @Column(name = "accept_address_id")
     private Integer acceptAddressId;
@@ -147,20 +128,28 @@ public class IdentityInfo {
     @Column(name = "u_time")
     private Date uTime;
 
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public Integer getAcceptAddressId() {
+        return acceptAddressId;
+    }
+
+    public void setAcceptAddressId(Integer acceptAddressId) {
+        this.acceptAddressId = acceptAddressId;
+    }
+
     public String getAcceptNumber() {
         return acceptNumber;
     }
 
     public void setAcceptNumber(String acceptNumber) {
         this.acceptNumber = acceptNumber;
-    }
-
-    public Integer getAcceptAddress_id() {
-        return acceptAddress_id;
-    }
-
-    public void setAcceptAddress_id(Integer acceptAddress_id) {
-        this.acceptAddress_id = acceptAddress_id;
     }
 
     public String getAcceptAddress() {

@@ -5,10 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.BaseService;
 import com.orange.score.common.tools.excel.ExcelFileUtil;
-import com.orange.score.common.tools.plugins.FormItem;
-import com.orange.score.common.utils.CamelUtil;
-import com.orange.score.common.utils.Option;
-import com.orange.score.database.core.dao.CommonQueryMapper;
 import com.orange.score.database.core.model.ColumnJson;
 import com.orange.score.database.core.model.CommonQuery;
 import com.orange.score.module.core.dto.CommonQueryDto;
@@ -24,7 +20,6 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +31,6 @@ public class CommonQueryServiceImpl extends BaseService<CommonQuery> implements 
 
     @Autowired
     private ICommonService iCommonService;
-
-    @Autowired
-    private CommonQueryMapper commonQueryMapper;
 
     @Autowired
     private IColumnJsonService iColumnJsonService;
@@ -90,7 +82,6 @@ public class CommonQueryServiceImpl extends BaseService<CommonQuery> implements 
     @Override
     public List selectFormItemsByTable(String table) {
         List items = new ArrayList<>();
-        List<Map> list = new ArrayList<>();
         ColumnJson columnJson = new ColumnJson();
         columnJson.setTableName(table);
         List<ColumnJson> columnJsons = iColumnJsonService.selectByFilter(columnJson);
@@ -101,67 +92,7 @@ public class CommonQueryServiceImpl extends BaseService<CommonQuery> implements 
                 for (Object o : jsonArray) {
                     items.add(o);
                 }
-                return items;
             }
-        } else {
-            list = commonQueryMapper.selectColumnsByTable(table);
-        }
-        for (Map map : list) {
-            String name = (String) map.get("dataColumn");
-            String comment = (String) map.get("dataComment");
-            String[] cs = comment.split(":");
-            if (cs.length > 2 && "skip".equals(cs[1])) continue;
-            FormItem formItem = new FormItem();
-            formItem.setName(CamelUtil.underlineToCamel(name));
-            formItem.setId(CamelUtil.underlineToCamel(name));
-            formItem.setLabel(cs[0]);
-            formItem.setType("text");
-            if (cs.length == 2) {
-                formItem.setType(cs[1]);
-                if ("date".equals(cs[1])) {
-                    formItem.setType("datepicker");
-                    Map config = new HashMap();
-                    config.put("timePicker", false);
-                    config.put("singleDatePicker", true);
-                    Map locale = new HashMap();
-                    locale.put("format", "YYYY-MM-DD");
-                    config.put("locale", locale);
-                    formItem.setConfig(config);
-                } else if ("datetime".equals(cs[1])) {
-                    formItem.setType("datepicker");
-                    Map config = new HashMap();
-                    config.put("timePicker", true);
-                    config.put("singleDatePicker", true);
-                    Map locale = new HashMap();
-                    locale.put("format", "YYYY-MM-DD HH:mm:ss");
-                    config.put("locale", locale);
-                    formItem.setConfig(config);
-                } else {
-                    formItem.setType(cs[1]);
-                    if ("code".equals(cs[1])) {
-                        formItem.setType("textarea");
-                        formItem.setCode(true);
-                    }
-                }
-            }
-            if (cs.length == 3) {
-                formItem.setType(cs[1]);
-                List<Option> options = new ArrayList<>();
-                String[] arr = cs[2].split("[,\\]\\[]");
-                for (String option : arr) {
-                    if (StringUtils.isNotEmpty(option)) {
-                        if (option.contains("#")) {
-                            String[] sArr = option.split("#");
-                            options.add(new Option(sArr[0], sArr[1]));
-                        } else {
-                            options.add(new Option(option, option));
-                        }
-
-                    }
-                }
-                formItem.setItems(options);
-            }
-            items.add(formItem);
         }
         return items;
     }

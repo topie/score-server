@@ -4,11 +4,12 @@ import javax.persistence.*;
 
 @Table(name = "d_column_json")
 public class ColumnJson {
+
     /**
      * ID:hidden
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select seq_id.nextval from dual")
     private Integer id;
 
     /**
