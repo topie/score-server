@@ -10,7 +10,7 @@ public class Attachment {
      */
     @Id
     @Column(name = "attachment_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
     private Integer attachmentId;
 
     /**

@@ -54,6 +54,7 @@ public class MybatisConfigurer {
         properties.setProperty("mappers", "com.orange.score.common.core.Mapper");
         properties.setProperty("notEmpty", "false");
         properties.setProperty("IDENTITY", "ORACLE");
+        properties.setProperty("ORDER", "BEFORE");
         mapperScannerConfigurer.setProperties(properties);
         return mapperScannerConfigurer;
     }

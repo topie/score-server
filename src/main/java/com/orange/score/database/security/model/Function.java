@@ -12,7 +12,7 @@ public class Function extends Sortable {
     private static final long serialVersionUID = -3601166032902209525L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
     private Integer id;
 
     /**

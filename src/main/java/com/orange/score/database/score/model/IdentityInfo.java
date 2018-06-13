@@ -13,7 +13,7 @@ public class IdentityInfo {
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
     private Integer id;
 
     /**

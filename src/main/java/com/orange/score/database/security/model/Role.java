@@ -15,7 +15,7 @@ public class Role extends Sortable {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
     private Integer id;
 
     /**
