@@ -9,7 +9,7 @@ public class OnlinePersonMaterial {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_online_person_material_seq.nextval from dual")
     private Integer id;
 
     /**

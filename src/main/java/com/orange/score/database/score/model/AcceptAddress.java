@@ -8,7 +8,7 @@ public class AcceptAddress {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_accept_address_seq.nextval from dual")
     private Integer id;
 
     /**

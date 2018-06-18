@@ -9,7 +9,7 @@ public class MaterialTitle {
      * id:hidden
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_material_title_seq.nextval from dual")
     private Integer id;
 
     /**

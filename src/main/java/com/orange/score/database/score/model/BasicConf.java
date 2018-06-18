@@ -9,7 +9,7 @@ public class BasicConf {
      * id:hidden
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_basic_conf_seq.nextval from dual")
     private Integer id;
 
     /**

@@ -9,7 +9,7 @@ public class IndicatorItem {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_indicator_item_seq.nextval from dual")
     private Integer id;
 
     /**

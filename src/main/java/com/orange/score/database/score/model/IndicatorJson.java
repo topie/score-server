@@ -9,7 +9,7 @@ public class IndicatorJson {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_indicator_json_seq.nextval from dual")
     private Integer id;
 
     /**

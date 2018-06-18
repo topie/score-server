@@ -12,7 +12,7 @@ public class FakeRecord {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_fake_record_seq.nextval from dual")
     private Integer id;
 
     /**

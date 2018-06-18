@@ -13,7 +13,7 @@ public class PersonBatchStatusRecord {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_person_batch_status_record_seq.nextval from dual")
     private Integer id;
 
     /**

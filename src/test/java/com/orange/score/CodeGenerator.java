@@ -22,13 +22,13 @@ public class CodeGenerator {
 
     //JDBC配置，请修改为你项目的实际配置
 
-    private static final String JDBC_URL = "jdbc:mysql://139.129.230.107:3306/score_server";
+    private static final String JDBC_URL = "jdbc:oracle:thin:@127.0.0.1:49161:helowin";
 
-    private static final String JDBC_USERNAME = "admin";
+    private static final String JDBC_USERNAME = "system";
 
-    private static final String JDBC_PASSWORD = "admin";
+    private static final String JDBC_PASSWORD = "helowin";
 
-    private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
+    private static final String JDBC_DIVER_CLASS_NAME = "oracle.jdbc.driver.OracleDriver";
 
     private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
 
@@ -53,7 +53,7 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCodeByCustomModelName("t_identity_info", "InInfo", "id");
+        genCodeByCustomModelName("t_document", "Document", "id");
     }
 
     /**

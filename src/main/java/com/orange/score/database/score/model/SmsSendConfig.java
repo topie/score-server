@@ -8,7 +8,7 @@ public class SmsSendConfig {
      * ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_sms_send_config_seq.nextval from dual")
     private Integer id;
 
     /**

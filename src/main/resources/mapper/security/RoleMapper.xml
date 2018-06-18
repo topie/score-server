@@ -28,7 +28,7 @@
         id, role_name, default_action, state, insert_time, update_time
     </sql>
     <insert id="insertRoleFunction" parameterType="java.lang.Integer">
-        insert into d_role_function (role_id,function_id) values(#{roleId,jdbcType=INTEGER},#{functionId,jdbcType=INTEGER});
+        insert into d_role_function (role_id,function_id) values (#{roleId},#{functionId})
     </insert>
     <delete id="deleteFunctionByRoleId">
         delete from d_role_function where role_id=#{roleId}

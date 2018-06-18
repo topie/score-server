@@ -10,7 +10,7 @@ public class ScoreResult {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_person_batch_score_result_seq.nextval from dual")
     private Integer id;
 
     /**

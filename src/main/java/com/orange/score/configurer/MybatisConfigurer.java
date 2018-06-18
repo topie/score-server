@@ -3,6 +3,7 @@ package com.orange.score.configurer;
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.JdbcType;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +43,7 @@ public class MybatisConfigurer {
         //添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         factory.setMapperLocations(resolver.getResources("classpath*:mapper/**/*.xml"));
+        factory.getObject().getConfiguration().setJdbcTypeForNull(JdbcType.NULL);
         return factory.getObject();
     }
 
