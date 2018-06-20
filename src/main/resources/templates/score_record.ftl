@@ -65,7 +65,7 @@
                                 <!-- 三组数据信息的 -->
                                 <tr>
                                     <td colspan="4">姓名：<strong>${person.name}</strong></td>
-                                    <td colspan="4">性别：<strong>${person.sex}</strong></td>
+                                    <td colspan="4">性别：<strong><#if person.sex == 1>男<#else>女</#if></strong></td>
                                     <td colspan="4">民族：<strong>${person.nation}</strong></td>
                                 </tr>
                                 <tr>
@@ -87,8 +87,8 @@
                                     <td colspan="6">工种：<strong>${profession.jobTypeStr}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">户口所在地：<strong>${move.moveRegisteredOffice}</strong></td>
-                                    <td colspan="6">户口性质：<strong>${move.houseNatureStr}</strong></td>
+                                    <td colspan="6">现户口性质：<strong>${move.houseNatureStr}</strong></td>
+                                    <td colspan="6">落户性质：<strong>${move.settledNatureStr}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">单位名称：<strong>${other.companyName}</strong></td>
@@ -99,11 +99,7 @@
                                     <td colspan="6">本人电话：<strong>${other.selfPhone}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">拟落户地址：<strong></strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="6">拟落户地区：<strong>${move.region}</strong></td>
+                                    <td colspan="6">拟落户地区：<strong>${move.regionStr}</strong></td>
                                     <td colspan="6">是否社保缴纳：<strong>${other.socialSecurityPayStr}</strong></td>
                                 </tr>
                                 <!-- 标题特变长的分为特殊的两组 -->
@@ -206,7 +202,7 @@
                                     <td class="check_desc" colspan="5">
                                         <div class="text-info">审核打分说明：</div>
                                         <textarea class="form-control" rows="3" disabled>
-                                        ${item.indicator.note}
+                                            ${item.indicator.note}
                                         </textarea>
                                     </td>
                                 </tr>
@@ -221,9 +217,38 @@
 
                     </div>
                 </div>
+                <div id="material-tab" class="main-cont clearfix tab-pane">
+                    <div>
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">
+                                申请人材料提交情况
+                            </div>
+                            <!-- Table 多个表格列表组合 -->
+                            <div class="table-list-item">
+                                <table class="table table-hover table-bordered table-condensed">
+                                    <tr class="info">
+                                        <th colspan="2" class="text-info">选中表示已经提交过该材料</th>
+                                    </tr>
+                                    <tr class="info">
+                                        <th>确认</th>
+                                        <th class="text-info">材料名称</th>
+                                    </tr>
+                                <#list materialInfos as item>
+                                    <tr>
+                                        <td class="text-center">
+                                            <input name="material" value="${item.id}" type="checkbox">
+                                        </td>
+                                        <td>${item.name}</td>
+                                    </tr>
+                                </#list>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 

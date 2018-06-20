@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-08.
@@ -60,6 +57,9 @@ public class IdentityInfoController {
 
     @Autowired
     private IOnlinePersonMaterialService iOnlinePersonMaterialService;
+
+    @Autowired
+    private IMaterialAcceptRecordService iMaterialAcceptRecordService;
 
     @GetMapping(value = "/list")
     @ResponseBody
@@ -114,6 +114,10 @@ public class IdentityInfoController {
         Map params = new HashMap();
         Integer userId = SecurityUtil.getCurrentUserId();
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
+        Map mMap = new HashMap();
+        for (MaterialInfo materialInfo : materialInfos) {
+            mMap.put(materialInfo.getId(), materialInfo.getName());
+        }
         params.put("materialInfos", materialInfos);
         if (userId == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
@@ -126,11 +130,10 @@ public class IdentityInfoController {
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
         List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
-        List<Integer> onlineIds = new ArrayList<>();
         for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
-            onlineIds.add(onlinePersonMaterial.getMaterialId());
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId()));
         }
-
+        params.put("onlinePersonMaterials", onlinePersonMaterials);
         params.put("person", person);
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
         if (companyInfo == null) {
@@ -163,8 +166,22 @@ public class IdentityInfoController {
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "identity_info.ftl", params);
         Map result = new HashMap();
+
+        condition = new Condition(MaterialAcceptRecord.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", identityInfoId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
+        List<Integer> submittedMids = new ArrayList<>();
+        Set<Integer> hSet = new HashSet<>();
+        for (MaterialAcceptRecord item : materials) {
+            if (!hSet.contains(item.getMaterialId())) {
+                submittedMids.add(item.getMaterialId());
+                hSet.add(item.getMaterialId());
+            }
+        }
+        result.put("cIds", submittedMids);
         result.put("html", html);
-        result.put("cMids", onlineIds);
         return ResponseUtil.success(result);
     }
 }

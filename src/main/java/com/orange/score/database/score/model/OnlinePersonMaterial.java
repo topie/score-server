@@ -1,15 +1,16 @@
 package com.orange.score.database.score.model;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "t_online_person_material")
 public class OnlinePersonMaterial {
+
     /**
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_online_person_material_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_online_person_material_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -29,6 +30,12 @@ public class OnlinePersonMaterial {
      */
     @Column(name = "material_id")
     private Integer materialId;
+
+    @Column(name = "material_info_id")
+    private Integer materialInfoId;
+
+    @Transient
+    private String materialInfoName;
 
     /**
      * 材料名称
@@ -52,6 +59,22 @@ public class OnlinePersonMaterial {
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    public String getMaterialInfoName() {
+        return materialInfoName;
+    }
+
+    public void setMaterialInfoName(String materialInfoName) {
+        this.materialInfoName = materialInfoName;
+    }
+
+    public Integer getMaterialInfoId() {
+        return materialInfoId;
+    }
+
+    public void setMaterialInfoId(Integer materialInfoId) {
+        this.materialInfoId = materialInfoId;
+    }
 
     /**
      * 获取id

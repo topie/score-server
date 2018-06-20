@@ -12,6 +12,17 @@
         <h4 class="widget-title lighter smaller">
             申请人信息
         </h4>
+
+        <div class="widget-toolbar no-border">
+            <ul class="nav nav-tabs" id="recent-tab">
+                <li class="active">
+                    <a data-toggle="tab" href="#info-tab" aria-expanded="true">信息</a>
+                </li>
+                <li class="">
+                    <a data-toggle="tab" href="#online-tab" aria-expanded="false">材料上传</a>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div class="widget-body">
@@ -53,7 +64,7 @@
                                 <!-- 三组数据信息的 -->
                                 <tr>
                                     <td colspan="4">姓名：<strong>${person.name}</strong></td>
-                                    <td colspan="4">性别：<strong>${person.sex}</strong></td>
+                                    <td colspan="4">性别：<strong><#if person.sex == 1>男<#else>女</#if></strong></td>
                                     <td colspan="4">民族：<strong>${person.nation}</strong></td>
                                 </tr>
                                 <tr>
@@ -75,8 +86,8 @@
                                     <td colspan="6">工种：<strong>${profession.jobTypeStr}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">户口所在地：<strong>${move.moveRegisteredOffice}</strong></td>
-                                    <td colspan="6">户口性质：<strong>${move.houseNatureStr}</strong></td>
+                                    <td colspan="6">现户口性质：<strong>${move.houseNatureStr}</strong></td>
+                                    <td colspan="6">落户性质：<strong>${move.settledNatureStr}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">单位名称：<strong>${other.companyName}</strong></td>
@@ -87,11 +98,7 @@
                                     <td colspan="6">本人电话：<strong>${other.selfPhone}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">拟落户地址：<strong></strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="6">拟落户地区：<strong>${move.region}</strong></td>
+                                    <td colspan="6">拟落户地区：<strong>${move.regionStr}</strong></td>
                                     <td colspan="6">是否社保缴纳：<strong>${other.socialSecurityPayStr}</strong></td>
                                 </tr>
                                 <!-- 标题特变长的分为特殊的两组 -->
@@ -160,6 +167,33 @@
                                 </table>
                             </div>
                         </#list>
+                        </div>
+                    </div>
+                </div>
+                <div id="online-tab" class="main-cont clearfix tab-pane">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            申请人材料上传情况
+                        </div>
+                        <!-- Table 多个表格列表组合 -->
+                        <div class="table-list-item">
+                            <table class="table table-hover table-bordered table-condensed">
+                                <tr class="info">
+                                    <th>操作</th>
+                                    <th class="text-info">材料名称</th>
+                                </tr>
+                                <#list onlinePersonMaterials as item>
+                                    <#if item.materialInfoId gt 0>
+                                        <tr>
+                                            <td class="text-center">
+                                                <a class="btn btn-mini btn-info" target="_blank" href="${item.materialUri}">下载</a>
+                                            </td>
+                                            <td>${item.materialInfoName}</td>
+                                        </tr>
+                                    </#if>
+                                </#list>
+                            </table>
                         </div>
                     </div>
                 </div>

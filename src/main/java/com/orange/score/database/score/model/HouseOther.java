@@ -1,15 +1,16 @@
 package com.orange.score.database.score.model;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "t_house_other")
 public class HouseOther {
+
     /**
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_house_other_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_house_other_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -120,6 +121,134 @@ public class HouseOther {
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    public String getCultureDegreeStr() {
+        switch (cultureDegree) {
+            case 11:
+                return "无";
+            case 4:
+                return "本科及以上学历";
+            case 5:
+                return "大专学历";
+            case 6:
+                return "高级技工学校高级班";
+        }
+        return "无";
+    }
+
+    public String getAwardsTitleStr() {
+        switch (awardsTitle) {
+            case 1:
+                return "拥有有效的中国发明专利";
+            case 2:
+                return "获得党中央、国务院授予的奖项和荣誉称号";
+            case 3:
+                return "获得省（自治区、直辖市）党委、政府或中央和国家机关部委等授予的奖项和荣誉称号";
+            case 4:
+                return "获得省（自治区、直辖市）党委、政府或中央和国家机关部委等授予的劳动模范或先进工作者荣誉称号，并享受省部级劳动模范或先进工作者待遇";
+        }
+        return "-";
+    }
+
+    public String getPenaltyStr() {
+        return socialSecurityPay == 1 ? "是" : "否";
+    }
+
+    public String getProvidentFundStr() {
+        return socialSecurityPay == 1 ? "是" : "否";
+    }
+
+    public String getTaxesStr() {
+        return taxes == 1 ? "是" : "否";
+    }
+
+    public String getDetentionStr() {
+        return detention == 1 ? "是" : "否";
+    }
+
+    public String getSocialSecurityPayStr() {
+        return socialSecurityPay == 1 ? "是" : "否";
+    }
+
+    public String getDegreeStr() {
+        switch (degree) {
+            case 0:
+                return "无";
+            case 1:
+                return "博士后";
+            case 2:
+                return "名誉博士";
+            case 3:
+                return "博士";
+            case 4:
+                return "硕士";
+            case 5:
+                return "学士";
+            case 6:
+                return "双学士";
+        }
+        return "-";
+    }
+
+    public String getPoliticalStatusStr() {
+        switch (politicalStatus) {
+            case 1:
+                return "中共党员";
+            case 2:
+                return "中共预备党员";
+            case 3:
+                return "共青团员";
+            case 4:
+                return "民革会员";
+            case 5:
+                return "民盟盟员";
+            case 6:
+                return "民建会员";
+            case 7:
+                return "民进会员";
+            case 8:
+                return "农工党党员";
+            case 9:
+                return "致公党党员";
+            case 10:
+                return "九三学社社员";
+            case 11:
+                return "台盟盟员";
+            case 12:
+                return "无党派民主人士";
+            case 13:
+                return "群众";
+        }
+        return "-";
+    }
+
+    public String getSoldierMeritoriousStr() {
+        switch (soldierMeritorious) {
+            case 1:
+                return "一等功";
+            case 2:
+                return "二等功";
+            case 3:
+                return "三等功";
+            case 0:
+                return "无";
+        }
+        return "-";
+    }
+
+    public String getApplicantTypeStr() {
+        switch (applicantType) {
+            case 1:
+                return "企业员工";
+            case 2:
+                return "投资者";
+            case 3:
+                return "个体商户";
+            case 4:
+                return "事业单位";
+        }
+        return "-";
+    }
 
     /**
      * 获取主键ID

@@ -73,6 +73,9 @@ public class MaterialReceiveController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private IOnlinePersonMaterialService iOnlinePersonMaterialService;
+
     @GetMapping(value = "/receiving")
     @ResponseBody
     public Result receiving(ScoreRecord scoreRecord,
@@ -123,32 +126,35 @@ public class MaterialReceiveController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
-    @GetMapping("/detailPerson")
-    public Result detailPerson(@RequestParam Integer identityInfoId) throws FileNotFoundException {
-        Map params = new HashMap();
-        Condition condition = new Condition(ScoreRecord.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+    @GetMapping("/detailAll")
+    public Result detailAll(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId)
+            throws FileNotFoundException {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserRoleByUserId(userId);
-        criteria.andEqualTo("personId", identityInfoId);
-        criteria.andIn("opRoleId", roles);
-        List<ScoreRecord> records = iScoreRecordService.findByCondition(condition);
-        List<Map> mList = new ArrayList<>();
-        for (ScoreRecord record : records) {
-            Map msMap = new HashMap();
-            Indicator indicator = iIndicatorService.findById(record.getIndicatorId());
-            msMap.put("indicator", indicator);
-            List<MaterialInfo> materialInfos = iMaterialInfoService.findByIndicatorId(record.getIndicatorId());
-            if (materialInfos.size() > 0) msMap.put("materialInfos", materialInfos);
-            mList.add(msMap);
-        }
-        params.put("mlist", mList);
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
+        Map params = new HashMap();
+        List<Map> mlist = new ArrayList<>();
+        Map msMap = new HashMap();
+        Indicator indicator = iIndicatorService.findById(indicatorId);
+        msMap.put("indicator", indicator);
+        List<MaterialInfo> materialInfos = iMaterialInfoService.findByIndicatorId(indicatorId);
+        msMap.put("materialInfos", materialInfos);
+        mlist.add(msMap);
+        params.put("mlist", mlist);
         IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
         if (person == null) {
             person = new IdentityInfo();
         }
         params.put("person", person);
+
+        Condition condition = new Condition(OnlinePersonMaterial.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", person.getId());
+        criteria.andEqualTo("batchId", person.getBatchId());
+        List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
+        params.put("onlinePersonMaterials", onlinePersonMaterials);
+
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
         if (companyInfo == null) {
             companyInfo = new CompanyInfo();
@@ -171,73 +177,6 @@ public class MaterialReceiveController {
         params.put("move", houseMove);
         condition = new Condition(HouseRelationship.class);
         criteria = condition.createCriteria();
-        criteria.andEqualTo("identityInfoId", identityInfoId);
-        List<HouseRelationship> relationshipList = iHouseRelationshipService.findByCondition(condition);
-        if (CollectionUtils.isEmpty(relationshipList)) {
-            relationshipList = new ArrayList<>();
-        }
-        params.put("relation", relationshipList);
-        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
-        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_info.ftl", params);
-        Map result = new HashMap();
-        List<String> mCheckList = new ArrayList<>();
-        condition = new Condition(MaterialAcceptRecord.class);
-        criteria = condition.createCriteria();
-        criteria.andEqualTo("roleId", roles.get(0));
-        criteria.andEqualTo("personId", identityInfoId);
-        criteria.andEqualTo("batchId", person.getBatchId());
-        List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
-        for (MaterialAcceptRecord item : materials) {
-            mCheckList.add(item.getIndicatorId() + "_" + item.getMaterialId());
-        }
-        result.put("mCheckList", mCheckList);
-        result.put("html", html);
-        return ResponseUtil.success(result);
-    }
-
-    @GetMapping("/detailAll")
-    public Result detailAll(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId)
-            throws FileNotFoundException {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
-        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
-        Map params = new HashMap();
-        List<Map> mlist = new ArrayList<>();
-        Map msMap = new HashMap();
-        Indicator indicator = iIndicatorService.findById(indicatorId);
-        msMap.put("indicator", indicator);
-        List<MaterialInfo> materialInfos = iMaterialInfoService.findByIndicatorId(indicatorId);
-        msMap.put("materialInfos", materialInfos);
-        mlist.add(msMap);
-        params.put("mlist", mlist);
-        IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
-        if (person == null) {
-            person = new IdentityInfo();
-        }
-        params.put("person", person);
-        CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
-        if (companyInfo == null) {
-            companyInfo = new CompanyInfo();
-        }
-        params.put("company", companyInfo);
-        HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
-        if (other == null) {
-            other = new HouseOther();
-        }
-        params.put("other", other);
-        HouseProfession profession = iHouseProfessionService.findBy("identityInfoId", identityInfoId);
-        if (profession == null) {
-            profession = new HouseProfession();
-        }
-        params.put("profession", profession);
-        HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", identityInfoId);
-        if (houseMove == null) {
-            houseMove = new HouseMove();
-        }
-        params.put("move", houseMove);
-        Condition condition = new Condition(HouseRelationship.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("identityInfoId", identityInfoId);
         List<HouseRelationship> relationshipList = iHouseRelationshipService.findByCondition(condition);
         if (CollectionUtils.isEmpty(relationshipList)) {

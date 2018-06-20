@@ -1,15 +1,16 @@
 package com.orange.score.database.score.model;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "t_house_profession")
 public class HouseProfession {
+
     /**
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_house_profession_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_house_profession_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -71,6 +72,60 @@ public class HouseProfession {
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    public String getJobTypeStr() {
+        switch (jobType) {
+            case 27:
+                return "非常紧缺的职业";
+            case 28:
+                return "紧缺职业";
+            case 29:
+                return "一般紧缺职业";
+            case 30:
+                return "无";
+        }
+        return "无";
+    }
+
+    public String getJobLevelStr() {
+        switch (jobLevel) {
+            case 1:
+                return "高级技师";
+            case 2:
+                return "技师";
+            case 3:
+                return "高级工";
+            case 4:
+                return "中级工";
+            case 5:
+                return "初级工";
+        }
+        return "无";
+    }
+
+    public String getJobTitleLevelStr() {
+        switch (jobTitleLevel) {
+            case 1:
+                return "初级职称";
+            case 2:
+                return "中级职称";
+            case 3:
+                return "高级职称";
+        }
+        return "无";
+    }
+
+    public String getProfessionTypeStr() {
+        switch (professionType) {
+            case 1:
+                return "无";
+            case 2:
+                return "具有职称";
+            case 3:
+                return "具有职业资格";
+        }
+        return "-";
+    }
 
     /**
      * 获取主键ID

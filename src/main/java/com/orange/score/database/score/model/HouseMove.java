@@ -1,15 +1,16 @@
 package com.orange.score.database.score.model;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "t_house_move")
 public class HouseMove {
+
     /**
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_house_move_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_house_move_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -116,6 +117,101 @@ public class HouseMove {
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    public String getSettledNatureStr() {
+        switch (settledNature) {
+            case 1:
+                return "本单位集体户口";
+            case 2:
+                return "非本单位集体户口";
+            case 3:
+                return "家庭户口";
+        }
+        return "-";
+    }
+
+    public String getRegionStr() {
+        switch (region) {
+            case 21:
+                return "和平区";
+            case 22:
+                return "河东区";
+            case 23:
+                return "河西区";
+            case 24:
+                return "南开区";
+            case 25:
+                return "河北区";
+            case 26:
+                return "红桥区";
+            case 27:
+                return "东丽区";
+            case 28:
+                return "西青区";
+            case 29:
+                return "津南区";
+            case 30:
+                return "北辰区";
+            case 31:
+                return "武清区";
+            case 32:
+                return "宝坻区";
+            case 33:
+                return "滨海新区";
+            case 34:
+                return "宁河区";
+            case 35:
+                return "静海区";
+            case 36:
+                return "蓟州区";
+
+        }
+        return "-";
+    }
+
+    public String getHouseNatureStr() {
+        switch (houseNature) {
+            case 1:
+                return "未落常住户口";
+            case 2:
+                return "非农业家庭户口";
+            case 3:
+                return "农业家庭户口";
+            case 4:
+                return "非农业集体户口";
+            case 5:
+                return "农业集体户口";
+            case 6:
+                return "自理口粮户口";
+            case 7:
+                return "寄住户口";
+            case 8:
+                return "暂住户口";
+            case 9:
+                return "地方城镇居民户口";
+            case 10:
+                return "其他户口";
+        }
+        return "-";
+    }
+
+    public String getHaveSonStr() {
+        return haveSon == 1 ? "有" : "无";
+    }
+
+    public String getMarriageStatusStr() {
+        switch (marriageStatus) {
+            case 1:
+                return "已婚";
+            case 2:
+                return "未婚";
+            case 3:
+                return "丧偶";
+            case 4:
+                return "离婚";
+        }
+        return "-";
+    }
 
     /**
      * 获取主键ID

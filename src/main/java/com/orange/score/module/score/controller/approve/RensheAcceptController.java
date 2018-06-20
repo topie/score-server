@@ -135,14 +135,4 @@ public class RensheAcceptController {
         return ResponseUtil.success();
     }
 
-    @GetMapping("/detailAll")
-    public Result detailAll(@RequestParam Integer id) throws FileNotFoundException {
-        Map params = new HashMap();
-        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
-        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "preapprove_identity_info.ftl", params);
-        Map result = new HashMap();
-        result.put("html", html);
-        return ResponseUtil.success(result);
-    }
 }
