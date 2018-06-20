@@ -7,14 +7,14 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Table(name = "t_person_batch_score_record")
+@Table(name = "t_pb_score_record")
 public class ScoreRecord {
 
     /**
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_person_batch_score_record_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_pb_score_result_seq.nextval from dual")
     private Integer id;
 
     /**

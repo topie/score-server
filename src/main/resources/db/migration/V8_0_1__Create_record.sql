@@ -62,8 +62,8 @@ CREATE TABLE t_indicator_self_test_record (
   COMMENT '用户自测得分';
 
 
-DROP TABLE IF EXISTS t_person_batch_score_record;
-CREATE TABLE t_person_batch_score_record (
+DROP TABLE IF EXISTS t_pb_score_record;
+CREATE TABLE t_pb_score_record (
   id                  INT(11)     NOT NULL  AUTO_INCREMENT
   COMMENT 'id',
   accept_number       VARCHAR(32) NOT NULL  DEFAULT ''

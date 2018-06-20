@@ -266,8 +266,8 @@ public class MaterialReceiveController {
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
-        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_person_batch_score_record");
-        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_person_batch_score_record");
+        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_pb_score_record");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_pb_score_record");
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);
