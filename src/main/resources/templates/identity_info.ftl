@@ -152,20 +152,29 @@
                         <div class="table-list-item">
                             <table class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
-                                    <th>操作</th>
+                                    <th>预览(点击放大)</th>
                                     <th class="text-info">材料名称</th>
                                 </tr>
                                 <#list onlinePersonMaterials as item>
                                     <#if item.materialInfoId gt 0>
                                         <tr>
                                             <td class="text-center">
-                                                <a class="btn btn-mini btn-info" target="_blank" href="${item.materialUri}">下载</a>
+                                                <img class="p-img" id="img_${item.id}" style="cursor: pointer" width="100" height="100" src="${item.materialUri}">
                                             </td>
                                             <td>${item.materialInfoName}</td>
                                         </tr>
                                     </#if>
                                 </#list>
                             </table>
+                            <script type="text/javascript">
+                                $(".p-img").off("click");
+                                $(".p-img").on("click",function(){
+                                    $.orangeModal({
+                                        title: "图片预览",
+                                        destroy: true
+                                    }).show().$body.html('<img width="99%" height="99%" src="${item.materialUri}">');
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
