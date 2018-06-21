@@ -165,8 +165,8 @@ CREATE TABLE t_indicator_json (
   COMMENT '指标Json信息表';
 
 
-DROP TABLE IF EXISTS t_person_batch_score_result;
-CREATE TABLE t_person_batch_score_result (
+DROP TABLE IF EXISTS t_pb_score_result;
+CREATE TABLE t_pb_score_result (
   id             INT(11)     NOT NULL  AUTO_INCREMENT
   COMMENT 'id',
   batch_id       INT(11)     NOT NULL  DEFAULT 0

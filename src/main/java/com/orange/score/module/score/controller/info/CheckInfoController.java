@@ -95,6 +95,33 @@ public class CheckInfoController {
 
     @PostMapping("/checkPerson")
     public Result checkPerson(@RequestParam Integer identityInfoId) {
+        IdentityInfo identityInfo = iIdentityInfoService.findById(identityInfoId);
+        if (identityInfo == null || (identityInfo.getReservationStatus() != 11 && identityInfo.getHallStatus() != 5)) {
+            return ResponseUtil.error("当前申请用户状态无法核算！");
+        }
+        List<Indicator> indicators = iIndicatorService.findAll();
+        Map<Integer, Integer> iMap = new HashMap();
+        Map<Integer, Indicator> indicatorMap = new HashMap();
+        for (Indicator indicator : indicators) {
+            iMap.put(indicator.getId(), indicator.getScoreRule());
+            indicatorMap.put(indicator.getId(), indicator);
+        }
+        iScoreResultService.insertToCheckIdentity(identityInfoId, iMap, indicatorMap);
+        return ResponseUtil.success();
+    }
+
+    /**
+     * 强制核算
+     *
+     * @param identityInfoId
+     * @return
+     */
+    @PostMapping("/checkPersonForce")
+    public Result checkPersonForce(@RequestParam Integer identityInfoId) {
+        IdentityInfo identityInfo = iIdentityInfoService.findById(identityInfoId);
+        if (identityInfo == null) {
+            return ResponseUtil.error("申请用户不存在");
+        }
         List<Indicator> indicators = iIndicatorService.findAll();
         Map<Integer, Integer> iMap = new HashMap();
         Map<Integer, Indicator> indicatorMap = new HashMap();
@@ -120,7 +147,8 @@ public class CheckInfoController {
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("batchId", batchId);
-        criteria.andNotEqualTo("hallStatus", 8);
+        criteria.andEqualTo("hallStatus", 5);
+        criteria.andEqualTo("reservationStatus", 11);
         List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
         for (IdentityInfo identityInfo : identityInfos) {
             iScoreResultService.insertToCheckIdentity(identityInfo.getId(), iMap, indicatorMap);

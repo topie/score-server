@@ -25,4 +25,5 @@ public interface IScoreResultService extends IService<ScoreResult> {
 
     int selectCountByFilter(ScoreRecord scoreRecord);
 
+    List<ScoreResult> selectRankByBatchId(Integer batchId);
 }

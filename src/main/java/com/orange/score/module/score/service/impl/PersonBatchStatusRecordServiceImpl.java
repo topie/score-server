@@ -71,7 +71,7 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (personBatchStatusRecord != null) {
             ColumnJson columnJson = new ColumnJson();
-            columnJson.setTableName("t_person_batch_status_record");
+            columnJson.setTableName("t_pb_status_record");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
             if (list.size() > 0) {
                 List<SearchItem> searchItems = new ArrayList<>();

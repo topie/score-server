@@ -40,8 +40,8 @@ public class ScoreResultController {
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
-        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_person_batch_score_result");
-        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_person_batch_score_result");
+        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_pb_score_result");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_pb_score_result");
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);

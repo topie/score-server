@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS t_person_batch_status_record;
-CREATE TABLE t_person_batch_status_record (
+DROP TABLE IF EXISTS t_pb_status_record;
+CREATE TABLE t_pb_status_record (
   id                INT(11)     NOT NULL  AUTO_INCREMENT
   COMMENT 'id',
   batch_id          INT(11)     NOT NULL  DEFAULT 0

@@ -45,8 +45,8 @@ public class PersonBatchStatusRecordController {
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
-        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_person_batch_status_record");
-        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_person_batch_status_record");
+        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_pb_status_record");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_pb_status_record");
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);

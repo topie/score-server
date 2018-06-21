@@ -14,6 +14,7 @@ import com.orange.score.module.score.service.IScoreResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +67,34 @@ public class ListInfoController {
     public Result batchList(@RequestParam("batchId") Integer batchId,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        PageInfo<ScoreResult> pageInfo = iScoreResultService.selectRankByBatchId(batchId,pageNum,pageSize);
+        PageInfo<ScoreResult> pageInfo = iScoreResultService.selectRankByBatchId(batchId, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+    @GetMapping(value = "/rankHtml")
+    @ResponseBody
+    public Result rankHtml(@RequestParam("batchId") Integer batchId) {
+        BatchConf batchConf = iBatchConfService.findById(batchId);
+        if (batchConf == null) return ResponseUtil.error("批次不存在");
+        List<ScoreResult> finalResultList = new ArrayList<>();
+        List<ScoreResult> scoreResultList = iScoreResultService.selectRankByBatchId(batchId);
+        int type = batchConf.getIndicatorType();
+        int limit = batchConf.getIndicatorValue();
+        if (type == 0) {
+            for (int i = 0; i < scoreResultList.size(); i++) {
+                if (limit > i) {
+                    ScoreResult item = scoreResultList.get(i);
+                    finalResultList.add(item);
+                }
+            }
+        } else if (type == 1) {
+            for (ScoreResult item : scoreResultList) {
+                if (limit >= item.getScoreValue().intValue()) {
+                    finalResultList.add(item);
+                }
+            }
+        }
+        return ResponseUtil.success(PageConvertUtil.grid(finalResultList));
     }
 
 }

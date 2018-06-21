@@ -6,14 +6,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
-@Table(name = "t_person_batch_status_record")
+@Table(name = "t_pb_status_record")
 public class PersonBatchStatusRecord {
 
     /**
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_person_batch_status_record_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_pb_status_record_seq.nextval from dual")
     private Integer id;
 
     /**

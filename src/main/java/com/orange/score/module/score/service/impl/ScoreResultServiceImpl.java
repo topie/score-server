@@ -66,7 +66,7 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (scoreResult != null) {
             ColumnJson columnJson = new ColumnJson();
-            columnJson.setTableName("t_person_batch_score_result");
+            columnJson.setTableName("t_pb_score_result");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
             if (list.size() > 0) {
                 List<SearchItem> searchItems = new ArrayList<>();
@@ -168,13 +168,18 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
     @Override
     public PageInfo<ScoreResult> selectRankByBatchId(Integer batchId, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<ScoreResult> list = scoreResultMapper.selectRankByBatchId(batchId);
+        List<ScoreResult> list = selectRankByBatchId(batchId);
         return new PageInfo<>(list);
     }
 
     @Override
     public int selectCountByFilter(ScoreRecord scoreRecord) {
         return scoreResultMapper.selectCountByFilter(scoreRecord);
+    }
+
+    @Override
+    public List<ScoreResult> selectRankByBatchId(Integer batchId) {
+        return scoreResultMapper.selectRankByBatchId(batchId);
     }
 }
 
