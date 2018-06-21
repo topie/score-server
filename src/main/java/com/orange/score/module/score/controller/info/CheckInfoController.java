@@ -120,6 +120,7 @@ public class CheckInfoController {
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("batchId", batchId);
+        criteria.andNotEqualTo("hallStatus", 8);
         List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
         for (IdentityInfo identityInfo : identityInfos) {
             iScoreResultService.insertToCheckIdentity(identityInfo.getId(), iMap, indicatorMap);

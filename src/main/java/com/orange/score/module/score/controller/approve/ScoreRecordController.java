@@ -249,6 +249,9 @@ public class ScoreRecordController {
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
         IdentityInfo person = iIdentityInfoService.findById(personId);
+        if (person.getHallStatus() == 8) {
+            throw new AuthBusinessException("资格已取消");
+        }
         if (sAns != null) {
             for (String sAn : sAns) {
                 String[] sAnArr = sAn.split("_");

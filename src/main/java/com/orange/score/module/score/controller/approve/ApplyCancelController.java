@@ -135,6 +135,7 @@ public class ApplyCancelController {
         iApplyCancelService.update(applyCancel);
         IdentityInfo identityInfo = iIdentityInfoService.findById(applyCancel.getPersonId());
         identityInfo.setCancelStatus(1);
+        identityInfo.setHallStatus(8);
         iIdentityInfoService.update(identityInfo);
         return ResponseUtil.success();
     }
