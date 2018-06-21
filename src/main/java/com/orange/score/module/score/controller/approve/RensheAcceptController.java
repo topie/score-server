@@ -2,6 +2,7 @@ package com.orange.score.module.score.controller.approve;
 
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
+import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
@@ -101,6 +102,9 @@ public class RensheAcceptController {
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if(identityInfo.getReservationStatus()==10){
+            throw new AuthBusinessException("预约已取消");
+        }
         if (identityInfo != null) {
             identityInfo.setHallStatus(5);
             identityInfo.setRensheAcceptStatus(3);
@@ -115,6 +119,9 @@ public class RensheAcceptController {
     @PostMapping("/supply")
     public Result supply(@RequestParam Integer id) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if(identityInfo.getReservationStatus()==10){
+            throw new AuthBusinessException("预约已取消");
+        }
         if (identityInfo != null) {
             identityInfo.setRensheAcceptStatus(2);
             iIdentityInfoService.update(identityInfo);
@@ -125,6 +132,9 @@ public class RensheAcceptController {
     @PostMapping("/disAgree")
     public Result disAgree(@RequestParam Integer id) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if(identityInfo.getReservationStatus()==10){
+            throw new AuthBusinessException("预约已取消");
+        }
         if (identityInfo != null) {
             identityInfo.setHallStatus(4);
             identityInfo.setRensheAcceptStatus(4);
