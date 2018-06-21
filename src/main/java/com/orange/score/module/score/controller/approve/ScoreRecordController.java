@@ -76,6 +76,9 @@ public class ScoreRecordController {
     @Autowired
     private ICompanyInfoService iCompanyInfoService;
 
+    @Autowired
+    private IOnlinePersonMaterialService iOnlinePersonMaterialService;
+
     @GetMapping(value = "/scoring")
     @ResponseBody
     public Result scoring(ScoreRecord scoreRecord,
@@ -179,6 +182,22 @@ public class ScoreRecordController {
             relationshipList = new ArrayList<>();
         }
         params.put("relation", relationshipList);
+
+        List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
+        Map mMap = new HashMap();
+        for (MaterialInfo materialInfo : materialInfos) {
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
+        }
+        condition = new Condition(OnlinePersonMaterial.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", person.getId());
+        criteria.andEqualTo("batchId", person.getBatchId());
+        List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
+        for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+        }
+        params.put("onlinePersonMaterials", onlinePersonMaterials);
+
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "score_record.ftl", params);
         Map result = new HashMap();

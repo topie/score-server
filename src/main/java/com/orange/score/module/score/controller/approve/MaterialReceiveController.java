@@ -147,14 +147,21 @@ public class MaterialReceiveController {
             person = new IdentityInfo();
         }
         params.put("person", person);
-
+        List<MaterialInfo> allMaterialInfos = iMaterialInfoService.findAll();
+        Map mMap = new HashMap();
+        for (MaterialInfo materialInfo : allMaterialInfos) {
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
+        }
+        params.put("allMaterialInfos", allMaterialInfos);
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
         List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
+        for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+        }
         params.put("onlinePersonMaterials", onlinePersonMaterials);
-
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
         if (companyInfo == null) {
             companyInfo = new CompanyInfo();

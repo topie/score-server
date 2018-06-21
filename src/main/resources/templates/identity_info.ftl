@@ -161,7 +161,7 @@
                                             <td class="text-center">
                                                 <img class="p-img" id="img_${item.id}" style="cursor: pointer" width="100" height="100" src="${item.materialUri}">
                                             </td>
-                                            <td>${item.materialInfoName}[${item.id}_${item.materialInfoId}]</td>
+                                            <td>${item.materialInfoName}</td>
                                         </tr>
                                     </#if>
                                 </#list>
