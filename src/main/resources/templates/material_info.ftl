@@ -197,10 +197,11 @@
                             <script type="text/javascript">
                                 $(".p-img").off("click");
                                 $(".p-img").on("click",function(){
+                                    var img = $('<img width="99%" height="99%" src="'+$(this).attr("src")+'">');
                                     $.orangeModal({
                                         title: "图片预览",
                                         destroy: true
-                                    }).show().$body.html('<img width="99%" height="99%" src="${item.materialUri}">');
+                                    }).show().$body.html(img);
                                 });
                             </script>
                         </div>
