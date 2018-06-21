@@ -12,7 +12,6 @@ import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUtil;
-import com.orange.score.module.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
@@ -20,10 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-08.
@@ -66,7 +62,7 @@ public class ScoreInfoController {
     private IScoreRecordService iScoreRecordService;
 
     @Autowired
-    private UserService userService;
+    private IMaterialAcceptRecordService iMaterialAcceptRecordService;
 
     @Autowired
     private IIndicatorService iIndicatorService;
@@ -131,6 +127,10 @@ public class ScoreInfoController {
         Integer userId = SecurityUtil.getCurrentUserId();
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
         params.put("materialInfos", materialInfos);
+        Map mMap = new HashMap();
+        for (MaterialInfo materialInfo : materialInfos) {
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
+        }
         if (userId == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
         if (person == null) {
@@ -138,14 +138,13 @@ public class ScoreInfoController {
         }
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
         List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
-        List<Integer> onlineIds = new ArrayList<>();
         for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
-            onlineIds.add(onlinePersonMaterial.getMaterialId());
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
         }
+        params.put("onlinePersonMaterials", onlinePersonMaterials);
 
         params.put("person", person);
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
@@ -180,7 +179,20 @@ public class ScoreInfoController {
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "score_info.ftl", params);
         Map result = new HashMap();
         result.put("html", html);
-        result.put("cMids", onlineIds);
+        condition = new Condition(MaterialAcceptRecord.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", identityInfoId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
+        List<Integer> submittedMids = new ArrayList<>();
+        Set<Integer> hSet = new HashSet<>();
+        for (MaterialAcceptRecord item : materials) {
+            if (!hSet.contains(item.getMaterialId())) {
+                submittedMids.add(item.getMaterialId());
+                hSet.add(item.getMaterialId());
+            }
+        }
+        result.put("cIds", submittedMids);
         return ResponseUtil.success(result);
     }
 

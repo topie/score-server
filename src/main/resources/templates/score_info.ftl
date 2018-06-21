@@ -20,7 +20,11 @@
                 </li>
 
                 <li class="">
-                    <a data-toggle="tab" href="#material-tab" aria-expanded="false">材料</a>
+                    <a data-toggle="tab" href="#material-tab" aria-expanded="false">材料提交</a>
+                </li>
+
+                <li class="">
+                    <a data-toggle="tab" href="#online-tab" aria-expanded="false">材料上传</a>
                 </li>
             </ul>
         </div>
@@ -233,7 +237,7 @@
                                     <td class="check_desc" colspan="5">
                                         <div class="text-info">审核打分说明：</div>
                                         <textarea class="form-control" rows="3" disabled>
-                                        ${item.indicator.note}
+                                            ${item.indicator.note}
                                         </textarea>
                                     </td>
                                 </tr>
@@ -248,22 +252,21 @@
                     </div>
                 </div>
                 <div id="material-tab" class="main-cont clearfix tab-pane">
-                    <div>
-                        <div class="panel panel-default">
-                            <!-- Default panel contents -->
-                            <div class="panel-heading">
-                                申请人材料提交情况
-                            </div>
-                            <!-- Table 多个表格列表组合 -->
-                            <div class="table-list-item">
-                                <table class="table table-hover table-bordered table-condensed">
-                                    <tr class="info">
-                                        <th colspan="2" class="text-info">选中表示已经提交过该材料</th>
-                                    </tr>
-                                    <tr class="info">
-                                        <th>确认</th>
-                                        <th class="text-info">材料名称</th>
-                                    </tr>
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            申请人材料提交情况
+                        </div>
+                        <!-- Table 多个表格列表组合 -->
+                        <div class="table-list-item">
+                            <table class="table table-hover table-bordered table-condensed">
+                                <tr class="info">
+                                    <th colspan="2" class="text-info">选中表示已经提交过该材料</th>
+                                </tr>
+                                <tr class="info">
+                                    <th>确认</th>
+                                    <th class="text-info">材料名称</th>
+                                </tr>
                                 <#list materialInfos as item>
                                     <tr>
                                         <td class="text-center">
@@ -272,8 +275,47 @@
                                         <td>${item.name}</td>
                                     </tr>
                                 </#list>
-                                </table>
-                            </div>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="online-tab" class="main-cont clearfix tab-pane">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            申请人材料上传情况
+                        </div>
+                        <!-- Table 多个表格列表组合 -->
+                        <div class="table-list-item">
+                            <table class="table table-hover table-bordered table-condensed">
+                                <tr class="info">
+                                    <th>预览(点击放大)</th>
+                                    <th class="text-info">材料名称</th>
+                                </tr>
+                                <#list onlinePersonMaterials as item>
+                                    <#if item.materialInfoId gt 0>
+                                        <tr>
+                                            <td class="text-center">
+                                                <img class="p-img" id="img_${item.id}" style="cursor: pointer"
+                                                     width="100" height="100" src="${item.materialUri}">
+                                            </td>
+                                            <td>${item.materialInfoName}<a class="btn btn-mini btn-info"
+                                                                           href="${item.materialUri}"
+                                                                           target="_blank">下载</a></td>
+                                        </tr>
+                                    </#if>
+                                </#list>
+                            </table>
+                            <script type="text/javascript">
+                                $(".p-img").off("click");
+                                $(".p-img").on("click", function () {
+                                    var img = $('<img width="99%" height="99%" src="' + $(this).attr("src") + '">');
+                                    $.orangeModal({
+                                        title: "图片预览",
+                                        destroy: true
+                                    }).show().$body.html(img);
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
