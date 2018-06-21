@@ -81,7 +81,7 @@
                                     <td colspan="4">年龄：<strong>${person.age}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12"><strong>${other.profession}</strong>
+                                    <td colspan="12"><strong>专业：${other.profession}</strong>
                                     </td>
                                 </tr>
                                 <tr>
@@ -107,7 +107,7 @@
                                 <!-- 标题特变长的分为特殊的两组 -->
                                 <tr>
                                     <td colspan="6">积分期间有无行政拘留记录：<strong>${other.detentionStr}</strong></td>
-                                    <td colspan="6">积分期间有无行政拘留记录：<strong>${other.penaltyStr}</strong></td>
+                                    <td colspan="6">积分期间有无行获刑记录：<strong>${other.penaltyStr}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">资格证书级别：<strong>${profession.jobLevelStr}</strong></td>

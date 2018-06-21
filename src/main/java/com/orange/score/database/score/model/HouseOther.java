@@ -151,11 +151,11 @@ public class HouseOther {
     }
 
     public String getPenaltyStr() {
-        return socialSecurityPay == 1 ? "是" : "否";
+        return penalty == 1 ? "是" : "否";
     }
 
     public String getProvidentFundStr() {
-        return socialSecurityPay == 1 ? "是" : "否";
+        return providentFund == 1 ? "是" : "否";
     }
 
     public String getTaxesStr() {
