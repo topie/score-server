@@ -116,7 +116,7 @@ public class IdentityInfoController {
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
         Map mMap = new HashMap();
         for (MaterialInfo materialInfo : materialInfos) {
-            mMap.put(materialInfo.getId(), materialInfo.getName());
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
         }
         params.put("materialInfos", materialInfos);
         if (userId == null) throw new AuthBusinessException("用户未登录");
@@ -126,12 +126,11 @@ public class IdentityInfoController {
         }
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
         List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
         for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
-            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId()));
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
         }
         params.put("onlinePersonMaterials", onlinePersonMaterials);
         params.put("person", person);
