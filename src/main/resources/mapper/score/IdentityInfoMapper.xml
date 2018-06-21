@@ -35,7 +35,7 @@
         <result column="result_status" jdbcType="INTEGER" property="resultStatus" />
     </resultMap>
     <select id="selectByCompany" resultMap="BaseResultMap">
-        select i.* from t_identity_info i inner join score_server.t_company_info c on i.company_id=c.id
+        select i.* from t_identity_info i inner join t_company_info c on i.company_id=c.id
         <where>
             <if test="search.companyId!=null">
                 and c.id=#{search.companyId}
