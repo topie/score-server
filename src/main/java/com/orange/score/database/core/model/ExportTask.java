@@ -18,7 +18,7 @@ public class ExportTask extends Sortable {
      * 任务id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select d_export_task_seq.nextval from dual")
     private Integer id;
 
     /**

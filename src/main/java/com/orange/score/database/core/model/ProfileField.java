@@ -13,7 +13,7 @@ public class ProfileField extends Sortable {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select d_profile_field_seq.nextval from dual")
     private Integer id;
 
     /**

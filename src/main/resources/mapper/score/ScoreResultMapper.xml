@@ -19,9 +19,9 @@
     <select id="selectRankByBatchId" resultMap="BaseResultMap">
       select
       person_id,
-      person_name,
-      person_id_num,
-      ifnull(sum(score_value),0) score_value
+      max(person_name),
+      max(person_id_num),
+      nvl(sum(score_value),0) score_value
       from t_person_batch_score_result
       where batch_id=#{batchId}
       group by person_id

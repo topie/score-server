@@ -8,7 +8,7 @@ public class Region {
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_region_seq.nextval from dual")
     private Integer id;
 
     /**

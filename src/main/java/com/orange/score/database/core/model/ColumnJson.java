@@ -9,7 +9,7 @@ public class ColumnJson {
      * ID:hidden
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select d_column_json_seq.nextval from dual")
     private Integer id;
 
     /**

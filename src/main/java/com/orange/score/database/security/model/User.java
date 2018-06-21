@@ -17,7 +17,7 @@ public class User extends Sortable {
     private static final long serialVersionUID = 4973095724072990604L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select seq_id.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select d_user_seq.nextval from dual")
     private Integer id;
 
     /**
