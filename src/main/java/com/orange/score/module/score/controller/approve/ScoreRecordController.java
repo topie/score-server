@@ -105,6 +105,32 @@ public class ScoreRecordController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
+    @GetMapping(value = "/scoringForRenshe")
+    @ResponseBody
+    public Result scoringForRenshe(ScoreRecord scoreRecord,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        criteria.andIn("opRoleId", roles);
+        Integer[] integers = new Integer[] { 1, 3 };
+        criteria.andIn("status", CollectionUtils.arrayToList(integers));
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
+            criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
+        }
+        if (scoreRecord.getBatchId() != null) {
+            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+        }
+        if (scoreRecord.getIndicatorId() != null) {
+            criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
+        }
+        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
     @GetMapping(value = "/scored")
     @ResponseBody
     public Result scored(ScoreRecord scoreRecord,
@@ -356,5 +382,13 @@ public class ScoreRecordController {
     public Result detail(@RequestParam Integer id) {
         ScoreRecord scoreRecord = iScoreRecordService.findById(id);
         return ResponseUtil.success(scoreRecord);
+    }
+
+    @PostMapping("/complete")
+    public Result complete(@RequestParam Integer id) {
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        identityInfo.setHallStatus(9);
+        iIdentityInfoService.update(identityInfo);
+        return ResponseUtil.success();
     }
 }

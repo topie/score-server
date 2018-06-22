@@ -130,7 +130,7 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
         scoreRecordMapper.deleteByCondition(condition);
         IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
         HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", personId);
-        CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getId());
+        CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getCompanyId());
         List<Indicator> indicators = iIndicatorService.findAll();
         for (Indicator indicator : indicators) {
             ScoreRecord record = new ScoreRecord();
@@ -153,6 +153,7 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
                 record.setStatus(2);
             } else {
                 record.setStatus(1);
+                record.setSubmitDate(new Date());
             }
             List<Integer> roleList = iIndicatorService.selectBindDepartmentIds(indicator.getId());
             for (Integer roleId : roleList) {
