@@ -159,21 +159,36 @@
                                     <#if item.materialInfoId gt 0>
                                         <tr>
                                             <td class="text-center">
-                                                <img class="p-img" id="img_${item.id}" style="cursor: pointer" width="100" height="100" src="${item.materialUri}">
+                                                <img class="p-img" id="img_${item.id}" style="cursor: pointer"
+                                                     width="100" height="100" src="${item.materialUri}">
                                             </td>
-                                            <td>${item.materialInfoName}<a class="btn btn-mini btn-info" href="${item.materialUri}" target="_blank">下载</a></td>
+                                            <td>${item.materialInfoName}
+                                                <br>
+                                                <button class="download btn btn-mini btn-info" type="button"
+                                                        data-uri="${item.materialUri}"
+                                                        data-name="${item.materialInfoName}_${item.personId}">下载
+                                                </button>
+                                            </td>
                                         </tr>
                                     </#if>
                                 </#list>
                             </table>
                             <script type="text/javascript">
                                 $(".p-img").off("click");
-                                $(".p-img").on("click",function(){
-                                    var img = $('<img width="99%" height="99%" src="'+$(this).attr("src")+'">');
+                                $(".p-img").on("click", function () {
+                                    var img = $('<img width="99%" height="99%" src="' + $(this).attr("src") + '">');
                                     $.orangeModal({
                                         title: "图片预览",
                                         destroy: true
                                     }).show().$body.html(img);
+                                });
+                                $(".download").off("click");
+                                $(".download").on("click", function () {
+                                    var uri = $(this).attr("data-uri");
+                                    var name = $(this).attr("data-name");
+                                    var type = uri.substring(uri.lastIndexOf("."));
+                                    var img = $("<a></a>").attr("href", uri).attr("download", name + type);
+                                    img[0].click();
                                 });
                             </script>
                         </div>
