@@ -83,7 +83,7 @@
         where login_name = #{loginName,jdbcType=VARCHAR}
     </select>
     <insert id="insertUserRole" parameterType="java.lang.Integer">
-        insert ignore into d_user_role (user_id,role_id) values(#{userId,jdbcType=INTEGER},#{roleId,jdbcType=INTEGER});
+        insert into d_user_role (user_id,role_id) values(#{userId,jdbcType=INTEGER},#{roleId,jdbcType=INTEGER})
     </insert>
     <select id="findUserRoleByUserId" parameterType="java.lang.Integer"
             resultType="java.lang.Integer">
