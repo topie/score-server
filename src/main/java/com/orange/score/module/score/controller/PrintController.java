@@ -6,10 +6,13 @@ import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.IdentityInfo;
-import com.orange.score.database.score.model.MaterialAcceptRecord;
+import com.orange.score.database.score.model.MaterialInfo;
+import com.orange.score.database.score.model.OnlinePersonMaterial;
 import com.orange.score.database.security.model.Role;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IMaterialAcceptRecordService;
+import com.orange.score.module.score.service.IMaterialInfoService;
+import com.orange.score.module.score.service.IOnlinePersonMaterialService;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.RoleService;
@@ -44,6 +47,12 @@ public class PrintController extends BaseController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private IOnlinePersonMaterialService iOnlinePersonMaterialService;
+
+    @Autowired
+    private IMaterialInfoService iMaterialInfoService;
+
     @GetMapping(value = "/template")
     @ResponseBody
     public Result html() throws FileNotFoundException {
@@ -75,12 +84,6 @@ public class PrintController extends BaseController {
             dayStr = "0" + dayStr;
         }
         params.put("day", dayStr);
-        Condition condition = new Condition(MaterialAcceptRecord.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria.andEqualTo("personId", personId);
-        criteria.andEqualTo("batchId", identityInfo.getBatchId());
-        List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
-        params.put("mList", materials);
 
         Date now = new Date();
         String nowYear = String.valueOf(DateUtil.getYear(now));
@@ -104,6 +107,21 @@ public class PrintController extends BaseController {
         List<Integer> roles = userService.findUserRoleByUserId(user.getId());
         Role role = roleService.findRoleById(roles.get(0));
         params.put("department", role.getRoleName());
+        List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
+        Map mMap = new HashMap();
+        for (MaterialInfo materialInfo : materialInfos) {
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
+        }
+        Condition condition = new Condition(OnlinePersonMaterial.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", identityInfo.getId());
+        criteria.andEqualTo("batchId", identityInfo.getBatchId());
+        List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
+        for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+        }
+        params.put("mList", onlinePersonMaterials);
+
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "accept_doc.ftl", params);
         Map result = new HashMap<>();
