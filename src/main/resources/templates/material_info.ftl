@@ -213,10 +213,11 @@
                                 $(".download").off("click");
                                 $(".download").on("click", function () {
                                     var uri = $(this).attr("data-uri");
-                                    var name = $(this).attr("data-name");
-                                    var type = uri.substring(uri.lastIndexOf("."));
-                                    var img = $("<a></a>").attr("href", uri).attr("download", name + type);
-                                    img[0].click();
+                                    //var name = $(this).attr("data-name");
+                                    //var type = uri.substring(uri.lastIndexOf("."));
+                                    //var img = $("<a></a>").attr("href", uri).attr("download", name + type);
+                                    //img[0].click();
+                                    window.App.download(uri);
                                 });
                             </script>
                         </div>
