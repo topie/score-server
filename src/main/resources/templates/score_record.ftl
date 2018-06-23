@@ -282,7 +282,7 @@
                             <script type="text/javascript">
                                 $(".p-img").off("click");
                                 $(".p-img").on("click", function () {
-                                    var img = $('<img width="99%" height="99%" src="' + $(this).attr("src") + '">');
+                                    var img = $('<img src="' + $(this).attr("src") + '">');
                                     $.orangeModal({
                                         title: "图片预览",
                                         destroy: true
@@ -291,11 +291,10 @@
                                 $(".download").off("click");
                                 $(".download").on("click", function () {
                                     var uri = $(this).attr("data-uri");
-                                    //var name = $(this).attr("data-name");
-                                    //var type = uri.substring(uri.lastIndexOf("."));
-                                    //var img = $("<a></a>").attr("href", uri).attr("download", name + type);
-                                    //img[0].click();
-                                    window.App.download(uri);
+                                    var name = $(this).attr("data-name");
+                                    var type = uri.substring(uri.lastIndexOf("."));
+                                    var img = $("<a></a>").attr("href", uri).attr("download", name + type);
+                                    img[0].click();
                                 });
                             </script>
                         </div>
