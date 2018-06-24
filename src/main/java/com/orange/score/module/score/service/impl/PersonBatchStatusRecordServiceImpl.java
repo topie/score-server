@@ -79,7 +79,6 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
                 JSONArray jsonArray = JSONArray.parseArray(columnJson.getSearchConf());
                 if (StringUtils.isNotEmpty(columnJson.getSearchConf())) {
                     for (Object o : jsonArray) {
-                        o = (JSONObject) o;
                         SearchItem searchItem = new SearchItem();
                         searchItem.setLabel(((JSONObject) o).getString("label"));
                         searchItem.setName(((JSONObject) o).getString("name"));
@@ -101,6 +100,7 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
                 SearchUtil.convert(criteria, searchItems);
             }
         }
+        condition.orderBy("statusTime").desc().orderBy("id").desc();
         if (tmp != null) SqlUtil.setLocalPage(tmp);
         return personBatchStatusRecordMapper.selectByCondition(condition);
     }
@@ -132,10 +132,10 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
         search.setStatusDictAlias(alias);
         search.setStatusInt(status);
         List<PersonBatchStatusRecord> searchList = selectByFilter(search);
-        if(searchList.size()>0){
+        if (searchList.size() > 0) {
             personBatchStatusRecord.setId(searchList.get(0).getId());
             update(personBatchStatusRecord);
-        }else{
+        } else {
             save(personBatchStatusRecord);
         }
         SmsSendConfig smsSendConfig = new SmsSendConfig();
