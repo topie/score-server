@@ -158,4 +158,13 @@ public class CheckInfoController {
         return ResponseUtil.success();
     }
 
+    @PostMapping("/cancelCheck")
+    public Result cancelCheck(@RequestParam Integer batchId) {
+        BatchConf batchConf = iBatchConfService.findById(batchId);
+        if (batchConf == null) return ResponseUtil.error("批次不存在");
+        batchConf.setProcess(1);
+        iBatchConfService.update(batchConf);
+        return ResponseUtil.success();
+    }
+
 }
