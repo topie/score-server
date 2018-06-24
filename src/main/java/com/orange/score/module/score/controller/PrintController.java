@@ -72,7 +72,7 @@ public class PrintController extends BaseController {
         params.put("person", identityInfo);
         String year = String.valueOf(DateUtil.getYear(identityInfo.getReservationDate()));
         params.put("year", year);
-        int month = DateUtil.getMonth(identityInfo.getReservationDate());
+        int month = DateUtil.getMonth(identityInfo.getReservationDate()) + 1;
         String monthStr = String.valueOf(month);
         if (month < 10) {
             monthStr = "0" + monthStr;
@@ -89,7 +89,7 @@ public class PrintController extends BaseController {
         String nowYear = String.valueOf(DateUtil.getYear(now));
         params.put("nowYear", nowYear);
         int newMonth = DateUtil.getMonth(now);
-        String nowMonthStr = String.valueOf(newMonth);
+        String nowMonthStr = String.valueOf(newMonth) + 1;
         if (newMonth < 10) {
             nowMonthStr = "0" + nowMonthStr;
         }
