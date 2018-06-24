@@ -20,8 +20,8 @@ import java.util.List;
 public class Doc2Html {
 
     public static void main(String[] args) throws Exception {
-        final String path = "F:/";
-        final String file = "课程.doc";
+        final String path = "/Users/chenguojun/Downloads/";
+        final String file = "1.doc";
         InputStream input = new FileInputStream(path + file);
         HWPFDocument wordDocument = new HWPFDocument(input);
         WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(
@@ -57,6 +57,6 @@ public class Doc2Html {
         serializer.transform(domSource, streamResult);
         outStream.close();
         String content = new String(outStream.toByteArray());
-        FileUtils.write(new File(path, "demo.html"), content, "utf-8");
+        FileUtils.write(new File(path, "1.html"), content, "utf-8");
     }
 }
