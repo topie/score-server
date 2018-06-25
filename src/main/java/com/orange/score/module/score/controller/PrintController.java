@@ -294,4 +294,16 @@ public class PrintController extends BaseController {
         return ResponseUtil.success(result);
     }
 
+
+    @GetMapping(value = "/materialList")
+    @ResponseBody
+    public Result materialList() throws FileNotFoundException {
+        Map params = new HashMap();
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_list_doc.ftl", params);
+        Map result = new HashMap<>();
+        result.put("html", html);
+        return ResponseUtil.success(result);
+    }
+
 }

@@ -21,30 +21,12 @@ public class Doc2Html {
 
     public static void main(String[] args) throws Exception {
         final String path = "/Users/chenguojun/Downloads/";
-        final String file = "1.doc";
+        final String file = "材料清单.doc";
         InputStream input = new FileInputStream(path + file);
         HWPFDocument wordDocument = new HWPFDocument(input);
         WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(
                 DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument());
-        wordToHtmlConverter.setPicturesManager(new PicturesManager() {
-
-            public String savePicture(byte[] content, PictureType pictureType, String suggestedName, float widthInches,
-                    float heightInches) {
-                return "test/" + suggestedName;
-            }
-        });
         wordToHtmlConverter.processDocument(wordDocument);
-        List pics = wordDocument.getPicturesTable().getAllPictures();
-        if (pics != null) {
-            for (int i = 0; i < pics.size(); i++) {
-                Picture pic = (Picture) pics.get(i);
-                try {
-                    pic.writeImageContent(new FileOutputStream(path + "test/" + pic.suggestFullFileName()));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
         Document htmlDocument = wordToHtmlConverter.getDocument();
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         DOMSource domSource = new DOMSource(htmlDocument);
@@ -57,6 +39,6 @@ public class Doc2Html {
         serializer.transform(domSource, streamResult);
         outStream.close();
         String content = new String(outStream.toByteArray());
-        FileUtils.write(new File(path, "1.html"), content, "utf-8");
+        FileUtils.write(new File(path, "材料清单.html"), content, "utf-8");
     }
 }

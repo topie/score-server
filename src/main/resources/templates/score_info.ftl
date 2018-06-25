@@ -303,7 +303,7 @@
                                                 <br>
                                                 <button class="download btn btn-mini btn-info" type="button"
                                                         data-uri="${item.materialUri}"
-                                                        data-name="${item.materialInfoName}_${item.personId}">下载
+                                                        data-name="${item.materialInfoName}_${item.personId?c}">下载
                                                 </button>
                                             </td>
                                         </tr>
