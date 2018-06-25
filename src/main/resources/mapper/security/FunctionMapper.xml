@@ -32,10 +32,10 @@
         select id,parent_id,function_name from d_function
         <where>
             <if test="functionName!=null and functionName!=''">
-                function_name like concat('%',concat(#{functionName},'%'))
+                and function_name like concat('%',concat(#{functionName},'%'))
             </if>
             <if test="display!=null">
-                display = #{display}
+                and display = #{display}
             </if>
         </where>
         order by function_desc
@@ -46,16 +46,16 @@
         from d_function
         <where>
             <if test="parentId!=null">
-                parent_id = #{parentId}
+                and parent_id = #{parentId}
             </if>
             <if test="display!=null">
-                display = #{display}
+                and display = #{display}
             </if>
             <if test="functionName!=null and functionName!=''">
-                function_name like concat('%',concat(#{functionName},'%'))
+                and function_name like concat('%',concat(#{functionName},'%'))
             </if>
             <if test="action!=null and action!=''">
-                action like concat('%',concat(#{action},'%'))
+                and action like concat('%',concat(#{action},'%'))
             </if>
         </where>
         <if test="sort_ != null and sort_ != ''">
