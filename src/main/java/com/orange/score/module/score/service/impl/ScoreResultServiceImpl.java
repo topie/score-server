@@ -108,6 +108,7 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", identityInfo.getId());
         criteria.andEqualTo("batchId", identityInfo.getBatchId());
+        criteria.andEqualTo("status", 4);
         List<ScoreRecord> list = iScoreRecordService.selectByFilter(condition);
         Map tmpMap = new LinkedHashMap();
         for (ScoreRecord scoreRecord : list) {
@@ -115,7 +116,7 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
                 tmpMap.put(scoreRecord.getIndicatorId(), new ArrayList());
             }
             List scoreList = (List) tmpMap.get(scoreRecord.getIndicatorId());
-            scoreList.add(scoreRecord.getScoreValue());
+            scoreList.add(scoreRecord.getScoreValue() == null ? BigDecimal.ZERO : scoreRecord.getScoreValue());
         }
         Iterator iterator = tmpMap.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -124,6 +125,7 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
             Integer iId = (Integer) entry.getKey();
             Indicator indicator = indicatorMap.get(iId);
             List<BigDecimal> sList = (List<BigDecimal>) entry.getValue();
+            if (sList.size() == 0) continue;
             Integer rule = iMap.get(iId);
             switch (rule) {
                 case 0:
@@ -131,6 +133,7 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
                     break;
                 case 1:
                     for (BigDecimal bigDecimal : sList) {
+                        if (bigDecimal == null) continue;
                         if (bigDecimal.floatValue() > finalValue.floatValue()) finalValue = bigDecimal;
                     }
                     break;

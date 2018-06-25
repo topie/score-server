@@ -147,7 +147,7 @@ public class CheckInfoController {
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("batchId", batchId);
-        criteria.andEqualTo("hallStatus", 9);
+        //criteria.andEqualTo("hallStatus", 9);
         criteria.andEqualTo("reservationStatus", 11);
         List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
         for (IdentityInfo identityInfo : identityInfos) {
