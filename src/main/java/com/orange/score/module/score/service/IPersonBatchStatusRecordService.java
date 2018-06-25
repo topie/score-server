@@ -3,6 +3,8 @@ package com.orange.score.module.score.service;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.IService;
 import com.orange.score.database.score.model.PersonBatchStatusRecord;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -14,5 +16,5 @@ public interface IPersonBatchStatusRecordService extends IService<PersonBatchSta
 
     List<PersonBatchStatusRecord> selectByFilter(PersonBatchStatusRecord personBatchStatusRecord);
 
-    void insertStatus(Integer batchId, Integer personId, String alias, Integer status);
+    void insertStatus(Integer batchId, Integer personId, String alias, Integer status) throws IOException;
 }

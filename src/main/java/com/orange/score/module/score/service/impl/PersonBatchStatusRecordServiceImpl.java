@@ -11,14 +11,18 @@ import com.orange.score.common.exception.DefaultBusinessException;
 import com.orange.score.common.utils.MethodUtil;
 import com.orange.score.common.utils.SearchItem;
 import com.orange.score.common.utils.SearchUtil;
+import com.orange.score.common.utils.SmsUtil;
+import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.core.model.ColumnJson;
 import com.orange.score.database.core.model.Dict;
 import com.orange.score.database.score.dao.PersonBatchStatusRecordMapper;
+import com.orange.score.database.score.model.HouseOther;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.PersonBatchStatusRecord;
 import com.orange.score.database.score.model.SmsSendConfig;
 import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.core.service.IDictService;
+import com.orange.score.module.score.service.IHouseOtherService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import com.orange.score.module.score.service.ISmsSendConfigService;
@@ -28,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +59,9 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
 
     @Autowired
     private ISmsSendConfigService iSmsSendConfigService;
+
+    @Autowired
+    private IHouseOtherService iHouseOtherService;
 
     @Override
     public PageInfo<PersonBatchStatusRecord> selectByFilterAndPage(PersonBatchStatusRecord personBatchStatusRecord,
@@ -106,7 +114,7 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
     }
 
     @Override
-    public void insertStatus(Integer batchId, Integer personId, String alias, Integer status) {
+    public void insertStatus(Integer batchId, Integer personId, String alias, Integer status) throws IOException {
         PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
         personBatchStatusRecord.setBatchId(batchId);
         personBatchStatusRecord.setPersonId(personId);
@@ -114,6 +122,7 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
         if (identityInfo == null) {
             throw new DefaultBusinessException("用户信息不存在!");
         }
+        HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", personId);
         personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
         personBatchStatusRecord.setStatusDictAlias(alias);
         personBatchStatusRecord.setStatusInt(status);
@@ -144,7 +153,11 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
         List<SmsSendConfig> smsSendConfigs = iSmsSendConfigService.selectByFilter(smsSendConfig);
         if (smsSendConfigs.size() > 0) {
             String template = smsSendConfigs.get(0).getTemplateStr();
-
+            //todo identityInfo 申请人信息
+            template.replaceAll("__username__", identityInfo.getName());
+            template.replaceAll("__acceptnumber__", identityInfo.getAcceptNumber());
+            template.replaceAll("__now__", DateUtil.getDate(new Date()));
+            SmsUtil.send(houseOther.getSelfPhone(), template);
         }
     }
 }
