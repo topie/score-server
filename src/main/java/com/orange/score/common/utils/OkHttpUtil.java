@@ -44,6 +44,6 @@ public class OkHttpUtil {
         }
         Request request = new Request.Builder().url(url).post(params.build()).build();
         Response response = client.newCall(request).execute();
-        return response.body() == null ? "[]" : response.body().string();
+        return response.body() == null ? "[]" : new String(response.body().bytes(), "gbk");
     }
 }
