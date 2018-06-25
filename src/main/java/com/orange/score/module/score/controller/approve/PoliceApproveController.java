@@ -3,7 +3,6 @@ package com.orange.score.module.score.controller.approve;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
-import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
@@ -13,10 +12,8 @@ import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +95,7 @@ public class PoliceApproveController {
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        if(identityInfo.getReservationStatus()==10){
+        if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
@@ -110,6 +107,8 @@ public class PoliceApproveController {
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 2);
             identityInfo.setHallStatus(3);
             iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 3);
         }
         return ResponseUtil.success();
     }
@@ -117,12 +116,14 @@ public class PoliceApproveController {
     @PostMapping("/supply")
     public Result supply(@RequestParam Integer id) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        if(identityInfo.getReservationStatus()==10){
+        if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
             identityInfo.setPoliceApproveStatus(2);
             iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "policeApproveStatus", 2);
         }
         return ResponseUtil.success();
     }
@@ -130,18 +131,18 @@ public class PoliceApproveController {
     @PostMapping("/disAgree")
     public Result disAgree(@RequestParam Integer id) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        if(identityInfo.getReservationStatus()==10){
+        if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
-            identityInfo.setHallStatus(1);
             identityInfo.setPoliceApproveStatus(4);
+            identityInfo.setHallStatus(1);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 1);
+
         }
         return ResponseUtil.success();
     }
-
 
 }

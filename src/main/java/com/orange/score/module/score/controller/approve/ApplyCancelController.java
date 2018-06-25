@@ -12,6 +12,7 @@ import com.orange.score.database.security.model.Role;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.score.service.IApplyCancelService;
 import com.orange.score.module.score.service.IIdentityInfoService;
+import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.RoleService;
@@ -45,6 +46,9 @@ public class ApplyCancelController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
 
     @GetMapping(value = "/mine")
     @ResponseBody
@@ -137,6 +141,10 @@ public class ApplyCancelController {
         identityInfo.setCancelStatus(1);
         identityInfo.setHallStatus(8);
         iIdentityInfoService.update(identityInfo);
+        iPersonBatchStatusRecordService
+                .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "cancelStatus", 1);
+        iPersonBatchStatusRecordService
+                .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 8);
         return ResponseUtil.success();
     }
 

@@ -134,7 +134,7 @@ public class PolicePrevApproveController {
             identityInfo.setUnionApproveStatus1(4);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
-                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus1", 3);
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus1", 4);
         }
         return ResponseUtil.success();
     }

@@ -114,7 +114,7 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
     }
 
     @Override
-    public void insertStatus(Integer batchId, Integer personId, String alias, Integer status) throws IOException {
+    public void insertStatus(Integer batchId, Integer personId, String alias, Integer status) {
         PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
         personBatchStatusRecord.setBatchId(batchId);
         personBatchStatusRecord.setPersonId(personId);
@@ -157,7 +157,11 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
             template.replaceAll("__username__", identityInfo.getName());
             template.replaceAll("__acceptnumber__", identityInfo.getAcceptNumber());
             template.replaceAll("__now__", DateUtil.getDate(new Date()));
-            SmsUtil.send(houseOther.getSelfPhone(), template);
+            try {
+                SmsUtil.send(houseOther.getSelfPhone(), template);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

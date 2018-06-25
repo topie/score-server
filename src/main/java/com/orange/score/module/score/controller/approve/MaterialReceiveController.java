@@ -71,9 +71,6 @@ public class MaterialReceiveController {
     private IMaterialAcceptRecordService iMaterialAcceptRecordService;
 
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
     private IOnlinePersonMaterialService iOnlinePersonMaterialService;
 
     @GetMapping(value = "/receiving")

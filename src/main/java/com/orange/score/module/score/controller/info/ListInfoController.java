@@ -89,7 +89,7 @@ public class ListInfoController {
             }
         } else if (type == 1) {
             for (ScoreResult item : scoreResultList) {
-                if (limit >= item.getScoreValue().intValue()) {
+                if (limit <= item.getScoreValue().intValue()) {
                     finalResultList.add(item);
                 }
             }
@@ -97,4 +97,22 @@ public class ListInfoController {
         return ResponseUtil.success(PageConvertUtil.grid(finalResultList));
     }
 
+
+    @PostMapping("/setList")
+    public Result setList(@RequestParam Integer batchId) {
+        BatchConf batchConf = iBatchConfService.findById(batchId);
+        if (batchConf == null) return ResponseUtil.error("批次不存在");
+        batchConf.setProcess(4);
+        iBatchConfService.update(batchConf);
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/cancelList")
+    public Result cancelList(@RequestParam Integer batchId) {
+        BatchConf batchConf = iBatchConfService.findById(batchId);
+        if (batchConf == null) return ResponseUtil.error("批次不存在");
+        batchConf.setProcess(4);
+        iBatchConfService.update(batchConf);
+        return ResponseUtil.success();
+    }
 }

@@ -18,6 +18,7 @@ import com.orange.score.database.score.model.ScoreRecord;
 import com.orange.score.database.score.model.ScoreResult;
 import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.score.service.IIdentityInfoService;
+import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import com.orange.score.module.score.service.IScoreRecordService;
 import com.orange.score.module.score.service.IScoreResultService;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +51,9 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
 
     @Autowired
     private IIdentityInfoService iIdentityInfoService;
+
+    @Autowired
+    private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
 
     @Override
     public PageInfo<ScoreResult> selectByFilterAndPage(ScoreResult scoreResult, int pageNum, int pageSize) {
@@ -164,7 +168,10 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
             scoreResult.setcTime(new Date());
             iScoreResultService.save(scoreResult);
             identityInfo.setResultStatus(1);
+            identityInfo.setHallStatus(6);
             iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 6);
         }
     }
 

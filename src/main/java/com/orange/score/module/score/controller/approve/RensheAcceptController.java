@@ -125,6 +125,8 @@ public class RensheAcceptController {
         if (identityInfo != null) {
             identityInfo.setRensheAcceptStatus(2);
             iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "rensheAcceptStatus", 2);
         }
         return ResponseUtil.success();
     }
