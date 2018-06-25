@@ -66,7 +66,8 @@ public class BatchConfController extends BaseController {
 
     @PostMapping("/insert")
     public Result insert(BatchConf batchConf) {
-
+        batchConf.setStatus(0);
+        batchConf.setProcess(0);
         iBatchConfService.save(batchConf);
         return ResponseUtil.success();
     }
