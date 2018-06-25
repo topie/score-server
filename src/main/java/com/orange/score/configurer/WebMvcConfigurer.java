@@ -33,7 +33,8 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:lang/messages_zh_CN");
+        messageSource.setBasename("messages_zh_CN");
+        messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
     }
 
