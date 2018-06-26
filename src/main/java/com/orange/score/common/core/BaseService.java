@@ -71,4 +71,9 @@ public abstract class BaseService<T> implements IService<T> {
     public List<T> findAll() {
         return mapper.selectAll();
     }
+
+    @Override
+    public List<T> findByT(T mode) {
+        return mapper.select(mode);
+    }
 }

@@ -12,7 +12,6 @@ import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUtil;
-import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,7 +199,6 @@ public class MaterialReceiveController {
         }
         params.put("materialInfos", roleMaterialInfoList);
 
-
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
         if (companyInfo == null) {
             companyInfo = new CompanyInfo();
@@ -279,6 +277,11 @@ public class MaterialReceiveController {
             materialAcceptRecord.setBatchId(person.getBatchId());
             materialAcceptRecord.setPersonId(personId);
             materialAcceptRecord.setRoleId(roles.get(0));
+            List<MaterialAcceptRecord> materialAcceptRecords = iMaterialAcceptRecordService
+                    .findByT(materialAcceptRecord);
+            if (materialAcceptRecords.size() > 0) {
+                continue;
+            }
             materialAcceptRecord.setMaterialName(materialInfo.getName());
             materialAcceptRecord.setMaterialId(materialInfo.getId());
             materialAcceptRecord.setStatus(1);
