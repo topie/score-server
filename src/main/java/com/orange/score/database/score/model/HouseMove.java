@@ -200,6 +200,7 @@ public class HouseMove {
     }
 
     public String getMarriageStatusStr() {
+        if (marriageStatus == null) return "-";
         switch (marriageStatus) {
             case 1:
                 return "已婚";

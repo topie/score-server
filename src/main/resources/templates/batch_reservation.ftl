@@ -11,13 +11,13 @@
         <th colspan="2">下午</th>
     </tr>
     <tr>
-        <th>已预约人数</th>
+        <th>剩余人数</th>
         <th>人数上限</th>
-        <th>已预约人数</th>
+        <th>剩余人数</th>
         <th>人数上限</th>
-        <th>已预约人数</th>
+        <th>剩余人数</th>
         <th>人数上限</th>
-        <th>已预约人数</th>
+        <th>剩余人数</th>
         <th>人数上限</th>
     </tr>
 <#list dateList as day>
