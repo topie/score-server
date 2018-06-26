@@ -12,6 +12,7 @@ import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUtil;
+import com.orange.score.module.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
@@ -70,6 +71,9 @@ public class ScoreInfoController {
     @Autowired
     private IIndicatorItemService iIndicatorItemService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(IdentityInfo identityInfo,
@@ -125,6 +129,9 @@ public class ScoreInfoController {
     public Result detailAll(@RequestParam Integer identityInfoId) throws FileNotFoundException {
         Map params = new HashMap();
         Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
         params.put("materialInfos", materialInfos);
         Map mMap = new HashMap();
@@ -136,15 +143,54 @@ public class ScoreInfoController {
         if (person == null) {
             person = new IdentityInfo();
         }
+        Integer roleId = roles.get(0);
+        List<Integer> indicatorIds = new ArrayList<>();
+        if (roleId == 1 || roleId == 3) {
+            List<Indicator> indicators = iIndicatorService.findAll();
+            for (Indicator item : indicators) {
+                indicatorIds.add(item.getId());
+            }
+        } else {
+            indicatorIds = iIndicatorService.selectIndicatorIdByRoleId(roleId);
+        }
+        Set<Integer> roleMidSet = new HashSet<>();
+        for (Integer itemId : indicatorIds) {
+            List<Integer> iIds = iIndicatorService.selectBindMaterialIds(itemId);
+            for (Integer iId : iIds) {
+                if (!roleMidSet.contains(iId)) {
+                    roleMidSet.add(iId);
+                }
+            }
+        }
+        List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
+        List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
+        for (MaterialInfo materialInfo : materialInfoList) {
+            if (roleMidSet.contains(materialInfo.getId())) {
+                roleMaterialInfoList.add(materialInfo);
+            }
+        }
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
-        List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
-        for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
-            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+        List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
+        List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
+        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                onlinePersonMaterial
+                        .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
+            }
         }
-        params.put("onlinePersonMaterials", onlinePersonMaterials);
+        params.put("onlinePersonMaterials", roleUploadMaterialList);
+        for (MaterialInfo materialInfo : roleMaterialInfoList) {
+            for (OnlinePersonMaterial onlinePersonMaterial : roleUploadMaterialList) {
+                if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
+                    materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
+                }
+            }
+        }
+        params.put("materialInfos", roleMaterialInfoList);
 
         params.put("person", person);
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());

@@ -214,15 +214,50 @@ public class ScoreRecordController {
         for (MaterialInfo materialInfo : materialInfos) {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
         }
+        Integer roleId = roles.get(0);
+        List<Integer> indicatorIds = new ArrayList<>();
+        if (roleId == 1 || roleId == 3) {
+            List<Indicator> indicators = iIndicatorService.findAll();
+            for (Indicator item : indicators) {
+                indicatorIds.add(item.getId());
+            }
+        } else {
+            indicatorIds = iIndicatorService.selectIndicatorIdByRoleId(roleId);
+        }
+        Set<Integer> roleMidSet = new HashSet<>();
+        for (Integer itemId : indicatorIds) {
+            List<Integer> iIds = iIndicatorService.selectBindMaterialIds(itemId);
+            roleMidSet.addAll(iIds);
+        }
+        List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
+        List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
+        for (MaterialInfo materialInfo : materialInfoList) {
+            if (roleMidSet.contains(materialInfo.getId())) {
+                roleMaterialInfoList.add(materialInfo);
+            }
+        }
         condition = new Condition(OnlinePersonMaterial.class);
         criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
-        List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
-        for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
-            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+        List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
+        List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
+        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                onlinePersonMaterial
+                        .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
+            }
         }
-        params.put("onlinePersonMaterials", onlinePersonMaterials);
+        params.put("onlinePersonMaterials", roleUploadMaterialList);
+        for (MaterialInfo materialInfo : roleMaterialInfoList) {
+            for (OnlinePersonMaterial onlinePersonMaterial : roleUploadMaterialList) {
+                if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
+                    materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
+                }
+            }
+        }
+        params.put("materialInfos", roleMaterialInfoList);
 
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "score_record.ftl", params);

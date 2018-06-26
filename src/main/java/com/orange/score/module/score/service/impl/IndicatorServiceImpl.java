@@ -87,5 +87,10 @@ public class IndicatorServiceImpl extends BaseService<Indicator> implements IInd
         return indicatorMapper.selectIndicatorIdByMaterialId(materialId);
     }
 
+    @Override
+    public List<Integer> selectIndicatorIdByRoleId(Integer roleId) {
+        return indicatorMapper.selectIndicatorIdByRoleId(roleId);
+    }
+
 }
 

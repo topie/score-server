@@ -36,6 +36,7 @@ public class RegionController {
     public Result list(Region region,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        region.setParentId(19);
         PageInfo<Region> pageInfo = iRegionService.selectByFilterAndPage(region, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

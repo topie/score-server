@@ -262,19 +262,30 @@
                                     <th>预览(点击放大)</th>
                                     <th class="text-info">材料名称</th>
                                 </tr>
-                                <#list onlinePersonMaterials as item>
-                                    <#if item.materialInfoId gt 0>
+                                <#list materialInfos as item>
+                                    <#if item.onlinePersonMaterial??>
                                         <tr>
                                             <td class="text-center">
-                                                <img class="p-img" id="img_${item.id}" style="cursor: pointer"
-                                                     width="100" height="100" src="${item.materialUri}">
+                                                <img class="p-img" id="img_${item.onlinePersonMaterial.id}"
+                                                     style="cursor: pointer;border: 1px solid gray;"
+                                                     width="100" height="100"
+                                                     src="${item.onlinePersonMaterial.materialUri}">
                                             </td>
-                                            <td>${item.materialInfoName}<br>
+                                            <td>${item.onlinePersonMaterial.materialInfoName}
+                                                <br>
                                                 <button class="download btn btn-mini btn-info" type="button"
-                                                        data-uri="${item.materialUri}"
-                                                        data-name="${item.materialInfoName}_${item.personId?c}">下载
+                                                        data-uri="${item.onlinePersonMaterial.materialUri}"
+                                                        data-name="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
+                                                    下载
                                                 </button>
                                             </td>
+                                        </tr>
+                                    <#else>
+                                        <tr>
+                                            <td class="text-center">
+                                                未上传
+                                            </td>
+                                            <td>${item.name}</td>
                                         </tr>
                                     </#if>
                                 </#list>

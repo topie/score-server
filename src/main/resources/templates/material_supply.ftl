@@ -10,10 +10,8 @@
 <div class="widget-box transparent">
     <div class="widget-header">
         <h4 class="widget-title lighter smaller">
-            材料上传
+            材料补正
         </h4>
-
-
     </div>
 
     <div class="widget-body">
@@ -33,42 +31,66 @@
                                     <th>预览(点击放大)</th>
                                     <th class="text-info">材料名称</th>
                                 </tr>
-                                <#list onlinePersonMaterials as item>
-                                    <#if item.materialInfoId gt 0>
+                                <#list materialInfos as item>
+                                    <#if item.onlinePersonMaterial??>
                                         <tr>
-                                            <input name="mId" value="${item.id}"
-                                                   type="checkbox"/>
                                             <td class="text-center">
-                                                <img class="p-img" id="img_${item.id}" style="cursor: pointer"
-                                                     width="100" height="100" src="${item.materialUri}">
+                                                <input name="supplyMaterial" value="${item.id}" type="checkbox">
                                             </td>
-                                            <td>${item.materialInfoName}
+                                            <td class="text-center">
+                                                <img class="p-img-supply"
+                                                     style="cursor: pointer;border: 1px solid gray;"
+                                                     width="100" height="100"
+                                                     src="${item.onlinePersonMaterial.materialUri}">
+                                            </td>
+                                            <td>${item.onlinePersonMaterial.materialInfoName}
                                                 <br>
-                                                <button class="download btn btn-mini btn-info" type="button"
-                                                        data-uri="${item.materialUri}"
-                                                        data-name="${item.materialInfoName}_${item.personId?c}">下载
+                                                <button class="download-supply btn btn-mini btn-info" type="button"
+                                                        data-uri="${item.onlinePersonMaterial.materialUri}"
+                                                        data-name="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
+                                                    下载
                                                 </button>
                                             </td>
                                         </tr>
+                                    <#else>
+                                        <tr>
+                                            <td class="text-center"><input name="supplyMaterial" value="${item.id}"
+                                                                           type="checkbox"></td>
+                                            <td class="text-center">
+                                                未上传
+                                            </td>
+                                            <td>${item.name}</td>
+                                        </tr>
                                     </#if>
+                                    <tr style="display: none;">
+                                        <td>补件理由：</td>
+                                        <td colspan="2"><input name="supplyReason" class="form-control"></td>
+                                    </tr>
                                 </#list>
                             </table>
                             <script type="text/javascript">
-                                $(".p-img").off("click");
-                                $(".p-img").on("click", function () {
+                                $(".p-img-supply").off("click");
+                                $(".p-img-supply").on("click", function () {
                                     var img = $('<img src="' + $(this).attr("src") + '">');
                                     $.orangeModal({
                                         title: "图片预览",
                                         destroy: true
                                     }).show().$body.html(img);
                                 });
-                                $(".download").off("click");
-                                $(".download").on("click", function () {
+                                $(".download-supply").off("click");
+                                $(".download-supply").on("click", function () {
                                     var uri = $(this).attr("data-uri");
                                     var name = $(this).attr("data-name");
                                     var type = uri.substring(uri.lastIndexOf("."));
                                     var img = $("<a></a>").attr("href", uri).attr("download", name + type);
                                     img[0].click();
+                                });
+                                $("input[name=supplyMaterial]").on("change", function () {
+                                    if ($(this).is(":checked")) {
+                                        $(this).parent().parent().next("tr").show();
+                                    } else {
+                                        $(this).parent().parent().next("tr").hide();
+                                    }
                                 });
                             </script>
                         </div>

@@ -34,6 +34,9 @@ public class OnlinePersonMaterial {
     @Column(name = "material_info_id")
     private Integer materialInfoId;
 
+    @Column(name = "reason")
+    private String reason;
+
     @Transient
     private String materialInfoName;
 
@@ -59,6 +62,14 @@ public class OnlinePersonMaterial {
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
     public String getMaterialInfoName() {
         return materialInfoName;

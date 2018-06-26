@@ -26,4 +26,7 @@ public interface IndicatorMapper extends Mapper<Indicator> {
     List<Integer> selectDistinctIndicatorIdByMids(@Param("mIds") String[] mIds);
 
     Integer selectIndicatorIdByMaterialId(@Param("materialId") Integer materialId);
+
+    List<Integer> selectIndicatorIdByRoleId(@Param("roleId") Integer roleId);
+
 }

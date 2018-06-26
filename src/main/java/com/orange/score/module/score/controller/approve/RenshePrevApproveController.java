@@ -1,18 +1,25 @@
 package com.orange.score.module.score.controller.approve;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.IdentityInfo;
+import com.orange.score.database.score.model.OnlinePersonMaterial;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IIdentityInfoService;
+import com.orange.score.module.score.service.IOnlinePersonMaterialService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Condition;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +42,9 @@ public class RenshePrevApproveController {
 
     @Autowired
     private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
+
+    @Autowired
+    private IOnlinePersonMaterialService iOnlinePersonMaterialService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -109,6 +119,7 @@ public class RenshePrevApproveController {
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 10);
         }
+
         return ResponseUtil.success();
     }
 
@@ -128,13 +139,40 @@ public class RenshePrevApproveController {
     }
 
     @PostMapping("/supply")
-    public Result supply(@RequestParam Integer id) {
+    public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo != null) {
             identityInfo.setUnionApproveStatus2(4);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 4);
+        }
+        if (StringUtils.isNotEmpty(supplyArr)) {
+            JSONArray jsonArray = JSONArray.parseArray(supplyArr);
+            for (Object o : jsonArray) {
+                Integer mId = ((JSONObject) o).getInteger("id");
+                String reason = ((JSONObject) o).getString("reason");
+                Condition condition = new Condition(OnlinePersonMaterial.class);
+                tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+                criteria.andEqualTo("materialInfoId", mId);
+                condition.orderBy("id").desc();
+                List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
+                if (materials.size() > 0) {
+                    OnlinePersonMaterial onlinePersonMaterial = materials.get(0);
+                    onlinePersonMaterial.setReason(reason);
+                    onlinePersonMaterial.setStatus(1);
+                    iOnlinePersonMaterialService.update(onlinePersonMaterial);
+                } else {
+                    OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
+                    onlinePersonMaterial.setMaterialInfoId(mId);
+                    onlinePersonMaterial.setReason(reason);
+                    onlinePersonMaterial.setStatus(1);
+                    onlinePersonMaterial.setcTime(new Date());
+                    onlinePersonMaterial.setPersonId(identityInfo.getId());
+                    onlinePersonMaterial.setBatchId(identityInfo.getBatchId());
+                    iOnlinePersonMaterialService.save(onlinePersonMaterial);
+                }
+            }
         }
         return ResponseUtil.success();
     }

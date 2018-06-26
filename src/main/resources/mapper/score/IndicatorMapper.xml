@@ -44,5 +44,8 @@
     <select id="selectIndicatorIdByMaterialId" resultType="java.lang.Integer">
         select indicator_id from t_relate_indicator_material where material_id=#{materialId}
     </select>
+    <select id="selectIndicatorIdByRoleId" resultType="java.lang.Integer">
+        select indicator_id from t_relate_indicator_role where role_id=#{roleId}
+    </select>
 
 </mapper>

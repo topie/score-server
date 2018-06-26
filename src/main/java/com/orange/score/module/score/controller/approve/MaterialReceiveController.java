@@ -150,15 +150,57 @@ public class MaterialReceiveController {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
         }
         params.put("allMaterialInfos", allMaterialInfos);
+
+        Integer roleId = roles.get(0);
+        List<Integer> indicatorIds = new ArrayList<>();
+        if (roleId == 1 || roleId == 3) {
+            List<Indicator> indicators = iIndicatorService.findAll();
+            for (Indicator item : indicators) {
+                indicatorIds.add(item.getId());
+            }
+        } else {
+            indicatorIds = iIndicatorService.selectIndicatorIdByRoleId(roleId);
+        }
+        Set<Integer> roleMidSet = new HashSet<>();
+        for (Integer itemId : indicatorIds) {
+            List<Integer> iIds = iIndicatorService.selectBindMaterialIds(itemId);
+            for (Integer iId : iIds) {
+                if (!roleMidSet.contains(iId)) {
+                    roleMidSet.add(iId);
+                }
+            }
+        }
+        List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
+        List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
+        for (MaterialInfo materialInfo : materialInfoList) {
+            if (roleMidSet.contains(materialInfo.getId())) {
+                roleMaterialInfoList.add(materialInfo);
+            }
+        }
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
-        List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
-        for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
-            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+        List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
+        List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
+        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                onlinePersonMaterial
+                        .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
+            }
         }
-        params.put("onlinePersonMaterials", onlinePersonMaterials);
+        params.put("onlinePersonMaterials", roleUploadMaterialList);
+        for (MaterialInfo materialInfo : roleMaterialInfoList) {
+            for (OnlinePersonMaterial onlinePersonMaterial : roleUploadMaterialList) {
+                if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
+                    materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
+                }
+            }
+        }
+        params.put("materialInfos", roleMaterialInfoList);
+
+
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
         if (companyInfo == null) {
             companyInfo = new CompanyInfo();
@@ -191,7 +233,7 @@ public class MaterialReceiveController {
         List<String> mCheckList = new ArrayList<>();
         condition = new Condition(MaterialAcceptRecord.class);
         criteria = condition.createCriteria();
-        criteria.andEqualTo("roleId", roles.get(0));
+        criteria.andEqualTo("roleId", roleId);
         criteria.andEqualTo("personId", identityInfoId);
         criteria.andEqualTo("batchId", person.getBatchId());
         criteria.andEqualTo("indicatorId", indicatorId);

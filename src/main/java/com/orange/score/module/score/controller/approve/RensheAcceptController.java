@@ -1,23 +1,27 @@
 package com.orange.score.module.score.controller.approve;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
-import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.IdentityInfo;
+import com.orange.score.database.score.model.OnlinePersonMaterial;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IIdentityInfoService;
+import com.orange.score.module.score.service.IOnlinePersonMaterialService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import com.orange.score.module.score.service.IScoreRecordService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Condition;
 
-import java.io.FileNotFoundException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +47,9 @@ public class RensheAcceptController {
 
     @Autowired
     private IScoreRecordService iScoreRecordService;
+
+    @Autowired
+    private IOnlinePersonMaterialService iOnlinePersonMaterialService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -102,7 +109,7 @@ public class RensheAcceptController {
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        if(identityInfo.getReservationStatus()==10){
+        if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
@@ -111,15 +118,15 @@ public class RensheAcceptController {
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 5);
-            iScoreRecordService.insertToInitRecords(identityInfo.getBatchId(),identityInfo.getId());
+            iScoreRecordService.insertToInitRecords(identityInfo.getBatchId(), identityInfo.getId());
         }
         return ResponseUtil.success();
     }
 
     @PostMapping("/supply")
-    public Result supply(@RequestParam Integer id) {
+    public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        if(identityInfo.getReservationStatus()==10){
+        if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
@@ -128,13 +135,40 @@ public class RensheAcceptController {
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "rensheAcceptStatus", 2);
         }
+        if (StringUtils.isNotEmpty(supplyArr)) {
+            JSONArray jsonArray = JSONArray.parseArray(supplyArr);
+            for (Object o : jsonArray) {
+                Integer mId = ((JSONObject) o).getInteger("id");
+                String reason = ((JSONObject) o).getString("reason");
+                Condition condition = new Condition(OnlinePersonMaterial.class);
+                tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+                criteria.andEqualTo("materialInfoId", mId);
+                condition.orderBy("id").desc();
+                List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
+                if (materials.size() > 0) {
+                    OnlinePersonMaterial onlinePersonMaterial = materials.get(0);
+                    onlinePersonMaterial.setReason(reason);
+                    onlinePersonMaterial.setStatus(1);
+                    iOnlinePersonMaterialService.update(onlinePersonMaterial);
+                } else {
+                    OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
+                    onlinePersonMaterial.setMaterialInfoId(mId);
+                    onlinePersonMaterial.setReason(reason);
+                    onlinePersonMaterial.setStatus(1);
+                    onlinePersonMaterial.setcTime(new Date());
+                    onlinePersonMaterial.setPersonId(identityInfo.getId());
+                    onlinePersonMaterial.setBatchId(identityInfo.getBatchId());
+                    iOnlinePersonMaterialService.save(onlinePersonMaterial);
+                }
+            }
+        }
         return ResponseUtil.success();
     }
 
     @PostMapping("/disAgree")
     public Result disAgree(@RequestParam Integer id) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        if(identityInfo.getReservationStatus()==10){
+        if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
