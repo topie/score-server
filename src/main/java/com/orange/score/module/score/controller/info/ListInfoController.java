@@ -5,19 +5,24 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.date.DateStyle;
+import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.BatchConf;
 import com.orange.score.database.score.model.ScoreResult;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IBatchConfService;
 import com.orange.score.module.score.service.IScoreResultService;
+import com.orange.score.module.score.thread.SendTaskSingleThread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Created by chenJz1012 on 2018-04-08.
@@ -37,6 +42,9 @@ public class ListInfoController {
 
     @Autowired
     private IScoreResultService iScoreResultService;
+
+    @Autowired
+    private ExecutorService executorService;
 
     @GetMapping(value = "/batch/list")
     @ResponseBody
@@ -97,7 +105,6 @@ public class ListInfoController {
         return ResponseUtil.success(PageConvertUtil.grid(finalResultList));
     }
 
-
     @PostMapping("/setList")
     public Result setList(@RequestParam Integer batchId) {
         BatchConf batchConf = iBatchConfService.findById(batchId);
@@ -122,6 +129,20 @@ public class ListInfoController {
         if (batchConf == null) return ResponseUtil.error("批次不存在");
         batchConf.setProcess(5);
         iBatchConfService.update(batchConf);
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/sendMessage")
+    public Result sendMessage(@RequestParam Integer batchId) throws IOException {
+        BatchConf batchConf = iBatchConfService.findById(batchId);
+        if (batchConf == null) return ResponseUtil.error("批次不存在");
+        List<Map> smsList = iBatchConfService.selectMobilesByBatchId(batchId);
+        String begin = DateUtil.DateToString(batchConf.getNoticeBegin(), DateStyle.YYYY_MM_DD_CN);
+        String end = DateUtil.DateToString(batchConf.getNoticeBegin(), DateStyle.MM_DD_CN);
+        String template =
+                "系统提示：__name__，天津市" + batchConf.getBatchName() + "积分落户受理审核工作已结束，请您登录天津市居住证积分专栏及时查看审核结果，公示期为：" + begin
+                        + "-" + end + "。";
+        executorService.execute(new SendTaskSingleThread(smsList, template));
         return ResponseUtil.success();
     }
 }

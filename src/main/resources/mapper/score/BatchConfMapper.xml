@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.orange.score.database.score.dao.BatchConfMapper">
-  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.BatchConf">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="batch_name" jdbcType="VARCHAR" property="batchName" />
-    <result column="batch_number" jdbcType="VARCHAR" property="batchNumber" />
-    <result column="apply_begin" jdbcType="DATE" property="applyBegin" />
-    <result column="apply_end" jdbcType="DATE" property="applyEnd" />
-    <result column="accept_begin" jdbcType="DATE" property="acceptBegin" />
-    <result column="accept_end" jdbcType="DATE" property="acceptEnd" />
-    <result column="publish_begin" jdbcType="DATE" property="publishBegin" />
-    <result column="publish_end" jdbcType="DATE" property="publishEnd" />
-    <result column="notice_begin" jdbcType="DATE" property="noticeBegin" />
-    <result column="notice_end" jdbcType="DATE" property="noticeEnd" />
-    <result column="self_score_end" jdbcType="DATE" property="selfScoreEnd" />
-    <result column="accept_address_id" jdbcType="INTEGER" property="acceptAddressId" />
-    <result column="indicator_type" jdbcType="INTEGER" property="indicatorType" />
-    <result column="indicator_value" jdbcType="INTEGER" property="indicatorValue" />
-    <result column="accept_user_count" jdbcType="INTEGER" property="acceptUserCount" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="process" jdbcType="INTEGER" property="process" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.BatchConf">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="batch_name" jdbcType="VARCHAR" property="batchName"/>
+        <result column="batch_number" jdbcType="VARCHAR" property="batchNumber"/>
+        <result column="apply_begin" jdbcType="DATE" property="applyBegin"/>
+        <result column="apply_end" jdbcType="DATE" property="applyEnd"/>
+        <result column="accept_begin" jdbcType="DATE" property="acceptBegin"/>
+        <result column="accept_end" jdbcType="DATE" property="acceptEnd"/>
+        <result column="publish_begin" jdbcType="DATE" property="publishBegin"/>
+        <result column="publish_end" jdbcType="DATE" property="publishEnd"/>
+        <result column="notice_begin" jdbcType="DATE" property="noticeBegin"/>
+        <result column="notice_end" jdbcType="DATE" property="noticeEnd"/>
+        <result column="self_score_end" jdbcType="DATE" property="selfScoreEnd"/>
+        <result column="accept_address_id" jdbcType="INTEGER" property="acceptAddressId"/>
+        <result column="indicator_type" jdbcType="INTEGER" property="indicatorType"/>
+        <result column="indicator_value" jdbcType="INTEGER" property="indicatorValue"/>
+        <result column="accept_user_count" jdbcType="INTEGER" property="acceptUserCount"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="process" jdbcType="INTEGER" property="process"/>
+    </resultMap>
+    <select id="selectMobilesByBatchId" resultType="map">
+      select
+      distinct o.self_phone,i.name
+      from t_batch_conf b inner join t_identity_info i
+      on b.id=i.batch_id inner join t_house_other o on i.id=o.identity_info_id
+      where b.id=#{batchId}
+    </select>
 </mapper>

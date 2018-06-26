@@ -42,6 +42,6 @@ public class SmsUtil {
     }
 
     public static void main(String[] args) throws IOException {
-        send("18600200791", "陈国俊的天津市居住证积分预约已经取消成功！");
+        send("18600200791", "系统提示：陈国俊，您的申请信息网上预审未通过。");
     }
 }

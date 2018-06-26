@@ -7,10 +7,13 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.SmsUtil;
+import com.orange.score.database.score.model.HouseOther;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.OnlinePersonMaterial;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
+import com.orange.score.module.score.service.IHouseOtherService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IOnlinePersonMaterialService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +49,9 @@ public class RenshePrevApproveController {
 
     @Autowired
     private IOnlinePersonMaterialService iOnlinePersonMaterialService;
+
+    @Autowired
+    private IHouseOtherService iHouseOtherService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -104,7 +111,7 @@ public class RenshePrevApproveController {
     }
 
     @PostMapping("/agree")
-    public Result agree(@RequestParam Integer id) {
+    public Result agree(@RequestParam Integer id) throws IOException {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo != null) {
             identityInfo.setUnionApproveStatus2(2);
@@ -118,13 +125,15 @@ public class RenshePrevApproveController {
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 10);
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
         }
 
         return ResponseUtil.success();
     }
 
     @PostMapping("/disAgree")
-    public Result disAgree(@RequestParam Integer id) {
+    public Result disAgree(@RequestParam Integer id) throws IOException {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo != null) {
             identityInfo.setUnionApproveStatus2(3);
@@ -134,6 +143,8 @@ public class RenshePrevApproveController {
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 3);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 9);
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您的申请信息网上预审未通过。");
         }
         return ResponseUtil.success();
     }

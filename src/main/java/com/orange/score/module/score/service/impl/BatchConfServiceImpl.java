@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chenJz1012 on 2018-04-04.
@@ -40,6 +41,11 @@ public class BatchConfServiceImpl extends BaseService<BatchConf> implements IBat
         }
         condition.orderBy("status").desc();
         return batchConfMapper.selectByCondition(condition);
+    }
+
+    @Override
+    public List<Map> selectMobilesByBatchId(Integer batchId) {
+        return batchConfMapper.selectMobilesByBatchId(batchId);
     }
 }
 
