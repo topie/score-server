@@ -365,7 +365,13 @@
                 </p>
             </td>
             <td class="td9" colspan="3">
-                <p class="p5">${move.moveRegisteredOffice}</p>
+                <p class="p5">
+                <#list officeList as it>
+                    <#if it.id==move.moveRegisteredOffice>
+                        ${it.name}
+                    </#if>
+                </#list>
+                </p>
             </td>
         </tr>
         <tr class="r5">
@@ -385,7 +391,13 @@
                 </p>
             </td>
             <td class="td9" colspan="3">
-                <p class="p5">${move.registeredOffice}</p>
+                <p class="p5">
+                    <#list officeList as it>
+                        <#if it.id==move.registeredOffice>
+                            ${it.name}
+                        </#if>
+                    </#list>
+                </p>
             </td>
         </tr>
         </tbody>

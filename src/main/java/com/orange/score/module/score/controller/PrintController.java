@@ -5,8 +5,10 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.date.DateUtil;
+import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.model.*;
 import com.orange.score.database.security.model.Role;
+import com.orange.score.module.core.service.IRegionService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
@@ -60,6 +62,12 @@ public class PrintController extends BaseController {
 
     @Autowired
     private IHouseRelationshipService iHouseRelationshipService;
+
+    @Autowired
+    private IOfficeService iOfficeService;
+
+    @Autowired
+    private IRegionService iRegionService;
 
     @GetMapping(value = "/template")
     @ResponseBody
@@ -286,7 +294,10 @@ public class PrintController extends BaseController {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
         }
         params.put("mList", onlinePersonMaterials);
-
+        List<Region> regionList = iRegionService.findAll();
+        params.put("regionList", regionList);
+        List<Office> officeList = iOfficeService.findAll();
+        params.put("officeList", officeList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "move_notice_doc.ftl", params);
         Map result = new HashMap<>();

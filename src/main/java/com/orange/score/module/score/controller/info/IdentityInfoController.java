@@ -7,9 +7,11 @@ import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
+import com.orange.score.module.core.service.IRegionService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
@@ -68,6 +70,12 @@ public class IdentityInfoController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private IRegionService iRegionService;
+
+    @Autowired
+    private IOfficeService iOfficeService;
+
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(IdentityInfo identityInfo,
@@ -125,6 +133,11 @@ public class IdentityInfoController {
         if (person == null) {
             person = new IdentityInfo();
         }
+        List<Region> regionList = iRegionService.findAll();
+        params.put("regionList", regionList);
+
+        List<Office> officeList = iOfficeService.findAll();
+        params.put("officeList", officeList);
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         Integer roleId = roles.get(0);
         List<Integer> indicatorIds = new ArrayList<>();
@@ -226,7 +239,6 @@ public class IdentityInfoController {
         result.put("html", html);
         return ResponseUtil.success(result);
     }
-
 
     @GetMapping("/materialSupply")
     public Result materialSupply(@RequestParam Integer identityInfoId) throws FileNotFoundException {
