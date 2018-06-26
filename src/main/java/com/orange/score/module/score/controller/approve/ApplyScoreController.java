@@ -139,17 +139,20 @@ public class ApplyScoreController {
 
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) {
-        String userName = SecurityUtil.getCurrentUserName();
-        if (userName == null) throw new AuthBusinessException("用户未登录");
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        if (user == null) throw new AuthBusinessException("用户未登录");
         ApplyScore applyScore = iApplyScoreService.findById(id);
         applyScore.setApproveContent("同意");
         applyScore.setApproveStatus(1);
-        applyScore.setApproveUser(userName);
+        applyScore.setApproveUser(user.getDisplayName());
         iApplyScoreService.update(applyScore);
         ScoreRecord scoreRecord = new ScoreRecord();
         scoreRecord.setIndicatorId(applyScore.getIndicatorId());
         scoreRecord.setBatchId(applyScore.getBatchId());
         scoreRecord.setPersonId(applyScore.getPersonId());
+        List<Integer> roles = userService.findUserRoleByUserId(user.getId());
+        Integer roleId = roles.get(0);
+        scoreRecord.setOpRoleId(roleId);
         scoreRecord = iScoreRecordService.selectOne(scoreRecord);
         scoreRecord.setScoreValue(BigDecimal.ZERO);
         scoreRecord.setItemId(0);

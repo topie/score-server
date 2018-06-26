@@ -368,15 +368,12 @@ public class ScoreRecordController {
     }
 
     @PostMapping("/rensheAutoScore")
-    public Result rensheAutoScore(@RequestParam(value = "idNumber", required = false) String idNumber,
-            @RequestParam(value = "partnerIdNumber", required = false) String partnerIdNumber,
-            @RequestParam(value = "canAdd", required = false) Integer canAdd)
+    public Result rensheAutoScore(@RequestParam(value = "personId", required = false) Integer personId)
             throws DocumentException, SOAPException, IOException {
-        if (StringUtils.isNotEmpty(partnerIdNumber)) {
-            partnerIdNumber = "";
-        }
-        if (canAdd == null) {
-            canAdd = 0;
+        IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        Integer lessThan35 = 1;
+        if (identityInfo.getAge() > 35) {
+            lessThan35 = 0;
         }
         String req = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" \n"
                 + "xmlns:ser=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">\n" + "   <soapenv:Header/>\n"
@@ -387,9 +384,9 @@ public class ScoreRecordController {
                 + "         <ser:arg3>TJZSYL</ser:arg3>\n" + "         <!--operatorName:-->\n"
                 + "         <ser:arg4>自动打分操作员</ser:arg4>\n" + "         <!--content:-->\n"
                 + "         <ser:arg5><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-                + "<ROOT><QUERY_PRAMS><idNumber>" + idNumber + "</idNumber>" + "<partnerIdNnumber>" + partnerIdNumber
-                + "</partnerIdNnumber>" + "<lessThan35>0</lessThan35>" + "<canAdd>" + canAdd + "</canAdd>"
-                + "<busType>3</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
+                + "<ROOT><QUERY_PRAMS><idNumber>" + identityInfo.getIdNumber() + "</idNumber>"
+                + "<partnerIdNnumber></partnerIdNnumber>" + "<lessThan35>" + lessThan35 + "</lessThan35>"
+                + "<canAdd>1</canAdd>" + "<busType>3</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
                 + "</ser:RsResidentJFRDBusinessRev></soapenv:Body></soapenv:Envelope>";
         SOAP3Response soapResponse = WebServiceClient.action(req);
         return ResponseUtil.success(soapResponse);

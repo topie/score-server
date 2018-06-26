@@ -198,6 +198,10 @@
                                             <input type="text" value=""
                                                    d-indicator="${item.indicator.id}"
                                                    name="score">
+                                            <#if item.indicator.id==7>
+                                                <button id="social_btn" data-person="${person.id}" type="button">获取分数
+                                                </button>
+                                            </#if>
                                         </td>
                                         <td class="text-danger">手动输入</td>
                                     </tr>
@@ -306,6 +310,29 @@
                                     var type = uri.substring(uri.lastIndexOf("."));
                                     var img = $("<a></a>").attr("href", uri).attr("download", name + type);
                                     img[0].click();
+                                });
+                                $("#social_btn").off("click");
+                                $("#social_btn").on("click", function () {
+                                    var personId = $(this).attr("data-person");
+                                    var that = this;
+                                    $.ajax({
+                                        type: "POST",
+                                        dataType: "json",
+                                        url: App.href + "/api/score/scoreRecord/rensheAutoScore",
+                                        data: {
+                                            "personId": personId
+                                        },
+                                        success: function (data) {
+                                            if (isNaN(data.score)) {
+                                                $(that).parent().find("input").val(data.score);
+                                            } else {
+                                                $(that).parent().find("input").val(0);
+                                            }
+                                        },
+                                        error: function (e) {
+                                            console.error("请求异常。");
+                                        }
+                                    });
                                 });
                             </script>
                         </div>
