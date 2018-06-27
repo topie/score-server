@@ -13,7 +13,6 @@ import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.database.core.model.ColumnJson;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.dao.IdentityInfoMapper;
-import com.orange.score.database.score.model.CompanyInfo;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.score.dto.SearchDto;
@@ -26,6 +25,7 @@ import tk.mybatis.mapper.entity.Condition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chenJz1012 on 2018-04-08.
@@ -110,10 +110,34 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
     }
 
     @Override
-    public PageInfo<IdentityInfo> selectByCompany(SearchDto searchDto,Integer pageNum,Integer pageSize) {
+    public PageInfo<IdentityInfo> selectByCompany(SearchDto searchDto, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<IdentityInfo> list = identityInfoMapper.selectByCompany(searchDto);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<Map> selectExportList1ByPage(Map argMap, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Map> list = selectExportList1(argMap);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public List<Map> selectExportList1(Map argMap) {
+        return identityInfoMapper.selectExportList1(argMap);
+    }
+
+    @Override
+    public PageInfo<Map> selectExportList2ByPage(Map argMap, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Map> list = selectExportList2(argMap);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public List<Map> selectExportList2(Map argMap) {
+        return identityInfoMapper.selectExportList2(argMap);
     }
 }
 

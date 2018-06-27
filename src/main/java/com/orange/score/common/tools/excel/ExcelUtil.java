@@ -57,7 +57,7 @@ public class ExcelUtil {
      * 获取cell类型的文字描述
      *
      * @param cellType <pre>
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @return
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @return
      */
     private static String getCellTypeByInt(int cellType) {
         switch (cellType) {
@@ -240,7 +240,6 @@ public class ExcelUtil {
                     int cellNum = 0;
                     for (String k : headers) {
                         if (map.containsKey(k) == false) {
-                            LG.error("Map 中 不存在 key [" + k + "]");
                             continue;
                         }
                         Object value = map.get(k);
@@ -391,7 +390,6 @@ public class ExcelUtil {
                     int cellNum = 0;
                     for (String k : headers) {
                         if (map.containsKey(k) == false) {
-                            LG.error("Map 中 不存在 key [" + k + "]");
                             continue;
                         }
                         Object value = map.get(k);
@@ -540,7 +538,6 @@ public class ExcelUtil {
                     int cellNum = 0;
                     for (String k : headers) {
                         if (map.containsKey(k) == false) {
-                            LG.error("Map 中 不存在 key [" + k + "]");
                             continue;
                         }
                         Object value = map.get(k);
