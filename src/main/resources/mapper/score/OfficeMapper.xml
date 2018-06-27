@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orange.score.database.score.dao.OfficeMapper">
+  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.Office">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PARENT_ID" jdbcType="DECIMAL" property="parentId" />
+    <result column="REGION_ID" jdbcType="DECIMAL" property="regionId" />
+    <result column="REGION_LEVEL" jdbcType="DECIMAL" property="regionLevel" />
+  </resultMap>
+</mapper>
