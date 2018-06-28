@@ -34,7 +34,7 @@
         <div class="widget-main">
             <div class="tab-content">
                 <div id="info-tab" class="row tab-pane active">
-                    <div class="col-md-7 col-sx-12">
+                    <div class="col-md-12 col-sx-12">
                         <div class="panel panel-default">
                             <!-- Default panel contents -->
                             <div class="panel-heading">用人单位信息</div>

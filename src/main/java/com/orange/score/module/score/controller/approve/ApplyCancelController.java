@@ -17,6 +17,7 @@ import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
@@ -61,6 +62,9 @@ public class ApplyCancelController {
         Condition condition = new Condition(ApplyCancel.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (roles.get(0) != 3) criteria.andEqualTo("applyRoleId", roles.get(0));
+        if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
+            criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
+        }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -75,6 +79,9 @@ public class ApplyCancelController {
         Condition condition = new Condition(ApplyCancel.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 0);
+        if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
+            criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
+        }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -89,6 +96,9 @@ public class ApplyCancelController {
         Condition condition = new Condition(ApplyCancel.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 1);
+        if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
+            criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
+        }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -143,8 +153,7 @@ public class ApplyCancelController {
         iIdentityInfoService.update(identityInfo);
         iPersonBatchStatusRecordService
                 .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "cancelStatus", 1);
-        iPersonBatchStatusRecordService
-                .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 8);
+        iPersonBatchStatusRecordService.insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 8);
         return ResponseUtil.success();
     }
 

@@ -16,6 +16,7 @@ import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
@@ -57,6 +58,9 @@ public class ApplyScoreController {
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("applyUserId", userId);
+        if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
+            criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
+        }
         PageInfo<ApplyScore> pageInfo = iApplyScoreService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -71,6 +75,9 @@ public class ApplyScoreController {
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 0);
+        if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
+            criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
+        }
         PageInfo<ApplyScore> pageInfo = iApplyScoreService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -85,6 +92,9 @@ public class ApplyScoreController {
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 1);
+        if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
+            criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
+        }
         PageInfo<ApplyScore> pageInfo = iApplyScoreService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -99,6 +109,9 @@ public class ApplyScoreController {
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("approveStatus", 2);
+        if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
+            criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
+        }
         PageInfo<ApplyScore> pageInfo = iApplyScoreService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
