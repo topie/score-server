@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -76,9 +75,9 @@ public class WebSecurityConfiger extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
         web.ignoring()
-                .antMatchers("/upload/**", "/api/token/login", "/api/token/refresh", "/api/noneAuth/**", "/static/**");
+                .antMatchers("/download/**", "/upload/**", "/api/token/login", "/api/token/refresh", "/api/noneAuth/**",
+                        "/static/**");
     }
-
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {

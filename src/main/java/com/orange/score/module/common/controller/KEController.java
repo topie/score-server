@@ -25,16 +25,16 @@ public class KEController {
     @Value("${upload.folder}")
     private String uploadFolder;
 
+    @Value("${download.prefix}")
+    private String downloadPrefix;
+
     @RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
     public void fileUpload(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(value = "imgFile", required = false) MultipartFile file) throws Exception {
         try {
-            String savePath =
-                    request.getSession().getServletContext().getRealPath("/") + uploadFolder + "/" + SecurityUtil
-                            .getCurrentUserName() + "/";
+            String savePath = uploadFolder + SecurityUtil.getCurrentUserName() + "/";
             // 文件保存目录URL
-            String saveUrl =
-                    request.getContextPath() + "/" + uploadFolder + "/" + SecurityUtil.getCurrentUserName() + "/";
+            String saveUrl = downloadPrefix + SecurityUtil.getCurrentUserName() + "/";
 
             // 定义允许上传的文件扩展名
             HashMap<String, String> extMap = new HashMap<String, String>();
@@ -131,10 +131,9 @@ public class KEController {
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        String rootPath = request.getSession().getServletContext().getRealPath("/") + uploadFolder + "/" + SecurityUtil
-                .getCurrentUserName() + "/";
+        String rootPath = uploadFolder + SecurityUtil.getCurrentUserName() + "/";
         // 文件保存目录URL
-        String rootUrl = request.getContextPath() + "/" + uploadFolder + "/" + SecurityUtil.getCurrentUserName() + "/";
+        String rootUrl = downloadPrefix + SecurityUtil.getCurrentUserName() + "/";
         // 图片扩展名
         String[] fileTypes = new String[] { "gif", "jpg", "jpeg", "png", "bmp" };
 

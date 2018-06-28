@@ -28,14 +28,16 @@ public class AttachmentServiceImpl extends BaseService<Attachment> implements IA
     @Value("${upload.folder}")
     String uploadFolder;
 
+    @Value("${download.prefix}")
+    String downloadPrefix;
+
     @Override
     public Attachment uploadFileAttachement(HttpServletRequest request, MultipartFile file, String dirName,
             long maxSize, HashMap<String, String> extLimitMap, Integer suffix) throws IOException {
         //文件保存路径
-        String savePath = request.getSession().getServletContext().getRealPath("/") + uploadFolder + "/" + SecurityUtil
-                .getCurrentUserName() + "/";
+        String savePath = uploadFolder + SecurityUtil.getCurrentUserName() + "/";
         // 文件保存目录URL
-        String saveUrl = request.getContextPath() + "/" + uploadFolder + "/" + SecurityUtil.getCurrentUserName() + "/";
+        String saveUrl = downloadPrefix + SecurityUtil.getCurrentUserName() + "/";
         File targetFile = new File(savePath);
         if (!targetFile.exists()) {
             targetFile.mkdirs();

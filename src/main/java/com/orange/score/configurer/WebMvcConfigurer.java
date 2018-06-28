@@ -6,6 +6,7 @@ import com.orange.score.common.core.ResultCode;
 import com.orange.score.common.core.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -30,6 +31,9 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
 
+    @Value("${upload.folder}")
+    private String uploadFolder;
+
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -40,6 +44,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/download/**").addResourceLocations("file:" + uploadFolder);
         registry.addResourceHandler("/upload/**").addResourceLocations("/upload/");
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
     }

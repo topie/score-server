@@ -166,11 +166,11 @@
                                             </td>
                                             <td>${item.onlinePersonMaterial.materialInfoName}
                                                 <br>
-                                                <button class="download btn btn-mini btn-info" type="button"
-                                                        data-uri="${item.onlinePersonMaterial.materialUri}"
-                                                        data-name="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
+                                                <a class="download btn btn-mini btn-info"
+                                                   href="${item.onlinePersonMaterial.materialUri}"
+                                                   download="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
                                                     下载
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     <#else>
@@ -191,14 +191,6 @@
                                         title: "图片预览",
                                         destroy: true
                                     }).show().$body.html(img);
-                                });
-                                $(".download").off("click");
-                                $(".download").on("click", function () {
-                                    var uri = $(this).attr("data-uri");
-                                    var name = $(this).attr("data-name");
-                                    var type = uri.substring(uri.lastIndexOf("."));
-                                    var img = $("<a></a>").attr("href", uri).attr("download", name + type);
-                                    img[0].click();
                                 });
                             </script>
                         </div>
