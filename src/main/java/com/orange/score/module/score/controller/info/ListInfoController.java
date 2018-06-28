@@ -93,11 +93,19 @@ public class ListInfoController {
                 if (limit > i) {
                     ScoreResult item = scoreResultList.get(i);
                     finalResultList.add(item);
+                    if (limit == i + 1) {
+                        for (int j = i + 1; j < scoreResultList.size(); j++) {
+                            ScoreResult jItem = scoreResultList.get(j);
+                            if (jItem.getScoreValue().floatValue() == item.getScoreValue().floatValue()) {
+                                finalResultList.add(jItem);
+                            }
+                        }
+                    }
                 }
             }
         } else if (type == 1) {
             for (ScoreResult item : scoreResultList) {
-                if (limit <= item.getScoreValue().intValue()) {
+                if (limit <= item.getScoreValue().floatValue()) {
                     finalResultList.add(item);
                 }
             }

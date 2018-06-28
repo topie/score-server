@@ -79,6 +79,9 @@ public class ScoreRecordController {
     @Autowired
     private IOnlinePersonMaterialService iOnlinePersonMaterialService;
 
+    @Autowired
+    private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
+
     @GetMapping(value = "/scoring")
     @ResponseBody
     public Result scoring(ScoreRecord scoreRecord,
@@ -363,6 +366,19 @@ public class ScoreRecordController {
                     iScoreRecordService.update(scoreRecord);
                 }
             }
+        }
+
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", personId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        criteria.andNotEqualTo("status", 4);
+        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+        if (scoreRecords.size() == 0) {
+            person.setHallStatus(9);
+            iIdentityInfoService.update(person);
+            iPersonBatchStatusRecordService
+                    .insertStatus(person.getBatchId(), person.getId(), "hallStatus", 9);
         }
         return ResponseUtil.success();
     }

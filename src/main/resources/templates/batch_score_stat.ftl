@@ -27,7 +27,7 @@
             <td style="width: 15%"></td>
             <td style="width: 55%">${it.name}</td>
             <td style="width: 15%">${it.total}</td>
-            <td style="width: 15%"><#if item.total gt 0>${it.total/item.total}<#else>-</#if></td>
+            <td style="width: 15%"><#if item.total gt 0>${it.total/item.total*100}%<#else>-</#if></td>
         </tr>
     </#list>
 </#list>

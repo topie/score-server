@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +134,42 @@ public class CheckInfoController {
         return ResponseUtil.success();
     }
 
+    @GetMapping("/canCheck")
+    public Result canCheck(@RequestParam Integer batchId) {
+        BatchConf batchConf = iBatchConfService.findById(batchId);
+        if (batchConf == null) return ResponseUtil.error("批次不存在");
+        Condition condition = new Condition(IdentityInfo.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", batchId);
+        criteria.andNotEqualTo("hallStatus", 9);
+        criteria.andEqualTo("cancelStatus", 0);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        if (identityInfos == null) identityInfos = new ArrayList<>();
+        Map result = new HashMap();
+        result.put("list", identityInfos);
+        if (identityInfos.size() > 0) {
+            result.put("can", 0);
+        } else {
+            result.put("can", 1);
+        }
+        return ResponseUtil.success(result);
+    }
+
+    @GetMapping(value = "/canNotCheckList")
+    @ResponseBody
+    public Result canNotCheckList(@RequestParam Integer batchId) {
+        BatchConf batchConf = iBatchConfService.findById(batchId);
+        if (batchConf == null) return ResponseUtil.error("批次不存在");
+        Condition condition = new Condition(IdentityInfo.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", batchId);
+        criteria.andNotEqualTo("hallStatus", 9);
+        criteria.andEqualTo("cancelStatus", 0);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        if (identityInfos == null) identityInfos = new ArrayList<>();
+        return ResponseUtil.success(PageConvertUtil.grid(identityInfos));
+    }
+
     @PostMapping("/checkBatch")
     public Result checkBatch(@RequestParam Integer batchId) {
         BatchConf batchConf = iBatchConfService.findById(batchId);
@@ -147,7 +184,7 @@ public class CheckInfoController {
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("batchId", batchId);
-        //criteria.andEqualTo("hallStatus", 9);
+        criteria.andEqualTo("hallStatus", 9);
         criteria.andEqualTo("reservationStatus", 11);
         List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
         for (IdentityInfo identityInfo : identityInfos) {
@@ -166,7 +203,6 @@ public class CheckInfoController {
         iBatchConfService.update(batchConf);
         return ResponseUtil.success();
     }
-
 
     @PostMapping("/endCheck")
     public Result endCheck(@RequestParam Integer batchId) {
