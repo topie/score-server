@@ -157,6 +157,8 @@ public class RenshePrevApproveController {
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 4);
+        }else{
+            return ResponseUtil.error("申请人不存在！");
         }
         if (StringUtils.isNotEmpty(supplyArr)) {
             JSONArray jsonArray = JSONArray.parseArray(supplyArr);
@@ -166,6 +168,7 @@ public class RenshePrevApproveController {
                 Condition condition = new Condition(OnlinePersonMaterial.class);
                 tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
                 criteria.andEqualTo("materialInfoId", mId);
+                criteria.andEqualTo("personId", identityInfo.getId());
                 condition.orderBy("id").desc();
                 List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
                 if (materials.size() > 0) {
