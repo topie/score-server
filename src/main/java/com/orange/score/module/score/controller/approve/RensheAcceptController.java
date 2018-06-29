@@ -143,6 +143,7 @@ public class RensheAcceptController {
                 Condition condition = new Condition(OnlinePersonMaterial.class);
                 tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
                 criteria.andEqualTo("materialInfoId", mId);
+                criteria.andEqualTo("personId", identityInfo.getId());
                 condition.orderBy("id").desc();
                 List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
                 if (materials.size() > 0) {
