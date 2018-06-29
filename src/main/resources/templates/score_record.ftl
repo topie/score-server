@@ -172,7 +172,7 @@
                                         <tr>
                                             <td class="text-center">
                                                 <input type="radio"
-                                                       value="${item.indicator.id}_${sitem.id}"
+                                                       value="${item.indicator.id?c}_${sitem.id?c}"
                                                        name="score">
                                             </td>
                                             <td style="width: 60%" colspan="3">${sitem.content}</td>
@@ -182,7 +182,7 @@
                                     <tr>
                                         <td class="text-center">
                                             <input type="radio"
-                                                   value="${item.indicator.id}_0"
+                                                   value="${item.indicator.id?c}_0"
                                                    name="score">
                                         </td>
                                         <td style="width: 60%" colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
@@ -196,10 +196,10 @@
                                     <tr>
                                         <td colspan="4" class="text-danger">
                                             <input type="text" value=""
-                                                   d-indicator="${item.indicator.id}"
+                                                   d-indicator="${item.indicator.id?c}"
                                                    name="score">
                                             <#if item.indicator.id==7>
-                                                <button id="social_btn" data-person="${person.id}" type="button">获取分数
+                                                <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
                                                 </button>
                                             </#if>
                                         </td>
@@ -244,7 +244,7 @@
                                 <#list materialInfos as item>
                                     <tr>
                                         <td class="text-center">
-                                            <input name="material" value="${item.id}" type="checkbox">
+                                            <input name="material" value="${item.id?c}" type="checkbox">
                                         </td>
                                         <td>${item.name}</td>
                                     </tr>
@@ -270,7 +270,7 @@
                                     <#if item.onlinePersonMaterial??>
                                         <tr>
                                             <td class="text-center">
-                                                <img class="p-img" id="img_${item.onlinePersonMaterial.id}"
+                                                <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
                                                      style="cursor: pointer;border: 1px solid gray;"
                                                      width="100" height="100"
                                                      src="${item.onlinePersonMaterial.materialUri}">

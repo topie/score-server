@@ -35,7 +35,7 @@
                                     <#if item.onlinePersonMaterial??>
                                         <tr>
                                             <td class="text-center">
-                                                <input name="supplyMaterial" value="${item.id}" type="checkbox">
+                                                <input name="supplyMaterial" value="${item.id?c}" type="checkbox">
                                             </td>
                                             <td class="text-center">
                                                 <img class="p-img-supply"
@@ -54,7 +54,7 @@
                                         </tr>
                                     <#else>
                                         <tr>
-                                            <td class="text-center"><input name="supplyMaterial" value="${item.id}"
+                                            <td class="text-center"><input name="supplyMaterial" value="${item.id?c}"
                                                                            type="checkbox"></td>
                                             <td class="text-center">
                                                 未上传

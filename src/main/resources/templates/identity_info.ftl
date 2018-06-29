@@ -159,7 +159,7 @@
                                     <#if item.onlinePersonMaterial??>
                                         <tr>
                                             <td class="text-center">
-                                                <img class="p-img" id="img_${item.onlinePersonMaterial.id}"
+                                                <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
                                                      style="cursor: pointer;border: 1px solid gray;"
                                                      width="100" height="100"
                                                      src="${item.onlinePersonMaterial.materialUri}">
@@ -211,7 +211,7 @@
                                 <#list materialInfos as item>
                                     <tr>
                                         <td class="text-center">
-                                            <input name="material" value="${item.id}"
+                                            <input name="material" value="${item.id?c}"
                                                    type="checkbox"/>
                                         </td>
                                         <td>${item.name}</td>

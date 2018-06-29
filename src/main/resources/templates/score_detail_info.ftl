@@ -83,7 +83,7 @@
                                         <tr>
                                             <td class="text-center">
                                                 <input type="radio"
-                                                       value="${item.opRoleId}_${item.indicator.id}_${sitem.id}"
+                                                       value="${item.opRoleId?c}_${item.indicator.id?c}_${sitem.id?c}"
                                                        name="score">
                                             </td>
                                             <td style="width: 60%" colspan="3">${sitem.content}</td>
@@ -93,7 +93,7 @@
                                     <tr>
                                         <td class="text-center">
                                             <input type="radio"
-                                                   value="${item.opRoleId}_${item.indicator.id}_0"
+                                                   value="${item.opRoleId?c}_${item.indicator.id?c}_0"
                                                    name="score">
                                         </td>
                                         <td style="width: 60%" colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
@@ -107,7 +107,7 @@
                                     <tr>
                                         <td colspan="4" class="text-danger">
                                             <input type="text" value=""
-                                                   d-indicator="${item.opRoleId}_${item.indicator.id}"
+                                                   d-indicator="${item.opRoleId?c}_${item.indicator.id?c}"
                                                    name="score">
                                         </td>
                                         <td class="text-danger">手动输入</td>
