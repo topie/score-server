@@ -268,6 +268,14 @@
                                 </tr>
                                 <#list materialInfos as item>
                                     <#if item.onlinePersonMaterial??>
+                                        <#if item.onlinePersonMaterial.materialUri=="">
+                                        <tr>
+                                            <td class="text-center">
+                                                未上传
+                                            </td>
+                                            <td>${item.name}</td>
+                                        </tr>
+                                        <#else>
                                         <tr>
                                             <td class="text-center">
                                                 <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
@@ -277,13 +285,14 @@
                                             </td>
                                             <td>${item.onlinePersonMaterial.materialInfoName}
                                                 <br>
-                                                <button class="download btn btn-mini btn-info" type="button"
-                                                        data-uri="${item.onlinePersonMaterial.materialUri}"
-                                                        data-name="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
+                                                <a class="download btn btn-mini btn-info"
+                                                   href="${item.onlinePersonMaterial.materialUri}"
+                                                   download="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
                                                     下载
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
+                                        </#if>
                                     <#else>
                                         <tr>
                                             <td class="text-center">

@@ -157,6 +157,14 @@
                                 </tr>
                                 <#list materialInfos as item>
                                     <#if item.onlinePersonMaterial??>
+                                        <#if item.onlinePersonMaterial.materialUri=="">
+                                        <tr>
+                                            <td class="text-center">
+                                                未上传
+                                            </td>
+                                            <td>${item.name}</td>
+                                        </tr>
+                                        <#else>
                                         <tr>
                                             <td class="text-center">
                                                 <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
@@ -173,6 +181,7 @@
                                                 </a>
                                             </td>
                                         </tr>
+                                        </#if>
                                     <#else>
                                         <tr>
                                             <td class="text-center">
