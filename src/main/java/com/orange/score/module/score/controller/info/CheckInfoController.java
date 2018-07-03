@@ -142,7 +142,7 @@ public class CheckInfoController {
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("batchId", batchId);
         criteria.andNotEqualTo("hallStatus", 9);
-        criteria.andEqualTo("cancelStatus", 0);
+        criteria.andNotEqualTo("cancelStatus", 1);
         List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
         if (identityInfos == null) identityInfos = new ArrayList<>();
         Map result = new HashMap();
@@ -164,7 +164,7 @@ public class CheckInfoController {
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("batchId", batchId);
         criteria.andNotEqualTo("hallStatus", 9);
-        criteria.andEqualTo("cancelStatus", 0);
+        criteria.andNotEqualTo("cancelStatus", 1);
         List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
         if (identityInfos == null) identityInfos = new ArrayList<>();
         return ResponseUtil.success(PageConvertUtil.grid(identityInfos));
