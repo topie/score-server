@@ -7,10 +7,12 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.ApplyScore;
+import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.ScoreRecord;
 import com.orange.score.database.security.model.Role;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.score.service.IApplyScoreService;
+import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IScoreRecordService;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
@@ -47,6 +49,9 @@ public class ApplyScoreController {
 
     @Autowired
     private IScoreRecordService iScoreRecordService;
+
+    @Autowired
+    private IIdentityInfoService iIdentityInfoService;
 
     @GetMapping(value = "/mine")
     @ResponseBody
@@ -171,6 +176,10 @@ public class ApplyScoreController {
         scoreRecord.setItemId(0);
         scoreRecord.setStatus(3);
         if (scoreRecord != null) iScoreRecordService.update(scoreRecord);
+        IdentityInfo identityInfo = iIdentityInfoService.findById(applyScore.getPersonId());
+        identityInfo.setHallStatus(5);
+        identityInfo.setResultStatus(0);
+        iIdentityInfoService.update(identityInfo);
         return ResponseUtil.success();
     }
 

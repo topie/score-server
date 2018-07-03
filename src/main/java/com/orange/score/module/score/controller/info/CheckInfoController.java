@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-08.
@@ -141,8 +138,8 @@ public class CheckInfoController {
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("batchId", batchId);
-        criteria.andNotEqualTo("hallStatus", 9);
-        criteria.andNotEqualTo("cancelStatus", 1);
+        criteria.andNotIn("hallStatus", Arrays.asList(6, 9));
+        criteria.andEqualTo("cancelStatus", 1);
         List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
         if (identityInfos == null) identityInfos = new ArrayList<>();
         Map result = new HashMap();
@@ -163,8 +160,8 @@ public class CheckInfoController {
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("batchId", batchId);
-        criteria.andNotEqualTo("hallStatus", 9);
-        criteria.andNotEqualTo("cancelStatus", 1);
+        criteria.andNotIn("hallStatus", Arrays.asList(6, 9));
+        criteria.andEqualTo("cancelStatus", 1);
         List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
         if (identityInfos == null) identityInfos = new ArrayList<>();
         return ResponseUtil.success(PageConvertUtil.grid(identityInfos));
