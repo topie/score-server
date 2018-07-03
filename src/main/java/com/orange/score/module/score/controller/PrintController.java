@@ -86,21 +86,27 @@ public class PrintController extends BaseController {
         IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
         Map params = new HashMap();
         params.put("person", identityInfo);
-        String year = String.valueOf(DateUtil.getYear(identityInfo.getReservationDate()));
-        params.put("year", year);
-        int month = DateUtil.getMonth(identityInfo.getReservationDate()) + 1;
-        String monthStr = String.valueOf(month);
-        if (month < 10) {
-            monthStr = "0" + monthStr;
+        Date reDate = identityInfo.getReservationDate();
+        if (reDate == null) {
+            params.put("year", "-");
+            params.put("month", "-");
+            params.put("day", "-");
+        } else {
+            String year = String.valueOf(DateUtil.getYear(reDate));
+            params.put("year", year);
+            int month = DateUtil.getMonth(identityInfo.getReservationDate()) + 1;
+            String monthStr = String.valueOf(month);
+            if (month < 10) {
+                monthStr = "0" + monthStr;
+            }
+            params.put("month", monthStr);
+            int day = DateUtil.getDay(identityInfo.getReservationDate());
+            String dayStr = String.valueOf(day);
+            if (day < 10) {
+                dayStr = "0" + dayStr;
+            }
+            params.put("day", dayStr);
         }
-        params.put("month", monthStr);
-        int day = DateUtil.getDay(identityInfo.getReservationDate());
-        String dayStr = String.valueOf(day);
-        if (day < 10) {
-            dayStr = "0" + dayStr;
-        }
-        params.put("day", dayStr);
-
         Date now = new Date();
         String nowYear = String.valueOf(DateUtil.getYear(now));
         params.put("nowYear", nowYear);
@@ -112,7 +118,7 @@ public class PrintController extends BaseController {
         params.put("nowMonth", nowMonthStr);
         int nowDay = DateUtil.getDay(now);
         String nowDayStr = String.valueOf(nowDay);
-        if (day < 10) {
+        if (nowDay < 10) {
             nowDayStr = "0" + nowDayStr;
         }
         params.put("nowDay", nowDayStr);
@@ -153,21 +159,26 @@ public class PrintController extends BaseController {
         params.put("person", identityInfo);
         CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getCompanyId());
         params.put("company", companyInfo);
-        String year = String.valueOf(DateUtil.getYear(identityInfo.getReservationDate()));
-        params.put("year", year);
-        int month = DateUtil.getMonth(identityInfo.getReservationDate()) + 1;
-        String monthStr = String.valueOf(month);
-        if (month < 10) {
-            monthStr = "0" + monthStr;
+        if (identityInfo.getReservationDate() == null) {
+            params.put("year", "-");
+            params.put("month", "-");
+            params.put("day", "-");
+        } else {
+            String year = String.valueOf(DateUtil.getYear(identityInfo.getReservationDate()));
+            params.put("year", year);
+            int month = DateUtil.getMonth(identityInfo.getReservationDate()) + 1;
+            String monthStr = String.valueOf(month);
+            if (month < 10) {
+                monthStr = "0" + monthStr;
+            }
+            params.put("month", monthStr);
+            int day = DateUtil.getDay(identityInfo.getReservationDate());
+            String dayStr = String.valueOf(day);
+            if (day < 10) {
+                dayStr = "0" + dayStr;
+            }
+            params.put("day", dayStr);
         }
-        params.put("month", monthStr);
-        int day = DateUtil.getDay(identityInfo.getReservationDate());
-        String dayStr = String.valueOf(day);
-        if (day < 10) {
-            dayStr = "0" + dayStr;
-        }
-        params.put("day", dayStr);
-
         Date now = new Date();
         String nowYear = String.valueOf(DateUtil.getYear(now));
         params.put("nowYear", nowYear);
@@ -179,7 +190,7 @@ public class PrintController extends BaseController {
         params.put("nowMonth", nowMonthStr);
         int nowDay = DateUtil.getDay(now);
         String nowDayStr = String.valueOf(nowDay);
-        if (day < 10) {
+        if (nowDay < 10) {
             nowDayStr = "0" + nowDayStr;
         }
         params.put("nowDay", nowDayStr);
@@ -304,7 +315,6 @@ public class PrintController extends BaseController {
         result.put("html", html);
         return ResponseUtil.success(result);
     }
-
 
     @GetMapping(value = "/materialList")
     @ResponseBody
