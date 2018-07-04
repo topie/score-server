@@ -168,9 +168,7 @@ public class ApplyScoreController {
         scoreRecord.setIndicatorId(applyScore.getIndicatorId());
         scoreRecord.setBatchId(applyScore.getBatchId());
         scoreRecord.setPersonId(applyScore.getPersonId());
-        List<Integer> roles = userService.findUserRoleByUserId(user.getId());
-        Integer roleId = roles.get(0);
-        scoreRecord.setOpRoleId(roleId);
+        scoreRecord.setOpRoleId(applyScore.getApplyRoleId());
         scoreRecord = iScoreRecordService.selectOne(scoreRecord);
         scoreRecord.setScoreValue(BigDecimal.ZERO);
         scoreRecord.setItemId(0);
