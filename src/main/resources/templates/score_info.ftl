@@ -143,6 +143,7 @@
                                                 <th>姓名</th>
                                                 <th>身份证号</th>
                                                 <th>文化程度</th>
+                                                <th>是否随迁</th>
                                             </tr>
                                         <#list relation as ritem>
                                             <tr>
@@ -150,6 +151,7 @@
                                                 <td>${ritem.name}</td>
                                                 <td>${ritem.idNumber}</td>
                                                 <td>${ritem.cultureDegree}</td>
+                                                <td><#if person.isRemove == 1>是<#else>否</#if></td>
                                             </tr>
                                         </#list>
                                         </table>
