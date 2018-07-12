@@ -710,6 +710,16 @@ public class DateUtil {
         return Integer.parseInt(String.valueOf(between_days));
     }
 
+    public static int getIntervalMins(Date date, Date otherDate) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        long time1 = cal.getTimeInMillis();
+        cal.setTime(otherDate);
+        long time2 = cal.getTimeInMillis();
+        long between_days = (time1 - time2) / (1000 * 3600);
+        return Integer.parseInt(String.valueOf(between_days));
+    }
+
     /**
      * 获取两个日期中的以天的拆分
      */

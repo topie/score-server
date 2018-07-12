@@ -1,6 +1,7 @@
 package com.orange.score.database.score.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.orange.score.common.utils.date.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -139,6 +140,39 @@ public class IdentityInfo {
 
     @Column(name = "union_approve_2_et")
     private Date unionApprove2Et;
+
+    @Transient
+    private String etStatus;
+
+    public String getEtStatus() {
+        int min = 0;
+        Date now = new Date();
+        if (rensheAcceptStatus == 2 && rensheAcceptSupplyEt != null) {
+            min = DateUtil.getIntervalMins(rensheAcceptSupplyEt, now);
+        }
+        if (policeApproveStatus == 2 && policeApproveEt != null) {
+            min = DateUtil.getIntervalMins(policeApproveEt, now);
+        }
+        if (unionApproveStatus1 == 4 && unionApprove1Et != null) {
+            min = DateUtil.getIntervalMins(unionApprove1Et, now);
+        }
+        if (unionApproveStatus2 == 4 && unionApprove2Et != null) {
+            min = DateUtil.getIntervalMins(unionApprove2Et, now);
+        }
+        if (min > 0) {
+            int day = min / 24;
+            if (day > 0) return "补件剩余" + day + "天";
+            return "补件剩余" + min + "小时";
+        } else if (min < 0) {
+            return "补件已过期";
+        } else {
+            return "-";
+        }
+    }
+
+    public void setEtStatus(String etStatus) {
+        this.etStatus = etStatus;
+    }
 
     public Date getRensheAcceptSupplyEt() {
         return rensheAcceptSupplyEt;
