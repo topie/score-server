@@ -493,7 +493,7 @@
             </td>
             <td class="td20">
                 <p class="p5">
-                    <span class="s2"><#if person.isRemove == 1>是<#else>否</#if></strong></span>
+                    <span class="s2"><#if ritem.isRemove == 1>是<#else>否</#if></strong></span>
                 </p>
             </td>
         </tr>

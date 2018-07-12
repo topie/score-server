@@ -131,7 +131,7 @@
                                                 <td>${ritem.name}</td>
                                                 <td>${ritem.idNumber}</td>
                                                 <td>${ritem.cultureDegree}</td>
-                                                <td><#if person.isRemove == 1>是<#else>否</#if></td>
+                                                <td><#if ritem.isRemove == 1>是<#else>否</#if></td>
                                             </tr>
                                         </#list>
                                         </table>

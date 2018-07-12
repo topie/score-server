@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
-* Created by chenJz1012 on 2018-04-08.
-*/
+ * Created by chenJz1012 on 2018-04-08.
+ */
 @RestController
 @RequestMapping("/api/score/houseRelationship")
 public class HouseRelationshipController {
@@ -29,9 +29,10 @@ public class HouseRelationshipController {
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(HouseRelationship houseRelationship,
-    @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-    @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-    PageInfo<HouseRelationship> pageInfo = iHouseRelationshipService.selectByFilterAndPage(houseRelationship, pageNum, pageSize);
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        PageInfo<HouseRelationship> pageInfo = iHouseRelationshipService
+                .selectByFilterAndPage(houseRelationship, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -56,6 +57,14 @@ public class HouseRelationshipController {
 
     @PostMapping("/update")
     public Result update(HouseRelationship houseRelationship) {
+        iHouseRelationshipService.update(houseRelationship);
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/updateIsMove")
+    public Result updateIsMove(@RequestParam Integer id, @RequestParam("isMove") Integer isMove) {
+        HouseRelationship houseRelationship = iHouseRelationshipService.findById(id);
+        houseRelationship.setIsRemove(isMove);
         iHouseRelationshipService.update(houseRelationship);
         return ResponseUtil.success();
     }

@@ -8,6 +8,7 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.SmsUtil;
+import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.HouseOther;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.OnlinePersonMaterial;
@@ -152,6 +153,9 @@ public class PolicePrevApproveController {
     public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo != null) {
+            Date now = new Date();
+            Date epDate = DateUtil.addDay(now, 3);
+            identityInfo.setUnionApprove1Et(epDate);
             identityInfo.setUnionApproveStatus1(4);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService

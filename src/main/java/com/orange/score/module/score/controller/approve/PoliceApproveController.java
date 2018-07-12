@@ -8,6 +8,7 @@ import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.OnlinePersonMaterial;
 import com.orange.score.module.core.service.ICommonQueryService;
@@ -130,7 +131,10 @@ public class PoliceApproveController {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
+            Date now = new Date();
+            Date epDate = DateUtil.addDay(now, 3);
             identityInfo.setPoliceApproveStatus(2);
+            identityInfo.setPoliceApproveEt(epDate);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "policeApproveStatus", 2);

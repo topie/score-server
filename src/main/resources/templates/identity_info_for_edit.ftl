@@ -18,13 +18,11 @@
                 <li class="active">
                     <a data-toggle="tab" href="#info-tab" aria-expanded="true">信息</a>
                 </li>
-
-                <li class="">
-                    <a data-toggle="tab" href="#material-tab" aria-expanded="false">材料提交</a>
-                </li>
-
                 <li class="">
                     <a data-toggle="tab" href="#online-tab" aria-expanded="false">材料上传</a>
+                </li>
+                <li class="">
+                    <a data-toggle="tab" href="#material-tab" aria-expanded="false">材料提交</a>
                 </li>
             </ul>
         </div>
@@ -42,31 +40,16 @@
                             <table style="font-size: 12px;" class="table table-hover table-condensed">
                                 <!-- 两组数据信息的 -->
                                 <tr>
-                                    <td colspan="2">单位名称：</td>
-                                    <td colspan="4">
-                                        <strong>${company.companyName}</strong>
-                                    </td>
-                                    <td colspan="2">机构代码：</td>
-                                    <td colspan="4">
-                                        <strong>${company.societyCode}</strong>
-                                    </td>
+                                    <td colspan="6">单位名称：${company.companyName}</td>
+                                    <td colspan="6">机构代码：<strong>${company.societyCode}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">联系人：</td>
-                                    <td colspan="4">
-                                        <strong>${company.operator}</strong>
-                                    </td>
-                                    <td colspan="2">联系电话：</td>
-                                    <td colspan="4">
-                                        <strong>${company.operatorMobile}</strong>
-                                    </td>
+                                    <td colspan="6">联系人：<strong>${company.operator}</strong></td>
+                                    <td colspan="6">联系电话：<strong>${company.operatorMobile}</strong></td>
                                 </tr>
                                 <!-- 一组数据信息的 -->
                                 <tr>
-                                    <td colspan="2">联系地址：</td>
-                                    <td colspan="10">
-                                        <strong>${company.operatorAddress}</strong>
-                                    </td>
+                                    <td colspan="12">联系地址：<strong>${company.operatorAddress}</strong></td>
                                 </tr>
                             </table>
                         </div>
@@ -137,13 +120,14 @@
                                 <!-- 内表格 -->
                                 <tr>
                                     <td colspan="12">
-                                        <table class="table table-hover table-bordered table-condensed">
+                                        <table id="move-table" class="table table-hover table-bordered table-condensed">
                                             <tr class="info">
                                                 <th>与本人关系</th>
                                                 <th>姓名</th>
                                                 <th>身份证号</th>
                                                 <th>文化程度</th>
                                                 <th>是否随迁</th>
+                                                <th>操作</th>
                                             </tr>
                                         <#list relation as ritem>
                                             <tr>
@@ -151,132 +135,23 @@
                                                 <td>${ritem.name}</td>
                                                 <td>${ritem.idNumber}</td>
                                                 <td>${ritem.cultureDegree}</td>
-                                                <td><#if ritem.isRemove == 1>是<#else>否</#if></td>
+                                                <td>
+                                                    <div class="display"><#if ritem.isRemove == 1>是<#else>否</#if></div>
+                                                    <div class="select" style="display: none;">
+                                                        <select role-id="${ritem.id?c}">
+                                                            <option value="1" <#if ritem.isRemove == 1>selected</#if> >是</option>
+                                                            <option value="0" <#if ritem.isRemove == 0>selected</#if> >否</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-mini btn-danger">修改</button>
+                                                </td>
                                             </tr>
                                         </#list>
                                         </table>
                                     </td>
                                 </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-md-5 col-sx-12">
-                    <#list scoreList as item>
-                        <div class="panel panel-default">
-                            <!-- Default panel contents -->
-                            <div class="panel-heading">部门审核打分</div>
-                            <!-- Table -->
-                            <table class="table table-hover table-bordered table-condensed">
-                                <tr class="info">
-                                    <th>指标序号：</th>
-                                    <th>${item.indicator.indexNum}</th>
-                                    <th>指标类别：</th>
-                                    <th colspan="2">${item.indicator.category}</th>
-                                </tr>
-                                <tr class="info">
-                                    <th>指标名称：</th>
-                                    <th colspan="4">${item.indicator.name}</th>
-                                </tr>
-                                <tr class="info">
-                                    <th>打分部门：</th>
-                                    <th colspan="4">${item.opRole}</th>
-                                </tr>
-                                <tr class="info">
-                                    <th>打分人：</th>
-                                    <th>${item.opUser}</th>
-                                    <th>打分时间：</th>
-                                    <th colspan="2"><#if item.submitDate??>${item.submitDater?string("yyyy-MM-dd")}</#if></th>
-                                </tr>
-                                <tr class="info">
-                                    <td>状态：</td>
-                                    <td style="color: red">${item.scoreStatus}</td>
-                                    <td>打分结果：</td>
-                                    <td style="color: red" colspan="2">${item.scoreValue?default("-")}</td>
-                                </tr>
-                            </table>
-                            <table class="table table-hover table-bordered table-condensed">
-                                <#if item.indicator.itemType==0>
-                                    <tr class="info">
-                                        <th>选择</th>
-                                        <th style="width: 60%" colspan="3">指标选项</th>
-                                        <th>分值</th>
-                                    </tr>
-                                    <#list item.indicatorItems as sitem>
-                                        <tr>
-                                            <td class="text-center">
-                                                <input type="radio"
-                                                       value="${item.opRoleId?c}_${item.indicator.id?c}_${sitem.id?c}"
-                                                       name="score">
-                                            </td>
-                                            <td style="width: 60%" colspan="3">${sitem.content}</td>
-                                            <td class="text-danger">${sitem.score}分</td>
-                                        </tr>
-                                    </#list>
-                                    <tr>
-                                        <td class="text-center">
-                                            <input type="radio"
-                                                   value="${item.opRoleId?c}_${item.indicator.id?c}_0"
-                                                   name="score">
-                                        </td>
-                                        <td style="width: 60%" colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
-                                        <td class="text-danger">0分</td>
-                                    </tr>
-                                <#else>
-                                    <tr class="info">
-                                        <th colspan="4">输入框</th>
-                                        <th>分值</th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="4" class="text-danger">
-                                            <input type="text" value=""
-                                                   d-indicator="${item.opRoleId?c}_${item.indicator.id?c}"
-                                                   name="score">
-                                        </td>
-                                        <td class="text-danger">手动输入</td>
-                                    </tr>
-                                </#if>
-                                <tr>
-                                    <td class="check_desc" colspan="5">
-                                        <div class="text-info">审核打分说明：</div>
-                                        <textarea class="form-control" rows="3" disabled>
-                                            ${item.indicator.note}
-                                        </textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-danger fontweight600" colspan="5">
-                                        <div class="alert alert-warning">请您按照指标体系要求打分</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </#list>
-                    </div>
-                </div>
-                <div id="material-tab" class="main-cont clearfix tab-pane">
-                    <div class="panel panel-default">
-                        <!-- Default panel contents -->
-                        <div class="panel-heading">
-                            申请人材料提交情况
-                        </div>
-                        <!-- Table 多个表格列表组合 -->
-                        <div class="table-list-item">
-                            <table class="table table-hover table-bordered table-condensed">
-                                <tr class="info">
-                                    <th colspan="2" class="text-info">选中表示已经提交过该材料</th>
-                                </tr>
-                                <tr class="info">
-                                    <th>确认</th>
-                                    <th class="text-info">材料名称</th>
-                                </tr>
-                                <#list materialInfos as item>
-                                    <tr>
-                                        <td class="text-center">
-                                            <input name="material" value="${item.id?c}" type="checkbox">
-                                        </td>
-                                        <td>${item.name}</td>
-                                    </tr>
-                                </#list>
                             </table>
                         </div>
                     </div>
@@ -291,7 +166,7 @@
                         <div class="table-list-item">
                             <table class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
-                                    <th>预览(点击放大)</th>
+                                    <th>预览</th>
                                     <th class="text-info">材料名称</th>
                                 </tr>
                                 <#list materialInfos as item>
@@ -340,21 +215,61 @@
                                         destroy: true
                                     }).show().$body.html(img);
                                 });
-                                $(".download").off("click");
-                                $(".download").on("click", function () {
-                                    var uri = $(this).attr("data-uri");
-                                    var name = $(this).attr("data-name");
-                                    var type = uri.substring(uri.lastIndexOf("."));
-                                    var img = $("<a></a>").attr("href", uri).attr("download", name + type);
-                                    img[0].click();
+                                $("#move-table").find("button").on("click", function () {
+                                    console.info($(this).parent().parent().find("div.display").length);
+                                    $(this).parent().parent().find("div.display").hide();
+                                    $(this).parent().parent().find("div.select").show();
+                                });
+                                $("#move-table").find("select").on("change", function () {
+                                    var that = $(this);
+                                    var v = $(this).val();
+                                    var id = $(this).attr("role-id");
+                                    $.ajax({
+                                        type: "POST",
+                                        dataType: "json",
+                                        url: window.App.href + "/api/score/houseRelationship/updateIsMove",
+                                        data: {
+                                            "id": id,
+                                            "isMove": v
+                                        },
+                                        success: function (ddd) {
+                                            that.parent().parent().find("div.display").html(v === 1 ? "是" : "否");
+                                            that.parent().parent().find("div.display").show();
+                                            that.parent().parent().find("div.select").hide();
+                                        }
+                                    });
                                 });
                             </script>
+                        </div>
+                    </div>
+                </div>
+                <div id="material-tab" class="main-cont clearfix tab-pane">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            申请人提交材料确认（<span class="text-danger">请勾选确认申请人送达的材料</span>）
+                        </div>
+                        <div class="table-list-item">
+                            <table class="table table-hover table-bordered table-condensed">
+                                <tr class="info">
+                                    <th>确认</th>
+                                    <th class="text-info">材料名称</th>
+                                </tr>
+                                <#list materialInfos as item>
+                                    <tr>
+                                        <td class="text-center">
+                                            <input name="material" value="${item.id?c}"
+                                                   type="checkbox"/>
+                                        </td>
+                                        <td>${item.name}</td>
+                                    </tr>
+                                </#list>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 

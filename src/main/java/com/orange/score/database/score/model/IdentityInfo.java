@@ -128,6 +128,50 @@ public class IdentityInfo {
     @Column(name = "u_time")
     private Date uTime;
 
+    @Column(name = "renshe_accept_supply_et")
+    private Date rensheAcceptSupplyEt;
+
+    @Column(name = "police_approve_et")
+    private Date policeApproveEt;
+
+    @Column(name = "union_approve_1_et")
+    private Date unionApprove1Et;
+
+    @Column(name = "union_approve_2_et")
+    private Date unionApprove2Et;
+
+    public Date getRensheAcceptSupplyEt() {
+        return rensheAcceptSupplyEt;
+    }
+
+    public void setRensheAcceptSupplyEt(Date rensheAcceptSupplyEt) {
+        this.rensheAcceptSupplyEt = rensheAcceptSupplyEt;
+    }
+
+    public Date getPoliceApproveEt() {
+        return policeApproveEt;
+    }
+
+    public void setPoliceApproveEt(Date policeApproveEt) {
+        this.policeApproveEt = policeApproveEt;
+    }
+
+    public Date getUnionApprove1Et() {
+        return unionApprove1Et;
+    }
+
+    public void setUnionApprove1Et(Date unionApprove1Et) {
+        this.unionApprove1Et = unionApprove1Et;
+    }
+
+    public Date getUnionApprove2Et() {
+        return unionApprove2Et;
+    }
+
+    public void setUnionApprove2Et(Date unionApprove2Et) {
+        this.unionApprove2Et = unionApprove2Et;
+    }
+
     public String getRegionName() {
         return regionName;
     }

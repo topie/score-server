@@ -18,6 +18,7 @@ import com.orange.score.module.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -125,7 +126,11 @@ public class IdentityInfoController {
     }
 
     @GetMapping("/detailAll")
-    public Result detailAll(@RequestParam Integer identityInfoId) throws FileNotFoundException {
+    public Result detailAll(@RequestParam Integer identityInfoId,
+            @RequestParam(value = "template", required = false) String template) throws FileNotFoundException {
+        if (StringUtils.isEmpty(template)) {
+            template = "identity_info";
+        }
         Map params = new HashMap();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
@@ -141,7 +146,7 @@ public class IdentityInfoController {
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         Integer roleId = roles.get(0);
         List<Integer> indicatorIds = new ArrayList<>();
-        if (roleId == 1 || roleId == 3) {
+        if (roleId == 1) {
             List<Indicator> indicators = iIndicatorService.findAll();
             for (Indicator indicator : indicators) {
                 indicatorIds.add(indicator.getId());
@@ -219,7 +224,7 @@ public class IdentityInfoController {
         }
         params.put("relation", relationshipList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
-        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "identity_info.ftl", params);
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, template + ".ftl", params);
         Map result = new HashMap();
 
         condition = new Condition(MaterialAcceptRecord.class);
