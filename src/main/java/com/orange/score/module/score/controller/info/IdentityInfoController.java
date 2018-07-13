@@ -193,16 +193,15 @@ public class IdentityInfoController {
         if (person == null) {
             person = new IdentityInfo();
         }
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
-        Integer roleId = roles.get(0);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         List<Integer> indicatorIds = new ArrayList<>();
-        if (roleId == 1) {
+        if (roles.contains(1) || roles.contains(3)) {
             List<Indicator> indicators = iIndicatorService.findAll();
-            for (Indicator indicator : indicators) {
-                indicatorIds.add(indicator.getId());
+            for (Indicator item : indicators) {
+                indicatorIds.add(item.getId());
             }
         } else {
-            indicatorIds = iIndicatorService.selectIndicatorIdByRoleId(roleId);
+            indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
         }
         Set<Integer> roleMidSet = new HashSet<>();
         for (Integer indicatorId : indicatorIds) {
@@ -332,16 +331,15 @@ public class IdentityInfoController {
         if (person == null) {
             person = new IdentityInfo();
         }
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
-        Integer roleId = roles.get(0);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         List<Integer> indicatorIds = new ArrayList<>();
-        if (roleId == 1 || roleId == 3) {
+        if (roles.contains(1) || roles.contains(3)) {
             List<Indicator> indicators = iIndicatorService.findAll();
-            for (Indicator indicator : indicators) {
-                indicatorIds.add(indicator.getId());
+            for (Indicator item : indicators) {
+                indicatorIds.add(item.getId());
             }
         } else {
-            indicatorIds = iIndicatorService.selectIndicatorIdByRoleId(roleId);
+            indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
         }
         Set<Integer> roleMidSet = new HashSet<>();
         for (Integer indicatorId : indicatorIds) {

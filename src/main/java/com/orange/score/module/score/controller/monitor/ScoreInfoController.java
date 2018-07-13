@@ -139,7 +139,7 @@ public class ScoreInfoController {
         Map params = new HashMap();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
         params.put("materialInfos", materialInfos);
@@ -152,15 +152,14 @@ public class ScoreInfoController {
         if (person == null) {
             person = new IdentityInfo();
         }
-        Integer roleId = roles.get(0);
         List<Integer> indicatorIds = new ArrayList<>();
-        if (roleId == 1 || roleId == 3) {
+        if (roles.contains(1) || roles.contains(3)) {
             List<Indicator> indicators = iIndicatorService.findAll();
             for (Indicator item : indicators) {
                 indicatorIds.add(item.getId());
             }
         } else {
-            indicatorIds = iIndicatorService.selectIndicatorIdByRoleId(roleId);
+            indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
         }
         Set<Integer> roleMidSet = new HashSet<>();
         for (Integer itemId : indicatorIds) {

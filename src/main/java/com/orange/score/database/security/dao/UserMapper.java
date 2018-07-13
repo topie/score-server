@@ -34,4 +34,6 @@ public interface UserMapper extends Mapper<User> {
 
     int updateLastLoginInfoByUserName(@Param("userName") String username, @Param("lastLoginDate") Date lastLoginDate,
             @Param("remoteAddr") String remoteAddr);
+
+    List<Integer> findUserDepartmentRoleByUserId(@Param("userId") Integer id);
 }

@@ -136,7 +136,7 @@ public class ApplyScoreController {
     public Result apply(@RequestParam("scoreRecordId") Integer scoreRecordId, @RequestParam("reason") String reason) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(securityUser.getId());
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(securityUser.getId());
         ScoreRecord scoreRecord = iScoreRecordService.findById(scoreRecordId);
         ApplyScore applyScore = new ApplyScore();
         applyScore.setBatchId(scoreRecord.getBatchId());

@@ -15,7 +15,7 @@ public class Role extends Sortable {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select d_role_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select d_role_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -49,6 +49,17 @@ public class Role extends Sortable {
 
     @Transient
     private List<Integer> functions;
+
+    @Column(name = "role_type")
+    private Integer roleType;
+
+    public Integer getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(Integer roleType) {
+        this.roleType = roleType;
+    }
 
     /**
      * 获取id

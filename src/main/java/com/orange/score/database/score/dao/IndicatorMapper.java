@@ -29,4 +29,5 @@ public interface IndicatorMapper extends Mapper<Indicator> {
 
     List<Integer> selectIndicatorIdByRoleId(@Param("roleId") Integer roleId);
 
+    List<Integer> selectIndicatorIdByRoleIds(@Param("roleIds") List<Integer> roles);
 }

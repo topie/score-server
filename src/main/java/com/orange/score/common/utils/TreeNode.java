@@ -9,7 +9,16 @@ public class TreeNode {
     private String name;
     private boolean checked;
     private boolean open;
-    
+    private boolean nocheck = false;
+
+    public boolean isNocheck() {
+        return nocheck;
+    }
+
+    public void setNocheck(boolean nocheck) {
+        this.nocheck = nocheck;
+    }
+
     private String type;
 
     private int i;

@@ -17,7 +17,7 @@ public class User extends Sortable {
     private static final long serialVersionUID = 4973095724072990604L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select d_user_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select d_user_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -44,6 +44,9 @@ public class User extends Sortable {
     @NotEmpty
     @Size(max = 20)
     private String displayName;
+
+    @Column(name = "user_type")
+    private Integer userType;
 
     /**
      * 状态，0=冻结，1=正常
@@ -118,6 +121,14 @@ public class User extends Sortable {
      */
     @Transient
     private List<Integer> roles;
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
+    }
 
     /**
      * @return id

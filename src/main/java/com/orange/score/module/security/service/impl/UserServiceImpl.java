@@ -159,4 +159,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public void deleteUserCache(int userId) {
         userCache.removeUserFromCacheByUserId(userId);
     }
+
+    @Override
+    public List<Integer> findUserDepartmentRoleByUserId(Integer id) {
+        return userMapper.findUserDepartmentRoleByUserId(id);
+    }
 }

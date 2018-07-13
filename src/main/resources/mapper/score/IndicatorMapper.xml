@@ -33,7 +33,7 @@
         select role_id from t_relate_indicator_role where indicator_id=#{id}
     </select>
     <select id="selectDepartmentTreeNodes" resultType="com.orange.score.common.utils.TreeNode">
-        select id,role_name name,0 pId from d_role where id>2
+        select id,role_name name,0 pId from d_role where role_type=0
     </select>
     <select id="selectDistinctIndicatorIdByMids" resultType="java.lang.Integer">
         select distinct indicator_id from t_relate_indicator_material where material_id in
@@ -46,6 +46,12 @@
     </select>
     <select id="selectIndicatorIdByRoleId" resultType="java.lang.Integer">
         select indicator_id from t_relate_indicator_role where role_id=#{roleId}
+    </select>
+    <select id="selectIndicatorIdByRoleIds" resultType="java.lang.Integer">
+        select indicator_id from t_relate_indicator_role where role_id in
+        <foreach item="item" collection="roleIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </select>
 
 </mapper>

@@ -34,4 +34,6 @@ public interface IIndicatorService extends IService<Indicator> {
     Integer selectIndicatorIdByMaterialId(Integer materialId);
 
     List<Integer> selectIndicatorIdByRoleId(Integer roleId);
+
+    List<Integer> selectIndicatorIdByRoleIds(List<Integer> roles);
 }

@@ -126,7 +126,7 @@ public class PrintController extends BaseController {
         params.put("now", nowStr);
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         params.put("user", user);
-        List<Integer> roles = userService.findUserRoleByUserId(user.getId());
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
         Role role = roleService.findRoleById(roles.get(0));
         params.put("department", role.getRoleName());
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
@@ -198,7 +198,7 @@ public class PrintController extends BaseController {
         params.put("now", nowStr);
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         params.put("user", user);
-        List<Integer> roles = userService.findUserRoleByUserId(user.getId());
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
         Role role = roleService.findRoleById(roles.get(0));
         params.put("department", role.getRoleName());
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
@@ -288,7 +288,7 @@ public class PrintController extends BaseController {
         params.put("now", nowStr);
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         params.put("user", user);
-        List<Integer> roles = userService.findUserRoleByUserId(user.getId());
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
         Role role = roleService.findRoleById(roles.get(0));
         params.put("department", role.getRoleName());
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();

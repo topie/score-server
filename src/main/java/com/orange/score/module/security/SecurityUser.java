@@ -10,17 +10,25 @@ import java.util.Date;
  * 工程：os-app 创建人 : ChenGJ 创建时间： 2015/9/4 说明：
  */
 public class SecurityUser extends User {
+
     private Integer id;
+
+    private Integer userType;
+
     private String loginName;
+
     private String displayName;
+
     private String email;
+
     private String contactPhone;
+
     private Date lastPasswordReset;
+
     public SecurityUser(com.orange.score.database.security.model.User user,
-                              Collection<GrantedAuthority> userGrantedAuthorities) {
-        super(user.getLoginName(), user.getPassword(), user.getEnabled(),
-                user.getAccountNonExpired(), user.getCredentialsNonExpired(),
-                user.getAccountNonLocked(), userGrantedAuthorities);
+            Collection<GrantedAuthority> userGrantedAuthorities) {
+        super(user.getLoginName(), user.getPassword(), user.getEnabled(), user.getAccountNonExpired(),
+                user.getCredentialsNonExpired(), user.getAccountNonLocked(), userGrantedAuthorities);
         if (user != null) {
             setId(user.getId());
             setLoginName(user.getLoginName());
@@ -28,7 +36,16 @@ public class SecurityUser extends User {
             setEmail(user.getEmail());
             setContactPhone(user.getContactPhone());
             setLastPasswordReset(user.getLastPasswordReset());
+            setUserType(user.getUserType());
         }
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 
     public Integer getId() {

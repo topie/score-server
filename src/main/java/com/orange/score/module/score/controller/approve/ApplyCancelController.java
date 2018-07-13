@@ -58,10 +58,10 @@ public class ApplyCancelController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         Condition condition = new Condition(ApplyCancel.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        if (roles.get(0) != 3) criteria.andEqualTo("applyRoleId", roles.get(0));
+        criteria.andEqualTo("applyRoleId", roles.get(0));
         if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
         }
@@ -121,7 +121,7 @@ public class ApplyCancelController {
     public Result apply(@RequestParam("personId") Integer personId, @RequestParam("reason") String reason) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(securityUser.getId());
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(securityUser.getId());
         IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
         ApplyCancel applyCancel = new ApplyCancel();
         applyCancel.setBatchId(identityInfo.getBatchId());

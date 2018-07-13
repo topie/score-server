@@ -99,7 +99,7 @@ public class ScoreRecordController {
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         criteria.andIn("opRoleId", roles);
         Integer[] integers = new Integer[] { 1, 3 };
         criteria.andIn("status", CollectionUtils.arrayToList(integers));
@@ -125,7 +125,7 @@ public class ScoreRecordController {
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         criteria.andIn("opRoleId", roles);
         Integer[] integers = new Integer[] { 1, 3 };
         criteria.andIn("status", CollectionUtils.arrayToList(integers));
@@ -151,7 +151,7 @@ public class ScoreRecordController {
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         criteria.andIn("opRoleId", roles);
         criteria.andEqualTo("status", 4);
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
@@ -163,6 +163,7 @@ public class ScoreRecordController {
         if (scoreRecord.getIndicatorId() != null) {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
         }
+        condition.orderBy("scoreDate").desc();
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -173,7 +174,7 @@ public class ScoreRecordController {
             throws FileNotFoundException {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         Map params = new HashMap();
         List<Map> scoreList = new ArrayList<>();
         Map msMap = new HashMap();
@@ -251,15 +252,14 @@ public class ScoreRecordController {
         for (MaterialInfo materialInfo : materialInfos) {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
         }
-        Integer roleId = roles.get(0);
         List<Integer> indicatorIds = new ArrayList<>();
-        if (roleId == 1 || roleId == 3) {
+        if (roles.contains(1) || roles.contains(3)) {
             List<Indicator> indicators = iIndicatorService.findAll();
             for (Indicator item : indicators) {
                 indicatorIds.add(item.getId());
             }
         } else {
-            indicatorIds = iIndicatorService.selectIndicatorIdByRoleId(roleId);
+            indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
         }
         Set<Integer> roleMidSet = new HashSet<>();
         for (Integer itemId : indicatorIds) {
@@ -340,12 +340,13 @@ public class ScoreRecordController {
     @PostMapping("/score")
     public Result score(@RequestParam("personId") Integer personId,
             @RequestParam(value = "sIds", required = false) String[] sIds,
-            @RequestParam(value = "sAns", required = false) String[] sAns) {
+            @RequestParam(value = "sAns", required = false) String[] sAns, @RequestParam Integer opRoleId) {
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         Integer userId = user.getId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
+        if (!roles.contains(opRoleId)) throw new AuthBusinessException("无权限打分");
         IdentityInfo person = iIdentityInfoService.findById(personId);
         if (person.getHallStatus() == 8) {
             throw new AuthBusinessException("资格已取消");
@@ -360,7 +361,7 @@ public class ScoreRecordController {
                 criteria.andEqualTo("indicatorId", indicatorId);
                 criteria.andEqualTo("personId", personId);
                 criteria.andEqualTo("batchId", person.getBatchId());
-                criteria.andEqualTo("opRoleId", roles.get(0));
+                criteria.andEqualTo("opRoleId", opRoleId);
                 List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
                 for (ScoreRecord scoreRecord : scoreRecords) {
                     scoreRecord.setItemId(0);
@@ -383,7 +384,7 @@ public class ScoreRecordController {
                 criteria.andEqualTo("indicatorId", indicatorId);
                 criteria.andEqualTo("personId", personId);
                 criteria.andEqualTo("batchId", person.getBatchId());
-                criteria.andEqualTo("opRoleId", roles.get(0));
+                criteria.andEqualTo("opRoleId", opRoleId);
                 List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
                 for (ScoreRecord scoreRecord : scoreRecords) {
                     scoreRecord.setItemId(itemId);

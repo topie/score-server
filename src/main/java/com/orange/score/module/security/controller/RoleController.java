@@ -78,6 +78,36 @@ public class RoleController {
         return list;
     }
 
+    @RequestMapping(value = "/treeNodesDiff", method = RequestMethod.POST)
+    @ResponseBody
+    public Object treeNodesDiff() {
+        List<TreeNode> result = new ArrayList<>();
+        TreeNode department = new TreeNode();
+        department.setId(-1);
+        department.setName("部门");
+        department.setNocheck(true);
+        result.add(department);
+        TreeNode function = new TreeNode();
+        function.setId(-2);
+        function.setName("权限");
+        function.setNocheck(true);
+        result.add(function);
+        Role role = new Role();
+        role.setRoleType(1);
+        List<TreeNode> list1 = roleService.getRoleTreeNodes(role);
+        for (TreeNode treeNode : list1) {
+            treeNode.setpId(-2);
+        }
+        result.addAll(list1);
+        role.setRoleType(0);
+        List<TreeNode> list2 = roleService.getRoleTreeNodes(role);
+        for (TreeNode treeNode : list2) {
+            treeNode.setpId(-1);
+        }
+        result.addAll(list2);
+        return result;
+    }
+
     @RequestMapping(value = "/functions", method = RequestMethod.POST)
     @ResponseBody
     public Object functions(@RequestParam(value = "roleIds", required = false) String roleIds) {

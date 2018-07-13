@@ -73,6 +73,7 @@ public class MaterialReceiveController {
 
     @Autowired
     private IOnlinePersonMaterialService iOnlinePersonMaterialService;
+
     @Autowired
     private IRegionService iRegionService;
 
@@ -88,7 +89,7 @@ public class MaterialReceiveController {
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         criteria.andEqualTo("status", 2);
         criteria.andIn("opRoleId", roles);
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
@@ -114,7 +115,7 @@ public class MaterialReceiveController {
         criteria.andGreaterThanOrEqualTo("status", 3);
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         criteria.andIn("opRoleId", roles);
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
@@ -125,6 +126,7 @@ public class MaterialReceiveController {
         if (scoreRecord.getIndicatorId() != null) {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
         }
+        condition.orderBy("submitDate").desc();
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -134,7 +136,7 @@ public class MaterialReceiveController {
             throws FileNotFoundException {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
         Map params = new HashMap();
         List<Map> mlist = new ArrayList<>();
@@ -157,15 +159,14 @@ public class MaterialReceiveController {
         }
         params.put("allMaterialInfos", allMaterialInfos);
 
-        Integer roleId = roles.get(0);
         List<Integer> indicatorIds = new ArrayList<>();
-        if (roleId == 1 || roleId == 3) {
+        if (roles.contains(1) || roles.contains(3)) {
             List<Indicator> indicators = iIndicatorService.findAll();
             for (Indicator item : indicators) {
                 indicatorIds.add(item.getId());
             }
         } else {
-            indicatorIds = iIndicatorService.selectIndicatorIdByRoleId(roleId);
+            indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
         }
         Set<Integer> roleMidSet = new HashSet<>();
         for (Integer itemId : indicatorIds) {
@@ -265,7 +266,7 @@ public class MaterialReceiveController {
         List<String> mCheckList = new ArrayList<>();
         condition = new Condition(MaterialAcceptRecord.class);
         criteria = condition.createCriteria();
-        criteria.andEqualTo("roleId", roleId);
+        criteria.andIn("roleId", roles);
         criteria.andEqualTo("personId", identityInfoId);
         criteria.andEqualTo("batchId", person.getBatchId());
         criteria.andEqualTo("indicatorId", indicatorId);
@@ -294,11 +295,12 @@ public class MaterialReceiveController {
     }
 
     @PostMapping("/confirmReceived")
-    public Result update(@RequestParam("personId") Integer personId, String[] mIds) {
+    public Result update(@RequestParam("personId") Integer personId, String[] mIds, Integer opRoleId) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserRoleByUserId(userId);
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
+        if (!roles.contains(opRoleId)) throw new AuthBusinessException("无权限接收该材料");
         IdentityInfo person = iIdentityInfoService.findById(personId);
         if (person.getHallStatus() == 8) throw new AuthBusinessException("用户资格已取消");
         Set<Integer> indicatorIdSet = new HashSet<>();
@@ -310,7 +312,7 @@ public class MaterialReceiveController {
             materialAcceptRecord.setIndicatorId(Integer.valueOf(mIdArr[0]));
             materialAcceptRecord.setBatchId(person.getBatchId());
             materialAcceptRecord.setPersonId(personId);
-            materialAcceptRecord.setRoleId(roles.get(0));
+            materialAcceptRecord.setRoleId(opRoleId);
             List<MaterialAcceptRecord> materialAcceptRecords = iMaterialAcceptRecordService
                     .findByT(materialAcceptRecord);
             if (materialAcceptRecords.size() > 0) {
@@ -326,7 +328,7 @@ public class MaterialReceiveController {
         criteria.andIn("indicatorId", indicatorIdSet);
         criteria.andEqualTo("personId", personId);
         criteria.andEqualTo("batchId", person.getBatchId());
-        criteria.andEqualTo("opRoleId", roles.get(0));
+        criteria.andEqualTo("opRoleId", opRoleId);
         List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
         for (ScoreRecord scoreRecord : scoreRecords) {
             scoreRecord.setStatus(3);
