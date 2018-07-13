@@ -1,10 +1,13 @@
 package com.orange.score.module.score.controller.info;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
+import com.orange.score.common.utils.Option;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.core.model.Region;
@@ -15,6 +18,7 @@ import com.orange.score.module.core.service.IRegionService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
@@ -119,6 +124,51 @@ public class IdentityInfoController {
         return ResponseUtil.success();
     }
 
+    @PostMapping("/updateEdit")
+    public Result updateEdit(@RequestParam Integer identityInfoId, @RequestParam String editInfo)
+            throws InvocationTargetException, IllegalAccessException {
+        JSONArray jsonArray = JSONArray.parseArray(editInfo);
+        IdentityInfo identityInfo = new IdentityInfo();
+        identityInfo.setId(identityInfoId);
+        HouseMove houseMove = new HouseMove();
+        houseMove.setIdentityInfoId(identityInfoId);
+        HouseOther houseOther = new HouseOther();
+        houseOther.setIdentityInfoId(identityInfoId);
+        for (Object o : jsonArray) {
+            String name = ((JSONObject) o).getString("name");
+            Object value = ((JSONObject) o).get("value");
+            Integer id = ((JSONObject) o).getInteger("id");
+            String[] arr = name.split("\\.");
+            if (arr.length == 2) {
+                switch (arr[0]) {
+                    case "person":
+                        BeanUtils.copyProperty(identityInfo, arr[1], value);
+                        break;
+                    case "move":
+                        BeanUtils.copyProperty(houseMove, arr[1], value);
+                        houseMove.setId(id);
+                        break;
+                    case "other":
+                        BeanUtils.copyProperty(houseOther, arr[1], value);
+                        houseOther.setId(id);
+                        break;
+                    case "relation":
+                        HouseRelationship houseRelationship = new HouseRelationship();
+                        houseRelationship.setIdentityInfoId(identityInfoId);
+                        BeanUtils.copyProperty(houseRelationship, arr[1], value);
+                        houseRelationship.setId(id);
+                        iHouseRelationshipService.update(houseRelationship);
+                        break;
+                }
+
+            }
+        }
+        iIdentityInfoService.update(identityInfo);
+        iHouseMoveService.update(houseMove);
+        iHouseOtherService.update(houseOther);
+        return ResponseUtil.success();
+    }
+
     @GetMapping("/detail")
     public Result detail(@RequestParam Integer id) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
@@ -138,11 +188,6 @@ public class IdentityInfoController {
         if (person == null) {
             person = new IdentityInfo();
         }
-        List<Region> regionList = iRegionService.findAll();
-        params.put("regionList", regionList);
-
-        List<Office> officeList = iOfficeService.findAll();
-        params.put("officeList", officeList);
         List<Integer> roles = userService.findUserRoleByUserId(userId);
         Integer roleId = roles.get(0);
         List<Integer> indicatorIds = new ArrayList<>();
@@ -223,6 +268,34 @@ public class IdentityInfoController {
             relationshipList = new ArrayList<>();
         }
         params.put("relation", relationshipList);
+        condition = new Condition(Region.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("level", 1);
+        List<Region> provinceList = iRegionService.findByCondition(condition);
+        params.put("provinceList", provinceList);
+        condition = new Condition(Region.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("level", 2);
+        List<Region> cityList = iRegionService.findByCondition(condition);
+        params.put("cityList", cityList);
+        condition = new Condition(Region.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("level", 3);
+        List<Region> areaList = iRegionService.findByCondition(condition);
+        params.put("areaList", areaList);
+
+        condition = new Condition(Office.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("regionLevel", 1);
+        List<Office> officeList1 = iOfficeService.findByCondition(condition);
+        params.put("officeList1", officeList1);
+
+        condition = new Condition(Office.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("regionLevel", 2);
+        List<Office> officeList2 = iOfficeService.findByCondition(condition);
+        params.put("officeList2", officeList2);
+
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, template + ".ftl", params);
         Map result = new HashMap();
@@ -354,5 +427,16 @@ public class IdentityInfoController {
         result.put("cIds", submittedMids);
         result.put("html", html);
         return ResponseUtil.success(result);
+    }
+
+    @RequestMapping(value = "/officeOption")
+    @ResponseBody
+    public List<Option> options(Office office) {
+        List<Option> options = new ArrayList<>();
+        List<Office> list = iOfficeService.selectByFilter(office);
+        for (Office item : list) {
+            options.add(new Option(item.getName(), item.getId()));
+        }
+        return options;
     }
 }

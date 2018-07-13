@@ -7,9 +7,11 @@ import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
+import com.orange.score.module.core.service.IRegionService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.score.ws.SOAP3Response;
 import com.orange.score.module.score.ws.WebServiceClient;
@@ -81,6 +83,12 @@ public class ScoreRecordController {
 
     @Autowired
     private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
+
+    @Autowired
+    private IRegionService iRegionService;
+
+    @Autowired
+    private IOfficeService iOfficeService;
 
     @GetMapping(value = "/scoring")
     @ResponseBody
@@ -211,7 +219,33 @@ public class ScoreRecordController {
             relationshipList = new ArrayList<>();
         }
         params.put("relation", relationshipList);
+        condition = new Condition(Region.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("level", 1);
+        List<Region> provinceList = iRegionService.findByCondition(condition);
+        params.put("provinceList", provinceList);
+        condition = new Condition(Region.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("level", 2);
+        List<Region> cityList = iRegionService.findByCondition(condition);
+        params.put("cityList", cityList);
+        condition = new Condition(Region.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("level", 3);
+        List<Region> areaList = iRegionService.findByCondition(condition);
+        params.put("areaList", areaList);
 
+        condition = new Condition(Office.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("regionLevel", 1);
+        List<Office> officeList1 = iOfficeService.findByCondition(condition);
+        params.put("officeList1", officeList1);
+
+        condition = new Condition(Office.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("regionLevel", 2);
+        List<Office> officeList2 = iOfficeService.findByCondition(condition);
+        params.put("officeList2", officeList2);
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
         Map mMap = new HashMap();
         for (MaterialInfo materialInfo : materialInfos) {
@@ -377,8 +411,7 @@ public class ScoreRecordController {
         if (scoreRecords.size() == 0) {
             person.setHallStatus(9);
             iIdentityInfoService.update(person);
-            iPersonBatchStatusRecordService
-                    .insertStatus(person.getBatchId(), person.getId(), "hallStatus", 9);
+            iPersonBatchStatusRecordService.insertStatus(person.getBatchId(), person.getId(), "hallStatus", 9);
         }
         return ResponseUtil.success();
     }

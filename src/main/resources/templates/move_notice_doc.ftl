@@ -416,7 +416,7 @@
             </td>
             <td class="td11">
                 <p class="p5">
-                    <span class="s2">${person.name}</span>
+                    <span class="s2">${move.witness}</span>
                 </p>
             </td>
         </tr>
@@ -428,7 +428,7 @@
             </td>
             <td class="td11">
                 <p class="p5">
-                    <span class="s2"></span>
+                    <span class="s2">${move.witnessAddress}</span>
                 </p>
             </td>
         </tr>
@@ -440,7 +440,7 @@
             </td>
             <td class="td11">
                 <p class="p5">
-                    <span class="s2">${other.selfPhone}</span>
+                    <span class="s2">${move.witnessPhone}</span>
                 </p>
             </td>
         </tr>

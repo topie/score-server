@@ -67,6 +67,9 @@ public class HouseMove {
     @Column(name = "registered_office")
     private String registeredOffice;
 
+    @Column(name = "registered_region")
+    private String registeredRegion;
+
     /**
      * 迁入地详细地址
      */
@@ -117,6 +120,14 @@ public class HouseMove {
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    public String getRegisteredRegion() {
+        return registeredRegion;
+    }
+
+    public void setRegisteredRegion(String registeredRegion) {
+        this.registeredRegion = registeredRegion;
+    }
 
     public String getSettledNatureStr() {
         switch (settledNature) {

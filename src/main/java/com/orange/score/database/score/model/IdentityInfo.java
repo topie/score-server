@@ -144,27 +144,21 @@ public class IdentityInfo {
     @Transient
     private String etStatus;
 
+    @Transient
+    private String epStatus;
+
     public String getEtStatus() {
         int min = 0;
         Date now = new Date();
-        if (rensheAcceptStatus == 2 && rensheAcceptSupplyEt != null) {
-            min = DateUtil.getIntervalMins(rensheAcceptSupplyEt, now);
-        }
         if (policeApproveStatus == 2 && policeApproveEt != null) {
             min = DateUtil.getIntervalMins(policeApproveEt, now);
         }
-        if (unionApproveStatus1 == 4 && unionApprove1Et != null) {
-            min = DateUtil.getIntervalMins(unionApprove1Et, now);
-        }
-        if (unionApproveStatus2 == 4 && unionApprove2Et != null) {
-            min = DateUtil.getIntervalMins(unionApprove2Et, now);
-        }
         if (min > 0) {
             int day = min / 24;
-            if (day > 0) return "补件剩余" + day + "天";
-            return "补件剩余" + min + "小时";
+            if (day > 0) return "剩余" + day + "天";
+            return "剩余" + min + "小时";
         } else if (min < 0) {
-            return "补件已过期";
+            return "已过期";
         } else {
             return "-";
         }
@@ -172,6 +166,27 @@ public class IdentityInfo {
 
     public void setEtStatus(String etStatus) {
         this.etStatus = etStatus;
+    }
+
+    public String getEpStatus() {
+        int min = 0;
+        Date now = new Date();
+        if (unionApproveStatus1 == 1 && unionApprove1Et != null) {
+            min = DateUtil.getIntervalMins(unionApprove1Et, now);
+        }
+        if (min > 0) {
+            int day = min / 24;
+            if (day > 0) return "剩余" + day + "天";
+            return "剩余" + min + "小时";
+        } else if (min < 0) {
+            return "已过期";
+        } else {
+            return "-";
+        }
+    }
+
+    public void setEpStatus(String epStatus) {
+        this.epStatus = epStatus;
     }
 
     public Date getRensheAcceptSupplyEt() {

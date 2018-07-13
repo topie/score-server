@@ -1,31 +1,28 @@
 package com.orange.score.module.score.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.SqlUtil;
-import com.orange.score.database.score.dao.OfficeMapper;
-import com.orange.score.database.score.model.Office;
-import com.orange.score.module.score.service.IOfficeService;
 import com.orange.score.common.core.BaseService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Condition;
-
-import java.util.List;
 import com.orange.score.common.utils.MethodUtil;
 import com.orange.score.common.utils.SearchItem;
 import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.database.core.model.ColumnJson;
-import org.apache.commons.lang3.StringUtils;
-import java.util.ArrayList;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.orange.score.database.score.dao.OfficeMapper;
+import com.orange.score.database.score.model.Office;
 import com.orange.score.module.core.service.IColumnJsonService;
+import com.orange.score.module.score.service.IOfficeService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Condition;
 
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by chenJz1012 on 2018-06-26.
@@ -54,6 +51,9 @@ public class OfficeServiceImpl extends BaseService<Office> implements IOfficeSer
         Condition condition = new Condition(Office.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (office != null) {
+            if (office.getParentId() != null) {
+                criteria.andEqualTo("parentId", office.getParentId());
+            }
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_office");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
@@ -61,7 +61,7 @@ public class OfficeServiceImpl extends BaseService<Office> implements IOfficeSer
                 List<SearchItem> searchItems = new ArrayList<>();
                 columnJson = list.get(0);
                 JSONArray jsonArray = JSONArray.parseArray(columnJson.getSearchConf());
-                if(StringUtils.isNotEmpty(columnJson.getSearchConf())){
+                if (StringUtils.isNotEmpty(columnJson.getSearchConf())) {
                     for (Object o : jsonArray) {
                         o = (JSONObject) o;
                         SearchItem searchItem = new SearchItem();

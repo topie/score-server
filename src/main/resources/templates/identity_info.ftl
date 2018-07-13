@@ -89,8 +89,134 @@
                                     <td colspan="6">工种：<strong>${profession.jobTypeStr}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">现户口性质：<strong>${move.houseNatureStr}</strong></td>
-                                    <td colspan="6">落户性质：<strong>${move.settledNatureStr}</strong></td>
+                                    <td colspan="12">迁出地省（市自治区）：
+                                        <select disabled style="height: 25px;">
+                                    <#list provinceList as item>
+                                        <option <#if move.moveProvince==item.id>selected</#if>
+                                                value="${item.id}">${item.name}</option>
+                                    </#list>
+                                        </select>
+                                        市：
+                                        <select disabled style="height: 25px;">
+                                    <#list cityList as item>
+                                        <#if item.parentId==move.moveProvince>
+                                            <option <#if move.moveCity==item.id>selected</#if>
+                                                    value="${item.id}">${item.name}</option>
+                                        </#if>
+                                    </#list>
+                                        </select>
+                                        区县：
+                                        <select disabled style="height: 25px;">
+                                    <#list areaList as item>
+                                        <#if item.parentId==move.moveCity>
+                                        <option <#if move.moveRegion==item.id>selected</#if>
+                                                value="${item.id}">${item.name}</option>
+                                        </#if>
+                                    </#list>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">迁出详细地址：<strong>${move.moveAddress}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">现户口性质：<select disabled style="height: 25px;">
+                                        <option <#if move.houseNature==1>selected</#if> value="1">未落常住户口</option>
+                                        <option <#if move.houseNature==2>selected</#if> value="2">非农业家庭户口</option>
+                                        <option <#if move.houseNature==3>selected</#if> value="3">农业家庭户口</option>
+                                        <option <#if move.houseNature==4>selected</#if> value="4">非农业集体户口</option>
+                                        <option <#if move.houseNature==5>selected</#if> value="5">农业集体户口</option>
+                                        <option <#if move.houseNature==6>selected</#if> value="6">自理口粮户口</option>
+                                        <option <#if move.houseNature==7>selected</#if> value="7">寄住户口</option>
+                                        <option <#if move.houseNature==8>selected</#if> value="8">暂住户口</option>
+                                        <option <#if move.houseNature==9>selected</#if> value="9">地方城镇居民户口</option>
+                                        <option <#if move.houseNature==10>selected</#if> value="10">其他户口</option>
+                                    </select></td>
+                                    <td colspan="6">落户性质：
+                                        <select disabled style="height: 25px;">
+                                            <option <#if move.settledNature==1>selected</#if> value="1">本单位集体户口</option>
+                                            <option <#if move.settledNature==2>selected</#if> value="2">非本单位集体户口
+                                            </option>
+                                            <option <#if move.settledNature==3>selected</#if> value="3">家庭户口</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">现户籍登记机关：<strong>${move.moveRegisteredOffice}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">迁入地户籍登记机关：
+                                        <select disabled style="height: 25px;">
+                                            <#list officeList1 as item>
+                                                <option <#if move.registeredOffice==item.id?string>selected</#if>
+                                                        value="${item.id}">${item.name}</option>
+                                            </#list>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">迁入地详细地址：<strong>${move.address}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">拟落户地区：
+                                        <select disabled style="height: 25px;">
+                                            <#list officeList1 as item>
+                                                <option <#if move.region==21>selected</#if>
+                                                        value="21">和平区
+                                                </option>
+                                                <option <#if move.region==22>selected</#if>
+                                                        value="22">河东区
+                                                </option>
+                                                <option <#if move.region==23>selected</#if>
+                                                        value="23">河西区
+                                                </option>
+                                                <option <#if move.region==24>selected</#if>
+                                                        value="24">南开区
+                                                </option>
+                                                <option <#if move.region==25>selected</#if>
+                                                        value="25">河北区
+                                                </option>
+                                                <option <#if move.region==26>selected</#if>
+                                                        value="26">红桥区
+                                                </option>
+                                                <option <#if move.region==27>selected</#if>
+                                                        value="27">东丽区
+                                                </option>
+                                                <option <#if move.region==28>selected</#if>
+                                                        value="28">西青区
+                                                </option>
+                                                <option <#if move.region==29>selected</#if>
+                                                        value="29">津南区
+                                                </option>
+                                                <option <#if move.region==30>selected</#if>
+                                                        value="30">北辰区
+                                                </option>
+                                                <option <#if move.region==31>selected</#if>
+                                                        value="31">武清区
+                                                </option>
+                                                <option <#if move.region==32>selected</#if>
+                                                        value="32">宝坻区
+                                                </option>
+                                                <option <#if move.region==33>selected</#if>
+                                                        value="33">滨海新区
+                                                </option>
+                                                <option <#if move.region==34>selected</#if>
+                                                        value="34">宁河区
+                                                </option>
+                                                <option <#if move.region==35>selected</#if>
+                                                        value="35">静海区
+                                                </option>
+                                                <option <#if move.region==36>selected</#if>
+                                                        value="36">蓟州区
+                                                </option>
+                                            </#list>
+                                        </select>
+                                    </td>
+                                    <td colspan="6">收件人：<strong>${move.witness}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">联系电话：<strong>${move.witnessPhone}</strong></td>
+                                    <td colspan="6">邮寄地址：<strong>${move.witnessAddress}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">单位名称：<strong>${other.companyName}</strong></td>
@@ -101,13 +227,9 @@
                                     <td colspan="6">本人电话：<strong>${other.selfPhone}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">拟落户地区：<strong>${move.regionStr}</strong></td>
-                                    <td colspan="6">是否社保缴纳：<strong>${other.socialSecurityPayStr}</strong></td>
-                                </tr>
-                                <!-- 标题特变长的分为特殊的两组 -->
-                                <tr>
-                                    <td colspan="6">积分期间有无行政拘留记录：<strong>${other.detentionStr}</strong></td>
-                                    <td colspan="6">积分期间有无行获刑记录：<strong>${other.penaltyStr}</strong></td>
+                                    <td colspan="4">是否社保缴纳：<strong>${other.socialSecurityPayStr}</strong></td>
+                                    <td colspan="4">有无行政拘留记录：<strong>${other.detentionStr}</strong></td>
+                                    <td colspan="4">有无行获刑记录：<strong>${other.penaltyStr}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">资格证书级别：<strong>${profession.jobLevelStr}</strong></td>

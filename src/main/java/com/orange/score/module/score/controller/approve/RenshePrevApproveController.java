@@ -154,9 +154,6 @@ public class RenshePrevApproveController {
     public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo != null) {
-            Date now = new Date();
-            Date epDate = DateUtil.addDay(now, 3);
-            identityInfo.setUnionApprove2Et(epDate);
             identityInfo.setUnionApproveStatus2(4);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
