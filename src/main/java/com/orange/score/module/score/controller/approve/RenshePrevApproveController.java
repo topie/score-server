@@ -151,7 +151,7 @@ public class RenshePrevApproveController {
     }
 
     @PostMapping("/supply")
-    public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) {
+    public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo != null) {
             identityInfo.setUnionApproveStatus2(4);
@@ -189,6 +189,8 @@ public class RenshePrevApproveController {
                 }
             }
         }
+        HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+        SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料未通过居住证积分网上预审，请根据提示尽快补正材料。");
         return ResponseUtil.success();
     }
 }

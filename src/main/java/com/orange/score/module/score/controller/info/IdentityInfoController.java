@@ -16,9 +16,12 @@ import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.core.service.IRegionService;
 import com.orange.score.module.score.service.*;
+import com.orange.score.module.score.ws.SOAP3Response;
+import com.orange.score.module.score.ws.WebServiceClient;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.beanutils.BeanUtils;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
@@ -26,7 +29,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import javax.xml.soap.SOAPException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -438,5 +443,50 @@ public class IdentityInfoController {
             options.add(new Option(item.getName(), item.getId()));
         }
         return options;
+    }
+
+    @PostMapping("/socialInfo")
+    public Result socialInfo(@RequestParam(value = "personId", required = false) Integer personId)
+            throws DocumentException, SOAPException, IOException {
+        IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        Integer lessThan35 = 1;
+        if (identityInfo.getAge() > 35) {
+            lessThan35 = 0;
+        }
+        String req = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" \n"
+                + "xmlns:ser=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">\n" + "   <soapenv:Header/>\n"
+                + "   <soapenv:Body>\n" + "      <ser:RsResidentJFRDBusinessRev>\n" + "         <!--ticket:-->\n"
+                + "         <ser:arg0>NEUSERVICE_GGFW_TICKET_12</ser:arg0>\n" + "         <!--buzzNumb:-->\n"
+                + "         <ser:arg1>TJZSYL_JFRDXT_002</ser:arg1>\n" + "         <!--sender:-->\n"
+                + "         <ser:arg2>JFRDXT</ser:arg2>\n" + "         <!--reciver:-->\n"
+                + "         <ser:arg3>TJZSYL</ser:arg3>\n" + "         <!--operatorName:-->\n"
+                + "         <ser:arg4>网上预审操作员</ser:arg4>\n" + "         <!--content:-->\n"
+                + "         <ser:arg5><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+                + "<ROOT><QUERY_PRAMS><idNumber>" + identityInfo.getIdNumber() + "</idNumber>"
+                + "<partnerIdNnumber></partnerIdNnumber>" + "<lessThan35>" + lessThan35 + "</lessThan35>"
+                + "<canAdd>1</canAdd>" + "<busType>3</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
+                + "</ser:RsResidentJFRDBusinessRev></soapenv:Body></soapenv:Envelope>";
+        String result = WebServiceClient.actionString(req);
+        result = result.substring((result.indexOf("<![CDATA[") + "<![CDATA[".length()), result.indexOf("]]>"))
+                .replaceAll("<ROOT>", "<br>").replaceAll("</ROOT>", "");
+        Map r = new HashMap();
+        r.put("list", result);
+
+        req = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" \n"
+                + "xmlns:ser=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">\n" + "   <soapenv:Header/>\n"
+                + "   <soapenv:Body>\n" + "      <ser:RsResidentJFRDBusinessRev>\n" + "         <!--ticket:-->\n"
+                + "         <ser:arg0>NEUSERVICE_GGFW_TICKET_12</ser:arg0>\n" + "         <!--buzzNumb:-->\n"
+                + "         <ser:arg1>TJZSYL_JFRDXT_001</ser:arg1>\n" + "         <!--sender:-->\n"
+                + "         <ser:arg2>JFRDXT</ser:arg2>\n" + "         <!--reciver:-->\n"
+                + "         <ser:arg3>TJZSYL</ser:arg3>\n" + "         <!--operatorName:-->\n"
+                + "         <ser:arg4>经办人校验测试操作员</ser:arg4>\n" + "         <!--content:-->\n"
+                + "         <ser:arg5><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+                + "<ROOT><QUERY_PRAMS><idNumber>" + identityInfo.getIdNumber() + "</idNumber>"
+                + "<partnerIdNnumber></partnerIdNnumber>" + "<lessThan35>" + lessThan35 + "</lessThan35>"
+                + "<canAdd>1</canAdd>" + "<busType>3</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
+                + "</ser:RsResidentJFRDBusinessRev></soapenv:Body></soapenv:Envelope>";
+        SOAP3Response soapResponse = WebServiceClient.action(req);
+        r.put("info", soapResponse);
+        return ResponseUtil.success(r);
     }
 }

@@ -8,19 +8,26 @@ import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.SmsUtil;
 import com.orange.score.common.utils.date.DateUtil;
+import com.orange.score.database.score.model.HouseOther;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.OnlinePersonMaterial;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
+import com.orange.score.module.score.service.IHouseOtherService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IOnlinePersonMaterialService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
+import com.orange.score.module.score.ws.WebServiceClient;
 import org.apache.commons.lang3.StringUtils;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import javax.xml.soap.SOAPException;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +54,9 @@ public class PoliceApproveController {
 
     @Autowired
     private IOnlinePersonMaterialService iOnlinePersonMaterialService;
+
+    @Autowired
+    private IHouseOtherService iHouseOtherService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -125,7 +135,7 @@ public class PoliceApproveController {
     }
 
     @PostMapping("/supply")
-    public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) {
+    public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException {
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
@@ -167,6 +177,8 @@ public class PoliceApproveController {
                 }
             }
         }
+        HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+        SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料未通过居住证积分网上预审，请根据提示尽快补正材料。");
         return ResponseUtil.success();
     }
 
