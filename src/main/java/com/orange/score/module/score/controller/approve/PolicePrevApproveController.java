@@ -81,9 +81,9 @@ public class PolicePrevApproveController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
-        if (securityUser.getUserType() == 1) {
+        if (securityUser.getUserType() == 0) {
             identityInfo.setAcceptAddressId(1);
-        } else if (securityUser.getUserType() == 2) {
+        } else if (securityUser.getUserType() == 1) {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setUnionApproveStatus1(1);
@@ -98,9 +98,9 @@ public class PolicePrevApproveController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
-        if (securityUser.getUserType() == 1) {
+        if (securityUser.getUserType() == 0) {
             identityInfo.setAcceptAddressId(1);
-        } else if (securityUser.getUserType() == 2) {
+        } else if (securityUser.getUserType() == 1) {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setUnionApproveStatus1(2);
@@ -115,9 +115,9 @@ public class PolicePrevApproveController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
-        if (securityUser.getUserType() == 1) {
+        if (securityUser.getUserType() == 0) {
             identityInfo.setAcceptAddressId(1);
-        } else if (securityUser.getUserType() == 2) {
+        } else if (securityUser.getUserType() == 1) {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setUnionApproveStatus1(3);
@@ -132,9 +132,9 @@ public class PolicePrevApproveController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
-        if (securityUser.getUserType() == 1) {
+        if (securityUser.getUserType() == 0) {
             identityInfo.setAcceptAddressId(1);
-        } else if (securityUser.getUserType() == 2) {
+        } else if (securityUser.getUserType() == 1) {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setUnionApproveStatus1(4);
