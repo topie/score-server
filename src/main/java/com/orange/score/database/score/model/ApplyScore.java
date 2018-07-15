@@ -9,7 +9,7 @@ public class ApplyScore {
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_apply_score_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_apply_score_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -66,6 +66,9 @@ public class ApplyScore {
     @Column(name = "apply_role_id")
     private Integer applyRoleId;
 
+    @Column(name = "apply_user_type")
+    private Integer applyUserType;
+
     /**
      * 申请人部门
      */
@@ -86,6 +89,14 @@ public class ApplyScore {
      */
     @Column(name = "approve_user")
     private String approveUser;
+
+    public Integer getApplyUserType() {
+        return applyUserType;
+    }
+
+    public void setApplyUserType(Integer applyUserType) {
+        this.applyUserType = applyUserType;
+    }
 
     /**
      * 获取主键ID

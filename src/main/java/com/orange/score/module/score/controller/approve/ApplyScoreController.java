@@ -20,6 +20,7 @@ import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -75,10 +76,14 @@ public class ApplyScoreController {
     public Result ing(ApplyScore applyScore,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) throw new AuthBusinessException("用户未登录");
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        if (user == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        criteria.andIn("applyRoleId", roles);
+        if (user.getUserType() != null) criteria.andEqualTo("applyUserType", user.getUserType());
         criteria.andEqualTo("approveStatus", 0);
         if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
@@ -92,10 +97,14 @@ public class ApplyScoreController {
     public Result agree(ApplyScore applyScore,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) throw new AuthBusinessException("用户未登录");
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        if (user == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        criteria.andIn("applyRoleId", roles);
+        if (user.getUserType() != null) criteria.andEqualTo("applyUserType", user.getUserType());
         criteria.andEqualTo("approveStatus", 1);
         if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
@@ -109,10 +118,14 @@ public class ApplyScoreController {
     public Result disAgree(ApplyScore applyScore,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) throw new AuthBusinessException("用户未登录");
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        if (user == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        criteria.andIn("applyRoleId", roles);
+        if (user.getUserType() != null) criteria.andEqualTo("applyUserType", user.getUserType());
         criteria.andEqualTo("approveStatus", 2);
         if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
@@ -136,7 +149,6 @@ public class ApplyScoreController {
     public Result apply(@RequestParam("scoreRecordId") Integer scoreRecordId, @RequestParam("reason") String reason) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserDepartmentRoleByUserId(securityUser.getId());
         ScoreRecord scoreRecord = iScoreRecordService.findById(scoreRecordId);
         ApplyScore applyScore = new ApplyScore();
         applyScore.setBatchId(scoreRecord.getBatchId());
@@ -145,9 +157,10 @@ public class ApplyScoreController {
         applyScore.setIndicatorName(scoreRecord.getIndicatorName());
         applyScore.setPersonIdNumber(scoreRecord.getPersonIdNum());
         applyScore.setApplyUserId(securityUser.getId());
+        applyScore.setApplyUserType(securityUser.getUserType());
         applyScore.setApplyUser(securityUser.getDisplayName());
-        applyScore.setApplyRoleId(roles.get(0));
-        Role role = roleService.findRoleById(roles.get(0));
+        applyScore.setApplyRoleId(scoreRecord.getOpRoleId());
+        Role role = roleService.findRoleById(scoreRecord.getOpRoleId());
         applyScore.setApplyRole(role.getRoleName());
         applyScore.setApproveStatus(0);
         applyScore.setApplyReason(reason);

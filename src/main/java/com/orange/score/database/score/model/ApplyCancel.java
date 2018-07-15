@@ -9,7 +9,7 @@ public class ApplyCancel {
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_apply_cancel_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_apply_cancel_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -38,6 +38,9 @@ public class ApplyCancel {
 
     @Column(name = "apply_user_id")
     private Integer applyUserId;
+
+    @Column(name = "apply_user_type")
+    private Integer applyUserType;
 
     /**
      * 申请人
@@ -71,6 +74,14 @@ public class ApplyCancel {
      */
     @Column(name = "approve_user")
     private String approveUser;
+
+    public Integer getApplyUserType() {
+        return applyUserType;
+    }
+
+    public void setApplyUserType(Integer applyUserType) {
+        this.applyUserType = applyUserType;
+    }
 
     /**
      * 获取主键ID

@@ -7,6 +7,7 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.ApplyCancel;
+import com.orange.score.database.score.model.ApplyScore;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.security.model.Role;
 import com.orange.score.module.core.service.ICommonQueryService;
@@ -19,6 +20,7 @@ import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -58,10 +60,9 @@ public class ApplyCancelController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         Condition condition = new Condition(ApplyCancel.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria.andEqualTo("applyRoleId", roles.get(0));
+        criteria.andEqualTo("applyUserId", userId);
         if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
         }
@@ -74,10 +75,13 @@ public class ApplyCancelController {
     public Result ing(ApplyCancel applyCancel,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) throw new AuthBusinessException("用户未登录");
-        Condition condition = new Condition(ApplyCancel.class);
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        if (user == null) throw new AuthBusinessException("用户未登录");
+        Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        criteria.andIn("applyRoleId", roles);
         criteria.andEqualTo("approveStatus", 0);
         if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
@@ -91,10 +95,13 @@ public class ApplyCancelController {
     public Result agree(ApplyCancel applyCancel,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) throw new AuthBusinessException("用户未登录");
-        Condition condition = new Condition(ApplyCancel.class);
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        if (user == null) throw new AuthBusinessException("用户未登录");
+        Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        criteria.andIn("applyRoleId", roles);
         criteria.andEqualTo("approveStatus", 1);
         if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
@@ -108,10 +115,13 @@ public class ApplyCancelController {
     public Result disAgree(ApplyCancel applyCancel,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) throw new AuthBusinessException("用户未登录");
-        Condition condition = new Condition(ApplyCancel.class);
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        if (user == null) throw new AuthBusinessException("用户未登录");
+        Condition condition = new Condition(ApplyScore.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        criteria.andIn("applyRoleId", roles);
         criteria.andEqualTo("approveStatus", 2);
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
@@ -128,6 +138,7 @@ public class ApplyCancelController {
         applyCancel.setPersonId(personId);
         applyCancel.setPersonIdNumber(identityInfo.getIdNumber());
         applyCancel.setApplyUserId(securityUser.getId());
+        applyCancel.setApplyUserType(securityUser.getUserType());
         applyCancel.setApplyUser(securityUser.getDisplayName());
         applyCancel.setApplyRoleId(roles.get(0));
         Role role = roleService.findRoleById(roles.get(0));
