@@ -20,6 +20,8 @@ import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IOnlinePersonMaterialService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import com.orange.score.module.score.ws.WebServiceClient;
+import com.orange.score.module.security.SecurityUser;
+import com.orange.score.module.security.SecurityUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +80,13 @@ public class PoliceApproveController {
     public Result approving(IdentityInfo identityInfo,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (securityUser.getUserType() == 1) {
+            identityInfo.setAcceptAddressId(1);
+        } else if (securityUser.getUserType() == 2) {
+            identityInfo.setAcceptAddressId(2);
+        }
         identityInfo.setPoliceApproveStatus(1);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
@@ -88,6 +97,13 @@ public class PoliceApproveController {
     public Result supply(IdentityInfo identityInfo,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (securityUser.getUserType() == 1) {
+            identityInfo.setAcceptAddressId(1);
+        } else if (securityUser.getUserType() == 2) {
+            identityInfo.setAcceptAddressId(2);
+        }
         identityInfo.setPoliceApproveStatus(2);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
@@ -98,6 +114,13 @@ public class PoliceApproveController {
     public Result approved(IdentityInfo identityInfo,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (securityUser.getUserType() == 1) {
+            identityInfo.setAcceptAddressId(1);
+        } else if (securityUser.getUserType() == 2) {
+            identityInfo.setAcceptAddressId(2);
+        }
         identityInfo.setPoliceApproveStatus(3);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
@@ -108,6 +131,13 @@ public class PoliceApproveController {
     public Result rejected(IdentityInfo identityInfo,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (securityUser.getUserType() == 1) {
+            identityInfo.setAcceptAddressId(1);
+        } else if (securityUser.getUserType() == 2) {
+            identityInfo.setAcceptAddressId(2);
+        }
         identityInfo.setPoliceApproveStatus(4);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));

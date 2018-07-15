@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
+import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
@@ -18,6 +19,8 @@ import com.orange.score.module.score.service.IHouseOtherService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IOnlinePersonMaterialService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
+import com.orange.score.module.security.SecurityUser;
+import com.orange.score.module.security.SecurityUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -76,6 +79,13 @@ public class PolicePrevApproveController {
     public Result approving(IdentityInfo identityInfo,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (securityUser.getUserType() == 1) {
+            identityInfo.setAcceptAddressId(1);
+        } else if (securityUser.getUserType() == 2) {
+            identityInfo.setAcceptAddressId(2);
+        }
         identityInfo.setUnionApproveStatus1(1);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
@@ -86,6 +96,13 @@ public class PolicePrevApproveController {
     public Result approved(IdentityInfo identityInfo,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (securityUser.getUserType() == 1) {
+            identityInfo.setAcceptAddressId(1);
+        } else if (securityUser.getUserType() == 2) {
+            identityInfo.setAcceptAddressId(2);
+        }
         identityInfo.setUnionApproveStatus1(2);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
@@ -96,6 +113,13 @@ public class PolicePrevApproveController {
     public Result rejected(IdentityInfo identityInfo,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (securityUser.getUserType() == 1) {
+            identityInfo.setAcceptAddressId(1);
+        } else if (securityUser.getUserType() == 2) {
+            identityInfo.setAcceptAddressId(2);
+        }
         identityInfo.setUnionApproveStatus1(3);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
@@ -106,6 +130,13 @@ public class PolicePrevApproveController {
     public Result supply(IdentityInfo identityInfo,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (securityUser.getUserType() == 1) {
+            identityInfo.setAcceptAddressId(1);
+        } else if (securityUser.getUserType() == 2) {
+            identityInfo.setAcceptAddressId(2);
+        }
         identityInfo.setUnionApproveStatus1(4);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));

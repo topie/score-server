@@ -75,6 +75,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             if (identityInfo.getBatchId() != null) {
                 criteria.andEqualTo("batchId", identityInfo.getBatchId());
             }
+            if (identityInfo.getAcceptAddressId() != null) {
+                criteria.andEqualTo("acceptAddressId", identityInfo.getAcceptAddressId());
+            }
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_identity_info");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
