@@ -286,7 +286,7 @@
                                     <#list item.materialInfos as mitem>
                                         <tr>
                                             <td class="text-center">
-                                                <input name="material" value="${item.indicator.id?c}_${mitem.id?c}"
+                                                <input name="material" value="${item.indicator.id?c}_${mitem.id?c}_${item.roleId?c}"
                                                        type="checkbox"/>
                                             </td>
                                             <td>${mitem.name}</td>

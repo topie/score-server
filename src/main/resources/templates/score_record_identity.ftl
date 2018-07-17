@@ -18,6 +18,7 @@
                 <li class="active">
                     <a data-toggle="tab" href="#info-tab" aria-expanded="true">信息</a>
                 </li>
+
                 <li class="">
                     <a data-toggle="tab" href="#online-tab" aria-expanded="false">材料上传</a>
                 </li>
@@ -262,40 +263,91 @@
                             </table>
                         </div>
                     </div>
-                    <div class="col-md-5 col-sx-12" style="padding-left: 0;">
+                    <div class="col-md-5 col-sx-12">
+                    <#list scoreList as item>
                         <div class="panel panel-default">
                             <!-- Default panel contents -->
-                            <div class="panel-heading">
-                                申请人提交材料确认（<span class="text-danger">请勾选确认申请人送达的材料</span>）
-                            </div>
-                        <#list mlist as item>
-                            <div class="table-list-item">
-                                <table class="table table-hover table-bordered table-condensed">
+                            <div class="panel-heading">部门审核打分</div>
+                            <!-- Table -->
+                            <table class="table table-hover table-bordered table-condensed">
+                                <tr class="info">
+                                    <th>指标序号：</th>
+                                    <th>${item.indicator.indexNum}</th>
+                                    <th>指标类别：</th>
+                                    <th colspan="2">${item.indicator.category}</th>
+                                </tr>
+                                <tr class="info">
+                                    <th>指标名称：</th>
+                                    <th colspan="4">${item.indicator.name}</th>
+                                </tr>
+                                <tr class="info">
+                                    <th>打分部门：</th>
+                                    <th colspan="4">${item.opRole}</th>
+                                </tr>
+                            </table>
+                            <table class="table table-hover table-bordered table-condensed">
+                                <#if item.indicator.itemType==0>
                                     <tr class="info">
-                                        <th style="width:25%;" class="text-nowrap">打分事项</th>
-                                        <th class="text-info">${item.indicator.name}</th>
+                                        <th>选择</th>
+                                        <th style="width: 60%" colspan="3">指标选项</th>
+                                        <th>分值</th>
                                     </tr>
-                                    <tr class="info">
-                                        <th>接收部门：</th>
-                                        <th>${item.opRole}</th>
-                                    </tr>
-                                    <tr class="info">
-                                        <th>确认</th>
-                                        <th class="text-info">材料名称</th>
-                                    </tr>
-                                    <#list item.materialInfos as mitem>
+                                    <#list item.indicatorItems as sitem>
                                         <tr>
                                             <td class="text-center">
-                                                <input name="material" value="${item.indicator.id?c}_${mitem.id?c}"
-                                                       type="checkbox"/>
+                                                <input type="radio"
+                                                       value="${item.indicator.id?c}_${sitem.id?c}_${item.roleId?c}"
+                                                       name="score">
                                             </td>
-                                            <td>${mitem.name}</td>
+                                            <td style="width: 60%" colspan="3">${sitem.content}</td>
+                                            <td class="text-danger">${sitem.score}分</td>
                                         </tr>
                                     </#list>
-                                </table>
-                            </div>
-                        </#list>
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="radio"
+                                                   value="${item.indicator.id?c}_0"
+                                                   name="score">
+                                        </td>
+                                        <td style="width: 60%" colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
+                                        <td class="text-danger">0分</td>
+                                    </tr>
+                                <#else>
+                                    <tr class="info">
+                                        <th colspan="4">输入框</th>
+                                        <th>分值</th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-danger">
+                                            <input type="text" value=""
+                                                   d-indicator="${item.indicator.id?c}"
+                                                   d-roleId="${item.roleId?c}"
+                                                   name="score">
+                                            <#if item.indicator.id==7>
+                                                <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
+                                                </button>
+                                            </#if>
+                                        </td>
+                                        <td class="text-danger">手动输入</td>
+                                    </tr>
+                                </#if>
+                                <tr>
+                                    <td class="check_desc" colspan="5">
+                                        <div class="text-info">审核打分说明：</div>
+                                        <textarea class="form-control" rows="3" disabled>
+                                            ${item.indicator.note}
+                                        </textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-danger fontweight600" colspan="5">
+                                        <div class="alert alert-warning">请您按照指标体系要求打分</div>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
+                    </#list>
+
                     </div>
                 </div>
                 <div id="online-tab" class="main-cont clearfix tab-pane">
@@ -308,7 +360,7 @@
                         <div class="table-list-item">
                             <table class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
-                                    <th>预览</th>
+                                    <th>预览(点击放大)</th>
                                     <th class="text-info">材料名称</th>
                                 </tr>
                                 <#list materialInfos as item>
@@ -364,6 +416,29 @@
                                     var type = uri.substring(uri.lastIndexOf("."));
                                     var img = $("<a></a>").attr("href", uri).attr("download", name + type);
                                     img[0].click();
+                                });
+                                $("#social_btn").off("click");
+                                $("#social_btn").on("click", function () {
+                                    var personId = $(this).attr("data-person");
+                                    var that = this;
+                                    $.ajax({
+                                        type: "POST",
+                                        dataType: "json",
+                                        url: App.href + "/api/score/scoreRecord/rensheAutoScore",
+                                        data: {
+                                            "personId": personId
+                                        },
+                                        success: function (data) {
+                                            if (isNaN(data.score)) {
+                                                $(that).parent().find("input").val(data.score);
+                                            } else {
+                                                $(that).parent().find("input").val(0);
+                                            }
+                                        },
+                                        error: function (e) {
+                                            console.error("请求异常。");
+                                        }
+                                    });
                                 });
                             </script>
                         </div>

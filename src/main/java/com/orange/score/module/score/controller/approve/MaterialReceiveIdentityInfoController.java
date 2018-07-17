@@ -29,8 +29,8 @@ import java.util.*;
  * Created by chenJz1012 on 2018-04-16.
  */
 @RestController
-@RequestMapping("/api/score/materialReceive")
-public class MaterialReceiveController {
+@RequestMapping("/api/score/materialReceive/identityInfo")
+public class MaterialReceiveIdentityInfoController {
 
     @Autowired
     private IScoreRecordService iScoreRecordService;
@@ -85,24 +85,23 @@ public class MaterialReceiveController {
     public Result receiving(ScoreRecord scoreRecord,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Condition condition = new Condition(ScoreRecord.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
-        criteria.andEqualTo("status", 2);
-        criteria.andIn("opRoleId", roles);
+        Map argMap = new HashMap();
+        argMap.put("status", Collections.singletonList(2));
+        argMap.put("opRoleId", roles);
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
-            criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
+            argMap.put("personIdNum", scoreRecord.getPersonIdNum());
+        }
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonName())) {
+            argMap.put("personName", scoreRecord.getPersonName());
         }
         if (scoreRecord.getBatchId() != null) {
-            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+            argMap.put("batchId", scoreRecord.getBatchId());
         }
-        if (scoreRecord.getIndicatorId() != null) {
-            criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
-        }
-        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
+        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -111,46 +110,42 @@ public class MaterialReceiveController {
     public Result received(ScoreRecord scoreRecord,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Condition condition = new Condition(ScoreRecord.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria.andGreaterThanOrEqualTo("status", 3);
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
-        criteria.andIn("opRoleId", roles);
+        Map argMap = new HashMap();
+        argMap.put("status", Collections.singletonList(2));
+        argMap.put("opRoleId", roles);
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
-            criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
+            argMap.put("personIdNum", scoreRecord.getPersonIdNum());
+        }
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonName())) {
+            argMap.put("personName", scoreRecord.getPersonName());
         }
         if (scoreRecord.getBatchId() != null) {
-            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+            argMap.put("batchId", scoreRecord.getBatchId());
         }
-        if (scoreRecord.getIndicatorId() != null) {
-            criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
-        }
-        condition.orderBy("submitDate").desc();
-        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
+        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
     @GetMapping("/detailAll")
-    public Result detailAll(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId,
-            @RequestParam Integer opRoleId) throws FileNotFoundException {
+    public Result detailAll(@RequestParam Integer identityInfoId) throws FileNotFoundException {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
-        if (!roles.contains(opRoleId)) throw new AuthBusinessException("当前部门无权限接收该指标材料");
         Map params = new HashMap();
         List<Map> mlist = new ArrayList<>();
         List<ScoreRecord> indicatorIdList = iScoreRecordService
-                .selectIndicatorIdsByIdentityInfoIdAndRoleIds(identityInfoId, indicatorId,
-                        Collections.singletonList(opRoleId));
+                .selectIndicatorIdsByIdentityInfoIdAndRoleIds(identityInfoId, roles);
         for (ScoreRecord item : indicatorIdList) {
             Map msMap = new HashMap();
             Indicator indicator = iIndicatorService.findById(item.getIndicatorId());
             msMap.put("indicator", indicator);
             List<MaterialInfo> materialInfos = iMaterialInfoService.findByIndicatorId(item.getIndicatorId());
+            if (materialInfos.size() == 0) continue;
             msMap.put("materialInfos", materialInfos);
             msMap.put("roleId", item.getOpRoleId());
             msMap.put("opRole", item.getOpRole());
@@ -279,14 +274,13 @@ public class MaterialReceiveController {
         criteria.andIn("roleId", roles);
         criteria.andEqualTo("personId", identityInfoId);
         criteria.andEqualTo("batchId", person.getBatchId());
-        criteria.andEqualTo("indicatorId", indicatorId);
         List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
         for (MaterialAcceptRecord item : materials) {
-            mCheckList.add(item.getIndicatorId() + "_" + item.getMaterialId());
+            mCheckList.add(item.getIndicatorId() + "_" + item.getMaterialId() + "_" + item.getRoleId());
         }
         result.put("mCheckList", mCheckList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
-        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_info.ftl", params);
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_info_identity.ftl", params);
         result.put("html", html);
         return ResponseUtil.success(result);
     }
@@ -305,25 +299,28 @@ public class MaterialReceiveController {
     }
 
     @PostMapping("/confirmReceived")
-    public Result update(@RequestParam("personId") Integer personId, String[] mIds, Integer opRoleId) {
+    public Result update(@RequestParam("personId") Integer personId, String[] mIds) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
-        if (!roles.contains(opRoleId)) throw new AuthBusinessException("无权限接收该材料");
         IdentityInfo person = iIdentityInfoService.findById(personId);
         if (person.getHallStatus() == 8) throw new AuthBusinessException("用户资格已取消");
-        Set<Integer> indicatorIdSet = new HashSet<>();
         for (String mId : mIds) {
             String[] mIdArr = mId.split("_");
-            MaterialInfo materialInfo = iMaterialInfoService.findById(Integer.valueOf(mIdArr[1]));
-            indicatorIdSet.add(Integer.valueOf(mIdArr[0]));
+            if (mIdArr.length != 3) {
+                continue;
+            }
+            Integer indicatorId = Integer.valueOf(mIdArr[0]);
+            Integer materialId = Integer.valueOf(mIdArr[1]);
+            Integer roleId = Integer.valueOf(mIdArr[2]);
+            MaterialInfo materialInfo = iMaterialInfoService.findById(materialId);
             MaterialAcceptRecord materialAcceptRecord = new MaterialAcceptRecord();
-            materialAcceptRecord.setIndicatorId(Integer.valueOf(mIdArr[0]));
+            materialAcceptRecord.setIndicatorId(indicatorId);
             materialAcceptRecord.setBatchId(person.getBatchId());
             materialAcceptRecord.setPersonId(personId);
-            materialAcceptRecord.setRoleId(opRoleId);
-            materialAcceptRecord.setMaterialId(Integer.valueOf(mIdArr[1]));
+            materialAcceptRecord.setMaterialId(materialId);
+            materialAcceptRecord.setRoleId(roleId);
             List<MaterialAcceptRecord> materialAcceptRecords = iMaterialAcceptRecordService
                     .findByT(materialAcceptRecord);
             if (materialAcceptRecords.size() > 0) {
@@ -333,18 +330,18 @@ public class MaterialReceiveController {
             materialAcceptRecord.setMaterialId(materialInfo.getId());
             materialAcceptRecord.setStatus(1);
             iMaterialAcceptRecordService.save(materialAcceptRecord);
-        }
-        Condition condition = new Condition(ScoreRecord.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria.andIn("indicatorId", indicatorIdSet);
-        criteria.andEqualTo("personId", personId);
-        criteria.andEqualTo("batchId", person.getBatchId());
-        criteria.andEqualTo("opRoleId", opRoleId);
-        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
-        for (ScoreRecord scoreRecord : scoreRecords) {
-            scoreRecord.setStatus(3);
-            scoreRecord.setSubmitDate(new Date());
-            iScoreRecordService.update(scoreRecord);
+            Condition condition = new Condition(ScoreRecord.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("indicatorId", indicatorId);
+            criteria.andEqualTo("personId", personId);
+            criteria.andEqualTo("batchId", person.getBatchId());
+            criteria.andEqualTo("opRoleId", roleId);
+            List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+            for (ScoreRecord scoreRecord : scoreRecords) {
+                scoreRecord.setStatus(3);
+                scoreRecord.setSubmitDate(new Date());
+                iScoreRecordService.update(scoreRecord);
+            }
         }
         return ResponseUtil.success();
     }

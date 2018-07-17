@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chenJz1012 on 2018-04-16.
@@ -259,6 +260,24 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
     @Override
     public ScoreRecord selectOne(ScoreRecord scoreRecord) {
         return scoreRecordMapper.selectOne(scoreRecord);
+    }
+
+    @Override
+    public PageInfo<ScoreRecord> selectIdentityInfoByPage(Map argMap, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ScoreRecord> list = scoreRecordMapper.selectIdentityInfo(argMap);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIds(Integer identityInfoId, List<Integer> roles) {
+        return scoreRecordMapper.selectIndicatorIdsByIdentityInfoIdAndRoleIds(identityInfoId, roles);
+    }
+
+    @Override
+    public List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIds(Integer identityInfoId, Integer indicatorId,
+            List<Integer> roles) {
+        return scoreRecordMapper.selectIndicatorIdsByIdentityInfoIdAndRoleIdsAndIndicatorId(identityInfoId, indicatorId, roles);
     }
 
     private BigDecimal findScoreRecordResultType0(Integer batchId, Integer personId, Integer indicatorId) {

@@ -1,30 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.orange.score.database.score.dao.ScoreRecordMapper">
-  <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.ScoreRecord">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="accept_number" jdbcType="VARCHAR" property="acceptNumber" />
-    <result column="indicator_id" jdbcType="INTEGER" property="indicatorId" />
-    <result column="indicator_name" jdbcType="VARCHAR" property="indicatorName" />
-    <result column="person_id" jdbcType="INTEGER" property="personId" />
-    <result column="person_name" jdbcType="VARCHAR" property="personName" />
-    <result column="person_id_num" jdbcType="VARCHAR" property="personIdNum" />
-    <result column="company_id" jdbcType="INTEGER" property="companyId" />
-    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="score_value" jdbcType="DECIMAL" property="scoreValue" />
-    <result column="item_id" jdbcType="INTEGER" property="itemId" />
-    <result column="accept_date" jdbcType="DATE" property="acceptDate" />
-    <result column="submit_date" jdbcType="DATE" property="submitDate" />
-    <result column="score_date" jdbcType="DATE" property="scoreDate" />
-    <result column="op_user_id" jdbcType="INTEGER" property="opUserId" />
-    <result column="op_user" jdbcType="VARCHAR" property="opUser" />
-    <result column="op_role_id" jdbcType="INTEGER" property="opRoleId" />
-    <result column="op_role" jdbcType="VARCHAR" property="opRole" />
-    <result column="score_detail" jdbcType="VARCHAR" property="scoreDetail" />
-    <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.orange.score.database.score.model.ScoreRecord">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="accept_number" jdbcType="VARCHAR" property="acceptNumber"/>
+        <result column="indicator_id" jdbcType="INTEGER" property="indicatorId"/>
+        <result column="indicator_name" jdbcType="VARCHAR" property="indicatorName"/>
+        <result column="batch_id" jdbcType="INTEGER" property="batchId"/>
+        <result column="person_id" jdbcType="INTEGER" property="personId"/>
+        <result column="person_name" jdbcType="VARCHAR" property="personName"/>
+        <result column="person_id_num" jdbcType="VARCHAR" property="personIdNum"/>
+        <result column="company_id" jdbcType="INTEGER" property="companyId"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="score_value" jdbcType="DECIMAL" property="scoreValue"/>
+        <result column="item_id" jdbcType="INTEGER" property="itemId"/>
+        <result column="accept_date" jdbcType="DATE" property="acceptDate"/>
+        <result column="submit_date" jdbcType="DATE" property="submitDate"/>
+        <result column="score_date" jdbcType="DATE" property="scoreDate"/>
+        <result column="op_user_id" jdbcType="INTEGER" property="opUserId"/>
+        <result column="op_user" jdbcType="VARCHAR" property="opUser"/>
+        <result column="op_role_id" jdbcType="INTEGER" property="opRoleId"/>
+        <result column="op_role" jdbcType="VARCHAR" property="opRole"/>
+        <result column="score_detail" jdbcType="VARCHAR" property="scoreDetail"/>
+        <result column="c_time" jdbcType="TIMESTAMP" property="cTime"/>
+    </resultMap>
+    <select id="selectIdentityInfo" resultMap="BaseResultMap">
+        select person_id,
+        max(person_name) person_name,
+        max(person_id_num) person_id_num,
+        max(company_name) company_name
+        from t_pb_score_record
+        <where>
+            <if test="item.status!=null">
+                and status in
+                <foreach item="it" collection="item.status" open="(" separator="," close=")">
+                    #{it}
+                </foreach>
+            </if>
+            <if test="item.batchId!=null">
+                and batch_id=#{item.batchId}
+            </if>
+            <if test="item.opRoleId!=null">
+                and op_role_id in
+                <foreach item="it" collection="item.opRoleId" open="(" separator="," close=")">
+                    #{it}
+                </foreach>
+            </if>
+            <if test="item.personIdNum!=null">
+                and person_id_num like concat(concat('%',#{item.personIdNum}),'%')
+            </if>
+            <if test="item.personName!=null">
+                and person_name like concat(concat('%',#{item.personName}),'%')
+            </if>
+        </where>
+        group by person_id
+    </select>
+    <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIds" resultMap="BaseResultMap">
+        select indicator_id,op_role_id,max(op_role) op_role from t_pb_score_record
+        where person_id=#{identityInfoId} and op_role_id in
+        <foreach item="item" collection="roles" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by indicator_id,op_role_id
+        order by indicator_id
+    </select>
+    <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIdsAndIndicatorId"
+            resultMap="BaseResultMap">
+        select indicator_id,op_role_id,max(op_role) op_role from t_pb_score_record
+        where
+        person_id=#{identityInfoId}
+        and indicator_id=#{indicatorId}
+        and op_role_id in
+        <foreach item="item" collection="roles" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by indicator_id,op_role_id
+        order by indicator_id
+    </select>
 </mapper>

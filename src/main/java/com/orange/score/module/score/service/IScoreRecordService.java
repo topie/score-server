@@ -7,6 +7,7 @@ import tk.mybatis.mapper.entity.Condition;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chenJz1012 on 2018-04-16.
@@ -28,4 +29,11 @@ public interface IScoreRecordService extends IService<ScoreRecord> {
     void updateToScore(Integer batchId, Integer personId, Integer indicatorId,Integer roleId, Integer itemId, BigDecimal scoreValue);
 
     ScoreRecord selectOne(ScoreRecord scoreRecord);
+
+    PageInfo<ScoreRecord> selectIdentityInfoByPage(Map argMap, int pageNum, int pageSize);
+
+    List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIds(Integer identityInfoId, List<Integer> roles);
+
+    List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIds(Integer identityInfoId,Integer indicatorId, List<Integer> roles);
+
 }

@@ -280,6 +280,10 @@
                                     <th>指标名称：</th>
                                     <th colspan="4">${item.indicator.name}</th>
                                 </tr>
+                                <tr class="info">
+                                    <th>打分部门：</th>
+                                    <th colspan="4">${item.opRole}</th>
+                                </tr>
                             </table>
                             <table class="table table-hover table-bordered table-condensed">
                                 <#if item.indicator.itemType==0>
