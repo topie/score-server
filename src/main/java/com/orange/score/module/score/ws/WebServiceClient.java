@@ -30,16 +30,15 @@ public class WebServiceClient {
         dispatch = WSClientSDK
                 .bind(dispatch, "3b12cb12fdf54a9296988ef3479fdf44", "j0R2XYM2mJjJ+dNNyc3rWdsVpAQ=", "juZhuZhengJiFen",
                         "1.0.0");
-        System.out.println("Send out the request: " + req);
         SOAPMessage reply = dispatch.invoke(request);
         if (reply != null) {
             SOAP3Response response = new SOAP3Response();
+            System.out.println("Response:" + DumpSoapUtil.dumpSoapMessage("response", reply));
             response.analysis(DumpSoapUtil.dumpSoapMessage("response", reply));
             return response;
         }
         return null;
     }
-
 
     public static String actionString(String req) throws SOAPException, IOException, DocumentException {
         String ns = "http://service.webinterface.yzym.si.sl.neusoft.com/";
@@ -57,10 +56,10 @@ public class WebServiceClient {
         System.out.println("Send out the request: " + req);
         SOAPMessage reply = dispatch.invoke(request);
         if (reply != null) {
+            System.out.println("Response:" + DumpSoapUtil.dumpSoapMessage("response", reply));
             return DumpSoapUtil.dumpSoapMessage("response", reply);
         }
         return "";
     }
-
 
 }
