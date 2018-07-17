@@ -179,7 +179,10 @@ public class ScoreRecordIdentityInfoController {
         for (ScoreRecord scoreRecord : indicatorIdList) {
             Map msMap = new HashMap();
             Indicator indicator = iIndicatorService.findById(scoreRecord.getIndicatorId());
-            if(indicator==null) continue;
+            if (indicator == null) {
+                System.out.println(scoreRecord.getIndicatorId());
+                continue;
+            }
             msMap.put("indicator", indicator);
             Condition condition = new Condition(IndicatorItem.class);
             tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
