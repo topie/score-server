@@ -12,6 +12,7 @@
         <result column="add_user" jdbcType="VARCHAR" property="addUser"/>
         <result column="title_id" jdbcType="INTEGER" property="titleId"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="template_img" jdbcType="VARCHAR" property="templateImg"/>
     </resultMap>
     <select id="selectMaterialTreeNodes" resultType="com.orange.score.common.utils.TreeNode">
       select id,name,0 pId from t_material_info

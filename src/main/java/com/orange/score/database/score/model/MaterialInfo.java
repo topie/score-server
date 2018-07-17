@@ -41,6 +41,9 @@ public class MaterialInfo {
     @Column(name = "title_id")
     private Integer titleId;
 
+    @Column(name = "template_img")
+    private String templateImg;
+
     /**
      * 材料标题
      */
@@ -48,6 +51,14 @@ public class MaterialInfo {
 
     @Transient
     private OnlinePersonMaterial onlinePersonMaterial;
+
+    public String getTemplateImg() {
+        return templateImg;
+    }
+
+    public void setTemplateImg(String templateImg) {
+        this.templateImg = templateImg;
+    }
 
     public OnlinePersonMaterial getOnlinePersonMaterial() {
         return onlinePersonMaterial;
