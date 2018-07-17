@@ -58,6 +58,7 @@
             </if>
         </where>
         group by person_id
+        order by person_id desc
     </select>
     <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIds" resultMap="BaseResultMap">
         select indicator_id,op_role_id,max(op_role) op_role from t_pb_score_record
