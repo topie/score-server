@@ -81,6 +81,8 @@ public class ApplyCancelController {
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        if (user.getUserType() == 0 || user.getUserType() == 1)
+            criteria.andEqualTo("applyUserType", user.getUserType());
         criteria.andIn("applyRoleId", roles);
         criteria.andEqualTo("approveStatus", 0);
         if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
@@ -103,6 +105,8 @@ public class ApplyCancelController {
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
         criteria.andIn("applyRoleId", roles);
         criteria.andEqualTo("approveStatus", 1);
+        if (user.getUserType() == 0 || user.getUserType() == 1)
+            criteria.andEqualTo("applyUserType", user.getUserType());
         if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
         }
@@ -123,6 +127,8 @@ public class ApplyCancelController {
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
         criteria.andIn("applyRoleId", roles);
         criteria.andEqualTo("approveStatus", 2);
+        if (user.getUserType() == 0 || user.getUserType() == 1)
+            criteria.andEqualTo("applyUserType", user.getUserType());
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

@@ -83,7 +83,8 @@ public class ApplyScoreController {
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
         criteria.andIn("applyRoleId", roles);
-        if (user.getUserType() != null) criteria.andEqualTo("applyUserType", user.getUserType());
+        if (user.getUserType() == 0 || user.getUserType() == 1)
+            criteria.andEqualTo("applyUserType", user.getUserType());
         criteria.andEqualTo("approveStatus", 0);
         if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
@@ -104,7 +105,8 @@ public class ApplyScoreController {
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
         criteria.andIn("applyRoleId", roles);
-        if (user.getUserType() != null) criteria.andEqualTo("applyUserType", user.getUserType());
+        if (user.getUserType() == 0 || user.getUserType() == 1)
+            criteria.andEqualTo("applyUserType", user.getUserType());
         criteria.andEqualTo("approveStatus", 1);
         if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
@@ -125,7 +127,8 @@ public class ApplyScoreController {
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(user.getId());
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
         criteria.andIn("applyRoleId", roles);
-        if (user.getUserType() != null) criteria.andEqualTo("applyUserType", user.getUserType());
+        if (user.getUserType() == 0 || user.getUserType() == 1)
+            criteria.andEqualTo("applyUserType", user.getUserType());
         criteria.andEqualTo("approveStatus", 2);
         if (StringUtils.isNotEmpty(applyScore.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
