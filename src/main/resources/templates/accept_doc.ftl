@@ -18,7 +18,7 @@
             style="font-size:16.0pt;color:#000000;white-space:pre-wrap;">申请所提交的下列申请材料，本机关已收到：</span></p>
     <#list mList as item>
         <p style="margin-left:32.0pt;text-align:left;white-space:pre-wrap;"><span
-                style="font-size:16.0pt;color:#000000;white-space:pre-wrap;">${item.materialInfoName}</span></p>
+                style="font-size:16.0pt;color:#000000;white-space:pre-wrap;">${item.materialName}</span></p>
     </#list>
 
 
@@ -61,9 +61,9 @@
             style="font-size:16.0pt;color:#000000;white-space:pre-wrap;"> </span><span
             style="font-size:16.0pt;color:#000000;white-space:pre-wrap;">人：</span><span
             style="font-size:16.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">  </span><span
-            style="font-size:16.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${user.displayName}</span><span
+            style="font-size:16.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${company.operator}</span><span
             style="font-size:16.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">     </span><span
             style="font-size:16.0pt;color:#000000;white-space:pre-wrap;">        </span><span
             style="font-size:16.0pt;color:#000000;white-space:pre-wrap;">联系电话：</span><span
-            style="font-size:16.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${user.contactPhone}</span>
+            style="font-size:16.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${company.companyMobile}</span>
     </p></div>

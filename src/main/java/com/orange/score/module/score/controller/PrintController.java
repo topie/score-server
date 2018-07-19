@@ -1,7 +1,9 @@
 package com.orange.score.module.score.controller;
 
+import com.google.common.base.Joiner;
 import com.orange.score.common.core.BaseController;
 import com.orange.score.common.core.Result;
+import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.date.DateUtil;
@@ -144,6 +146,82 @@ public class PrintController extends BaseController {
         }
         params.put("mList", onlinePersonMaterials);
 
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "accept_doc.ftl", params);
+        Map result = new HashMap<>();
+        result.put("html", html);
+        return ResponseUtil.success(result);
+    }
+
+    @GetMapping(value = "/acceptMaterialDoc")
+    @ResponseBody
+    public Result acceptMaterialDoc(@RequestParam("personId") Integer personId) throws FileNotFoundException {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getCompanyId());
+        Map params = new HashMap();
+        params.put("person", identityInfo);
+        params.put("companyInfo", companyInfo);
+        Date reDate = identityInfo.getReservationDate();
+        if (reDate == null) {
+            params.put("year", "-");
+            params.put("month", "-");
+            params.put("day", "-");
+        } else {
+            String year = String.valueOf(DateUtil.getYear(reDate));
+            params.put("year", year);
+            int month = DateUtil.getMonth(identityInfo.getReservationDate()) + 1;
+            String monthStr = String.valueOf(month);
+            if (month < 10) {
+                monthStr = "0" + monthStr;
+            }
+            params.put("month", monthStr);
+            int day = DateUtil.getDay(identityInfo.getReservationDate());
+            String dayStr = String.valueOf(day);
+            if (day < 10) {
+                dayStr = "0" + dayStr;
+            }
+            params.put("day", dayStr);
+        }
+        Date now = new Date();
+        String nowYear = String.valueOf(DateUtil.getYear(now));
+        params.put("nowYear", nowYear);
+        int newMonth = DateUtil.getMonth(now) + 1;
+        String nowMonthStr = String.valueOf(newMonth);
+        if (newMonth < 10) {
+            nowMonthStr = "0" + nowMonthStr;
+        }
+        params.put("nowMonth", nowMonthStr);
+        int nowDay = DateUtil.getDay(now);
+        String nowDayStr = String.valueOf(nowDay);
+        if (nowDay < 10) {
+            nowDayStr = "0" + nowDayStr;
+        }
+        params.put("nowDay", nowDayStr);
+        String nowStr = DateUtil.getDate(now);
+        params.put("now", nowStr);
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        params.put("user", user);
+        List<String> departmentNames = new ArrayList<>();
+        for (Integer roleId : roles) {
+            Role role = roleService.findRoleById(roleId);
+            departmentNames.add(role.getRoleName());
+        }
+        params.put("department", Joiner.on("、").join(departmentNames));
+        List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
+        Map mMap = new HashMap();
+        for (MaterialInfo materialInfo : materialInfos) {
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
+        }
+        Condition condition = new Condition(MaterialAcceptRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andIn("roleId", roles);
+        criteria.andEqualTo("personId", personId);
+        criteria.andEqualTo("batchId", identityInfo.getBatchId());
+        List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
+        params.put("mList", materials);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "accept_doc.ftl", params);
         Map result = new HashMap<>();

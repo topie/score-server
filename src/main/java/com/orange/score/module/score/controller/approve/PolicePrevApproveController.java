@@ -10,15 +10,13 @@ import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.SmsUtil;
 import com.orange.score.common.utils.date.DateUtil;
+import com.orange.score.database.score.model.BatchConf;
 import com.orange.score.database.score.model.HouseOther;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.OnlinePersonMaterial;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
-import com.orange.score.module.score.service.IHouseOtherService;
-import com.orange.score.module.score.service.IIdentityInfoService;
-import com.orange.score.module.score.service.IOnlinePersonMaterialService;
-import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
+import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -57,6 +55,9 @@ public class PolicePrevApproveController {
     @Autowired
     private IHouseOtherService iHouseOtherService;
 
+    @Autowired
+    private IBatchConfService iBatchConfService;
+
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
@@ -81,6 +82,14 @@ public class PolicePrevApproveController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (identityInfo.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                identityInfo.setBatchId(list.get(0).getId());
+            }
+        }
         if (securityUser.getUserType() == 0) {
             identityInfo.setAcceptAddressId(1);
         } else if (securityUser.getUserType() == 1) {
@@ -98,6 +107,14 @@ public class PolicePrevApproveController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (identityInfo.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                identityInfo.setBatchId(list.get(0).getId());
+            }
+        }
         if (securityUser.getUserType() == 0) {
             identityInfo.setAcceptAddressId(1);
         } else if (securityUser.getUserType() == 1) {
@@ -115,6 +132,14 @@ public class PolicePrevApproveController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (identityInfo.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                identityInfo.setBatchId(list.get(0).getId());
+            }
+        }
         if (securityUser.getUserType() == 0) {
             identityInfo.setAcceptAddressId(1);
         } else if (securityUser.getUserType() == 1) {
@@ -132,6 +157,14 @@ public class PolicePrevApproveController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (identityInfo.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                identityInfo.setBatchId(list.get(0).getId());
+            }
+        }
         if (securityUser.getUserType() == 0) {
             identityInfo.setAcceptAddressId(1);
         } else if (securityUser.getUserType() == 1) {

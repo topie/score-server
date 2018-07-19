@@ -11,7 +11,7 @@ public class Indicator {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_indicator_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_indicator_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -56,11 +56,25 @@ public class Indicator {
     @Column(name = "add_user")
     private String addUser;
 
+    /**
+     * 是否自动打分
+     */
+    @Column(name = "auto_score")
+    private Integer autoScore;
+
     @Transient
     private List<Integer> material;
 
     @Transient
     private List<Integer> department;
+
+    public Integer getAutoScore() {
+        return autoScore;
+    }
+
+    public void setAutoScore(Integer autoScore) {
+        this.autoScore = autoScore;
+    }
 
     public Integer getScoreRule() {
         return scoreRule;

@@ -90,15 +90,6 @@
                                             <td class="text-danger">${sitem.score}分</td>
                                         </tr>
                                     </#list>
-                                    <tr>
-                                        <td class="text-center">
-                                            <input type="radio"
-                                                   value="${item.opRoleId?c}_${item.indicator.id?c}_0"
-                                                   name="score">
-                                        </td>
-                                        <td style="width: 60%" colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
-                                        <td class="text-danger">0分</td>
-                                    </tr>
                                 <#else>
                                     <tr class="info">
                                         <th colspan="4">输入框</th>
