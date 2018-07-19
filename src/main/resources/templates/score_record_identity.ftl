@@ -297,7 +297,7 @@
                                             <td class="text-center">
                                                 <input type="radio"
                                                        value="${item.indicator.id?c}_${sitem.id?c}_${item.roleId?c}"
-                                                       name="score">
+                                                       name="score_${item.indicator.id?c}_${item.roleId?c}">
                                             </td>
                                             <td style="width: 60%" colspan="3">${sitem.content}</td>
                                             <td class="text-danger">${sitem.score}分</td>
@@ -307,7 +307,7 @@
                                         <td class="text-center">
                                             <input type="radio"
                                                    value="${item.indicator.id?c}_0"
-                                                   name="score">
+                                                   name="score_${item.indicator.id?c}_${item.roleId?c}">
                                         </td>
                                         <td style="width: 60%" colspan="3" class="text-danger">不属于上述情况，此指标不得分</td>
                                         <td class="text-danger">0分</td>
@@ -322,7 +322,7 @@
                                             <input type="text" value=""
                                                    d-indicator="${item.indicator.id?c}"
                                                    d-roleId="${item.roleId?c}"
-                                                   name="score">
+                                                   name="score_${item.indicator.id?c}_${item.roleId?c}">
                                             <#if item.indicator.id==7>
                                                 <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
                                                 </button>
