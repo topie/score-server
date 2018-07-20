@@ -83,6 +83,7 @@ public class CmsModuleServiceImpl extends BaseService<CmsModule> implements ICms
                 SearchUtil.convert(criteria, searchItems);
             }
         }
+        condition.orderBy("id").desc();
         if (tmp != null) SqlUtil.setLocalPage(tmp);
         return cmsModuleMapper.selectByCondition(condition);
     }
