@@ -465,11 +465,14 @@ public class IdentityInfoController {
                 + "<canAdd>1</canAdd>" + "<busType>3</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
                 + "</ser:RsResidentJFRDBusinessRev></soapenv:Body></soapenv:Envelope>";
         String result = WebServiceClient.actionString(req);
-        result = result.substring((result.indexOf("<![CDATA[") + "<![CDATA[".length()), result.indexOf("]]>"))
-                .replaceAll("<ROOT>", "<br>").replaceAll("</ROOT>", "");
         Map r = new HashMap();
-        r.put("list", result);
-
+        if (result.contains("没有查到人员信息")) {
+            r.put("list", "没有查到人员信息");
+        } else {
+            result = result.substring((result.indexOf("<![CDATA[") + "<![CDATA[".length()), result.indexOf("]]>"))
+                    .replaceAll("<ROOT>", "<br>").replaceAll("</ROOT>", "");
+            r.put("list", result);
+        }
         req = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" \n"
                 + "xmlns:ser=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">\n" + "   <soapenv:Header/>\n"
                 + "   <soapenv:Body>\n" + "      <ser:RsResidentJFRDBusinessRev>\n" + "         <!--ticket:-->\n"
