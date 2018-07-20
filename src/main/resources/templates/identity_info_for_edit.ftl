@@ -21,9 +21,6 @@
                 <li class="">
                     <a data-toggle="tab" href="#online-tab" aria-expanded="false">材料上传</a>
                 </li>
-                <li class="">
-                    <a data-toggle="tab" href="#material-tab" aria-expanded="false">材料提交</a>
-                </li>
             </ul>
         </div>
     </div>
@@ -285,7 +282,7 @@
                                     <th>预览</th>
                                     <th class="text-info">材料名称</th>
                                 </tr>
-                                <#list materialInfos as item>
+                                <#list allMaterialInfos as item>
                                     <#if item.onlinePersonMaterial??>
                                         <#if item.onlinePersonMaterial.materialUri=="">
                                         <tr>
@@ -359,31 +356,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="material-tab" class="main-cont clearfix tab-pane">
-                    <div class="panel panel-default">
-                        <!-- Default panel contents -->
-                        <div class="panel-heading">
-                            申请人提交材料确认（<span class="text-danger">请勾选确认申请人送达的材料</span>）
-                        </div>
-                        <div class="table-list-item">
-                            <table class="table table-hover table-bordered table-condensed">
-                                <tr class="info">
-                                    <th>确认</th>
-                                    <th class="text-info">材料名称</th>
-                                </tr>
-                                <#list materialInfos as item>
-                                    <tr>
-                                        <td class="text-center">
-                                            <input name="material" value="${item.id?c}"
-                                                   type="checkbox"/>
-                                        </td>
-                                        <td>${item.name}</td>
-                                    </tr>
-                                </#list>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>

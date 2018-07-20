@@ -213,6 +213,7 @@ public class IdentityInfoController {
             }
         }
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
+
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
         Map mMap = new HashMap();
         for (MaterialInfo materialInfo : materialInfos) {
@@ -228,13 +229,23 @@ public class IdentityInfoController {
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
-                onlinePersonMaterial
-                        .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
                 roleUploadMaterialList.add(onlinePersonMaterial);
             }
         }
         params.put("onlinePersonMaterials", roleUploadMaterialList);
+        params.put("uploadMaterialList", uploadMaterialList);
+
+        for (MaterialInfo materialInfo : materialInfos) {
+            for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+                if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
+                    materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
+                }
+            }
+        }
+        params.put("allMaterialInfos", materialInfos);
+
         for (MaterialInfo materialInfo : roleMaterialInfoList) {
             for (OnlinePersonMaterial onlinePersonMaterial : roleUploadMaterialList) {
                 if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
