@@ -123,6 +123,7 @@ public class HouseOther {
     private Date cTime;
 
     public String getCultureDegreeStr() {
+        if (cultureDegree == null) return "-";
         switch (cultureDegree) {
             case 11:
                 return "无";
@@ -137,6 +138,7 @@ public class HouseOther {
     }
 
     public String getAwardsTitleStr() {
+        if (awardsTitle == null) return "-";
         switch (awardsTitle) {
             case 1:
                 return "拥有有效的中国发明专利";
@@ -171,6 +173,7 @@ public class HouseOther {
     }
 
     public String getDegreeStr() {
+        if (degree == null) return "-";
         switch (degree) {
             case 0:
                 return "无";
@@ -186,11 +189,13 @@ public class HouseOther {
                 return "学士";
             case 6:
                 return "双学士";
+            default:
+                return "-";
         }
-        return "-";
     }
 
     public String getPoliticalStatusStr() {
+        if (politicalStatus == null) return "-";
         switch (politicalStatus) {
             case 1:
                 return "中共党员";
@@ -223,6 +228,7 @@ public class HouseOther {
     }
 
     public String getSoldierMeritoriousStr() {
+        if (soldierMeritorious == null) return "-";
         switch (soldierMeritorious) {
             case 1:
                 return "一等功";
@@ -237,6 +243,7 @@ public class HouseOther {
     }
 
     public String getApplicantTypeStr() {
+        if (applicantType == null) return "-";
         switch (applicantType) {
             case 1:
                 return "企业员工";
