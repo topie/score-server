@@ -466,8 +466,8 @@ public class IdentityInfoController {
                 + "</ser:RsResidentJFRDBusinessRev></soapenv:Body></soapenv:Envelope>";
         String result = WebServiceClient.actionString(req);
         Map r = new HashMap();
-        if (result.contains("没有查到人员信息")) {
-            r.put("list", "没有查到人员信息");
+        if (result.contains("没有查询到人员信息")) {
+            r.put("list", "没有查询到人员信息");
         } else {
             result = result.substring((result.indexOf("<![CDATA[") + "<![CDATA[".length()), result.indexOf("]]>"))
                     .replaceAll("<ROOT>", "<br>").replaceAll("</ROOT>", "");
