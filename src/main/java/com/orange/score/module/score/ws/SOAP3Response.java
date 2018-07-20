@@ -82,6 +82,8 @@ public class SOAP3Response extends VisitorSupport {
                         this.setScore(element.getText());
                     }else if ("PARTNERSCORE".equals(element.getName().toUpperCase())) {
                         this.setPartnerScore(element.getText());
+                    }else if ("ERRMSG".equals(element.getName().toUpperCase())) {
+                        this.setErrMsg(element.getText());
                     }
                 }
             } catch (DocumentException e) {
