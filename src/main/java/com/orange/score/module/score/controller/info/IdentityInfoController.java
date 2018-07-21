@@ -194,15 +194,7 @@ public class IdentityInfoController {
             person = new IdentityInfo();
         }
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
-        List<Integer> indicatorIds = new ArrayList<>();
-        if (roles.contains(1) || roles.contains(3)) {
-            List<Indicator> indicators = iIndicatorService.findAll();
-            for (Indicator item : indicators) {
-                indicatorIds.add(item.getId());
-            }
-        } else {
-            indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
-        }
+        List<Integer> indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
         Set<Integer> roleMidSet = new HashSet<>();
         for (Integer indicatorId : indicatorIds) {
             List<Integer> iIds = iIndicatorService.selectBindMaterialIds(indicatorId);
@@ -221,6 +213,11 @@ public class IdentityInfoController {
             if (roleMidSet.contains(materialInfo.getId())) {
                 roleMaterialInfoList.add(materialInfo);
             }
+            //公安单独处理随迁信息
+            if (roles.contains(4) && (materialInfo.getId() == 1013
+                    || materialInfo.getId() == 1014)) {
+                roleMaterialInfoList.add(materialInfo);
+            }
         }
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
@@ -231,6 +228,11 @@ public class IdentityInfoController {
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                roleUploadMaterialList.add(onlinePersonMaterial);
+            }
+            //公安单独处理随迁信息
+            if (roles.contains(4) && (onlinePersonMaterial.getId() == 1013
+                    || onlinePersonMaterial.getId() == 1014)) {
                 roleUploadMaterialList.add(onlinePersonMaterial);
             }
         }
@@ -473,7 +475,7 @@ public class IdentityInfoController {
                 + "         <ser:arg5><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
                 + "<ROOT><QUERY_PRAMS><idNumber>" + identityInfo.getIdNumber() + "</idNumber>"
                 + "<partnerIdNnumber></partnerIdNnumber>" + "<lessThan35>" + lessThan35 + "</lessThan35>"
-                + "<canAdd>1</canAdd>" + "<busType>3</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
+                + "<canAdd>1</canAdd>" + "<busType>2</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
                 + "</ser:RsResidentJFRDBusinessRev></soapenv:Body></soapenv:Envelope>";
         String result = WebServiceClient.actionString(req);
         Map r = new HashMap();
@@ -495,7 +497,7 @@ public class IdentityInfoController {
                 + "         <ser:arg5><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
                 + "<ROOT><QUERY_PRAMS><idNumber>" + identityInfo.getIdNumber() + "</idNumber>"
                 + "<partnerIdNnumber></partnerIdNnumber>" + "<lessThan35>" + lessThan35 + "</lessThan35>"
-                + "<canAdd>1</canAdd>" + "<busType>3</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
+                + "<canAdd>1</canAdd>" + "<busType>1</busType>" + "</QUERY_PRAMS></ROOT>]]></ser:arg5>\n"
                 + "</ser:RsResidentJFRDBusinessRev></soapenv:Body></soapenv:Envelope>";
         SOAP3Response soapResponse = WebServiceClient.action(req);
         r.put("info", soapResponse);

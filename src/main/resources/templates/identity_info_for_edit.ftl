@@ -282,7 +282,7 @@
                                     <th>预览</th>
                                     <th class="text-info">材料名称</th>
                                 </tr>
-                                <#list allMaterialInfos as item>
+                                <#list materialInfos as item>
                                     <#if item.onlinePersonMaterial??>
                                         <#if item.onlinePersonMaterial.materialUri=="">
                                         <tr>
