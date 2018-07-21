@@ -63,6 +63,9 @@ public class IdentityInfo {
     @Column(name = "accept_address_id")
     private Integer acceptAddressId;
 
+    @Transient
+    private String orderByColumn;
+
     /**
      * 姓名
      */
@@ -146,6 +149,25 @@ public class IdentityInfo {
 
     @Transient
     private String epStatus;
+
+    @Transient
+    private String orderBy;
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public String getOrderByColumn() {
+        return orderByColumn;
+    }
+
+    public void setOrderByColumn(String orderByColumn) {
+        this.orderByColumn = orderByColumn;
+    }
 
     public String getEtStatus() {
         int min = 0;

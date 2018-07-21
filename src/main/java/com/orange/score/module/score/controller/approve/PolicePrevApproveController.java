@@ -96,6 +96,8 @@ public class PolicePrevApproveController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setUnionApproveStatus1(1);
+        identityInfo.setOrderByColumn("reservationDate");
+        identityInfo.setOrderBy("desc");
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

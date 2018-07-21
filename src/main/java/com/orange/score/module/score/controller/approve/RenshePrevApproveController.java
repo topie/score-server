@@ -103,6 +103,8 @@ public class RenshePrevApproveController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setUnionApproveStatus2(1);
+        identityInfo.setOrderByColumn("reservationDate");
+        identityInfo.setOrderBy("desc");
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

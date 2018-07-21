@@ -82,6 +82,17 @@ public class PrintController extends BaseController {
         return ResponseUtil.success(result);
     }
 
+    @GetMapping(value = "/approveEmptyDoc")
+    @ResponseBody
+    public Result approveEmptyDoc() throws FileNotFoundException {
+        Map params = new HashMap();
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "approve_empty_doc.ftl", params);
+        Map result = new HashMap<>();
+        result.put("html", html);
+        return ResponseUtil.success(result);
+    }
+
     @GetMapping(value = "/accept")
     @ResponseBody
     public Result accept(@RequestParam("personId") Integer personId) throws FileNotFoundException {

@@ -86,7 +86,6 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
                 columnJson = list.get(0);
                 JSONArray jsonArray = JSONArray.parseArray(columnJson.getSearchConf());
                 for (Object o : jsonArray) {
-                    o = (JSONObject) o;
                     SearchItem searchItem = new SearchItem();
                     searchItem.setLabel(((JSONObject) o).getString("label"));
                     searchItem.setName(((JSONObject) o).getString("name"));
@@ -106,9 +105,19 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
                 }
                 SearchUtil.convert(criteria, searchItems);
             }
+            if (StringUtils.isNotEmpty(identityInfo.getOrderByColumn())) {
+                if (StringUtils.isNotEmpty(identityInfo.getOrderBy()) && "desc".equals(identityInfo.getOrderBy())) {
+                    condition.orderBy(identityInfo.getOrderByColumn()).desc();
+                } else {
+                    condition.orderBy(identityInfo.getOrderByColumn()).asc();
+                }
+
+            } else {
+                condition.orderBy("id").desc();
+            }
         }
         if (tmp != null) SqlUtil.setLocalPage(tmp);
-        condition.orderBy("id").desc();
+
         return identityInfoMapper.selectByCondition(condition);
     }
 

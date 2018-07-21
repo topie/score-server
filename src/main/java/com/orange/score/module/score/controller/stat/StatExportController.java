@@ -89,7 +89,7 @@ public class StatExportController {
         if (StringUtils.isNotEmpty(idNumber)) {
             argMap.put("idNumber", idNumber);
         }
-        List<Map> allList = iIdentityInfoService.selectExportList1(argMap);
+        List<Map> allList = iIdentityInfoService.selectExportList2(argMap);
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,

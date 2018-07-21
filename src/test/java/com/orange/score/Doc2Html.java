@@ -2,10 +2,7 @@ package com.orange.score;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hwpf.HWPFDocument;
-import org.apache.poi.hwpf.converter.PicturesManager;
 import org.apache.poi.hwpf.converter.WordToHtmlConverter;
-import org.apache.poi.hwpf.usermodel.Picture;
-import org.apache.poi.hwpf.usermodel.PictureType;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,14 +11,16 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.*;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 public class Doc2Html {
 
     public static void main(String[] args) throws Exception {
         final String path = "/Users/chenguojun/Downloads/";
-        final String file = "材料清单.doc";
+        final String file = "approve.doc";
         InputStream input = new FileInputStream(path + file);
         HWPFDocument wordDocument = new HWPFDocument(input);
         WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(
@@ -39,6 +38,6 @@ public class Doc2Html {
         serializer.transform(domSource, streamResult);
         outStream.close();
         String content = new String(outStream.toByteArray());
-        FileUtils.write(new File(path, "材料清单.html"), content, "utf-8");
+        FileUtils.write(new File(path, "approve_3.html"), content, "utf-8");
     }
 }
