@@ -214,8 +214,7 @@ public class IdentityInfoController {
                 roleMaterialInfoList.add(materialInfo);
             }
             //公安单独处理随迁信息
-            if (roles.contains(4) && (materialInfo.getId() == 1013
-                    || materialInfo.getId() == 1014)) {
+            if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
                 roleMaterialInfoList.add(materialInfo);
             }
         }
@@ -231,8 +230,7 @@ public class IdentityInfoController {
                 roleUploadMaterialList.add(onlinePersonMaterial);
             }
             //公安单独处理随迁信息
-            if (roles.contains(4) && (onlinePersonMaterial.getId() == 1013
-                    || onlinePersonMaterial.getId() == 1014)) {
+            if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(onlinePersonMaterial.getId())) {
                 roleUploadMaterialList.add(onlinePersonMaterial);
             }
         }
