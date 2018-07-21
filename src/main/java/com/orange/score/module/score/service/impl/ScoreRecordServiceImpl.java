@@ -82,6 +82,9 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
         Condition condition = new Condition(ScoreRecord.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (scoreRecord != null) {
+            if(scoreRecord.getBatchId()!=null){
+                criteria.andEqualTo("batchId",scoreRecord.getBatchId());
+            }
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_pb_score_record");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);

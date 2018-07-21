@@ -79,6 +79,8 @@ public class MaterialReceiveController {
 
     @Autowired
     private IOfficeService iOfficeService;
+    @Autowired
+    private IBatchConfService iBatchConfService;
 
     @GetMapping(value = "/receiving")
     @ResponseBody
@@ -91,6 +93,14 @@ public class MaterialReceiveController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        if (scoreRecord.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                scoreRecord.setBatchId(list.get(0).getId());
+            }
+        }
         criteria.andEqualTo("status", 2);
         criteria.andIn("opRoleId", roles);
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
@@ -118,6 +128,14 @@ public class MaterialReceiveController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        if (scoreRecord.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                scoreRecord.setBatchId(list.get(0).getId());
+            }
+        }
         criteria.andIn("opRoleId", roles);
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());

@@ -90,6 +90,9 @@ public class ScoreRecordController {
     @Autowired
     private IOfficeService iOfficeService;
 
+    @Autowired
+    private IBatchConfService iBatchConfService;
+
     @GetMapping(value = "/scoring")
     @ResponseBody
     public Result scoring(ScoreRecord scoreRecord,
@@ -101,6 +104,14 @@ public class ScoreRecordController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        if (scoreRecord.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                scoreRecord.setBatchId(list.get(0).getId());
+            }
+        }
         criteria.andIn("opRoleId", roles);
         Integer[] integers = new Integer[] { 1, 3 };
         criteria.andIn("status", CollectionUtils.arrayToList(integers));
@@ -128,6 +139,14 @@ public class ScoreRecordController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        if (scoreRecord.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                scoreRecord.setBatchId(list.get(0).getId());
+            }
+        }
         criteria.andIn("opRoleId", roles);
         Integer[] integers = new Integer[] { 1, 3 };
         criteria.andIn("status", CollectionUtils.arrayToList(integers));
@@ -155,6 +174,14 @@ public class ScoreRecordController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        if (scoreRecord.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                scoreRecord.setBatchId(list.get(0).getId());
+            }
+        }
         criteria.andIn("opRoleId", roles);
         criteria.andEqualTo("status", 4);
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
@@ -188,7 +215,7 @@ public class ScoreRecordController {
         for (ScoreRecord scoreRecord : indicatorIdList) {
             Map msMap = new HashMap();
             Indicator indicator = iIndicatorService.findById(scoreRecord.getIndicatorId());
-            if(indicator==null) {
+            if (indicator == null) {
                 System.out.println(scoreRecord.getIndicatorId());
                 continue;
             }
