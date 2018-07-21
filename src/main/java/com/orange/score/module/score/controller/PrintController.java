@@ -220,6 +220,9 @@ public class PrintController extends BaseController {
             Role role = roleService.findRoleById(roleId);
             departmentNames.add(role.getRoleName());
         }
+        if(roles.contains(3)){
+            params.put("renshe", true);
+        }
         params.put("department", Joiner.on("、").join(departmentNames));
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
         Map mMap = new HashMap();
