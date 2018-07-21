@@ -416,4 +416,30 @@ public class PrintController extends BaseController {
         return ResponseUtil.success(result);
     }
 
+    @GetMapping(value = "/uploadMaterialDoc")
+    @ResponseBody
+    public Result uploadMaterialDoc(@RequestParam("personId") Integer personId) throws FileNotFoundException {
+        Map params = new HashMap();
+        IdentityInfo person = iIdentityInfoService.findById(personId);
+        Condition condition = new Condition(OnlinePersonMaterial.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", person.getId());
+        criteria.andEqualTo("batchId", person.getBatchId());
+        List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
+        Map mMap = new HashMap();
+        for (MaterialInfo materialInfo : materialInfos) {
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
+        }
+        List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
+        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+        }
+        params.put("uploadMaterialList", uploadMaterialList);
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "upload_material_doc.ftl", params);
+        Map result = new HashMap<>();
+        result.put("html", html);
+        return ResponseUtil.success(result);
+    }
+
 }
