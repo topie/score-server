@@ -260,10 +260,26 @@
                                             </tr>
                                         <#list relation as ritem>
                                             <tr>
-                                                <td>${ritem.relationship}</td>
-                                                <td>${ritem.name}</td>
-                                                <td>${ritem.idNumber}</td>
-                                                <td>${ritem.cultureDegree}</td>
+                                                <td>
+                                                    <input data-id="${ritem.id?c}" data-name="relation.relationship"
+                                                           class="edit input-large" style="height: 25px;"
+                                                           value="${ritem.relationship}">
+                                                </td>
+                                                <td>
+                                                    <input data-id="${ritem.id?c}" data-name="relation.name"
+                                                           class="edit input-large" style="height: 25px;"
+                                                           value="${ritem.name}">
+                                                </td>
+                                                <td>
+                                                    <input data-id="${ritem.id?c}" data-name="relation.idNumber"
+                                                           class="edit input-large" style="height: 25px;"
+                                                           value="${ritem.idNumber}">
+                                                </td>
+                                                <td>
+                                                    <input data-id="${ritem.id?c}" data-name="relation.cultureDegree"
+                                                           class="edit input-large" style="height: 25px;"
+                                                           value="${ritem.cultureDegree}">
+                                                </td>
                                                 <td>
                                                     <select data-name="relation.isRemove" data-id="${ritem.id?c}"
                                                             class="edit"">
