@@ -183,15 +183,7 @@ public class MaterialReceiveIdentityInfoController {
         }
         params.put("allMaterialInfos", allMaterialInfos);
 
-        List<Integer> indicatorIds = new ArrayList<>();
-        if (roles.contains(1) || roles.contains(3)) {
-            List<Indicator> indicators = iIndicatorService.findAll();
-            for (Indicator item : indicators) {
-                indicatorIds.add(item.getId());
-            }
-        } else {
-            indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
-        }
+        List<Integer> indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
         Set<Integer> roleMidSet = new HashSet<>();
         for (Integer itemId : indicatorIds) {
             List<Integer> iIds = iIndicatorService.selectBindMaterialIds(itemId);
@@ -204,8 +196,10 @@ public class MaterialReceiveIdentityInfoController {
         List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
         for (MaterialInfo materialInfo : materialInfoList) {
-            if (roleMidSet.contains(materialInfo.getId())) {
-                roleMaterialInfoList.add(materialInfo);
+            if (materialInfo.getIsUpload() == 1) {
+                if (roleMidSet.contains(materialInfo.getId())) {
+                    roleMaterialInfoList.add(materialInfo);
+                }
             }
         }
         Condition condition = new Condition(OnlinePersonMaterial.class);
