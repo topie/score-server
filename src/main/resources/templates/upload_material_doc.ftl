@@ -63,7 +63,7 @@
     </p>
     <#list uploadMaterialList as item>
         <p class="p4">
-            <span class="s3"> ${item_index+1}、${item.materialInfoName}</span>
+            <span class="s3"> ${item_index+1}、${item.name}</span>
         </p>
     </#list>
     <p class="p5">

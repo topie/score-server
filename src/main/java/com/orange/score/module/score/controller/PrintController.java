@@ -529,12 +529,10 @@ public class PrintController extends BaseController {
             }
         }
         IdentityInfo person = iIdentityInfoService.findById(personId);
-        Condition condition = new Condition(OnlinePersonMaterial.class);
+        Condition condition = new Condition(MaterialInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria.andEqualTo("personId", person.getId());
-        criteria.andEqualTo("batchId", person.getBatchId());
         criteria.andEqualTo("isUpload", 1);
-        List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
+        List<MaterialInfo> materialInfos = iMaterialInfoService.findByCondition(condition);
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
         Map mMap = new HashMap();
         for (MaterialInfo materialInfo : materialInfos) {
@@ -543,6 +541,10 @@ public class PrintController extends BaseController {
                 roleMaterialInfoList.add(materialInfo);
             }
         }
+        condition = new Condition(OnlinePersonMaterial.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", person.getId());
+        criteria.andEqualTo("batchId", person.getBatchId());
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
