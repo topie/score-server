@@ -201,15 +201,21 @@ public class ScoreRecordIdentityInfoController {
 
     /*审核打分*/
     @GetMapping("/detailAll")
-    public Result detailAll(@RequestParam Integer identityInfoId) throws FileNotFoundException {
+    public Result detailAll(@RequestParam Integer identityInfoId,
+            @RequestParam(value = "view", required = false, defaultValue = "0") Integer view)
+            throws FileNotFoundException {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         Map params = new HashMap();
+        params.put("view", view);
         List<Map> scoreList = new ArrayList<>();
         List<ScoreRecord> indicatorIdList = iScoreRecordService
                 .selectIndicatorIdsByIdentityInfoIdAndRoleIds(identityInfoId, roles);
         for (ScoreRecord scoreRecord : indicatorIdList) {
+            if (view != 1 && scoreRecord.getStatus() != null && scoreRecord.getStatus() == 4) {
+                continue;
+            }
             Map msMap = new HashMap();
             Indicator indicator = iIndicatorService.findById(scoreRecord.getIndicatorId());
             if (indicator == null) {
@@ -220,6 +226,7 @@ public class ScoreRecordIdentityInfoController {
             Condition condition = new Condition(IndicatorItem.class);
             tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
+            condition.orderBy("score").desc();
             List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition);
             msMap.put("indicatorItems", indicatorItems);
             msMap.put("roleId", scoreRecord.getOpRoleId());

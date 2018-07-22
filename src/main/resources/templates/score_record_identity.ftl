@@ -309,16 +309,32 @@
                                         <th>分值</th>
                                     </tr>
                                     <tr>
+                                        <#if item.indicator.id==7 && view!=1>
+                                        <td colspan="2" class="text-danger">
+                                            <input type="text" readonly="readonly" value=""
+                                                   d-indicator="${item.indicator.id?c}"
+                                                   d-roleId="${item.roleId?c}"
+                                                   d-name="manScore"
+                                                   name="score_${item.indicator.id?c}_${item.roleId?c}">
+
+                                            <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
+                                            </button>
+                                        </td>
+                                        <td colspan="2" class="text-danger">
+                                            <input type="text" value=""
+                                                   d-indicator="${item.indicator.id?c}"
+                                                   d-roleId="${item.roleId?c}"
+                                                   d-name="manScore"
+                                                   name="score_${item.indicator.id?c}_${item.roleId?c}">
+                                        </td>
+                                        <#else>
                                         <td colspan="4" class="text-danger">
                                             <input type="text" value=""
                                                    d-indicator="${item.indicator.id?c}"
                                                    d-roleId="${item.roleId?c}"
                                                    name="score_${item.indicator.id?c}_${item.roleId?c}">
-                                            <#if item.indicator.id==7>
-                                                <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
-                                                </button>
-                                            </#if>
                                         </td>
+                                        </#if>
                                         <td class="text-danger">手动输入</td>
                                     </tr>
                                 </#if>
@@ -412,6 +428,7 @@
                                 $("#social_btn").on("click", function () {
                                     var personId = $(this).attr("data-person");
                                     var that = this;
+                                    $(that).parent().find("input").val(0);
                                     $.ajax({
                                         type: "POST",
                                         dataType: "json",
@@ -427,6 +444,7 @@
                                             }
                                         },
                                         error: function (e) {
+                                            $(that).parent().find("input").val(0);
                                             console.error("请求异常。");
                                         }
                                     });

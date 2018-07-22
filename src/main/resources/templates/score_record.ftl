@@ -309,15 +309,27 @@
                                         <th>分值</th>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" class="text-danger">
+                                 <#if item.indicator.id==7 && view!=1>
+                                        <td colspan="2" class="text-danger">
+                                            <input type="text" reaonly value=""
+                                                   d-indicator="${item.indicator.id?c}"
+                                                   name="manScore">
+                                            <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
+                                            </button>
+
+                                        </td>
+                                        <td colspan="2" class="text-danger">
                                             <input type="text" value=""
                                                    d-indicator="${item.indicator.id?c}"
-                                                   name="score">
-                                            <#if item.indicator.id==7>
-                                                <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
-                                                </button>
-                                            </#if>
+                                                   name="manScore">
                                         </td>
+                                 <#else>
+                                     <td colspan="4" class="text-danger">
+                                         <input type="text" value=""
+                                                d-indicator="${item.indicator.id?c}"
+                                                name="score">
+                                     </td>
+                                 </#if>
                                         <td class="text-danger">手动输入</td>
                                     </tr>
                                 </#if>
