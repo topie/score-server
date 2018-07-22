@@ -134,7 +134,7 @@ public class MaterialReceiveIdentityInfoController {
             }
         }
         Map argMap = new HashMap();
-        argMap.put("status", Collections.singletonList(2));
+        argMap.put("status", Arrays.asList(3, 4));
         argMap.put("opRoleId", roles);
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             argMap.put("personIdNum", scoreRecord.getPersonIdNum());
