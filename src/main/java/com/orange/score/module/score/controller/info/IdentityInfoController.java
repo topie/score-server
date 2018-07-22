@@ -210,12 +210,14 @@ public class IdentityInfoController {
         Map mMap = new HashMap();
         for (MaterialInfo materialInfo : materialInfos) {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
-            if (roleMidSet.contains(materialInfo.getId())) {
-                roleMaterialInfoList.add(materialInfo);
-            }
-            //公安单独处理随迁信息
-            if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
-                roleMaterialInfoList.add(materialInfo);
+            if (materialInfo.getIsUpload() == 1) {
+                if (roleMidSet.contains(materialInfo.getId())) {
+                    roleMaterialInfoList.add(materialInfo);
+                }
+                //公安单独处理随迁信息
+                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
+                    roleMaterialInfoList.add(materialInfo);
+                }
             }
         }
         Condition condition = new Condition(OnlinePersonMaterial.class);
@@ -366,8 +368,10 @@ public class IdentityInfoController {
         Map mMap = new HashMap();
         for (MaterialInfo materialInfo : materialInfos) {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
-            if (roleMidSet.contains(materialInfo.getId())) {
-                roleMaterialInfoList.add(materialInfo);
+            if (materialInfo.getIsUpload() == 1) {
+                if (roleMidSet.contains(materialInfo.getId())) {
+                    roleMaterialInfoList.add(materialInfo);
+                }
             }
         }
         Condition condition = new Condition(OnlinePersonMaterial.class);
