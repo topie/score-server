@@ -454,7 +454,7 @@
                 </p>
             </td>
             <td class="td2" colspan="2">
-                <p class="p3"></p>
+                <p class="p3">${person.name}</p>
             </td>
             <td class="td3">
                 <p class="p3">
@@ -462,7 +462,7 @@
                 </p>
             </td>
             <td class="td4" colspan="3">
-                <p class="p3"></p>
+                <p class="p3"><#if person.sex == 1>男<#else>女</#if></p>
             </td>
             <td class="td5" colspan="3">
                 <p class="p3">
@@ -470,7 +470,7 @@
                 </p>
             </td>
             <td class="td6">
-                <p class="p3"></p>
+                <p class="p3">${person.nation}</p>
             </td>
             <td class="td7" rowspan="4">
                 <p class="p3"></p>
@@ -483,7 +483,7 @@
                 </p>
             </td>
             <td class="td9" colspan="2">
-                <p class="p3"></p>
+                <p class="p3">${person.birthday}</p>
             </td>
             <td class="td10">
                 <p class="p3">
@@ -491,7 +491,7 @@
                 </p>
             </td>
             <td class="td11" colspan="3">
-                <p class="p3"></p>
+                <p class="p3">${other.politicalStatusStr}</p>
             </td>
             <td class="td12" colspan="3">
                 <p class="p3">
@@ -499,7 +499,7 @@
                 </p>
             </td>
             <td class="td13">
-                <p class="p3"></p>
+                <p class="p3">${move.marriageStatusStr}</p>
             </td>
         </tr>
         <tr class="r3">
@@ -509,7 +509,7 @@
                 </p>
             </td>
             <td class="td9" colspan="2">
-                <p class="p3"></p>
+                <p class="p3">${other.cultureDegreeStr}</p>
             </td>
             <td class="td10">
                 <p class="p3">
@@ -517,7 +517,7 @@
                 </p>
             </td>
             <td class="td11" colspan="3">
-                <p class="p3"></p>
+                <p class="p3">${other.degreeStr}</p>
             </td>
             <td class="td12" colspan="3">
                 <p class="p3">
@@ -525,7 +525,7 @@
                 </p>
             </td>
             <td class="td13">
-                <p class="p3"></p>
+                <p class="p3">${other.profession}</p>
             </td>
         </tr>
         <tr class="r4">
@@ -535,7 +535,7 @@
                 </p>
             </td>
             <td class="td15" colspan="4">
-                <p class="p3"></p>
+                <p class="p3">${profession.professionTypeStr}</p>
             </td>
             <td class="td12" colspan="3">
                 <p class="p3">
@@ -543,7 +543,7 @@
                 </p>
             </td>
             <td class="td13">
-                <p class="p3"></p>
+                <p class="p3">${profession.jobTypeStr}</p>
             </td>
         </tr>
         <tr class="r5">
@@ -553,7 +553,7 @@
                 </p>
             </td>
             <td class="td16" colspan="7">
-                <p class="p3"></p>
+                <p class="p3">${move.moveRegisteredOffice}</p>
             </td>
             <td class="td13">
                 <p class="p3">
@@ -561,7 +561,7 @@
                 </p>
             </td>
             <td class="td17">
-                <p class="p3"></p>
+                <p class="p3">${move.houseNatureStr}</p>
             </td>
         </tr>
         <tr class="r6">
@@ -571,7 +571,7 @@
                 </p>
             </td>
             <td class="td18" colspan="9">
-                <p class="p4"></p>
+                <p class="p4">${person.idNumber}</p>
             </td>
         </tr>
         <tr class="r5">
@@ -581,7 +581,7 @@
                 </p>
             </td>
             <td class="td19" colspan="5">
-                <p class="p3"></p>
+                <p class="p3">${company.companyName}</p>
             </td>
             <td class="td20" colspan="3">
                 <p class="p3">
@@ -589,7 +589,7 @@
                 </p>
             </td>
             <td class="td21" colspan="3">
-                <p class="p3"></p>
+                <p class="p3">${company.operatorMobile}</p>
             </td>
         </tr>
         <tr class="r7">
@@ -599,7 +599,7 @@
                 </p>
             </td>
             <td class="td19" colspan="5">
-                <p class="p3"></p>
+                <p class="p3">${company.operatorAddress}</p>
             </td>
             <td class="td20" colspan="3">
                 <p class="p3">
@@ -607,7 +607,7 @@
                 </p>
             </td>
             <td class="td21" colspan="3">
-                <p class="p3"></p>
+                <p class="p3">${other.selfPhone}</p>
             </td>
         </tr>
         <tr class="r8">
@@ -617,11 +617,11 @@
                 </p>
             </td>
             <td class="td22" colspan="11">
-                <p class="p3"></p>
+                <p class="p3">${move.moveAddress}</p>
             </td>
         </tr>
         <tr class="r3">
-            <td class="td8" rowspan="7">
+            <td class="td8" rowspan="${relation?size+1}">
                 <p class="p3"></p>
                 <p class="p3"></p>
                 <p class="p3"></p>
@@ -659,81 +659,22 @@
                 </p>
             </td>
         </tr>
-        <tr class="r9">
-            <td class="td23">
-                <p class="p3"></p>
-            </td>
-            <td class="td24" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td25" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r3">
-            <td class="td23">
-                <p class="p3"></p>
-            </td>
-            <td class="td24" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td25" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r10">
-            <td class="td23">
-                <p class="p3"></p>
-            </td>
-            <td class="td24" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td25" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r11">
-            <td class="td23">
-                <p class="p3"></p>
-            </td>
-            <td class="td24" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td25" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r12">
-            <td class="td23">
-                <p class="p3"></p>
-            </td>
-            <td class="td24" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td25" colspan="3">
-                <p class="p3"></p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r13">
-            <td class="td22" colspan="11">
-                <p class="p3"></p>
-            </td>
-        </tr>
+        <#list relation as ritem>
+              <tr class="r9">
+                  <td class="td23">
+                      <p class="p3">${ritem.relationship}</p>
+                  </td>
+                  <td class="td24" colspan="3">
+                      <p class="p3">${ritem.name}</p>
+                  </td>
+                  <td class="td25" colspan="3">
+                      <p class="p3">${ritem.idNumber}</p>
+                  </td>
+                  <td class="td26" colspan="4">
+                      <p class="p3">${ritem.cultureDegree}</p>
+                  </td>
+              </tr>
+        </#list>
         <tr class="r3">
             <td class="td8" rowspan="9">
                 <p class="p3"></p>

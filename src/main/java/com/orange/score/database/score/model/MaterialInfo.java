@@ -44,6 +44,9 @@ public class MaterialInfo {
     @Column(name = "template_img")
     private String templateImg;
 
+    @Column(name = "is_upload")
+    private Integer isUpload;
+
     /**
      * 材料标题
      */
@@ -51,6 +54,14 @@ public class MaterialInfo {
 
     @Transient
     private OnlinePersonMaterial onlinePersonMaterial;
+
+    public Integer getIsUpload() {
+        return isUpload;
+    }
+
+    public void setIsUpload(Integer isUpload) {
+        this.isUpload = isUpload;
+    }
 
     public String getTemplateImg() {
         return templateImg;

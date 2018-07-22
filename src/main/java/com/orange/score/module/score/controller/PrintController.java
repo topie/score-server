@@ -10,6 +10,7 @@ import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.model.*;
 import com.orange.score.database.security.model.Role;
+import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.core.service.IRegionService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUser;
@@ -71,6 +72,17 @@ public class PrintController extends BaseController {
     @Autowired
     private IRegionService iRegionService;
 
+    @Autowired
+    private IIndicatorService iIndicatorService;
+
+    @Autowired
+    private IIndicatorItemService iIndicatorItemService;
+
+    @Autowired
+    private IDictService iDictService;
+
+    @Autowired
+    private IScoreRecordService iScoreRecordService;
     @GetMapping(value = "/template")
     @ResponseBody
     public Result html() throws FileNotFoundException {
@@ -84,8 +96,87 @@ public class PrintController extends BaseController {
 
     @GetMapping(value = "/approveEmptyDoc")
     @ResponseBody
-    public Result approveEmptyDoc() throws FileNotFoundException {
+    public Result approveEmptyDoc(@RequestParam Integer identityInfoId) throws FileNotFoundException {
         Map params = new HashMap();
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
+        if (person == null) {
+            person = new IdentityInfo();
+        }
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+
+        params.put("person", person);
+        CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
+        if (companyInfo == null) {
+            companyInfo = new CompanyInfo();
+        }
+        params.put("company", companyInfo);
+        HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
+        if (other == null) {
+            other = new HouseOther();
+        }
+        params.put("other", other);
+        HouseProfession profession = iHouseProfessionService.findBy("identityInfoId", identityInfoId);
+        if (profession == null) {
+            profession = new HouseProfession();
+        }
+        params.put("profession", profession);
+        HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", identityInfoId);
+        if (houseMove == null) {
+            houseMove = new HouseMove();
+        }
+        params.put("move", houseMove);
+        Condition condition = new Condition(HouseRelationship.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("identityInfoId", identityInfoId);
+        List<HouseRelationship> relationshipList = iHouseRelationshipService.findByCondition(condition);
+        if (CollectionUtils.isEmpty(relationshipList)) {
+            relationshipList = new ArrayList<>();
+        }
+        params.put("relation", relationshipList);
+        List<Map> scoreList = new ArrayList<>();
+        List sCheckList = new ArrayList<>();
+        List sTextList = new ArrayList<>();
+        condition = new Condition(ScoreRecord.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", identityInfoId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        criteria.andIn("opRoleId", roles);
+        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+        Map scoreRecordStatus = iDictService.selectMapByAlias("scoreRecordStatus");
+        for (ScoreRecord item : scoreRecords) {
+            Map itemMap = new HashMap();
+            Indicator indicator = iIndicatorService.findById(item.getIndicatorId());
+            itemMap.put("indicator", indicator);
+            condition = new Condition(IndicatorItem.class);
+            criteria = condition.createCriteria();
+            criteria.andEqualTo("indicatorId", item.getIndicatorId());
+            List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition);
+            itemMap.put("indicatorItems", indicatorItems);
+            itemMap.put("opUser", item.getOpUser());
+            itemMap.put("opRole", item.getOpRole());
+            itemMap.put("opRoleId", item.getOpRoleId());
+            itemMap.put("scoreValue", item.getScoreValue());
+            itemMap.put("scoreStatus", scoreRecordStatus.get(item.getStatus()));
+            itemMap.put("submitDate", item.getSubmitDate());
+            scoreList.add(itemMap);
+            if (item.getStatus() == 4) {
+                Indicator indicator1 = iIndicatorService.findById(item.getIndicatorId());
+                if (indicator1.getItemType() == 0) {
+                    sCheckList.add(item.getOpRoleId() + "_" + item.getIndicatorId() + "_" + item.getItemId());
+                } else {
+                    sTextList.add(item.getOpRoleId() + "_" + item.getIndicatorId() + "_" + item.getScoreValue());
+                }
+            }
+        }
+        params.put("scoreList", scoreList);
+        List<String> departmentNames = new ArrayList<>();
+        for (Integer roleId : roles) {
+            Role role = roleService.findRoleById(roleId);
+            departmentNames.add(role.getRoleName());
+        }
+        params.put("department", Joiner.on("、").join(departmentNames));
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "approve_empty_doc.ftl", params);
         Map result = new HashMap<>();
@@ -174,7 +265,7 @@ public class PrintController extends BaseController {
         CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getCompanyId());
         Map params = new HashMap();
         params.put("person", identityInfo);
-        params.put("companyInfo", companyInfo);
+        params.put("company", companyInfo);
         Date reDate = identityInfo.getReservationDate();
         if (reDate == null) {
             params.put("year", "-");

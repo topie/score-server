@@ -18,8 +18,16 @@
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">申请所提交的下列申请材料，本机关已收到：</span></p>
     <#list mList as item>
         <p style="margin-left:36.0pt;text-align:left;white-space:pre-wrap;"><span
-                style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${item.materialName}</span></p>
+                style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${item_index+1}、${item.materialName}</span>
+        </p>
     </#list>
+    <#if mList?size lt 7>
+        <#list 1..(7-mList?size) as t>
+             <p style="margin-left:36.0pt;text-align:left;white-space:pre-wrap;"><span
+                     style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"> </span>
+             </p>
+        </#list>
+    </#if>
 
     <#if renshe==true>
     <p style="text-indent:36.0pt;text-align:left;white-space:pre-wrap;"><br/></p>
@@ -29,11 +37,9 @@
     <#else>
     <p style="text-indent:36.0pt;text-align:left;white-space:pre-wrap;"><br/></p>
     <p style="text-align:left;white-space:pre-wrap;"><span style="color:#000000;white-space:pre-wrap;"></span><span
-            style="color:#000000;white-space:pre-wrap;">6</span><span style="color:#000000;white-space:pre-wrap;"></span>
+            style="color:#000000;white-space:pre-wrap;"></span><span style="color:#000000;white-space:pre-wrap;"></span>
     </p>
     </#if>
-    <br>
-    <br>
     <p style="text-align:right;white-space:pre-wrap;"><span
             style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${nowYear}</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">年</span><span
@@ -43,44 +49,37 @@
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">日</span></p>
     <br>
     <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
     <p style="text-align:left;white-space:pre-wrap;"><span style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理部门：</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">  </span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${department}</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">       </span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">        </span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${department}</span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"><#list 1..(24-department?length) as t> </#list></span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理时间：</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;"> </span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${now}</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">   </span></p>
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${now}</span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">    </span></p>
     <p style="text-align:left;white-space:pre-wrap;"><span style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">受</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"> </span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">理</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"> </span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">人：</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">  </span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${user.displayName}</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">  </span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">   </span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">        </span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">人 ：</span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${user.displayName}</span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"><#list 1..(24-user.displayName?length) as t> </#list></span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">送达时间：</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;"> </span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${now}</span></p>
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${now} </span></p>
     <p style="text-align:left;white-space:pre-wrap;"><span style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">经</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"> </span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">办</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"> </span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">人：</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">  </span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${company.operator}</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">             </span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">        </span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">人 ：</span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${company.operator}</span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"><#list 1..(24-company.operator?length) as t> </#list></span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">联系电话：</span><span
-            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${company.companyMobile}</span>
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${company.companyMobile}</span>
     </p></div>
