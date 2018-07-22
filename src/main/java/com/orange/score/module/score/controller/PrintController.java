@@ -83,6 +83,7 @@ public class PrintController extends BaseController {
 
     @Autowired
     private IScoreRecordService iScoreRecordService;
+
     @GetMapping(value = "/template")
     @ResponseBody
     public Result html() throws FileNotFoundException {
@@ -311,7 +312,7 @@ public class PrintController extends BaseController {
             Role role = roleService.findRoleById(roleId);
             departmentNames.add(role.getRoleName());
         }
-        if(roles.contains(3)){
+        if (roles.contains(3)) {
             params.put("renshe", true);
         }
         params.put("department", Joiner.on("、").join(departmentNames));
@@ -514,21 +515,39 @@ public class PrintController extends BaseController {
     @ResponseBody
     public Result uploadMaterialDoc(@RequestParam("personId") Integer personId) throws FileNotFoundException {
         Map params = new HashMap();
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        List<Integer> indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
+        Set<Integer> roleMidSet = new HashSet<>();
+        for (Integer indicatorId : indicatorIds) {
+            List<Integer> iIds = iIndicatorService.selectBindMaterialIds(indicatorId);
+            for (Integer iId : iIds) {
+                if (!roleMidSet.contains(iId)) {
+                    roleMidSet.add(iId);
+                }
+            }
+        }
         IdentityInfo person = iIdentityInfoService.findById(personId);
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
+        criteria.andEqualTo("isUpload", 1);
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
+        List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
         Map mMap = new HashMap();
         for (MaterialInfo materialInfo : materialInfos) {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
+            if (roleMidSet.contains(materialInfo.getId())) {
+                roleMaterialInfoList.add(materialInfo);
+            }
         }
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
         }
-        params.put("uploadMaterialList", uploadMaterialList);
+        params.put("uploadMaterialList", roleMaterialInfoList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "upload_material_doc.ftl", params);
         Map result = new HashMap<>();
