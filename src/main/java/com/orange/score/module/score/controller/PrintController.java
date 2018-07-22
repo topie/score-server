@@ -533,21 +533,23 @@ public class PrintController extends BaseController {
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("isUpload", 1);
         List<MaterialInfo> materialInfos = iMaterialInfoService.findByCondition(condition);
-        List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
+
         Map mMap = new HashMap();
         for (MaterialInfo materialInfo : materialInfos) {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
-            if (roleMidSet.contains(materialInfo.getId())) {
-                roleMaterialInfoList.add(materialInfo);
-            }
+
         }
         condition = new Condition(OnlinePersonMaterial.class);
         criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
+        List<OnlinePersonMaterial> roleMaterialInfoList = new ArrayList<>();
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                roleMaterialInfoList.add(onlinePersonMaterial);
+            }
         }
         params.put("uploadMaterialList", roleMaterialInfoList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
