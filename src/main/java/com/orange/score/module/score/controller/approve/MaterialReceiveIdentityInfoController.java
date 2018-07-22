@@ -349,18 +349,17 @@ public class MaterialReceiveIdentityInfoController {
             materialAcceptRecord.setMaterialId(materialInfo.getId());
             materialAcceptRecord.setStatus(1);
             iMaterialAcceptRecordService.save(materialAcceptRecord);
-            Condition condition = new Condition(ScoreRecord.class);
-            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-            criteria.andEqualTo("indicatorId", indicatorId);
-            criteria.andEqualTo("personId", personId);
-            criteria.andEqualTo("batchId", person.getBatchId());
-            criteria.andEqualTo("opRoleId", roleId);
-            List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
-            for (ScoreRecord scoreRecord : scoreRecords) {
-                scoreRecord.setStatus(3);
-                scoreRecord.setSubmitDate(new Date());
-                iScoreRecordService.update(scoreRecord);
-            }
+        }
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", personId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        criteria.andIn("opRoleId", roles);
+        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+        for (ScoreRecord scoreRecord : scoreRecords) {
+            scoreRecord.setStatus(3);
+            scoreRecord.setSubmitDate(new Date());
+            iScoreRecordService.update(scoreRecord);
         }
         return ResponseUtil.success();
     }

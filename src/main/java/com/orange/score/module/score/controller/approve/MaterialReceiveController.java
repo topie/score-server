@@ -79,6 +79,7 @@ public class MaterialReceiveController {
 
     @Autowired
     private IOfficeService iOfficeService;
+
     @Autowired
     private IBatchConfService iBatchConfService;
 
@@ -323,7 +324,8 @@ public class MaterialReceiveController {
     }
 
     @PostMapping("/confirmReceived")
-    public Result update(@RequestParam("personId") Integer personId, String[] mIds, Integer opRoleId) {
+    public Result update(@RequestParam("personId") Integer personId, String[] mIds, Integer opRoleId,
+            Integer indicatorId) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
@@ -332,6 +334,7 @@ public class MaterialReceiveController {
         IdentityInfo person = iIdentityInfoService.findById(personId);
         if (person.getHallStatus() == 8) throw new AuthBusinessException("用户资格已取消");
         Set<Integer> indicatorIdSet = new HashSet<>();
+        indicatorIdSet.add(indicatorId);
         for (String mId : mIds) {
             String[] mIdArr = mId.split("_");
             MaterialInfo materialInfo = iMaterialInfoService.findById(Integer.valueOf(mIdArr[1]));
