@@ -20,6 +20,7 @@ import com.orange.score.module.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -547,7 +548,8 @@ public class PrintController extends BaseController {
         List<OnlinePersonMaterial> roleMaterialInfoList = new ArrayList<>();
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId()) && StringUtils
+                    .isEmpty(onlinePersonMaterial.getMaterialInfoName())) {
                 roleMaterialInfoList.add(onlinePersonMaterial);
             }
         }
