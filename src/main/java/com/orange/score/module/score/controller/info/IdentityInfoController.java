@@ -492,8 +492,8 @@ public class IdentityInfoController {
         if (result.contains("没有查询到人员信息")) {
             r.put("list", "没有查询到人员信息");
         } else {
-            result = result.substring((result.indexOf("<![CDATA[") + "<![CDATA[".length()), result.indexOf("]]>"))
-                    .replaceAll("<ROOT>", "<br>").replaceAll("</ROOT>", "");
+            result = result.substring((result.indexOf("<return xmlns=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">") + "<return xmlns=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">".length()), result.indexOf("</return>"))
+                    .replaceAll("&lt;ROOT&gt;", "<br>").replaceAll("&lt;/ROOT&gt;", "");
             r.put("list", result);
         }
         req = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" \n"
