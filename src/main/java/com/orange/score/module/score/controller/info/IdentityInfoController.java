@@ -494,7 +494,8 @@ public class IdentityInfoController {
             result = result.substring(
                     (result.indexOf("<return xmlns=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">")
                             + "<return xmlns=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">".length()),
-                    result.indexOf("</return>")).replaceAll("&lt;ROOT&gt;", "<div>").replaceAll(" &lt;errMsg&gt;", "")
+                    result.indexOf("</return>")).replaceAll("&lt;ROOT&gt;", "<div>").replaceAll(" &lt;appCode&gt;", "")
+                    .replaceAll("&lt;/appCode&gt;", "").replaceAll(" &lt;errMsg&gt;", "")
                     .replaceAll("&lt;/errMsg&gt;", "").replaceAll("&lt;birthIns&gt;", "")
                     .replaceAll("&lt;/birthIns&gt;", "").replaceAll("&lt;flag&gt;", "").replaceAll("&lt;/flag&gt;", "")
                     .replaceAll("&lt;injuryIns&gt;", "").replaceAll("&lt;/injuryIns&gt;", "")
