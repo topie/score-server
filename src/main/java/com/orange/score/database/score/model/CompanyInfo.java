@@ -1,15 +1,16 @@
 package com.orange.score.database.score.model;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "t_company_info")
 public class CompanyInfo {
+
     /**
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_company_info_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_company_info_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -85,6 +86,50 @@ public class CompanyInfo {
      * 备注说明
      */
     private String remark;
+
+    @Column(name = "idCardNumber_1")
+    private String idCardNumber_1;
+
+    @Column(name = "idCardNumber_2")
+    private String idCardNumber_2;
+
+    @Column(name = "operator2")
+    private String operator2;
+
+    @Column(name = "operator_obile2")
+    private String operatorMobile2;
+
+    public String getIdCardNumber_1() {
+        return idCardNumber_1;
+    }
+
+    public void setIdCardNumber_1(String idCardNumber_1) {
+        this.idCardNumber_1 = idCardNumber_1;
+    }
+
+    public String getIdCardNumber_2() {
+        return idCardNumber_2;
+    }
+
+    public void setIdCardNumber_2(String idCardNumber_2) {
+        this.idCardNumber_2 = idCardNumber_2;
+    }
+
+    public String getOperator2() {
+        return operator2;
+    }
+
+    public void setOperator2(String operator2) {
+        this.operator2 = operator2;
+    }
+
+    public String getOperatorMobile2() {
+        return operatorMobile2;
+    }
+
+    public void setOperatorMobile2(String operatorMobile2) {
+        this.operatorMobile2 = operatorMobile2;
+    }
 
     /**
      * 获取主键ID

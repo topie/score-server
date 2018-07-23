@@ -83,7 +83,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="6">职业资格：<strong>${profession.professionTypeStr}</strong></td>
-                                    <td colspan="6">工种：<strong>${profession.jobTypeStr}</strong></td>
+                                    <td colspan="6">职业名称：<strong>${profession.jobNameStr}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="12">迁出地省（市自治区）：
