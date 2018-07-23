@@ -198,6 +198,24 @@ public class CheckInfoController {
         if (batchConf == null) return ResponseUtil.error("批次不存在");
         batchConf.setProcess(1);
         iBatchConfService.update(batchConf);
+        List<Indicator> indicators = iIndicatorService.findAll();
+        Map<Integer, Integer> iMap = new HashMap();
+        Map<Integer, Indicator> indicatorMap = new HashMap();
+        for (Indicator indicator : indicators) {
+            iMap.put(indicator.getId(), indicator.getScoreRule());
+            indicatorMap.put(indicator.getId(), indicator);
+        }
+        Condition condition = new Condition(IdentityInfo.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", batchConf.getId());
+        criteria.andEqualTo("resultStatus", 1);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        for (IdentityInfo identityInfo : identityInfos) {
+            identityInfo.setResultStatus(0);
+            identityInfo.setHallStatus(5);
+            iIdentityInfoService.update(identityInfo);
+        }
+        iBatchConfService.update(batchConf);
         return ResponseUtil.success();
     }
 
