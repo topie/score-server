@@ -42,7 +42,7 @@ public class ScoreTask {
         Condition condition = new Condition(BatchConf.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("status", 0);
-        criteria.andGreaterThanOrEqualTo("applyBegin", today);
+        criteria.andLessThanOrEqualTo("applyBegin", today);
         List<BatchConf> list = iBatchConfService.findByCondition(condition);
         for (BatchConf batchConf : list) {
             batchConf.setStatus(1);
@@ -57,7 +57,7 @@ public class ScoreTask {
         Condition condition = new Condition(BatchConf.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("status", 1);
-        criteria.andGreaterThanOrEqualTo("publishBegin", today);
+        criteria.andLessThanOrEqualTo("publishBegin", today);
         List<BatchConf> list = iBatchConfService.findByCondition(condition);
         for (BatchConf batchConf : list) {
             List<Indicator> indicators = iIndicatorService.findAll();
@@ -101,7 +101,7 @@ public class ScoreTask {
         Condition condition = new Condition(BatchConf.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("process", 3);
-        criteria.andGreaterThanOrEqualTo("noticeBegin", today);
+        criteria.andLessThanOrEqualTo("noticeBegin", today);
         List<BatchConf> list = iBatchConfService.findByCondition(condition);
         for (BatchConf batchConf : list) {
             batchConf.setProcess(4);
