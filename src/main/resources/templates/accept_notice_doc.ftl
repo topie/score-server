@@ -1,4 +1,4 @@
-<div style="width:595.3pt;margin-bottom:72.0pt;margin-top:72.0pt;margin-left:90.0pt;margin-right:90.0pt;"><p
+<div style="width:595.3pt;margin-top:30.0pt;"><p
         style="text-align:center;white-space:pre-wrap;"><span
         style="font-size:32.0pt;font-weight:bold;color:#000000;white-space:pre-wrap;">天津市居住证积分受理通知书</span></p>
     <p style="text-align:right;white-space:pre-wrap;"><span
