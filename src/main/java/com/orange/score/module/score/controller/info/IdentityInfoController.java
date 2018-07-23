@@ -385,8 +385,7 @@ public class IdentityInfoController {
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
-            onlinePersonMaterial
-                    .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
                 roleUploadMaterialList.add(onlinePersonMaterial);
             }
@@ -492,8 +491,23 @@ public class IdentityInfoController {
         if (result.contains("没有查询到人员信息")) {
             r.put("list", "没有查询到人员信息");
         } else {
-            result = result.substring((result.indexOf("<return xmlns=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">") + "<return xmlns=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">".length()), result.indexOf("</return>"))
-                    .replaceAll("&lt;ROOT&gt;", "<br>").replaceAll("&lt;/ROOT&gt;", "");
+            result = result.substring(
+                    (result.indexOf("<return xmlns=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">")
+                            + "<return xmlns=\"http://service.webinterface.yzym.si.sl.neusoft.com/\">".length()),
+                    result.indexOf("</return>")).replaceAll("&lt;ROOT&gt;", "<div>").replaceAll(" &lt;errMsg&gt;", "")
+                    .replaceAll("&lt;/errMsg&gt;", "").replaceAll("&lt;birthIns&gt;", "")
+                    .replaceAll("&lt;/birthIns&gt;", "").replaceAll("&lt;flag&gt;", "").replaceAll("&lt;/flag&gt;", "")
+                    .replaceAll("&lt;injuryIns&gt;", "").replaceAll("&lt;/injuryIns&gt;", "")
+                    .replaceAll("&lt;medicalIns&gt;", "").replaceAll("&lt;/medicalIns&gt;", "")
+                    .replaceAll("&lt;pesionIns&gt;", "").replaceAll("&lt;/pesionIns&gt;", "")
+                    .replaceAll("&lt;unemploymentIns&gt;", "").replaceAll("&lt;/unemploymentIns&gt;", "")
+                    .replaceAll("&lt;unitNumber&gt;", "").replaceAll("&lt;/unitNumber&gt;", "")
+                    .replaceAll("&lt;unitName&gt;", "单位名称").replaceAll("&lt;/unitName&gt;", "")
+                    .replaceAll("&lt;unitCode&gt;", "单位编号：").replaceAll("&lt;/unitCode&gt;", "")
+                    .replaceAll("&lt;payBase&gt;", "缴纳基数：").replaceAll("&lt;/payBase&gt;", "")
+                    .replaceAll("&lt;paymentYear&gt;", "缴纳月份：").replaceAll("&lt;/paymentYear&gt;", "")
+                    .replaceAll("&lt;/ROOT&gt;", "</div>").replaceAll("&lt;personNumber&gt;", "身份证号：")
+                    .replaceAll("&lt;/personNumber&gt;", "").replaceAll("&lt;/personNumber&gt;", "");
             r.put("list", result);
         }
         req = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" \n"
