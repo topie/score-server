@@ -1,4 +1,4 @@
-<div style="width:595.3pt;margin-bottom:72.0pt;margin-top:72.0pt;margin-left:90.0pt;margin-right:90.0pt;"><p><span
+<div style="width:595.3pt;margin-bottom:72.0pt;margin-top:72.0pt;margin-left:20.0pt;"><p><span
         style="font-size:24.0pt;color:#000000;white-space:pre-wrap;">申报编号：</span><span
         style="font-size:24.0pt;color:#000000;white-space:pre-wrap;">${person.acceptNumber}</span></p>
     <p style="text-align:center;white-space:pre-wrap;"><span
@@ -47,8 +47,6 @@
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">月</span><span
             style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${nowDay}</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">日</span></p>
-    <br>
-    <br>
     <p style="text-align:left;white-space:pre-wrap;"><span style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理部门：</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${department}</span><span
@@ -68,7 +66,7 @@
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"><#list 1..(24-user.displayName?length) as t> </#list></span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">送达时间：</span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;margin-left: 4pt;">送达时间：</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${now} </span></p>
     <p style="text-align:left;white-space:pre-wrap;"><span style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">经</span><span
@@ -77,9 +75,9 @@
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"> </span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">人 ：</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${company.operator}</span><span
             style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"><#list 1..(24-company.operator?length) as t> </#list></span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">联系电话：</span><span
-            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;">${company.companyMobile}</span>
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
+            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;"><#list 1..24 as t> </#list></span><span
+            style="font-size:20.0pt;color:#000000;white-space:pre-wrap;margin-left: 6pt;">   联系电话：</span><span
+            style="font-size:20.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;"><#list 1..20 as t> </#list></span>
     </p></div>
