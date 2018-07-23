@@ -11,6 +11,7 @@ import com.orange.score.module.score.service.IQuestionAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,7 @@ public class QuestionController {
 
     @PostMapping("/insert")
     public Result insert(QuestionAnswer questionAnswer) {
+        questionAnswer.setcTime(new Date());
         iQuestionAnswerService.save(questionAnswer);
         return ResponseUtil.success();
     }

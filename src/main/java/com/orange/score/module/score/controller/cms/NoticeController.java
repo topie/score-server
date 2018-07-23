@@ -11,6 +11,7 @@ import com.orange.score.module.score.service.ICmsModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class NoticeController {
     @PostMapping("/insert")
     public Result insert(CmsModule cmsModule) {
         cmsModule.setType(3);
+        cmsModule.setcTime(new Date());
         iCmsModuleService.save(cmsModule);
         return ResponseUtil.success();
     }
