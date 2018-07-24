@@ -300,7 +300,7 @@ public class ScoreRecordIdentityInfoController {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
         }
         List<Integer> indicatorIds = new ArrayList<>();
-        if (roles.contains(1) || roles.contains(3)) {
+        if (roles.contains(1)) {
             List<Indicator> indicators = iIndicatorService.findAll();
             for (Indicator item : indicators) {
                 indicatorIds.add(item.getId());
@@ -316,7 +316,13 @@ public class ScoreRecordIdentityInfoController {
         List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
         for (MaterialInfo materialInfo : materialInfoList) {
-            if (roleMidSet.contains(materialInfo.getId())) {
+            if (materialInfo.getIsUpload() == 1) {
+                if (roleMidSet.contains(materialInfo.getId())) {
+                    roleMaterialInfoList.add(materialInfo);
+                }
+            }
+            //公安单独处理随迁信息
+            if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
                 roleMaterialInfoList.add(materialInfo);
             }
         }
@@ -330,6 +336,10 @@ public class ScoreRecordIdentityInfoController {
             if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
                 onlinePersonMaterial
                         .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
+            }
+            //公安单独处理随迁信息
+            if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(onlinePersonMaterial.getId())) {
                 roleUploadMaterialList.add(onlinePersonMaterial);
             }
         }

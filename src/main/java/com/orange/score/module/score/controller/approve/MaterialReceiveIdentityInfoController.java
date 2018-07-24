@@ -201,6 +201,10 @@ public class MaterialReceiveIdentityInfoController {
                     roleMaterialInfoList.add(materialInfo);
                 }
             }
+            //公安单独处理随迁信息
+            if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
+                roleMaterialInfoList.add(materialInfo);
+            }
         }
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
@@ -212,6 +216,10 @@ public class MaterialReceiveIdentityInfoController {
             if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
                 onlinePersonMaterial
                         .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
+            }
+            //公安单独处理随迁信息
+            if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(onlinePersonMaterial.getId())) {
                 roleUploadMaterialList.add(onlinePersonMaterial);
             }
         }
