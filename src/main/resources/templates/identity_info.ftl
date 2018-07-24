@@ -300,7 +300,7 @@
                                                 <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
                                                      style="cursor: pointer;border: 1px solid gray;"
                                                      width="100" height="100"
-                                                     src="<#if person.acceptAddressId==2>${item.onlinePersonMaterial.materialUri?replace("218.67.246.52:80","172.16.200.68:8092")}<#else>${item.onlinePersonMaterial.materialUri}</#if>">
+                                                     src="${item.onlinePersonMaterial.materialUri}">
                                             </td>
                                             <td>${item.onlinePersonMaterial.materialInfoName}
                                                 <br>
@@ -323,6 +323,14 @@
                                 </#list>
                             </table>
                             <script type="text/javascript">
+                                var hostName = window.location.host;
+                                if (hostName == "172.16.200.68") {
+                                    $(".p-img").each(function () {
+                                        var src = $(this).attr("src");
+                                        var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
+                                        $(this).attr("src",newSrc);
+                                    });
+                                }
                                 $(".p-img").off("click");
                                 $(".p-img").on("click", function () {
                                     var img = $('<img src="' + $(this).attr("src") + '">');

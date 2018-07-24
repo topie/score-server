@@ -414,6 +414,14 @@
                                 </#list>
                             </table>
                             <script type="text/javascript">
+                                var hostName = window.location.host;
+                                if (hostName == "172.16.200.68") {
+                                    $(".p-img").each(function () {
+                                        var src = $(this).attr("src");
+                                        var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
+                                        $(this).attr("src",newSrc);
+                                    });
+                                }
                                 $(".p-img").off("click");
                                 $(".p-img").on("click", function () {
                                     var img = $('<img src="' + $(this).attr("src") + '">');
