@@ -331,7 +331,12 @@
                                     $(".p-img").each(function () {
                                         var src = $(this).attr("src");
                                         var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
-                                        $(this).attr("src",newSrc);
+                                        $(this).attr("src", newSrc);
+                                    });
+                                    $("a.download").each(function () {
+                                        var href = $(this).attr("href");
+                                        var newHref = href.replace("218.67.246.52:80", "172.16.200.68:8092");
+                                        $(this).attr("href", newHref);
                                     });
                                 }
                                 $(".p-img").off("click");
