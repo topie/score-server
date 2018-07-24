@@ -153,6 +153,21 @@ public class IdentityInfo {
     @Transient
     private String orderBy;
 
+    @Column(name = "reject_reason")
+    private String rejectReason;
+
+    private String opuser1;
+
+    private String opuser2;
+
+    private String opuser3;
+
+    private String opuser4;
+
+    private String opuser5;
+
+    private String opuser6;
+
     public String getOrderBy() {
         return orderBy;
     }
@@ -212,6 +227,62 @@ public class IdentityInfo {
 
     public void setEpStatus(String epStatus) {
         this.epStatus = epStatus;
+    }
+
+    public String getRejectReason() {
+        return rejectReason;
+    }
+
+    public void setRejectReason(String rejectReason) {
+        this.rejectReason = rejectReason;
+    }
+
+    public String getOpuser1() {
+        return opuser1;
+    }
+
+    public void setOpuser1(String opuser1) {
+        this.opuser1 = opuser1;
+    }
+
+    public String getOpuser2() {
+        return opuser2;
+    }
+
+    public void setOpuser2(String opuser2) {
+        this.opuser2 = opuser2;
+    }
+
+    public String getOpuser3() {
+        return opuser3;
+    }
+
+    public void setOpuser3(String opuser3) {
+        this.opuser3 = opuser3;
+    }
+
+    public String getOpuser4() {
+        return opuser4;
+    }
+
+    public void setOpuser4(String opuser4) {
+        this.opuser4 = opuser4;
+    }
+
+    public String getOpuser5() {
+        return opuser5;
+    }
+
+    public void setOpuser5(String opuser5) {
+        this.opuser5 = opuser5;
+    }
+
+    public String getOpuser6() {
+        return opuser6;
+    }
+
+    public void setOpuser6(String opuser6) {
+        this.opuser6 = opuser6;
     }
 
     public Date getRensheAcceptSupplyEt() {

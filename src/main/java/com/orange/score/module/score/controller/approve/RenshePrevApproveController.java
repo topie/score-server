@@ -178,9 +178,15 @@ public class RenshePrevApproveController {
 
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (3 == identityInfo.getUnionApproveStatus2()) {
+            return ResponseUtil.error("该申请人人社预审驳回，无法进行此操作");
+        }
         if (identityInfo != null) {
             identityInfo.setUnionApproveStatus2(2);
+            identityInfo.setOpuser2(securityUser.getDisplayName());
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 2);
@@ -199,11 +205,21 @@ public class RenshePrevApproveController {
     }
 
     @PostMapping("/disAgree")
-    public Result disAgree(@RequestParam Integer id) throws IOException {
+    public Result disAgree(@RequestParam Integer id,
+            @RequestParam(value = "reasonType", required = false, defaultValue = "其它") String reasonType,
+            @RequestParam(value = "rejectReason", required = false, defaultValue = "") String rejectReason)
+            throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (2 == identityInfo.getUnionApproveStatus2()) {
+            return ResponseUtil.error("该申请人人社预审已通过，无法进行此操作");
+        }
         if (identityInfo != null) {
+            identityInfo.setOpuser2(securityUser.getDisplayName());
             identityInfo.setUnionApproveStatus2(3);
             identityInfo.setReservationStatus(9);
+            identityInfo.setRejectReason(reasonType + " " + rejectReason);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 3);
@@ -217,8 +233,17 @@ public class RenshePrevApproveController {
 
     @PostMapping("/supply")
     public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (2 == identityInfo.getUnionApproveStatus2()) {
+            return ResponseUtil.error("该申请人人社预审已通过，无法进行此操作");
+        }
+        if (3 == identityInfo.getUnionApproveStatus2()) {
+            return ResponseUtil.error("该申请人人社预审驳回，无法进行此操作");
+        }
         if (identityInfo != null) {
+            identityInfo.setOpuser2(securityUser.getDisplayName());
             identityInfo.setUnionApproveStatus2(4);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService

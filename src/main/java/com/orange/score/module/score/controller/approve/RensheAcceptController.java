@@ -172,11 +172,17 @@ public class RensheAcceptController {
 
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
+            if (4 == identityInfo.getRensheAcceptStatus()) {
+                return ResponseUtil.error("该申请人已被人社受理不通过，无法进行该操作");
+            }
+            identityInfo.setOpuser4(securityUser.getDisplayName());
             identityInfo.setHallStatus(5);
             identityInfo.setRensheAcceptStatus(3);
             iIdentityInfoService.update(identityInfo);
@@ -189,11 +195,20 @@ public class RensheAcceptController {
 
     @PostMapping("/supply")
     public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
+            if (3 == identityInfo.getRensheAcceptStatus()) {
+                return ResponseUtil.error("该申请人已被人社受理通过，无法进行该操作");
+            }
+            if (4 == identityInfo.getRensheAcceptStatus()) {
+                return ResponseUtil.error("该申请人已被人社受理不通过，无法进行该操作");
+            }
+            identityInfo.setOpuser4(securityUser.getDisplayName());
             Date now = new Date();
             Date epDate = DateUtil.addDay(now, 3);
             identityInfo.setRensheAcceptSupplyEt(epDate);
@@ -235,11 +250,17 @@ public class RensheAcceptController {
 
     @PostMapping("/disAgree")
     public Result disAgree(@RequestParam Integer id) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
+            if (3 == identityInfo.getRensheAcceptStatus()) {
+                return ResponseUtil.error("该申请人已被人社受理通过，无法进行该操作");
+            }
+            identityInfo.setOpuser4(securityUser.getDisplayName());
             identityInfo.setHallStatus(4);
             identityInfo.setRensheAcceptStatus(4);
             iIdentityInfoService.update(identityInfo);

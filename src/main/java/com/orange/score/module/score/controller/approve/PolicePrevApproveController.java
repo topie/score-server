@@ -179,9 +179,15 @@ public class PolicePrevApproveController {
 
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (3 == identityInfo.getUnionApproveStatus1()) {
+            return ResponseUtil.error("该申请人公安预审已驳回，无法进行此操作");
+        }
         if (identityInfo != null) {
             identityInfo.setUnionApproveStatus1(2);
+            identityInfo.setOpuser1(securityUser.getDisplayName());
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus1", 2);
@@ -200,8 +206,14 @@ public class PolicePrevApproveController {
 
     @PostMapping("/disAgree")
     public Result disAgree(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (2 == identityInfo.getUnionApproveStatus1()) {
+            return ResponseUtil.error("该申请人公安预审已同意，无法进行此操作");
+        }
         if (identityInfo != null) {
+            identityInfo.setOpuser1(securityUser.getDisplayName());
             identityInfo.setUnionApproveStatus1(3);
             identityInfo.setReservationStatus(9);
             iIdentityInfoService.update(identityInfo);
@@ -217,12 +229,21 @@ public class PolicePrevApproveController {
 
     @PostMapping("/supply")
     public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (3 == identityInfo.getUnionApproveStatus1()) {
+            return ResponseUtil.error("该申请人公安预审已驳回，无法进行此操作");
+        }
+        if (2 == identityInfo.getUnionApproveStatus1()) {
+            return ResponseUtil.error("该申请人公安预审已同意，无法进行此操作");
+        }
         if (identityInfo != null) {
             Date now = new Date();
             Date epDate = DateUtil.addDay(now, 3);
             identityInfo.setUnionApprove1Et(epDate);
             identityInfo.setUnionApproveStatus1(4);
+            identityInfo.setOpuser1(securityUser.getDisplayName());
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus1", 4);

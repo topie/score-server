@@ -17,16 +17,13 @@ import com.orange.score.database.score.model.OnlinePersonMaterial;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
-import com.orange.score.module.score.ws.WebServiceClient;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
-import javax.xml.soap.SOAPException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -178,11 +175,17 @@ public class PoliceApproveController {
 
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
+            if (4 == identityInfo.getPoliceApproveStatus()) {
+               return ResponseUtil.error("该申请人已被公安前置不通过，无法进行该操作");
+            }
+            identityInfo.setOpuser3(securityUser.getDisplayName());
             identityInfo.setHallStatus(2);
             identityInfo.setPoliceApproveStatus(3);
             identityInfo.setRensheAcceptStatus(1);
@@ -199,11 +202,20 @@ public class PoliceApproveController {
 
     @PostMapping("/supply")
     public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
+            if (3 == identityInfo.getPoliceApproveStatus()) {
+                return ResponseUtil.error("该申请人已被公安前置通过，无法进行该操作");
+            }
+            if (4 == identityInfo.getPoliceApproveStatus()) {
+                return ResponseUtil.error("该申请人已被公安前置不通过，无法进行该操作");
+            }
+            identityInfo.setOpuser3(securityUser.getDisplayName());
             Date now = new Date();
             Date epDate = DateUtil.addDay(now, 3);
             identityInfo.setPoliceApproveStatus(2);
@@ -247,11 +259,17 @@ public class PoliceApproveController {
 
     @PostMapping("/disAgree")
     public Result disAgree(@RequestParam Integer id) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
         if (identityInfo.getReservationStatus() == 10) {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
+            if (3 == identityInfo.getPoliceApproveStatus()) {
+                return ResponseUtil.error("该申请人已被公安前置通过，无法进行该操作");
+            }
+            identityInfo.setOpuser3(securityUser.getDisplayName());
             identityInfo.setPoliceApproveStatus(4);
             identityInfo.setHallStatus(1);
             iIdentityInfoService.update(identityInfo);
