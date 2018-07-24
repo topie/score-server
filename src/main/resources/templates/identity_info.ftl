@@ -300,7 +300,7 @@
                                                 <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
                                                      style="cursor: pointer;border: 1px solid gray;"
                                                      width="100" height="100"
-                                                     src="${item.onlinePersonMaterial.materialUri}">
+                                                     src="<#if person.acceptAddressId==2>${item.onlinePersonMaterial.materialUri?replace("218.67.246.52:80","172.16.200.68:8092")}<#else>${item.onlinePersonMaterial.materialUri}</#if>">
                                             </td>
                                             <td>${item.onlinePersonMaterial.materialInfoName}
                                                 <br>
