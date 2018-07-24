@@ -193,7 +193,10 @@ public class IdentityInfo {
     public String getEpStatus() {
         int min = 0;
         Date now = new Date();
-        if ((unionApproveStatus1 == 1 || unionApproveStatus1 == 4) && (unionApproveStatus2 == 1 || unionApproveStatus2 == 4) && unionApprove1Et != null) {
+        if (unionApproveStatus1 == 2 && unionApproveStatus2 == 2) {
+            return "-";
+        }
+        if (unionApproveStatus1 != 3 && unionApproveStatus2 != 3 && unionApprove1Et != null) {
             min = DateUtil.getIntervalMins(unionApprove1Et, now);
         }
         if (min > 0) {
