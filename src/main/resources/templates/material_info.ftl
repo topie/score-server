@@ -328,7 +328,7 @@
                                         </tr>
                                         <#else>
                                         <tr>
-                                            <td class="text-center">
+                                            <td style="width:100px;height:100px" class="text-center">
                                                 <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
                                                      style="cursor: pointer;border: 1px solid gray;"
                                                      width="100" height="100"
