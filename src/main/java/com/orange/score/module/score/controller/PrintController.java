@@ -530,6 +530,7 @@ public class PrintController extends BaseController {
             }
         }
         IdentityInfo person = iIdentityInfoService.findById(personId);
+        params.put("person", person);
         Condition condition = new Condition(MaterialInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("isUpload", 1);

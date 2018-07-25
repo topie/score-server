@@ -56,7 +56,7 @@
     </p>
     <p class="p2"></p>
     <p class="p3">
-        <span class="s2">            </span>
+        <span class="s2">${person.name}</span>
     </p>
     <p class="p4">
         <span class="s3">您在网上预审环节中上传了如下材料：</span>
