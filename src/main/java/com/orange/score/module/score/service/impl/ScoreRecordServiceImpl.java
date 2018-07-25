@@ -82,8 +82,8 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
         Condition condition = new Condition(ScoreRecord.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (scoreRecord != null) {
-            if(scoreRecord.getBatchId()!=null){
-                criteria.andEqualTo("batchId",scoreRecord.getBatchId());
+            if (scoreRecord.getBatchId() != null) {
+                criteria.andEqualTo("batchId", scoreRecord.getBatchId());
             }
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_pb_score_record");
@@ -166,6 +166,12 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
                 record.setId(null);
                 record.setOpRoleId(roleId);
                 record.setOpRole(role.getRoleName());
+                List<ScoreRecord> list = findByT(record);
+                if (list.size() > 0) {
+                    for (ScoreRecord item : list) {
+                        deleteById(item.getId());
+                    }
+                }
                 save(record);
             }
 
@@ -280,7 +286,8 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
     @Override
     public List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIds(Integer identityInfoId, Integer indicatorId,
             List<Integer> roles) {
-        return scoreRecordMapper.selectIndicatorIdsByIdentityInfoIdAndRoleIdsAndIndicatorId(identityInfoId, indicatorId, roles);
+        return scoreRecordMapper
+                .selectIndicatorIdsByIdentityInfoIdAndRoleIdsAndIndicatorId(identityInfoId, indicatorId, roles);
     }
 
     private BigDecimal findScoreRecordResultType0(Integer batchId, Integer personId, Integer indicatorId) {

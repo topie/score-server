@@ -899,15 +899,15 @@ public class HouseProfession {
 
     public String getJobLevelStr() {
         switch (jobLevel) {
-            case 1:
+            case 19:
                 return "高级技师";
-            case 2:
+            case 20:
                 return "技师";
-            case 3:
+            case 21:
                 return "高级工";
-            case 4:
+            case 22:
                 return "中级工";
-            case 5:
+            case 23:
                 return "初级工";
         }
         return "无";

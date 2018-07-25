@@ -676,7 +676,7 @@
               </tr>
         </#list>
         <tr class="r3">
-            <td class="td8" rowspan="9">
+            <td class="td8" rowspan="${scoreList?size+1}">
                 <p class="p3"></p>
                 <p class="p3"></p>
                 <p class="p3"></p>
@@ -697,78 +697,20 @@
                 </p>
             </td>
         </tr>
+        <#list scoreList as item>
         <tr class="r9">
             <td class="td27" colspan="7">
                 <p class="p5">
-                    <span class="s2">1、受教育程度[市人力社保局]</span>
+                    <span class="s2">${item.indicator.name}[${item.opRole}]</span>
                 </p>
             </td>
             <td class="td26" colspan="4">
-                <p class="p3"></p>
+                <p class="p3"> </p>
             </td>
         </tr>
-        <tr class="r14">
-            <td class="td27" colspan="7">
-                <p class="p5">
-                    <span class="s2">2、专业技术、职业技能水平[市人力社保局]</span>
-                </p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r10">
-            <td class="td27" colspan="7">
-                <p class="p5">
-                    <span class="s2">3、社会保险[市人力社保局]</span>
-                </p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r11">
-            <td class="td27" colspan="7">
-                <p class="p5">
-                    <span class="s2">4、职业（工种）[市人力社保局]</span>
-                </p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r12">
-            <td class="td27" colspan="7">
-                <p class="p5">
-                    <span class="s2">5、婚姻情况[市人力社保局]</span>
-                </p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r2">
-            <td class="td27" colspan="7">
-                <p class="p5">
-                    <span class="s2">6、奖项和荣誉称号[市人力社保局]</span>
-                </p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
-        <tr class="r3">
-            <td class="td27" colspan="7">
-                <p class="p5">
-                    <span class="s2">7、退役军人立功奖励[市人力社保局]</span>
-                </p>
-            </td>
-            <td class="td26" colspan="4">
-                <p class="p3"></p>
-            </td>
-        </tr>
+        </#list>
         <tr class="r15">
-            <td class="td28" colspan="11">
+            <td class="td28" colspan="12">
                 <p class="p3"></p>
                 <p class="p6">
                     <span class="s2">根据入户积分实施细则和积分指标及分值的规定，经审核，上述材料真实无误。</span>
@@ -777,7 +719,7 @@
                     <span class="s2">审核单位盖章</span>
                 </p>
                 <p class="p8">
-                    <span class="s2">年    月    日</span>
+                    <span class="s2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</span>
                 </p>
             </td>
         </tr>

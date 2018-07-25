@@ -168,8 +168,6 @@ public class ApplyCancelController {
         identityInfo.setCancelStatus(1);
         identityInfo.setHallStatus(8);
         iIdentityInfoService.update(identityInfo);
-        iPersonBatchStatusRecordService
-                .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "cancelStatus", 1);
         iPersonBatchStatusRecordService.insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 8);
         return ResponseUtil.success();
     }

@@ -93,6 +93,9 @@ public class ScoreRecordController {
     @Autowired
     private IBatchConfService iBatchConfService;
 
+    @Autowired
+    private IApplyCancelService iApplyCancelService;
+
     @GetMapping(value = "/scoring")
     @ResponseBody
     public Result scoring(ScoreRecord scoreRecord,
@@ -226,7 +229,7 @@ public class ScoreRecordController {
             Condition condition = new Condition(IndicatorItem.class);
             tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
-            condition.orderBy("score").desc();
+            condition.orderBy("score").desc().orderBy("id").asc();
             List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition);
             msMap.put("indicatorItems", indicatorItems);
             msMap.put("roleId", scoreRecord.getOpRoleId());
@@ -457,6 +460,23 @@ public class ScoreRecordController {
                     }
                     scoreRecord.setStatus(4);
                     iScoreRecordService.update(scoreRecord);
+                    if (scoreRecord.getIndicatorId() == 1003 && scoreRecord.getOpRoleId() == 12
+                            && scoreRecord.getItemId() == 1018) {
+                        IdentityInfo identityInfo = iIdentityInfoService.findById(scoreRecord.getPersonId());
+                        ApplyCancel applyCancel = new ApplyCancel();
+                        applyCancel.setBatchId(identityInfo.getBatchId());
+                        applyCancel.setPersonId(scoreRecord.getPersonId());
+                        applyCancel.setPersonIdNumber(identityInfo.getIdNumber());
+                        applyCancel.setApplyUserId(user.getId());
+                        applyCancel.setApplyUserType(user.getUserType());
+                        applyCancel.setApplyUser(user.getDisplayName());
+                        applyCancel.setApplyRoleId(scoreRecord.getOpRoleId());
+                        applyCancel.setApplyRole(scoreRecord.getOpRole());
+                        applyCancel.setApproveStatus(0);
+                        applyCancel.setApplyReason(
+                                scoreRecord.getOpRole() + " 指标[" + scoreRecord.getIndicatorName() + "]打分自动申请取消资格");
+                        iApplyCancelService.save(applyCancel);
+                    }
                 }
             }
         }
