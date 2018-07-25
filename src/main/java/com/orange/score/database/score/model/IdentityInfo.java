@@ -212,7 +212,7 @@ public class IdentityInfo {
             return "-";
         }
         if (unionApproveStatus1 != 3 && unionApproveStatus2 != 3 && unionApprove1Et != null) {
-            min = DateUtil.getIntervalMins(unionApprove1Et, now);
+            min = DateUtil.getIntervalMins(unionApprove2Et, now);
         }
         if (min > 0) {
             int day = min / 24;

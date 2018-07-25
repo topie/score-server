@@ -239,9 +239,9 @@ public class PolicePrevApproveController {
             return ResponseUtil.error("该申请人公安预审已同意，无法进行此操作");
         }
         if (identityInfo != null) {
-            Date now = new Date();
-            Date epDate = DateUtil.addDay(now, 3);
-            identityInfo.setUnionApprove1Et(epDate);
+//            Date now = new Date();
+//            Date epDate = DateUtil.addDay(now, 3);
+//            identityInfo.setUnionApprove1Et(epDate);
             identityInfo.setUnionApproveStatus1(4);
             identityInfo.setOpuser1(securityUser.getDisplayName());
             iIdentityInfoService.update(identityInfo);
