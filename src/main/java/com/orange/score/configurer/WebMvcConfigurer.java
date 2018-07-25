@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.core.ResultCode;
 import com.orange.score.common.core.ServiceException;
+import com.orange.score.common.exception.AuthBusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,6 +64,8 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                 } else if (e instanceof NoHandlerFoundException) {
                     result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
                 } else if (e instanceof ServletException) {
+                    result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
+                } else if (e instanceof AuthBusinessException) {
                     result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
                 } else {
                     result.setCode(ResultCode.INTERNAL_SERVER_ERROR)
