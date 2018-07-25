@@ -275,6 +275,49 @@
                                 申请人提交材料确认（<span class="text-danger">请勾选确认申请人送达的材料</span>）
                             </div>
                         <#list mlist as item>
+                            <#if item.indicator.id==3 >
+                                    <div class="table-list-item">
+                                        <table class="table table-hover table-bordered table-condensed">
+                                            <tr class="info">
+                                                <th style="width:25%;" class="text-nowrap">打分事项</th>
+                                                <th class="text-info">${item.indicator.name}</th>
+                                            </tr>
+                                            <tr class="info">
+                                                <th>接收部门：</th>
+                                                <th>${item.opRole}</th>
+                                            </tr>
+                                            <tr class="info">
+                                                <th>确认</th>
+                                                <th class="text-info">材料名称</th>
+                                            </tr>
+                                    <#list item.materialInfos as mitem>
+                                        <#if item.roleId==6>
+                                            <#if mitem.id==1 || mitem.id==2>
+                                            <tr>
+                                                <td class="text-center">
+                                                    <input name="material"
+                                                           value="${item.indicator.id?c}_${mitem.id?c}_${item.roleId?c}"
+                                                           type="checkbox"/>
+                                                </td>
+                                                <td>${mitem.name}</td>
+                                            </tr>
+                                            </#if>
+                                        <#else>
+                                            <#if mitem.id!=1 && mitem.id!=2>
+                                            <tr>
+                                                <td class="text-center">
+                                                    <input name="material"
+                                                           value="${item.indicator.id?c}_${mitem.id?c}_${item.roleId?c}"
+                                                           type="checkbox"/>
+                                                </td>
+                                                <td>${mitem.name}</td>
+                                            </tr>
+                                            </#if>
+                                        </#if>
+                                    </#list>
+                                        </table>
+                                    </div>
+                            <#else>
                             <div class="table-list-item">
                                 <table class="table table-hover table-bordered table-condensed">
                                     <tr class="info">
@@ -292,7 +335,8 @@
                                     <#list item.materialInfos as mitem>
                                         <tr>
                                             <td class="text-center">
-                                                <input name="material" value="${item.indicator.id?c}_${mitem.id?c}"
+                                                <input name="material"
+                                                       value="${item.indicator.id?c}_${mitem.id?c}_${item.roleId?c}"
                                                        type="checkbox"/>
                                             </td>
                                             <td>${mitem.name}</td>
@@ -300,6 +344,7 @@
                                     </#list>
                                 </table>
                             </div>
+                            </#if>
                         </#list>
                         </div>
                     </div>
