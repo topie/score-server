@@ -352,15 +352,7 @@ public class IdentityInfoController {
             person = new IdentityInfo();
         }
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
-        List<Integer> indicatorIds = new ArrayList<>();
-        if (roles.contains(1)) {
-            List<Indicator> indicators = iIndicatorService.findAll();
-            for (Indicator item : indicators) {
-                indicatorIds.add(item.getId());
-            }
-        } else {
-            indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
-        }
+        List<Integer> indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
         Set<Integer> roleMidSet = new HashSet<>();
         for (Integer indicatorId : indicatorIds) {
             List<Integer> iIds = iIndicatorService.selectBindMaterialIds(indicatorId);
@@ -409,6 +401,8 @@ public class IdentityInfoController {
             }
         }
         params.put("onlinePersonMaterials", roleUploadMaterialList);
+        params.put("uploadMaterialList", uploadMaterialList);
+
         for (MaterialInfo materialInfo : roleMaterialInfoList) {
             for (OnlinePersonMaterial onlinePersonMaterial : roleUploadMaterialList) {
                 if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
@@ -417,6 +411,16 @@ public class IdentityInfoController {
             }
         }
         params.put("materialInfos", roleMaterialInfoList);
+
+        for (MaterialInfo materialInfo : materialInfos) {
+            for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+                if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
+                    materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
+                }
+            }
+        }
+        params.put("allMaterialInfos", materialInfos);
+
         params.put("person", person);
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
         if (companyInfo == null) {
