@@ -228,6 +228,7 @@ public class MaterialReceiveController {
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roles.contains(3) || roles.contains(4)) {
                 if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
                     onlinePersonMaterial

@@ -69,6 +69,19 @@
                                 </#list>
                             </table>
                             <script type="text/javascript">
+                                var hostName = window.location.host;
+                                if (hostName == "172.16.200.68") {
+                                    $(".p-img-supply").each(function () {
+                                        var src = $(this).attr("src");
+                                        var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
+                                        $(this).attr("src",newSrc);
+                                    });
+                                    $("a.download-supply").each(function () {
+                                        var href = $(this).attr("href");
+                                        var newHref = href.replace("218.67.246.52:80", "172.16.200.68:8092");
+                                        $(this).attr("href", newHref);
+                                    });
+                                }
                                 $(".p-img-supply").off("click");
                                 $(".p-img-supply").on("click", function () {
                                     var img = $('<img src="' + $(this).attr("src") + '">');
