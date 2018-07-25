@@ -50,30 +50,6 @@
     <br/>
     <br/>
 
-    <p style="text-align:left;white-space:pre-wrap;"><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理部门：</span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">${department}</span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">   <#list 1..(24-department?length) as t> </#list></span><span
-            id="_GoBack"/><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理人：</span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">${user.displayName}</span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">        </span>
-    </p>
-    <p style="text-align:left;white-space:pre-wrap;"><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理时间：</span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">${now}</span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;"><#list 1..(24-now?length) as t> </#list></span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">联系电话</span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">：</span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;"> </span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">${user.contactPhone}</span><span
-            style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">            </span>
-    </p>
+    <p style="text-align:left;white-space:pre-wrap;"><span style="float:left;width:300pt;font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理部门：${department}</span><span style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理人：${user.displayName}</span></p>
+    <p style="text-align:left;white-space:pre-wrap;"><span style="float:left;width:300pt;font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理时间：${now}</span><span style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">联系电话${user.contactPhone}</span></p>
 </div>

@@ -21,14 +21,13 @@
                 style="font-size:14.0pt;color:#000000;white-space:pre-wrap;">${item_index+1}、${item.materialName}</span>
         </p>
     </#list>
-    <#if mList?size lt 10>
-        <#list 1..(10-mList?size) as t>
+    <#if mList?size lt 9>
+        <#list 1..(9-mList?size) as t>
              <p style="line-height:14.0pt;font-size:14.0pt;margin-left:36.0pt;text-align:left;white-space:pre-wrap;"><span
                      style="font-size:14.0pt;color:#000000;white-space:pre-wrap;"> </span>
              </p>
         </#list>
     </#if>
-
     <#if renshe==true>
     <p style="text-indent:36.0pt;text-align:left;white-space:pre-wrap;"><br/></p>
     <p style="font-size:14.0pt;text-align:left;white-space:pre-wrap;"><span style="color:#000000;white-space:pre-wrap;">市人力社保局窗口审核留存的原件，申请人（或者经办人）请于本期入户名单公示后</span><span
@@ -40,44 +39,19 @@
             style="color:#000000;white-space:pre-wrap;"></span><span style="color:#000000;white-space:pre-wrap;"></span>
     </p>
     </#if>
-    <p style="text-align:right;white-space:pre-wrap;"><span
+    <p style="text-align:right;white-space:pre-wrap;margin-bottom: 5pt;margin-right: 10pt;"><span
             style="font-size:18.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${nowYear}</span><span
             style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">年</span><span
             style="font-size:18.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${nowMonth}</span><span
             style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">月</span><span
             style="font-size:18.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;">${nowDay}</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">日</span></p>
-    <p style="text-align:left;white-space:pre-wrap;"><span style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">受理部门：</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">${department}</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"><#list 1..(24-department?length) as t> </#list></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">受理时间：</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">${now}</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">    </span></p>
-    <p style="text-align:left;white-space:pre-wrap;"><span style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">受</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"> </span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">理</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"> </span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">人 ：</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">${user.displayName}</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"><#list 1..(24-user.displayName?length) as t> </#list></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;margin-left: 4pt;">送达时间：</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">${now} </span></p>
-    <p style="text-align:left;white-space:pre-wrap;"><span style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">经</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"> </span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">办</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"> </span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">人 ：</span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;"></span><span
-            style="font-size:18.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;"><#list 1..24 as t> </#list></span><span
-            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;margin-left: 6pt;">   联系电话：</span><span
-            style="font-size:18.0pt;color:#000000;text-decoration:underline;white-space:pre-wrap;"><#list 1..20 as t> </#list></span>
-    </p></div>
+            style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">日</span>
+    </p>
+    <p style="text-align:left;white-space:pre-wrap;"><span style="float:left;width:300pt;font-size:18.0pt;color:#000000;white-space:pre-wrap;">受理部门：${department}</span><span style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">受理时间：${now}</span></p>
+    <p style="text-align:left;white-space:pre-wrap;"><span style="float:left;width:300pt;font-size:18.0pt;color:#000000;white-space:pre-wrap;">受理人：${user.displayName}</span><span style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">送达时间：${now}</span></p>
+    <p style="text-align:left;white-space:pre-wrap;"><span style="float:left;width:300pt;font-size:18.0pt;color:#000000;white-space:pre-wrap;">经办人：<#list 1..24 as t> </#list></span><span style="font-size:18.0pt;color:#000000;white-space:pre-wrap;">联系电话：<#list 1..20 as t> </#list></span></p>
+    <script>
+
+    </script>
+</div>
+
