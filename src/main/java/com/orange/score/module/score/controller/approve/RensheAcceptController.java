@@ -17,6 +17,7 @@ import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
+import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +55,9 @@ public class RensheAcceptController {
 
     @Autowired
     private IBatchConfService iBatchConfService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -182,6 +186,9 @@ public class RensheAcceptController {
             if (4 == identityInfo.getRensheAcceptStatus()) {
                 return ResponseUtil.error("该申请人已被人社受理不通过，无法进行该操作");
             }
+            if (3 == identityInfo.getRensheAcceptStatus()) {
+                return ResponseUtil.error("该申请人已被人社受理通过，无法进行该操作");
+            }
             identityInfo.setOpuser4(securityUser.getDisplayName());
             identityInfo.setHallStatus(5);
             identityInfo.setRensheAcceptStatus(3);
@@ -189,6 +196,56 @@ public class RensheAcceptController {
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 5);
             iScoreRecordService.insertToInitRecords(identityInfo.getBatchId(), identityInfo.getId());
+        }
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/reAgree")
+    public Result reAgree(@RequestParam Integer id, @RequestParam Integer indicatorId) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(securityUser.getId());
+        if (!roles.contains(1)) return ResponseUtil.error("只有管理员有该操作权限");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (identityInfo.getReservationStatus() == 10) {
+            throw new AuthBusinessException("预约已取消");
+        }
+        if (identityInfo != null) {
+            if (4 == identityInfo.getRensheAcceptStatus()) {
+                return ResponseUtil.error("该申请人已被人社受理不通过，无法进行该操作");
+            }
+            identityInfo.setOpuser4(securityUser.getDisplayName());
+            identityInfo.setHallStatus(5);
+            identityInfo.setRensheAcceptStatus(3);
+            iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 5);
+            iScoreRecordService.insertToReInitRecords(identityInfo.getBatchId(), identityInfo.getId(), indicatorId);
+        }
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/appendAgree")
+    public Result appendAgree(@RequestParam Integer id) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(securityUser.getId());
+        if (!roles.contains(1)) return ResponseUtil.error("只有管理员有该操作权限");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (identityInfo.getReservationStatus() == 10) {
+            throw new AuthBusinessException("预约已取消");
+        }
+        if (identityInfo != null) {
+            if (4 == identityInfo.getRensheAcceptStatus()) {
+                return ResponseUtil.error("该申请人已被人社受理不通过，无法进行该操作");
+            }
+            identityInfo.setOpuser4(securityUser.getDisplayName());
+            identityInfo.setHallStatus(5);
+            identityInfo.setRensheAcceptStatus(3);
+            iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 5);
+            iScoreRecordService.insertToAppendInitRecords(identityInfo.getBatchId(), identityInfo.getId());
         }
         return ResponseUtil.success();
     }

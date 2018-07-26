@@ -61,6 +61,9 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
     @Autowired
     private IScoreResultService iScoreResultService;
 
+    @Autowired
+    private IMaterialAcceptRecordService iMaterialAcceptRecordService;
+
     @Override
     public PageInfo<ScoreRecord> selectByFilterAndPage(ScoreRecord scoreRecord, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -166,15 +169,121 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
                 record.setId(null);
                 record.setOpRoleId(roleId);
                 record.setOpRole(role.getRoleName());
-                List<ScoreRecord> list = findByT(record);
-                if (list.size() > 0) {
-                    for (ScoreRecord item : list) {
-                        deleteById(item.getId());
+                save(record);
+            }
+        }
+    }
+
+    @Override
+    public void insertToReInitRecords(Integer batchId, Integer personId, Integer indicatorId) {
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("batchId", batchId);
+        criteria.andEqualTo("personId", personId);
+        if (indicatorId != null) {
+            criteria.andEqualTo("indicatorId", indicatorId);
+        }
+        scoreRecordMapper.deleteByCondition(condition);
+        IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", personId);
+        CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getCompanyId());
+        List<Indicator> indicators = new ArrayList<>();
+        if (indicatorId != null) {
+            Indicator indicator = iIndicatorService.findById(indicatorId);
+            indicators.add(indicator);
+        } else {
+            indicators = iIndicatorService.findAll();
+        }
+
+        for (Indicator indicator : indicators) {
+            ScoreRecord record = new ScoreRecord();
+            record.setBatchId(batchId);
+            record.setAcceptDate(new Date());
+            record.setAcceptNumber(identityInfo.getAcceptNumber());
+            record.setIndicatorId(indicator.getId());
+            record.setIndicatorName(indicator.getName());
+            record.setcTime(new Date());
+            record.setPersonName(identityInfo.getName());
+            record.setPersonMobilePhone(houseOther.getSelfPhone());
+            record.setPersonId(identityInfo.getId());
+            record.setPersonIdNum(identityInfo.getIdNumber());
+            if (companyInfo != null) {
+                record.setCompanyId(companyInfo.getId());
+                record.setCompanyName(companyInfo.getCompanyName());
+            }
+            List<Integer> materialList = iIndicatorService.selectBindMaterialIds(indicator.getId());
+            if (materialList.size() > 0) {
+                record.setStatus(2);
+            } else {
+                record.setStatus(1);
+                record.setSubmitDate(new Date());
+            }
+            List<Integer> roleList = iIndicatorService.selectBindDepartmentIds(indicator.getId());
+            for (Integer roleId : roleList) {
+                Role role = roleService.findRoleById(roleId);
+                if (role == null) continue;
+                record.setId(null);
+                record.setOpRoleId(roleId);
+                record.setOpRole(role.getRoleName());
+                MaterialAcceptRecord materialAcceptRecord = new MaterialAcceptRecord();
+                materialAcceptRecord.setIndicatorId(record.getIndicatorId());
+                materialAcceptRecord.setBatchId(record.getBatchId());
+                materialAcceptRecord.setPersonId(record.getPersonId());
+                materialAcceptRecord.setRoleId(record.getOpRoleId());
+                List<MaterialAcceptRecord> materialAcceptRecords = iMaterialAcceptRecordService
+                        .findByT(materialAcceptRecord);
+                if (materialAcceptRecords.size() > 0) {
+                    for (MaterialAcceptRecord acceptRecord : materialAcceptRecords) {
+                        iMaterialAcceptRecordService.deleteById(acceptRecord.getId());
                     }
                 }
                 save(record);
             }
 
+        }
+    }
+
+    @Override
+    public void insertToAppendInitRecords(Integer batchId, Integer personId) {
+        IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", personId);
+        CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getCompanyId());
+        List<Indicator> indicators = iIndicatorService.findAll();
+        for (Indicator indicator : indicators) {
+            ScoreRecord record = new ScoreRecord();
+            record.setBatchId(batchId);
+            record.setAcceptDate(new Date());
+            record.setAcceptNumber(identityInfo.getAcceptNumber());
+            record.setIndicatorId(indicator.getId());
+            record.setIndicatorName(indicator.getName());
+            record.setcTime(new Date());
+            record.setPersonName(identityInfo.getName());
+            record.setPersonMobilePhone(houseOther.getSelfPhone());
+            record.setPersonId(identityInfo.getId());
+            record.setPersonIdNum(identityInfo.getIdNumber());
+            if (companyInfo != null) {
+                record.setCompanyId(companyInfo.getId());
+                record.setCompanyName(companyInfo.getCompanyName());
+            }
+            List<Integer> roleList = iIndicatorService.selectBindDepartmentIds(indicator.getId());
+            for (Integer roleId : roleList) {
+                Role role = roleService.findRoleById(roleId);
+                if (role == null) continue;
+                record.setId(null);
+                record.setOpRoleId(roleId);
+                record.setOpRole(role.getRoleName());
+                List<ScoreRecord> list = findByT(record);
+                if (list == null || list.size() == 0) {
+                    List<Integer> materialList = iIndicatorService.selectBindMaterialIds(indicator.getId());
+                    if (materialList.size() > 0) {
+                        record.setStatus(2);
+                    } else {
+                        record.setStatus(1);
+                        record.setSubmitDate(new Date());
+                    }
+                    save(record);
+                }
+            }
         }
     }
 
