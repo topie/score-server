@@ -10,10 +10,7 @@ import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.SmsUtil;
 import com.orange.score.common.utils.date.DateUtil;
-import com.orange.score.database.score.model.BatchConf;
-import com.orange.score.database.score.model.HouseOther;
-import com.orange.score.database.score.model.IdentityInfo;
-import com.orange.score.database.score.model.OnlinePersonMaterial;
+import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
@@ -57,6 +54,12 @@ public class PoliceApproveController {
 
     @Autowired
     private IBatchConfService iBatchConfService;
+
+    @Autowired
+    private IHouseMoveService iHouseMoveService;
+
+    @Autowired
+    private ILuohuService iLuohuService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -183,7 +186,7 @@ public class PoliceApproveController {
         }
         if (identityInfo != null) {
             if (4 == identityInfo.getPoliceApproveStatus()) {
-               return ResponseUtil.error("该申请人已被公安前置不通过，无法进行该操作");
+                return ResponseUtil.error("该申请人已被公安前置不通过，无法进行该操作");
             }
             identityInfo.setOpuser3(securityUser.getDisplayName());
             identityInfo.setHallStatus(2);
@@ -196,6 +199,30 @@ public class PoliceApproveController {
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 3);
+            HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", identityInfo.getId());
+            Integer type = 1;
+            if (identityInfo.getAcceptAddressId() == 1 && houseMove.getRegion() != 33) {
+                type = 1;
+            }
+
+            if (identityInfo.getAcceptAddressId() == 2 && houseMove.getRegion() != 33) {
+                type = 2;
+            }
+
+            if (identityInfo.getAcceptAddressId() == 1 && houseMove.getRegion() == 33) {
+                type = 3;
+            }
+
+            if (identityInfo.getAcceptAddressId() == 2 && houseMove.getRegion() == 33) {
+                type = 4;
+            }
+            Luohu luohu = new Luohu();
+            luohu.setPersonId(identityInfo.getId());
+            luohu.setType(type);
+            iLuohuService.save(luohu);
+            String number = String.format("%07d", luohu.getId());
+            identityInfo.setLuohuNumber(type + number);
+            iIdentityInfoService.update(identityInfo);
         }
         return ResponseUtil.success();
     }

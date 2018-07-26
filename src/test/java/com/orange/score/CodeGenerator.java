@@ -22,11 +22,11 @@ public class CodeGenerator {
 
     //JDBC配置，请修改为你项目的实际配置
 
-    private static final String JDBC_URL = "jdbc:oracle:thin:@127.0.0.1:49161:helowin";
+    private static final String JDBC_URL = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
 
     private static final String JDBC_USERNAME = "system";
 
-    private static final String JDBC_PASSWORD = "helowin";
+    private static final String JDBC_PASSWORD = "oracle";
 
     private static final String JDBC_DIVER_CLASS_NAME = "oracle.jdbc.driver.OracleDriver";
 
@@ -53,7 +53,7 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCodeByCustomModelName("t_office", "Office", "id");
+        genCodeByCustomModelName("T_LUOHU", "Luohu", "ID");
     }
 
     /**

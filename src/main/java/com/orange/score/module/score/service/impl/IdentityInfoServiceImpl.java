@@ -155,5 +155,10 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
     public List<Map> selectExportList2(Map argMap) {
         return identityInfoMapper.selectExportList2(argMap);
     }
+
+    @Override
+    public List<Integer> selectApprovingRedCompanyId(IdentityInfo identityInfo,int limit) {
+        return identityInfoMapper.selectApprovingRedCompanyId(identityInfo,limit);
+    }
 }
 

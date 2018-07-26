@@ -10,6 +10,7 @@ import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.BatchConf;
+import com.orange.score.database.score.model.CompanyInfo;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.OnlinePersonMaterial;
 import com.orange.score.module.core.service.ICommonQueryService;
@@ -59,6 +60,9 @@ public class RensheAcceptController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ICompanyInfoService iCompanyInfoService;
+
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
@@ -71,6 +75,12 @@ public class RensheAcceptController {
         result.put("hallStatus", hallStatus);
         Map rensheAcceptStatus = iDictService.selectMapByAlias("rensheAcceptStatus");
         result.put("rensheAcceptStatus", rensheAcceptStatus);
+        List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
+        Map companyMap = new HashMap();
+        for (CompanyInfo companyInfo : companyInfos) {
+            companyMap.put(companyInfo.getId(), companyInfo.getCompanyName());
+        }
+        result.put("companyNames", companyMap);
         return ResponseUtil.success(result);
     }
 
@@ -95,7 +105,14 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(1);
+
+       // List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo,5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+//        for (IdentityInfo info : pageInfo.getList()) {
+//            if(companyIds.contains(info.getCompanyId())){
+//                info.setCompanyWarning(1);
+//            }
+//        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 

@@ -28,8 +28,9 @@ public class Docx2Html {
 
     public static void main(String args[]) {
         try {
-            canExtractImage();
-        } catch (IOException e) {
+            //canExtractImage();
+            System.out.println("9".length());
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

@@ -482,10 +482,34 @@ public class ExportController extends BaseController {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
         }
         params.put("mList", onlinePersonMaterials);
-        List<Region> regionList = iRegionService.findAll();
-        params.put("regionList", regionList);
-        List<Office> officeList = iOfficeService.findAll();
-        params.put("officeList", officeList);
+
+        condition = new Condition(Region.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("level", 1);
+        List<Region> provinceList = iRegionService.findByCondition(condition);
+        params.put("provinceList", provinceList);
+        condition = new Condition(Region.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("level", 2);
+        List<Region> cityList = iRegionService.findByCondition(condition);
+        params.put("cityList", cityList);
+        condition = new Condition(Region.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("level", 3);
+        List<Region> areaList = iRegionService.findByCondition(condition);
+        params.put("areaList", areaList);
+
+        condition = new Condition(Office.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("regionLevel", 1);
+        List<Office> officeList1 = iOfficeService.findByCondition(condition);
+        params.put("officeList1", officeList1);
+
+        condition = new Condition(Office.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("regionLevel", 2);
+        List<Office> officeList2 = iOfficeService.findByCondition(condition);
+        params.put("officeList2", officeList2);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "move_notice_doc.ftl", params);
         String tmpName = System.currentTimeMillis() + "";

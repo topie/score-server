@@ -66,6 +66,9 @@ public class IdentityInfo {
     @Transient
     private String orderByColumn;
 
+    @Column(name = "luohu_number")
+    private String luohuNumber;
+
     /**
      * 姓名
      */
@@ -167,6 +170,25 @@ public class IdentityInfo {
     private String opuser5;
 
     private String opuser6;
+
+    @Transient
+    private Integer companyWarning = 0;
+
+    public Integer getCompanyWarning() {
+        return companyWarning;
+    }
+
+    public void setCompanyWarning(Integer companyWarning) {
+        this.companyWarning = companyWarning;
+    }
+
+    public String getLuohuNumber() {
+        return luohuNumber;
+    }
+
+    public void setLuohuNumber(String luohuNumber) {
+        this.luohuNumber = luohuNumber;
+    }
 
     public String getOrderBy() {
         return orderBy;

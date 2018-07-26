@@ -158,6 +158,12 @@
                                                         value="${item.id}">${item.name}</option>
                                             </#list>
                                         </select>
+                                        <select disabled style="height: 25px;">
+                                            <#list officeList2 as item>
+                                                <option <#if move.registeredRegion==item.id?string>selected</#if>
+                                                        value="${item.id?c}">${item.name}</option>
+                                            </#list>
+                                        </select>
                                     </td>
                                 </tr>
                                 <tr>

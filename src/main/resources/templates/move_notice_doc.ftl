@@ -296,7 +296,7 @@
     </p>
     <p class="p2"></p>
     <p class="p3">
-        <span class="s1">${person.acceptNumber}</span>
+        <span class="s1">${person.luohuNumber}</span>
     </p>
     <p class="p2"></p>
     <p class="p4">
@@ -355,7 +355,11 @@
                 </p>
             </td>
             <td class="td9" colspan="3">
-                <p class="p5">${move.moveAddress}</p>
+                <p class="p5">
+                <#list provinceList as item><#if move.moveProvince==item.id>${item.name}</#if></#list>
+                <#list cityList as item><#if move.moveCity==item.id>${item.name}</#if></#list>
+                <#list regionList as item><#if move.moveRegion==item.id>${item.name}</#if></#list>
+                ${move.moveAddress}</p>
             </td>
         </tr>
         <tr class="r4">
@@ -366,11 +370,7 @@
             </td>
             <td class="td9" colspan="3">
                 <p class="p5">
-                <#list officeList as it>
-                    <#if it.id==move.moveRegisteredOffice>
-                        ${it.name}
-                    </#if>
-                </#list>
+                ${move.moveRegisteredOffice}
                 </p>
             </td>
         </tr>
@@ -392,8 +392,13 @@
             </td>
             <td class="td9" colspan="3">
                 <p class="p5">
-                    <#list officeList as it>
+                    <#list officeList1 as it>
                         <#if it.id==move.registeredOffice>
+                            ${it.name}
+                        </#if>
+                    </#list>
+                    <#list officeList2 as it>
+                        <#if it.id==move.registeredRegion>
                             ${it.name}
                         </#if>
                     </#list>

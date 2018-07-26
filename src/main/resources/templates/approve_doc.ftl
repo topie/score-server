@@ -532,11 +532,11 @@
             </td>
             <td class="td12" colspan="3">
                 <p class="p3">
-                    <span class="s2">工种</span>
+                    <span class="s2">职业名称</span>
                 </p>
             </td>
             <td class="td13">
-                <p class="p3">${profession.jobTypeStr}</p>
+                <p class="p3">${profession.jobNameStr}</p>
             </td>
         </tr>
         <tr class="r5">
@@ -614,7 +614,7 @@
             </td>
         </tr>
         <tr class="r3">
-            <td class="td8" rowspan="${relation?size+1}">
+            <td class="td8" rowspan="${relation?size+3}">
                 <p class="p3"></p>
                 <p class="p3"></p>
                 <p class="p3"></p>
@@ -668,7 +668,34 @@
                   </td>
               </tr>
         </#list>
-
+        <tr class="r9">
+            <td class="td23">
+                <p class="p3"></p>
+            </td>
+            <td class="td24" colspan="3">
+                <p class="p3"></p>
+            </td>
+            <td class="td25" colspan="3">
+                <p class="p3"></p>
+            </td>
+            <td class="td26" colspan="4">
+                <p class="p3"></p>
+            </td>
+        </tr>
+        <tr class="r9">
+            <td class="td23">
+                <p class="p3"></p>
+            </td>
+            <td class="td24" colspan="3">
+                <p class="p3"></p>
+            </td>
+            <td class="td25" colspan="3">
+                <p class="p3"></p>
+            </td>
+            <td class="td26" colspan="4">
+                <p class="p3"></p>
+            </td>
+        </tr>
         <tr class="r3">
             <td class="td8" rowspan="${scoreList?size+1}">
                 <p class="p3"></p>
