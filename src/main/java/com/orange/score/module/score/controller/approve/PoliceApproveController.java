@@ -61,6 +61,15 @@ public class PoliceApproveController {
     @Autowired
     private ILuohuService iLuohuService;
 
+    @Autowired
+    private ILuohu2Service iLuohu2Service;
+
+    @Autowired
+    private ILuohu3Service iLuohu3Service;
+
+    @Autowired
+    private ILuohu4Service iLuohu4Service;
+
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
@@ -203,25 +212,44 @@ public class PoliceApproveController {
             Integer type = 1;
             if (identityInfo.getAcceptAddressId() == 1 && houseMove.getRegion() != 33) {
                 type = 1;
+                Luohu luohu = new Luohu();
+                luohu.setPersonId(identityInfo.getId());
+                luohu.setType(type);
+                iLuohuService.save(luohu);
+                String number = String.format("%07d", luohu.getId());
+                identityInfo.setLuohuNumber(type + number);
             }
 
             if (identityInfo.getAcceptAddressId() == 2 && houseMove.getRegion() != 33) {
                 type = 2;
+                Luohu2 luohu2 = new Luohu2();
+                luohu2.setPersonId(identityInfo.getId());
+                luohu2.setType(type);
+                iLuohu2Service.save(luohu2);
+                String number = String.format("%07d", luohu2.getId());
+                identityInfo.setLuohuNumber(type + number);
             }
 
             if (identityInfo.getAcceptAddressId() == 1 && houseMove.getRegion() == 33) {
                 type = 3;
+                Luohu3 luohu3 = new Luohu3();
+                luohu3.setPersonId(identityInfo.getId());
+                luohu3.setType(type);
+                iLuohu3Service.save(luohu3);
+                String number = String.format("%07d", luohu3.getId());
+                identityInfo.setLuohuNumber(type + number);
             }
 
             if (identityInfo.getAcceptAddressId() == 2 && houseMove.getRegion() == 33) {
                 type = 4;
+                Luohu4 luohu4 = new Luohu4();
+                luohu4.setPersonId(identityInfo.getId());
+                luohu4.setType(type);
+                iLuohu4Service.save(luohu4);
+                String number = String.format("%07d", luohu4.getId());
+                identityInfo.setLuohuNumber(type + number);
             }
-            Luohu luohu = new Luohu();
-            luohu.setPersonId(identityInfo.getId());
-            luohu.setType(type);
-            iLuohuService.save(luohu);
-            String number = String.format("%07d", luohu.getId());
-            identityInfo.setLuohuNumber(type + number);
+
             iIdentityInfoService.update(identityInfo);
         }
         return ResponseUtil.success();

@@ -13,6 +13,7 @@ import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.core.service.IRegionService;
 import com.orange.score.module.score.service.*;
+import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -103,6 +104,12 @@ public class MaterialReceiveIdentityInfoController {
         Map argMap = new HashMap();
         argMap.put("status", Collections.singletonList(2));
         argMap.put("opRoleId", roles);
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            argMap.put("acceptAddressId", 1);
+        } else if (securityUser.getUserType() == 1) {
+            argMap.put("acceptAddressId", 2);
+        }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             argMap.put("personIdNum", scoreRecord.getPersonIdNum());
         }
@@ -136,6 +143,12 @@ public class MaterialReceiveIdentityInfoController {
         Map argMap = new HashMap();
         argMap.put("status", Arrays.asList(3, 4));
         argMap.put("opRoleId", roles);
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            argMap.put("acceptAddressId", 1);
+        } else if (securityUser.getUserType() == 1) {
+            argMap.put("acceptAddressId", 2);
+        }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             argMap.put("personIdNum", scoreRecord.getPersonIdNum());
         }

@@ -29,36 +29,40 @@
         <result column="c_time" jdbcType="TIMESTAMP" property="cTime"/>
     </resultMap>
     <select id="selectIdentityInfo" resultMap="BaseResultMap">
-        select person_id,
-        max(person_name) person_name,
-        max(person_id_num) person_id_num,
-        max(company_name) company_name
-        from t_pb_score_record
+        select sr.person_id,
+        max(sr.person_name) person_name,
+        max(sr.person_id_num) person_id_num,
+        max(sr.company_name) company_name
+        from t_pb_score_record sr inner join t_identity_info i
+        on sr.person_id=i.id
         <where>
             <if test="item.status!=null">
-                and status in
+                and sr.status in
                 <foreach item="it" collection="item.status" open="(" separator="," close=")">
                     #{it}
                 </foreach>
             </if>
             <if test="item.batchId!=null">
-                and batch_id=#{item.batchId}
+                and sr.batch_id=#{item.batchId}
             </if>
             <if test="item.opRoleId!=null">
-                and op_role_id in
+                and sr.op_role_id in
                 <foreach item="it" collection="item.opRoleId" open="(" separator="," close=")">
                     #{it}
                 </foreach>
             </if>
             <if test="item.personIdNum!=null">
-                and person_id_num like concat(concat('%',#{item.personIdNum}),'%')
+                and sr.person_id_num like concat(concat('%',#{item.personIdNum}),'%')
             </if>
             <if test="item.personName!=null">
-                and person_name like concat(concat('%',#{item.personName}),'%')
+                and sr.person_name like concat(concat('%',#{item.personName}),'%')
+            </if>
+            <if test="item.acceptAddressId!=null">
+                and i.accept_address_id = #{item.acceptAddressId}
             </if>
         </where>
-        group by person_id
-        order by person_id desc
+        group by sr.person_id
+        order by sr.person_id desc
     </select>
     <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIds" resultMap="BaseResultMap">
         select indicator_id,op_role_id,max(op_role) op_role,max(status) status from t_pb_score_record

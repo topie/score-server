@@ -122,6 +122,12 @@ public class ScoreRecordIdentityInfoController {
         Map argMap = new HashMap();
         argMap.put("status", Arrays.asList(1, 3));
         argMap.put("opRoleId", roles);
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            argMap.put("acceptAddressId", 1);
+        } else if (securityUser.getUserType() == 1) {
+            argMap.put("acceptAddressId", 2);
+        }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             argMap.put("personIdNum", scoreRecord.getPersonIdNum());
         }
@@ -156,6 +162,12 @@ public class ScoreRecordIdentityInfoController {
         Map argMap = new HashMap();
         argMap.put("status", Arrays.asList(1, 3));
         argMap.put("opRoleId", roles);
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            argMap.put("acceptAddressId", 1);
+        } else if (securityUser.getUserType() == 1) {
+            argMap.put("acceptAddressId", 2);
+        }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             argMap.put("personIdNum", scoreRecord.getPersonIdNum());
         }
@@ -189,6 +201,12 @@ public class ScoreRecordIdentityInfoController {
         Map argMap = new HashMap();
         argMap.put("status", Arrays.asList(4));
         argMap.put("opRoleId", roles);
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            argMap.put("acceptAddressId", 1);
+        } else if (securityUser.getUserType() == 1) {
+            argMap.put("acceptAddressId", 2);
+        }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             argMap.put("personIdNum", scoreRecord.getPersonIdNum());
         }

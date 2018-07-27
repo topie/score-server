@@ -101,10 +101,21 @@ public class ScoreRecordController {
     public Result scoring(ScoreRecord scoreRecord,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Condition condition = new Condition(ScoreRecord.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
+        Condition condition = new Condition(IdentityInfo.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("acceptAddressId", 2);
+        if (scoreRecord.getBatchId() != null) {
+            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+        }
+        List<IdentityInfo> identityInfoList = iIdentityInfoService.findByCondition(condition);
+        Set<Integer> binhaiIds = new HashSet<>();
+        for (IdentityInfo identityInfo : identityInfoList) {
+            binhaiIds.add(identityInfo.getId());
+        }
+        condition = new Condition(ScoreRecord.class);
+        criteria = condition.createCriteria();
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
         if (scoreRecord.getBatchId() == null) {
@@ -118,6 +129,12 @@ public class ScoreRecordController {
         criteria.andIn("opRoleId", roles);
         Integer[] integers = new Integer[] { 1, 3 };
         criteria.andIn("status", CollectionUtils.arrayToList(integers));
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            criteria.andNotIn("personId", binhaiIds);
+        } else if (securityUser.getUserType() == 1) {
+            criteria.andIn("personId", binhaiIds);
+        }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
         }
@@ -136,10 +153,21 @@ public class ScoreRecordController {
     public Result scoringForRenshe(ScoreRecord scoreRecord,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Condition condition = new Condition(ScoreRecord.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
+        Condition condition = new Condition(IdentityInfo.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("acceptAddressId", 2);
+        if (scoreRecord.getBatchId() != null) {
+            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+        }
+        List<IdentityInfo> identityInfoList = iIdentityInfoService.findByCondition(condition);
+        Set<Integer> binhaiIds = new HashSet<>();
+        for (IdentityInfo identityInfo : identityInfoList) {
+            binhaiIds.add(identityInfo.getId());
+        }
+        condition = new Condition(ScoreRecord.class);
+        criteria = condition.createCriteria();
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
         if (scoreRecord.getBatchId() == null) {
@@ -153,6 +181,12 @@ public class ScoreRecordController {
         criteria.andIn("opRoleId", roles);
         Integer[] integers = new Integer[] { 1, 3 };
         criteria.andIn("status", CollectionUtils.arrayToList(integers));
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            criteria.andNotIn("personId", binhaiIds);
+        } else if (securityUser.getUserType() == 1) {
+            criteria.andIn("personId", binhaiIds);
+        }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
         }
