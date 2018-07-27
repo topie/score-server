@@ -212,7 +212,7 @@ public class IdentityInfoController {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
             if (roles.contains(3) || roles.contains(4)) {
                 if (materialInfo.getIsUpload() == 1) {
-                    if (roleMidSet.contains(materialInfo.getId())) {
+                    if (roleMidSet.contains(materialInfo.getId()) && 17 != materialInfo.getId()) {
                         roleMaterialInfoList.add(materialInfo);
                     }
                 }
@@ -231,7 +231,8 @@ public class IdentityInfoController {
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roles.contains(3) || roles.contains(4)) {
-                if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId()) && 17 != onlinePersonMaterial
+                        .getMaterialInfoId()) {
                     onlinePersonMaterial
                             .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
                     roleUploadMaterialList.add(onlinePersonMaterial);
@@ -369,7 +370,7 @@ public class IdentityInfoController {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
             if (roles.contains(3) || roles.contains(4)) {
                 if (materialInfo.getIsUpload() == 1) {
-                    if (roleMidSet.contains(materialInfo.getId())) {
+                    if (roleMidSet.contains(materialInfo.getId()) && 17 != materialInfo.getId()) {
                         roleMaterialInfoList.add(materialInfo);
                     }
                 }
@@ -388,7 +389,8 @@ public class IdentityInfoController {
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roles.contains(3) || roles.contains(4)) {
-                if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId()) && 17 != onlinePersonMaterial
+                        .getMaterialInfoId()) {
                     onlinePersonMaterial
                             .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
                     roleUploadMaterialList.add(onlinePersonMaterial);
