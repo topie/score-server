@@ -101,6 +101,23 @@ public class RenshePrevApproveController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
+    @PostMapping("/lock")
+    public Result lock(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (1 != identityInfo.getUnionApproveStatus2()) {
+            return ResponseUtil.error("该申请人不是待审核状态，锁定无效");
+        }
+        if (StringUtils.isNotEmpty(identityInfo.getLockUser2()) && !identityInfo.getLockUser2()
+                .equals(securityUser.getUsername())) {
+            return ResponseUtil.error("该申请人的预审状态已被" + identityInfo.getLockUser2() + "锁定");
+        }
+        identityInfo.setLockUser2(securityUser.getUsername());
+        iIdentityInfoService.update(identityInfo);
+        return ResponseUtil.success();
+    }
+
     @GetMapping(value = "/approved")
     @ResponseBody
     public Result approved(IdentityInfo identityInfo,
@@ -184,9 +201,17 @@ public class RenshePrevApproveController {
         if (3 == identityInfo.getUnionApproveStatus2()) {
             return ResponseUtil.error("该申请人人社预审驳回，无法进行此操作");
         }
+        if (StringUtils.isEmpty(identityInfo.getLockUser2())) {
+            return ResponseUtil.error("该申请人的预审状态未被锁定，请先锁定！");
+        }
+        if (StringUtils.isNotEmpty(identityInfo.getLockUser2()) && !identityInfo.getLockUser2()
+                .equals(securityUser.getUsername())) {
+            return ResponseUtil.error("该申请人的预审状态已被" + identityInfo.getLockUser2() + "锁定");
+        }
         if (identityInfo != null) {
             identityInfo.setUnionApproveStatus2(2);
             identityInfo.setOpuser2(securityUser.getDisplayName());
+            identityInfo.setLockUser2("");
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 2);
@@ -212,13 +237,21 @@ public class RenshePrevApproveController {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (StringUtils.isNotEmpty(identityInfo.getLockUser2()) && !identityInfo.getLockUser2()
+                .equals(securityUser.getUsername())) {
+            return ResponseUtil.error("该申请人的预审状态已被" + identityInfo.getLockUser2() + "锁定");
+        }
         if (2 == identityInfo.getUnionApproveStatus2()) {
             return ResponseUtil.error("该申请人人社预审已通过，无法进行此操作");
+        }
+        if (StringUtils.isEmpty(identityInfo.getLockUser2())) {
+            return ResponseUtil.error("该申请人的预审状态未被锁定，请先锁定！");
         }
         if (identityInfo != null) {
             identityInfo.setOpuser2(securityUser.getDisplayName());
             identityInfo.setUnionApproveStatus2(3);
             identityInfo.setReservationStatus(9);
+            identityInfo.setLockUser2("");
             identityInfo.setRejectReason(reasonType + " " + rejectReason);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
@@ -236,14 +269,22 @@ public class RenshePrevApproveController {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (StringUtils.isNotEmpty(identityInfo.getLockUser2()) && !identityInfo.getLockUser2()
+                .equals(securityUser.getUsername())) {
+            return ResponseUtil.error("该申请人的预审状态已被" + identityInfo.getLockUser2() + "锁定");
+        }
         if (2 == identityInfo.getUnionApproveStatus2()) {
             return ResponseUtil.error("该申请人人社预审已通过，无法进行此操作");
         }
         if (3 == identityInfo.getUnionApproveStatus2()) {
             return ResponseUtil.error("该申请人人社预审驳回，无法进行此操作");
         }
+        if (StringUtils.isEmpty(identityInfo.getLockUser2())) {
+            return ResponseUtil.error("该申请人的预审状态未被锁定，请先锁定！");
+        }
         if (identityInfo != null) {
             identityInfo.setOpuser2(securityUser.getDisplayName());
+            identityInfo.setLockUser2("");
             identityInfo.setUnionApproveStatus2(4);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService

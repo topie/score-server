@@ -32,7 +32,8 @@
         select sr.person_id,
         max(sr.person_name) person_name,
         max(sr.person_id_num) person_id_num,
-        max(sr.company_name) company_name
+        max(sr.company_name) company_name,
+        max(sr.accept_date) accept_date
         from t_pb_score_record sr inner join t_identity_info i
         on sr.person_id=i.id
         <where>

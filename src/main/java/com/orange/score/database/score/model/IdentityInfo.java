@@ -171,8 +171,30 @@ public class IdentityInfo {
 
     private String opuser6;
 
+    @Column(name = "lock_user_1")
+    private String lockUser1;
+
+    @Column(name = "lock_user_2")
+    private String lockUser2;
+
     @Transient
     private Integer companyWarning = 0;
+
+    public String getLockUser1() {
+        return lockUser1;
+    }
+
+    public void setLockUser1(String lockUser1) {
+        this.lockUser1 = lockUser1;
+    }
+
+    public String getLockUser2() {
+        return lockUser2;
+    }
+
+    public void setLockUser2(String lockUser2) {
+        this.lockUser2 = lockUser2;
+    }
 
     public Integer getCompanyWarning() {
         return companyWarning;
