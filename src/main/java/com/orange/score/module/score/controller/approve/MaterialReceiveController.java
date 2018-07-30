@@ -352,7 +352,7 @@ public class MaterialReceiveController {
         criteria.andEqualTo("indicatorId", indicatorId);
         List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
         for (MaterialAcceptRecord item : materials) {
-            mCheckList.add(item.getIndicatorId() + "_" + item.getMaterialId());
+            mCheckList.add(item.getIndicatorId() + "_" + item.getMaterialId() + "_" + item.getRoleId());
         }
         result.put("mCheckList", mCheckList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
