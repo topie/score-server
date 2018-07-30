@@ -105,7 +105,6 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(1);
-
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         for (IdentityInfo info : pageInfo.getList()) {
@@ -137,7 +136,13 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(2);
+        List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+        for (IdentityInfo info : pageInfo.getList()) {
+            if (companyIds.contains(info.getCompanyId())) {
+                info.setCompanyWarning(1);
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -162,7 +167,13 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(3);
+        List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+        for (IdentityInfo info : pageInfo.getList()) {
+            if (companyIds.contains(info.getCompanyId())) {
+                info.setCompanyWarning(1);
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -187,7 +198,13 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(4);
+        List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+        for (IdentityInfo info : pageInfo.getList()) {
+            if (companyIds.contains(info.getCompanyId())) {
+                info.setCompanyWarning(1);
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
