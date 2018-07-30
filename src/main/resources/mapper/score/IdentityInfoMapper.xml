@@ -101,9 +101,6 @@
             <if test="item.acceptAddressId!=null">
                 and accept_address_id=#{item.acceptAddressId}
             </if>
-            <if test="item.rensheAcceptStatus!=null">
-                and renshe_accept_status=#{item.rensheAcceptStatus}
-            </if>
         </where>
         group by company_id having count(1)>=#{limit}
     </select>
