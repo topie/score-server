@@ -358,7 +358,7 @@
                 <p class="p5">
                 <#list provinceList as item><#if move.moveProvince==item.id>${item.name}</#if></#list>
                 <#list cityList as item><#if move.moveCity==item.id>${item.name}</#if></#list>
-                <#list regionList as item><#if move.moveRegion==item.id>${item.name}</#if></#list>
+                <#list areaList as item><#if move.moveRegion==item.id>${item.name}</#if></#list>
                 ${move.moveAddress}</p>
             </td>
         </tr>
