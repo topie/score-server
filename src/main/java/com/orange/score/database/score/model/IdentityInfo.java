@@ -230,8 +230,9 @@ public class IdentityInfo {
 
     public String getEtStatus() {
         int min = 0;
+        if (policeApproveEt == null) return "-";
         Date now = new Date();
-        if ((policeApproveStatus == 2 || policeApproveStatus == 1) && policeApproveEt != null) {
+        if ((2 == policeApproveStatus || 1 == policeApproveStatus) && policeApproveEt != null) {
             min = DateUtil.getIntervalMins(policeApproveEt, now);
         }
         if (min > 0) {
@@ -251,6 +252,8 @@ public class IdentityInfo {
 
     public String getEpStatus() {
         int min = 0;
+        if(unionApprove1Et==null)
+            return "-";
         Date now = new Date();
         if (unionApproveStatus1 == 2 && unionApproveStatus2 == 2) {
             return "-";

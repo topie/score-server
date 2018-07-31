@@ -413,9 +413,9 @@ public class ScoreRecordController {
             if (item.getStatus() == 4) {
                 Indicator indicator1 = iIndicatorService.findById(item.getIndicatorId());
                 if (indicator1.getItemType() == 0) {
-                    sCheckList.add(item.getIndicatorId() + "_" + item.getItemId());
+                    sCheckList.add(item.getIndicatorId() + "_" + item.getItemId() + "_" + item.getOpRoleId());
                 } else {
-                    sTextList.add(item.getIndicatorId() + "_" + item.getScoreValue());
+                    sTextList.add(item.getIndicatorId() + "_" + item.getScoreValue() + "_" + item.getOpRoleId());
                 }
             }
         }
@@ -441,21 +441,32 @@ public class ScoreRecordController {
     @PostMapping("/score")
     public Result score(@RequestParam("personId") Integer personId,
             @RequestParam(value = "sIds", required = false) String[] sIds,
-            @RequestParam(value = "sAns", required = false) String[] sAns, @RequestParam Integer opRoleId) {
+            @RequestParam(value = "sAns", required = false) String[] sAns,
+            @RequestParam(value = "sDetails", required = false) String[] sDetails) {
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         Integer userId = user.getId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
-        if (!roles.contains(opRoleId)) throw new AuthBusinessException("无权限打分");
         IdentityInfo person = iIdentityInfoService.findById(personId);
         if (person.getHallStatus() == 8) {
             throw new AuthBusinessException("资格已取消");
+        }
+        Map<String, String> detailMap = new HashMap<>();
+        if (sDetails != null) {
+            for (String sDetail : sDetails) {
+                String[] arr = sDetail.split("_");
+                if (arr.length != 3) continue;
+                Integer indicatorId = Integer.valueOf(arr[0]);
+                Integer roleId = Integer.valueOf(arr[2]);
+                detailMap.put(indicatorId + "_" + roleId, arr[1]);
+            }
         }
         if (sAns != null) {
             for (String sAn : sAns) {
                 String[] sAnArr = sAn.split("_");
                 Integer indicatorId = Integer.valueOf(sAnArr[0]);
+                Integer opRoleId = Integer.valueOf(sAnArr[2]);
                 BigDecimal scoreValue = BigDecimal.valueOf(Float.valueOf(sAnArr[1]));
                 Condition condition = new Condition(ScoreRecord.class);
                 tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
@@ -471,6 +482,11 @@ public class ScoreRecordController {
                     scoreRecord.setOpUser(user.getDisplayName());
                     scoreRecord.setScoreValue(scoreValue);
                     scoreRecord.setStatus(4);
+                    if (StringUtils.isNotEmpty(
+                            detailMap.get(scoreRecord.getIndicatorId() + "_" + scoreRecord.getOpRoleId()))) {
+                        scoreRecord.setScoreDetail(
+                                detailMap.get(scoreRecord.getIndicatorId() + "_" + scoreRecord.getOpRoleId()));
+                    }
                     iScoreRecordService.update(scoreRecord);
                 }
             }
@@ -480,6 +496,7 @@ public class ScoreRecordController {
                 String[] sIdArr = sId.split("_");
                 Integer indicatorId = Integer.valueOf(sIdArr[0]);
                 Integer itemId = Integer.valueOf(sIdArr[1]);
+                Integer opRoleId = Integer.valueOf(sIdArr[2]);
                 Condition condition = new Condition(ScoreRecord.class);
                 tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
                 criteria.andEqualTo("indicatorId", indicatorId);
@@ -492,6 +509,11 @@ public class ScoreRecordController {
                     scoreRecord.setScoreDate(new Date());
                     scoreRecord.setOpUserId(userId);
                     scoreRecord.setOpUser(user.getDisplayName());
+                    if (StringUtils.isNotEmpty(
+                            detailMap.get(scoreRecord.getIndicatorId() + "_" + scoreRecord.getOpRoleId()))) {
+                        scoreRecord.setScoreDetail(
+                                detailMap.get(scoreRecord.getIndicatorId() + "_" + scoreRecord.getOpRoleId()));
+                    }
                     if (itemId == 0) {
                         scoreRecord.setScoreValue(BigDecimal.ZERO);
                     } else {
@@ -513,8 +535,14 @@ public class ScoreRecordController {
                         applyCancel.setApplyRoleId(scoreRecord.getOpRoleId());
                         applyCancel.setApplyRole(scoreRecord.getOpRole());
                         applyCancel.setApproveStatus(0);
-                        applyCancel.setApplyReason(
-                                scoreRecord.getOpRole() + " 指标[" + scoreRecord.getIndicatorName() + "]打分自动申请取消资格");
+                        if (StringUtils.isNotEmpty(
+                                detailMap.get(scoreRecord.getIndicatorId() + "_" + scoreRecord.getOpRoleId()))) {
+                            applyCancel.setApplyReason(
+                                    detailMap.get(scoreRecord.getIndicatorId() + "_" + scoreRecord.getOpRoleId()));
+                        } else {
+                            applyCancel.setApplyReason(
+                                    scoreRecord.getOpRole() + " 指标[" + scoreRecord.getIndicatorName() + "]打分自动申请取消资格");
+                        }
                         iApplyCancelService.save(applyCancel);
                     }
                 }

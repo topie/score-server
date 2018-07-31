@@ -345,12 +345,17 @@
                                     </tr>
                                 </#if>
                                 <tr>
-                                    <td class="check_desc" colspan="5">
-                                        <div class="text-info">审核打分说明：</div>
-                                        <textarea class="form-control" rows="3" disabled>
-                                            ${item.indicator.note}
-                                        </textarea>
-                                    </td>
+                                    <#if item.indicator.id==1003 && view!=1>
+                                        <td class="check_desc" colspan="5">
+                                            <div class="text-info">取消资格说明：</div>
+                                            <textarea d-name="reason"  d-roleId="${item.roleId?c}" class="form-control" d-indicator="${item.indicator.id?c}" rows="3"></textarea>
+                                        </td>
+                                    <#else>
+                                        <td class="check_desc" colspan="5">
+                                            <div class="text-info">审核打分说明：</div>
+                                            <textarea class="form-control" rows="3" disabled>${item.indicator.note}</textarea>
+                                        </td>
+                                    </#if>
                                 </tr>
                                 <tr>
                                     <td class="text-danger fontweight600" colspan="5">

@@ -79,6 +79,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             if (identityInfo.getBatchId() != null) {
                 criteria.andEqualTo("batchId", identityInfo.getBatchId());
             }
+            if (identityInfo.getCompanyId() != null) {
+                criteria.andEqualTo("companyId", identityInfo.getCompanyId());
+            }
             if (identityInfo.getAcceptAddressId() != null) {
                 criteria.andEqualTo("acceptAddressId", identityInfo.getAcceptAddressId());
             }
@@ -157,8 +160,8 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
     }
 
     @Override
-    public List<Integer> selectApprovingRedCompanyId(IdentityInfo identityInfo,int limit) {
-        return identityInfoMapper.selectApprovingRedCompanyId(identityInfo,limit);
+    public List<Integer> selectApprovingRedCompanyId(IdentityInfo identityInfo, int limit) {
+        return identityInfoMapper.selectApprovingRedCompanyId(identityInfo, limit);
     }
 }
 

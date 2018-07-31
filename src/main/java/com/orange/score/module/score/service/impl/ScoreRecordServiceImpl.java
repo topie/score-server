@@ -269,11 +269,11 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
             for (Integer roleId : roleList) {
                 Role role = roleService.findRoleById(roleId);
                 if (role == null) continue;
-                record.setId(null);
                 record.setOpRoleId(roleId);
                 record.setOpRole(role.getRoleName());
                 List<ScoreRecord> list = findByT(record);
                 if (list == null || list.size() == 0) {
+                    record.setId(null);
                     List<Integer> materialList = iIndicatorService.selectBindMaterialIds(indicator.getId());
                     if (materialList.size() > 0) {
                         record.setStatus(2);

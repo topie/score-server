@@ -302,8 +302,8 @@
                                         <tr>
                                             <td class="text-center">
                                                 <input type="radio"
-                                                       value="${item.indicator.id?c}_${sitem.id?c}"
-                                                       name="score">
+                                                       value="${item.indicator.id?c}_${sitem.id?c}_${item.roleId?c}"
+                                                       name="score_${item.indicator.id?c}_${item.roleId?c}">
                                             </td>
                                             <td style="width: 60%" colspan="3">${sitem.content}</td>
                                             <td class="text-danger">${sitem.score}分</td>
@@ -318,34 +318,44 @@
                                  <#if item.indicator.id==7 && view!=1>
                                         <td colspan="2" class="text-danger">
                                             <input type="text" reaonly value=""
+                                                   d-roleId="${item.roleId?c}"
                                                    d-indicator="${item.indicator.id?c}"
-                                                   name="manScore">
+                                                   d-name="manScore"
+                                                   name="score_${item.indicator.id?c}_${item.roleId?c}">
                                             <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
                                             </button>
 
                                         </td>
                                         <td colspan="2" class="text-danger">
                                             <input type="text" value=""
+                                                   d-roleId="${item.roleId?c}"
                                                    d-indicator="${item.indicator.id?c}"
-                                                   name="manScore">
+                                                   d-name="manScore"
+                                                   name="score_${item.indicator.id?c}_${item.roleId?c}">
                                         </td>
                                  <#else>
                                      <td colspan="4" class="text-danger">
                                          <input type="text" value=""
+                                                d-roleId="${item.roleId?c}"
                                                 d-indicator="${item.indicator.id?c}"
-                                                name="score">
+                                                name="score_${item.indicator.id?c}_${item.roleId?c}">
                                      </td>
                                  </#if>
                                         <td class="text-danger">手动输入</td>
                                     </tr>
                                 </#if>
                                 <tr>
-                                    <td class="check_desc" colspan="5">
-                                        <div class="text-info">审核打分说明：</div>
-                                        <textarea class="form-control" rows="3" disabled>
-                                            ${item.indicator.note}
-                                        </textarea>
-                                    </td>
+                                    <#if item.indicator.id==1003 && view!=1>
+                                        <td class="check_desc" colspan="5">
+                                            <div class="text-info">取消资格说明：</div>
+                                            <textarea d-name="reason" d-roleId="${item.roleId?c}" class="form-control" d-indicator="${item.indicator.id?c}" rows="3"></textarea>
+                                        </td>
+                                    <#else>
+                                        <td class="check_desc" colspan="5">
+                                            <div class="text-info">审核打分说明：</div>
+                                            <textarea class="form-control" rows="3" disabled>${item.indicator.note}</textarea>
+                                        </td>
+                                    </#if>
                                 </tr>
                                 <tr>
                                     <td class="text-danger fontweight600" colspan="5">
