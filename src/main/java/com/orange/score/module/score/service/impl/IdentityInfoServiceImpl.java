@@ -56,11 +56,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
         if (identityInfo != null) {
             if (identityInfo.getUnionApproveStatus1() != null) {
                 criteria.andEqualTo("unionApproveStatus1", identityInfo.getUnionApproveStatus1());
-                criteria.andNotEqualTo("reservationStatus", 10);
             }
             if (identityInfo.getUnionApproveStatus2() != null) {
                 criteria.andEqualTo("unionApproveStatus2", identityInfo.getUnionApproveStatus2());
-                criteria.andNotEqualTo("reservationStatus", 10);
             }
             if (identityInfo.getHallStatus() != null) {
                 criteria.andEqualTo("hallStatus", identityInfo.getHallStatus());
