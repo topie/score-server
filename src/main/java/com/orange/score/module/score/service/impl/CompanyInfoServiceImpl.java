@@ -39,6 +39,9 @@ public class CompanyInfoServiceImpl extends BaseService<CompanyInfo> implements 
             if (StringUtils.isNotEmpty(companyInfo.getCompanyName())) {
                 criteria.andLike("companyName", "%" + companyInfo.getCompanyName() + "%");
             }
+            if (StringUtils.isNotEmpty(companyInfo.getSocietyCode())) {
+                criteria.andLike("societyCode", "%" + companyInfo.getSocietyCode() + "%");
+            }
         }
         return companyInfoMapper.selectByCondition(condition);
     }
