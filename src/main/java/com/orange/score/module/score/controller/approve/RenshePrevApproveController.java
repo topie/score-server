@@ -106,8 +106,8 @@ public class RenshePrevApproveController {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        if (1 != identityInfo.getUnionApproveStatus2()) {
-            return ResponseUtil.error("该申请人不是待审核状态，锁定无效");
+        if (1 != identityInfo.getUnionApproveStatus2() && 4 != identityInfo.getUnionApproveStatus2()) {
+            return ResponseUtil.error("该申请人不是待审核状态或待补件，锁定无效");
         }
         if (StringUtils.isNotEmpty(identityInfo.getLockUser2()) && !identityInfo.getLockUser2()
                 .equals(securityUser.getUsername())) {
