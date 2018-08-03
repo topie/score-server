@@ -8,10 +8,12 @@ import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.ApplyCancel;
 import com.orange.score.database.score.model.ApplyScore;
+import com.orange.score.database.score.model.CompanyInfo;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.security.model.Role;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.score.service.IApplyCancelService;
+import com.orange.score.module.score.service.ICompanyInfoService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import com.orange.score.module.security.SecurityUser;
@@ -24,9 +26,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-21.
@@ -53,6 +53,9 @@ public class ApplyCancelController {
     @Autowired
     private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
 
+    @Autowired
+    private ICompanyInfoService iCompanyInfoService;
+
     @GetMapping(value = "/mine")
     @ResponseBody
     public Result mine(ApplyCancel applyCancel,
@@ -67,6 +70,23 @@ public class ApplyCancelController {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
         }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
+
+        Set<Integer> personIdSet = new HashSet<>();
+        for (ApplyCancel cancel : pageInfo.getList()) {
+            personIdSet.add(cancel.getPersonId());
+        }
+        condition = new Condition(IdentityInfo.class);
+        criteria = condition.createCriteria();
+        criteria.andIn("id", personIdSet);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        Map personMap = new HashMap();
+        for (IdentityInfo identityInfo : identityInfos) {
+            personMap.put(identityInfo.getId(), identityInfo);
+        }
+        for (ApplyCancel cancel : pageInfo.getList()) {
+            cancel.setPersonName(((IdentityInfo) personMap.get(cancel.getPersonId())).getName());
+            cancel.setCompanyId(((IdentityInfo) personMap.get(cancel.getPersonId())).getCompanyId());
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -89,6 +109,23 @@ public class ApplyCancelController {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
         }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
+
+        Set<Integer> personIdSet = new HashSet<>();
+        for (ApplyCancel cancel : pageInfo.getList()) {
+            personIdSet.add(cancel.getPersonId());
+        }
+        condition = new Condition(IdentityInfo.class);
+        criteria = condition.createCriteria();
+        criteria.andIn("id", personIdSet);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        Map personMap = new HashMap();
+        for (IdentityInfo identityInfo : identityInfos) {
+            personMap.put(identityInfo.getId(), identityInfo);
+        }
+        for (ApplyCancel cancel : pageInfo.getList()) {
+            cancel.setPersonName(((IdentityInfo) personMap.get(cancel.getPersonId())).getName());
+            cancel.setCompanyId(((IdentityInfo) personMap.get(cancel.getPersonId())).getCompanyId());
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -111,6 +148,22 @@ public class ApplyCancelController {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
         }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
+        Set<Integer> personIdSet = new HashSet<>();
+        for (ApplyCancel cancel : pageInfo.getList()) {
+            personIdSet.add(cancel.getPersonId());
+        }
+        condition = new Condition(IdentityInfo.class);
+        criteria = condition.createCriteria();
+        criteria.andIn("id", personIdSet);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        Map personMap = new HashMap();
+        for (IdentityInfo identityInfo : identityInfos) {
+            personMap.put(identityInfo.getId(), identityInfo);
+        }
+        for (ApplyCancel cancel : pageInfo.getList()) {
+            cancel.setPersonName(((IdentityInfo) personMap.get(cancel.getPersonId())).getName());
+            cancel.setCompanyId(((IdentityInfo) personMap.get(cancel.getPersonId())).getCompanyId());
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -130,6 +183,22 @@ public class ApplyCancelController {
         if (user.getUserType() == 0 || user.getUserType() == 1)
             criteria.andEqualTo("applyUserType", user.getUserType());
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
+        Set<Integer> personIdSet = new HashSet<>();
+        for (ApplyCancel cancel : pageInfo.getList()) {
+            personIdSet.add(cancel.getPersonId());
+        }
+        condition = new Condition(IdentityInfo.class);
+        criteria = condition.createCriteria();
+        criteria.andIn("id", personIdSet);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        Map personMap = new HashMap();
+        for (IdentityInfo identityInfo : identityInfos) {
+            personMap.put(identityInfo.getId(), identityInfo);
+        }
+        for (ApplyCancel cancel : pageInfo.getList()) {
+            cancel.setPersonName(((IdentityInfo) personMap.get(cancel.getPersonId())).getName());
+            cancel.setCompanyId(((IdentityInfo) personMap.get(cancel.getPersonId())).getCompanyId());
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -189,9 +258,15 @@ public class ApplyCancelController {
     public Result formItems() {
         List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_apply_cancel");
         List searchItems = iCommonQueryService.selectSearchItemsByTable("t_apply_cancel");
+        List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);
+        Map companyMap = new HashMap();
+        for (CompanyInfo companyInfo : companyInfos) {
+            companyMap.put(companyInfo.getId(), companyInfo.getCompanyName());
+        }
+        result.put("companyNames", companyMap);
         return ResponseUtil.success(result);
     }
 

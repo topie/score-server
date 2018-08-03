@@ -7,11 +7,13 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.score.model.ApplyScore;
+import com.orange.score.database.score.model.CompanyInfo;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.ScoreRecord;
 import com.orange.score.database.security.model.Role;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.score.service.IApplyScoreService;
+import com.orange.score.module.score.service.ICompanyInfoService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IScoreRecordService;
 import com.orange.score.module.security.SecurityUser;
@@ -25,9 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-21.
@@ -54,6 +54,9 @@ public class ApplyScoreController {
     @Autowired
     private IIdentityInfoService iIdentityInfoService;
 
+    @Autowired
+    private ICompanyInfoService iCompanyInfoService;
+
     @GetMapping(value = "/mine")
     @ResponseBody
     public Result mine(ApplyScore applyScore,
@@ -68,6 +71,22 @@ public class ApplyScoreController {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
         }
         PageInfo<ApplyScore> pageInfo = iApplyScoreService.selectByFilterAndPage(condition, pageNum, pageSize);
+        Set<Integer> personIdSet = new HashSet<>();
+        for (ApplyScore item : pageInfo.getList()) {
+            personIdSet.add(item.getPersonId());
+        }
+        condition = new Condition(IdentityInfo.class);
+        criteria = condition.createCriteria();
+        criteria.andIn("id", personIdSet);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        Map personMap = new HashMap();
+        for (IdentityInfo identityInfo : identityInfos) {
+            personMap.put(identityInfo.getId(), identityInfo);
+        }
+        for (ApplyScore item : pageInfo.getList()) {
+            item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
+            item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -90,6 +109,22 @@ public class ApplyScoreController {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
         }
         PageInfo<ApplyScore> pageInfo = iApplyScoreService.selectByFilterAndPage(condition, pageNum, pageSize);
+        Set<Integer> personIdSet = new HashSet<>();
+        for (ApplyScore item : pageInfo.getList()) {
+            personIdSet.add(item.getPersonId());
+        }
+        condition = new Condition(IdentityInfo.class);
+        criteria = condition.createCriteria();
+        criteria.andIn("id", personIdSet);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        Map personMap = new HashMap();
+        for (IdentityInfo identityInfo : identityInfos) {
+            personMap.put(identityInfo.getId(), identityInfo);
+        }
+        for (ApplyScore item : pageInfo.getList()) {
+            item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
+            item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -112,6 +147,22 @@ public class ApplyScoreController {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
         }
         PageInfo<ApplyScore> pageInfo = iApplyScoreService.selectByFilterAndPage(condition, pageNum, pageSize);
+        Set<Integer> personIdSet = new HashSet<>();
+        for (ApplyScore item : pageInfo.getList()) {
+            personIdSet.add(item.getPersonId());
+        }
+        condition = new Condition(IdentityInfo.class);
+        criteria = condition.createCriteria();
+        criteria.andIn("id", personIdSet);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        Map personMap = new HashMap();
+        for (IdentityInfo identityInfo : identityInfos) {
+            personMap.put(identityInfo.getId(), identityInfo);
+        }
+        for (ApplyScore item : pageInfo.getList()) {
+            item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
+            item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -134,6 +185,22 @@ public class ApplyScoreController {
             criteria.andEqualTo("personIdNumber", applyScore.getPersonIdNumber());
         }
         PageInfo<ApplyScore> pageInfo = iApplyScoreService.selectByFilterAndPage(condition, pageNum, pageSize);
+        Set<Integer> personIdSet = new HashSet<>();
+        for (ApplyScore item : pageInfo.getList()) {
+            personIdSet.add(item.getPersonId());
+        }
+        condition = new Condition(IdentityInfo.class);
+        criteria = condition.createCriteria();
+        criteria.andIn("id", personIdSet);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+        Map personMap = new HashMap();
+        for (IdentityInfo identityInfo : identityInfos) {
+            personMap.put(identityInfo.getId(), identityInfo);
+        }
+        for (ApplyScore item : pageInfo.getList()) {
+            item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
+            item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -142,9 +209,15 @@ public class ApplyScoreController {
     public Result formItems() {
         List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_apply_score");
         List searchItems = iCommonQueryService.selectSearchItemsByTable("t_apply_score");
+        List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);
+        Map companyMap = new HashMap();
+        for (CompanyInfo companyInfo : companyInfos) {
+            companyMap.put(companyInfo.getId(), companyInfo.getCompanyName());
+        }
+        result.put("companyNames", companyMap);
         return ResponseUtil.success(result);
     }
 

@@ -24,6 +24,12 @@ public class ApplyCancel {
     @Column(name = "person_id")
     private Integer personId;
 
+    @Transient
+    private String personName;
+
+    @Transient
+    private Integer companyId;
+
     /**
      * 申请人身份证号
      */
@@ -74,6 +80,22 @@ public class ApplyCancel {
      */
     @Column(name = "approve_user")
     private String approveUser;
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
 
     public Integer getApplyUserType() {
         return applyUserType;

@@ -30,6 +30,12 @@ public class ApplyScore {
     @Column(name = "person_id_number")
     private String personIdNumber;
 
+    @Transient
+    private String personName;
+
+    @Transient
+    private Integer companyId;
+
     /**
      * 指标ID
      */
@@ -89,6 +95,22 @@ public class ApplyScore {
      */
     @Column(name = "approve_user")
     private String approveUser;
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
 
     public Integer getApplyUserType() {
         return applyUserType;
