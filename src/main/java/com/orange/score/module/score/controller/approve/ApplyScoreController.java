@@ -75,17 +75,19 @@ public class ApplyScoreController {
         for (ApplyScore item : pageInfo.getList()) {
             personIdSet.add(item.getPersonId());
         }
-        condition = new Condition(IdentityInfo.class);
-        criteria = condition.createCriteria();
-        criteria.andIn("id", personIdSet);
-        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
-        Map personMap = new HashMap();
-        for (IdentityInfo identityInfo : identityInfos) {
-            personMap.put(identityInfo.getId(), identityInfo);
-        }
-        for (ApplyScore item : pageInfo.getList()) {
-            item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
-            item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+        if(personIdSet.size()>0){
+            condition = new Condition(IdentityInfo.class);
+            criteria = condition.createCriteria();
+            criteria.andIn("id", personIdSet);
+            List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+            Map personMap = new HashMap();
+            for (IdentityInfo identityInfo : identityInfos) {
+                personMap.put(identityInfo.getId(), identityInfo);
+            }
+            for (ApplyScore item : pageInfo.getList()) {
+                item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
+                item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+            }
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -113,17 +115,19 @@ public class ApplyScoreController {
         for (ApplyScore item : pageInfo.getList()) {
             personIdSet.add(item.getPersonId());
         }
-        condition = new Condition(IdentityInfo.class);
-        criteria = condition.createCriteria();
-        criteria.andIn("id", personIdSet);
-        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
-        Map personMap = new HashMap();
-        for (IdentityInfo identityInfo : identityInfos) {
-            personMap.put(identityInfo.getId(), identityInfo);
-        }
-        for (ApplyScore item : pageInfo.getList()) {
-            item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
-            item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+        if(personIdSet.size()>0){
+            condition = new Condition(IdentityInfo.class);
+            criteria = condition.createCriteria();
+            criteria.andIn("id", personIdSet);
+            List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+            Map personMap = new HashMap();
+            for (IdentityInfo identityInfo : identityInfos) {
+                personMap.put(identityInfo.getId(), identityInfo);
+            }
+            for (ApplyScore item : pageInfo.getList()) {
+                item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
+                item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+            }
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -151,17 +155,19 @@ public class ApplyScoreController {
         for (ApplyScore item : pageInfo.getList()) {
             personIdSet.add(item.getPersonId());
         }
-        condition = new Condition(IdentityInfo.class);
-        criteria = condition.createCriteria();
-        criteria.andIn("id", personIdSet);
-        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
-        Map personMap = new HashMap();
-        for (IdentityInfo identityInfo : identityInfos) {
-            personMap.put(identityInfo.getId(), identityInfo);
-        }
-        for (ApplyScore item : pageInfo.getList()) {
-            item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
-            item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+        if(personIdSet.size()>0){
+            condition = new Condition(IdentityInfo.class);
+            criteria = condition.createCriteria();
+            criteria.andIn("id", personIdSet);
+            List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+            Map personMap = new HashMap();
+            for (IdentityInfo identityInfo : identityInfos) {
+                personMap.put(identityInfo.getId(), identityInfo);
+            }
+            for (ApplyScore item : pageInfo.getList()) {
+                item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
+                item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+            }
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -189,17 +195,19 @@ public class ApplyScoreController {
         for (ApplyScore item : pageInfo.getList()) {
             personIdSet.add(item.getPersonId());
         }
-        condition = new Condition(IdentityInfo.class);
-        criteria = condition.createCriteria();
-        criteria.andIn("id", personIdSet);
-        List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
-        Map personMap = new HashMap();
-        for (IdentityInfo identityInfo : identityInfos) {
-            personMap.put(identityInfo.getId(), identityInfo);
-        }
-        for (ApplyScore item : pageInfo.getList()) {
-            item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
-            item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+        if(personIdSet.size()>0){
+            condition = new Condition(IdentityInfo.class);
+            criteria = condition.createCriteria();
+            criteria.andIn("id", personIdSet);
+            List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+            Map personMap = new HashMap();
+            for (IdentityInfo identityInfo : identityInfos) {
+                personMap.put(identityInfo.getId(), identityInfo);
+            }
+            for (ApplyScore item : pageInfo.getList()) {
+                item.setPersonName(((IdentityInfo) personMap.get(item.getPersonId())).getName());
+                item.setCompanyId(((IdentityInfo) personMap.get(item.getPersonId())).getCompanyId());
+            }
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
