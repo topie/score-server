@@ -22,7 +22,6 @@ import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
-import com.sun.deploy.net.HttpResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -666,7 +666,7 @@ public class ScoreRecordIdentityInfoController {
 
     @GetMapping(value = "/export/approveDoc")
     @ResponseBody
-    public void exportApproveDoc(HttpResponse response, @RequestParam Integer identityInfoId) throws Exception {
+    public void exportApproveDoc(HttpServletResponse response, @RequestParam Integer identityInfoId) throws Exception {
         Map params = new HashMap();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
