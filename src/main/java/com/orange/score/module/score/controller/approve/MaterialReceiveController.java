@@ -377,7 +377,9 @@ public class MaterialReceiveController {
     @PostMapping("/confirmReceived")
     public Result update(@RequestParam("personId") Integer personId, String[] mIds, Integer opRoleId,
             Integer indicatorId) {
-        Integer userId = SecurityUtil.getCurrentUserId();
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        Integer userId = securityUser.getId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
@@ -416,6 +418,8 @@ public class MaterialReceiveController {
         for (ScoreRecord scoreRecord : scoreRecords) {
             scoreRecord.setStatus(3);
             scoreRecord.setSubmitDate(new Date());
+            scoreRecord.setOpUser(securityUser.getLoginName());
+            scoreRecord.setOpUserId(securityUser.getId());
             iScoreRecordService.update(scoreRecord);
         }
         return ResponseUtil.success();

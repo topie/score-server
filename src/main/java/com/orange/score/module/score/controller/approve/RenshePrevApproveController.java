@@ -9,10 +9,7 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.SmsUtil;
-import com.orange.score.database.score.model.BatchConf;
-import com.orange.score.database.score.model.HouseOther;
-import com.orange.score.database.score.model.IdentityInfo;
-import com.orange.score.database.score.model.OnlinePersonMaterial;
+import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
@@ -57,6 +54,9 @@ public class RenshePrevApproveController {
     @Autowired
     private IBatchConfService iBatchConfService;
 
+    @Autowired
+    private ICompanyInfoService iCompanyInfoService;
+
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
@@ -71,6 +71,12 @@ public class RenshePrevApproveController {
         result.put("unionApproveStatus2", unionApproveStatus2);
         Map reservationStatus = iDictService.selectMapByAlias("reservationStatus");
         result.put("reservationStatus", reservationStatus);
+        List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
+        Map companyMap = new HashMap();
+        for (CompanyInfo companyInfo : companyInfos) {
+            companyMap.put(companyInfo.getId(), companyInfo.getCompanyName());
+        }
+        result.put("companyNames", companyMap);
         return ResponseUtil.success(result);
     }
 
@@ -98,6 +104,13 @@ public class RenshePrevApproveController {
         identityInfo.setOrderByColumn("reservationDate");
         identityInfo.setOrderBy("desc");
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+
+        List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
+        for (IdentityInfo info : pageInfo.getList()) {
+            if (companyIds.contains(info.getCompanyId())) {
+                info.setCompanyWarning(1);
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -140,6 +153,12 @@ public class RenshePrevApproveController {
         }
         identityInfo.setUnionApproveStatus2(2);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+        List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
+        for (IdentityInfo info : pageInfo.getList()) {
+            if (companyIds.contains(info.getCompanyId())) {
+                info.setCompanyWarning(1);
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -165,6 +184,12 @@ public class RenshePrevApproveController {
         }
         identityInfo.setUnionApproveStatus2(3);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+        List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
+        for (IdentityInfo info : pageInfo.getList()) {
+            if (companyIds.contains(info.getCompanyId())) {
+                info.setCompanyWarning(1);
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -190,6 +215,12 @@ public class RenshePrevApproveController {
         }
         identityInfo.setUnionApproveStatus2(4);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+        List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
+        for (IdentityInfo info : pageInfo.getList()) {
+            if (companyIds.contains(info.getCompanyId())) {
+                info.setCompanyWarning(1);
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 

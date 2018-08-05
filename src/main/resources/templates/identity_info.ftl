@@ -334,7 +334,7 @@
                                     $(".p-img").each(function () {
                                         var src = $(this).attr("src");
                                         var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
-                                        $(this).attr("src",newSrc);
+                                        $(this).attr("src", newSrc);
                                     });
                                     $("a.download").each(function () {
                                         var href = $(this).attr("href");
@@ -344,10 +344,33 @@
                                 }
                                 $(".p-img").off("click");
                                 $(".p-img").on("click", function () {
-                                    var img = $('<img src="' + $(this).attr("src") + '">');
+                                    var img = $('<img style="height: 99%;width:99%;" src="' + $(this).attr("src") + '">');
                                     $.orangeModal({
                                         title: "图片预览",
-                                        destroy: true
+                                        destroy: true,
+                                        buttons: [
+                                            {
+                                                text: '放大',
+                                                cls: 'btn btn-info',
+                                                handle: function (m) {
+                                                    m.$body.find("img").each(function (i, d) {
+                                                        var that = this;
+                                                        $(this).css("height", $(that).height()*1.1);
+                                                        $(this).css("width",$(that).width()*1.1);
+                                                    });
+                                                }
+                                            }, {
+                                                text: '缩小',
+                                                cls: 'btn btn-info',
+                                                handle: function (m) {
+                                                    m.$body.find("img").each(function (i, d) {
+                                                        var that = this;
+                                                        $(this).css("height", $(that).height()*0.9);
+                                                        $(this).css("width",$(that).width()*0.9);
+                                                    });
+                                                }
+                                            }
+                                        ]
                                     }).show().$body.html(img);
                                 });
                             </script>
