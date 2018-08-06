@@ -171,8 +171,8 @@ public class ExportController extends BaseController {
         params.put("department", Joiner.on("、").join(departmentNames));
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "approve_empty_doc.ftl", params);
-        String tmpName = System.currentTimeMillis() + "";
-        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName + ".doc");
+        String tmpName = System.currentTimeMillis() + ".doc";
+        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName);
         string2DocConverter.writeWordFile();
         string2DocConverter.download(response, tmpName);
     }
@@ -243,8 +243,8 @@ public class ExportController extends BaseController {
 
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "accept_doc.ftl", params);
-        String tmpName = System.currentTimeMillis() + "";
-        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName + ".doc");
+        String tmpName = System.currentTimeMillis() + ".doc";
+        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName);
         string2DocConverter.writeWordFile();
         string2DocConverter.download(response, tmpName);
     }
@@ -512,8 +512,8 @@ public class ExportController extends BaseController {
         params.put("officeList2", officeList2);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "move_notice_doc.ftl", params);
-        String tmpName = System.currentTimeMillis() + "";
-        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName + ".doc");
+        String tmpName = System.currentTimeMillis() + ".doc";
+        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName);
         string2DocConverter.writeWordFile();
         string2DocConverter.download(response, tmpName);
     }
@@ -523,8 +523,8 @@ public class ExportController extends BaseController {
         Map params = new HashMap();
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_list_doc.ftl", params);
-        String tmpName = System.currentTimeMillis() + "";
-        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName + ".doc");
+        String tmpName = System.currentTimeMillis() + ".doc";
+        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName);
         string2DocConverter.writeWordFile();
         string2DocConverter.download(response, tmpName);
     }
@@ -573,8 +573,8 @@ public class ExportController extends BaseController {
         params.put("uploadMaterialList", roleMaterialInfoList);
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "upload_material_doc.ftl", params);
-        String tmpName = System.currentTimeMillis() + "";
-        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName + ".doc");
+        String tmpName = System.currentTimeMillis() + ".doc";
+        String2DocConverter string2DocConverter = new String2DocConverter(html, "/tmp/" + tmpName);
         string2DocConverter.writeWordFile();
         string2DocConverter.download(response, tmpName);
     }
