@@ -5,6 +5,7 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
+import com.orange.score.common.utils.CamelUtil;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.core.model.Region;
@@ -86,7 +87,7 @@ public class MaterialReceiveIdentityInfoController {
 
     @GetMapping(value = "/receiving")
     @ResponseBody
-    public Result receiving(ScoreRecord scoreRecord,
+    public Result receiving(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -119,13 +120,25 @@ public class MaterialReceiveIdentityInfoController {
         if (scoreRecord.getBatchId() != null) {
             argMap.put("batchId", scoreRecord.getBatchId());
         }
+        if (StringUtils.isNotEmpty(sort_)) {
+            String[] arr = sort_.split("_");
+            if (arr.length == 2) {
+                if ("desc".endsWith(arr[1])) {
+                    argMap.put("orderBy", CamelUtil.camelToUnderline(arr[0]));
+                    argMap.put("orderType", "desc");
+                } else {
+                    argMap.put("orderBy", CamelUtil.camelToUnderline(arr[0]));
+                    argMap.put("orderType", "asc");
+                }
+            }
+        }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
     @GetMapping(value = "/received")
     @ResponseBody
-    public Result received(ScoreRecord scoreRecord,
+    public Result received(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -157,6 +170,18 @@ public class MaterialReceiveIdentityInfoController {
         }
         if (scoreRecord.getBatchId() != null) {
             argMap.put("batchId", scoreRecord.getBatchId());
+        }
+        if (StringUtils.isNotEmpty(sort_)) {
+            String[] arr = sort_.split("_");
+            if (arr.length == 2) {
+                if ("desc".endsWith(arr[1])) {
+                    argMap.put("orderBy", CamelUtil.camelToUnderline(arr[0]));
+                    argMap.put("orderType", "desc");
+                } else {
+                    argMap.put("orderBy", CamelUtil.camelToUnderline(arr[0]));
+                    argMap.put("orderType", "asc");
+                }
+            }
         }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));

@@ -98,7 +98,7 @@ public class ScoreRecordController {
 
     @GetMapping(value = "/scoring")
     @ResponseBody
-    public Result scoring(ScoreRecord scoreRecord,
+    public Result scoring(ScoreRecord scoreRecord,@RequestParam(value = "sort_", required = false) String sort_,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -143,6 +143,18 @@ public class ScoreRecordController {
         }
         if (scoreRecord.getIndicatorId() != null) {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
+        }
+        if (StringUtils.isNotEmpty(sort_)) {
+            String[] arr = sort_.split("_");
+            if (arr.length == 2) {
+                if ("desc".endsWith(arr[1])) {
+                    condition.orderBy(arr[0]).desc();
+                } else {
+                    condition.orderBy(arr[0]).asc();
+                }
+            }
+        }else{
+            condition.orderBy("scoreDate").desc();
         }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
@@ -202,7 +214,7 @@ public class ScoreRecordController {
 
     @GetMapping(value = "/scored")
     @ResponseBody
-    public Result scored(ScoreRecord scoreRecord,
+    public Result scored(ScoreRecord scoreRecord,@RequestParam(value = "sort_", required = false) String sort_,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Condition condition = new Condition(ScoreRecord.class);
@@ -230,7 +242,18 @@ public class ScoreRecordController {
         if (scoreRecord.getIndicatorId() != null) {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
         }
-        condition.orderBy("scoreDate").desc();
+        if (StringUtils.isNotEmpty(sort_)) {
+            String[] arr = sort_.split("_");
+            if (arr.length == 2) {
+                if ("desc".endsWith(arr[1])) {
+                    condition.orderBy(arr[0]).desc();
+                } else {
+                    condition.orderBy(arr[0]).asc();
+                }
+            }
+        }else{
+            condition.orderBy("scoreDate").desc();
+        }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

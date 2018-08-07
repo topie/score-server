@@ -29,7 +29,8 @@
         <result column="c_time" jdbcType="TIMESTAMP" property="cTime"/>
     </resultMap>
     <select id="selectIdentityInfo" resultMap="BaseResultMap">
-        select sr.person_id,
+        select
+        sr.person_id,
         max(sr.person_name) person_name,
         max(sr.person_id_num) person_id_num,
         max(sr.company_name) company_name,
@@ -63,7 +64,13 @@
             </if>
         </where>
         group by sr.person_id
-        order by sr.person_id desc
+        <if test="item.orderBy!=null and item.orderType!=null">
+            order by ${item.orderBy} ${item.orderType}
+        </if>
+        <if test="item.orderBy==null">
+            order by sr.person_id desc
+        </if>
+
     </select>
     <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIds" resultMap="BaseResultMap">
         select indicator_id,op_role_id,max(op_role) op_role,max(status) status from t_pb_score_record

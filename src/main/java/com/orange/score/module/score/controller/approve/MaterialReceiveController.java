@@ -86,7 +86,7 @@ public class MaterialReceiveController {
 
     @GetMapping(value = "/receiving")
     @ResponseBody
-    public Result receiving(ScoreRecord scoreRecord,
+    public Result receiving(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Condition condition = new Condition(IdentityInfo.class);
@@ -131,13 +131,23 @@ public class MaterialReceiveController {
         if (scoreRecord.getIndicatorId() != null) {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
         }
+        if (StringUtils.isNotEmpty(sort_)) {
+            String[] arr = sort_.split("_");
+            if (arr.length == 2) {
+                if ("desc".endsWith(arr[1])) {
+                    condition.orderBy(arr[0]).desc();
+                } else {
+                    condition.orderBy(arr[0]).asc();
+                }
+            }
+        }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
     @GetMapping(value = "/received")
     @ResponseBody
-    public Result received(ScoreRecord scoreRecord,
+    public Result received(ScoreRecord scoreRecord,@RequestParam(value = "sort_", required = false) String sort_,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -182,7 +192,18 @@ public class MaterialReceiveController {
         if (scoreRecord.getIndicatorId() != null) {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
         }
-        condition.orderBy("submitDate").desc();
+        if (StringUtils.isNotEmpty(sort_)) {
+            String[] arr = sort_.split("_");
+            if (arr.length == 2) {
+                if ("desc".endsWith(arr[1])) {
+                    condition.orderBy(arr[0]).desc();
+                } else {
+                    condition.orderBy(arr[0]).asc();
+                }
+            }
+        }else{
+            condition.orderBy("submitDate").desc();
+        }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
