@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.IService;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.score.dto.SearchDto;
+import tk.mybatis.mapper.entity.Condition;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +29,6 @@ public interface IIdentityInfoService extends IService<IdentityInfo> {
     List<Map> selectExportList2(Map argMap);
 
     List<Integer> selectApprovingRedCompanyId(IdentityInfo identityInfo,int limit);
+
+    int countByCondition(Condition condition);
 }

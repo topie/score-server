@@ -161,5 +161,10 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
     public List<Integer> selectApprovingRedCompanyId(IdentityInfo identityInfo, int limit) {
         return identityInfoMapper.selectApprovingRedCompanyId(identityInfo, limit);
     }
+
+    @Override
+    public int countByCondition(Condition condition) {
+        return identityInfoMapper.selectCountByCondition(condition);
+    }
 }
 
