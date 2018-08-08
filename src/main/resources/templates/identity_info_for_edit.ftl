@@ -34,7 +34,7 @@
                             <!-- Default panel contents -->
                             <div class="panel-heading">用人单位信息</div>
                             <!-- Table -->
-                            <table style="font-size: 12px;" class="table table-hover table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-condensed">
                                 <!-- 两组数据信息的 -->
                                 <tr>
                                     <td colspan="6">单位名称：<strong>${company.companyName}</strong></td>
@@ -58,7 +58,7 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">申请人及随迁子女信息</div>
-                            <table style="font-size: 12px;" class="table table-hover table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-condensed">
                                 <tr>
                                     <td colspan="12">居住证号（身份证号）：<strong>${person.idNumber}</strong>
                                     </td>

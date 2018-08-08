@@ -8,7 +8,7 @@
     }
 </style>
 <div>
-    <table style="font-size: 12px;" class="table table-bordered table-hover table-condensed">
+    <table style="font-size: 14px;" class="table table-bordered table-hover table-condensed">
         <tr>
             <td colspan="4">居住证号（身份证号）：
                 <input data-id="${person.id?c}" data-name="person.idNumber"

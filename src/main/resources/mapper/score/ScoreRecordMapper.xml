@@ -62,6 +62,9 @@
             <if test="item.acceptAddressId!=null">
                 and i.accept_address_id = #{item.acceptAddressId}
             </if>
+            <if test="item.acceptDate!=null">
+                and TO_CHAR(sr.accept_date,'yyyy-mm-dd') = #{item.acceptDate}
+            </if>
         </where>
         group by sr.person_id
         <if test="item.orderBy!=null and item.orderType!=null">

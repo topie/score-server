@@ -10,6 +10,8 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.CamelUtil;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.date.DateStyle;
+import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.model.*;
 import com.orange.score.database.security.model.Role;
@@ -108,6 +110,7 @@ public class ScoreRecordIdentityInfoController {
     @GetMapping(value = "/scoring")
     @ResponseBody
     public Result scoring(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
+            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -136,6 +139,9 @@ public class ScoreRecordIdentityInfoController {
         }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonName())) {
             argMap.put("personName", scoreRecord.getPersonName());
+        }
+        if (scoreRecord.getAcceptDate() != null && dateSearch == 1) {
+            argMap.put("acceptDate", DateUtil.DateToString(scoreRecord.getAcceptDate(), DateStyle.YYYY_MM_DD));
         }
         if (scoreRecord.getBatchId() != null) {
             argMap.put("batchId", scoreRecord.getBatchId());
@@ -157,48 +163,10 @@ public class ScoreRecordIdentityInfoController {
 
     }
 
-    @GetMapping(value = "/scoringForRenshe")
-    @ResponseBody
-    public Result scoringForRenshe(ScoreRecord scoreRecord,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        if (userId == null) throw new AuthBusinessException("用户未登录");
-        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
-        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
-        if (scoreRecord.getBatchId() == null) {
-            BatchConf batchConf = new BatchConf();
-            batchConf.setStatus(1);
-            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
-            if (list.size() > 0) {
-                scoreRecord.setBatchId(list.get(0).getId());
-            }
-        }
-        Map argMap = new HashMap();
-        argMap.put("status", Arrays.asList(1, 3));
-        argMap.put("opRoleId", roles);
-        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
-        if (securityUser.getUserType() == 0) {
-            argMap.put("acceptAddressId", 1);
-        } else if (securityUser.getUserType() == 1) {
-            argMap.put("acceptAddressId", 2);
-        }
-        if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
-            argMap.put("personIdNum", scoreRecord.getPersonIdNum());
-        }
-        if (StringUtils.isNotEmpty(scoreRecord.getPersonName())) {
-            argMap.put("personName", scoreRecord.getPersonName());
-        }
-        if (scoreRecord.getBatchId() != null) {
-            argMap.put("batchId", scoreRecord.getBatchId());
-        }
-        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
-        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
-    }
-
     @GetMapping(value = "/scored")
     @ResponseBody
     public Result scored(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
+            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -230,6 +198,9 @@ public class ScoreRecordIdentityInfoController {
         }
         if (scoreRecord.getBatchId() != null) {
             argMap.put("batchId", scoreRecord.getBatchId());
+        }
+        if (scoreRecord.getAcceptDate() != null && dateSearch == 1) {
+            argMap.put("acceptDate", DateUtil.DateToString(scoreRecord.getAcceptDate(), DateStyle.YYYY_MM_DD));
         }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");

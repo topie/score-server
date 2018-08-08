@@ -8,6 +8,8 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.CamelUtil;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.date.DateStyle;
+import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
@@ -88,6 +90,7 @@ public class MaterialReceiveIdentityInfoController {
     @GetMapping(value = "/receiving")
     @ResponseBody
     public Result receiving(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
+            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -114,6 +117,9 @@ public class MaterialReceiveIdentityInfoController {
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             argMap.put("personIdNum", scoreRecord.getPersonIdNum());
         }
+        if (scoreRecord.getAcceptDate() != null && dateSearch == 1) {
+            argMap.put("acceptDate", DateUtil.DateToString(scoreRecord.getAcceptDate(), DateStyle.YYYY_MM_DD));
+        }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonName())) {
             argMap.put("personName", scoreRecord.getPersonName());
         }
@@ -139,6 +145,7 @@ public class MaterialReceiveIdentityInfoController {
     @GetMapping(value = "/received")
     @ResponseBody
     public Result received(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
+            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -167,6 +174,9 @@ public class MaterialReceiveIdentityInfoController {
         }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonName())) {
             argMap.put("personName", scoreRecord.getPersonName());
+        }
+        if (scoreRecord.getAcceptDate() != null && dateSearch == 1) {
+            argMap.put("acceptDate", DateUtil.DateToString(scoreRecord.getAcceptDate(), DateStyle.YYYY_MM_DD));
         }
         if (scoreRecord.getBatchId() != null) {
             argMap.put("batchId", scoreRecord.getBatchId());

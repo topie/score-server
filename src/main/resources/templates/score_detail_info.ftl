@@ -21,7 +21,7 @@
                     <div class="col-md-12 col-sx-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">申请人信息</div>
-                            <table style="font-size: 12px;" class="table table-hover table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-condensed">
                                 <tr>
                                     <td colspan="12">居住证号（身份证号）：<strong>${person.idNumber}</strong>
                                     </td>

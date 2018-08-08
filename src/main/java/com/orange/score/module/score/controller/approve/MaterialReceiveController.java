@@ -147,7 +147,7 @@ public class MaterialReceiveController {
 
     @GetMapping(value = "/received")
     @ResponseBody
-    public Result received(ScoreRecord scoreRecord,@RequestParam(value = "sort_", required = false) String sort_,
+    public Result received(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -201,7 +201,7 @@ public class MaterialReceiveController {
                     condition.orderBy(arr[0]).asc();
                 }
             }
-        }else{
+        } else {
             condition.orderBy("submitDate").desc();
         }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
