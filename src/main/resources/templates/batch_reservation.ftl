@@ -1,4 +1,4 @@
-<table class="table table-scrollable table-striped table-bordered table-hover dataTable no-footer">
+<table style="font-size: 14px;" class="table table-scrollable table-striped table-bordered table-hover dataTable no-footer">
     <tr>
         <th rowspan="3">受理日期</th>
         <th colspan="4">市级预约人数</th>

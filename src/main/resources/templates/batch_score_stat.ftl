@@ -8,7 +8,7 @@
         text-align: left;
     }
 </style>
-<table class="table table-scrollable table-striped table-bordered table-hover dataTable no-footer">
+<table style="font-size: 14px;" class="table table-scrollable table-striped table-bordered table-hover dataTable no-footer">
     <tr>
         <th style="width: 15%">打分事项</th>
         <th style="width: 55%">指标</th>

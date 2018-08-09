@@ -25,7 +25,7 @@
                         </div>
                         <!-- Table 多个表格列表组合 -->
                         <div class="table-list-item">
-                            <table class="table table-hover table-bordered table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
                                     <th>选择</th>
                                     <th>预览(点击放大)</th>

@@ -44,7 +44,7 @@
                             <!-- Default panel contents -->
                             <div class="panel-heading">部门审核打分</div>
                             <!-- Table -->
-                            <table class="table table-hover table-bordered table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
                                     <th>指标序号：</th>
                                     <th>${item.indicator.indexNum}</th>
@@ -72,7 +72,7 @@
                                     <td style="color: red" colspan="2">${item.scoreValue?default("-")}</td>
                                 </tr>
                             </table>
-                            <table class="table table-hover table-bordered table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                 <#if item.indicator.itemType==0>
                                     <tr class="info">
                                         <th>选择</th>

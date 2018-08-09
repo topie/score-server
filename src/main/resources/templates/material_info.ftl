@@ -245,7 +245,7 @@
                                 <!-- 内表格 -->
                                 <tr>
                                     <td colspan="12">
-                                        <table class="table table-hover table-bordered table-condensed">
+                                        <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                             <tr class="info">
                                                 <th>与本人关系</th>
                                                 <th>姓名</th>
@@ -277,7 +277,7 @@
                         <#list mlist as item>
                             <#if item.indicator.id==3 >
                                     <div class="table-list-item">
-                                        <table class="table table-hover table-bordered table-condensed">
+                                        <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                             <tr class="info">
                                                 <th style="width:25%;" class="text-nowrap">打分事项</th>
                                                 <th class="text-info">${item.indicator.name}</th>
@@ -319,7 +319,7 @@
                                     </div>
                             <#else>
                             <div class="table-list-item">
-                                <table class="table table-hover table-bordered table-condensed">
+                                <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                     <tr class="info">
                                         <th style="width:25%;" class="text-nowrap">打分事项</th>
                                         <th class="text-info">${item.indicator.name}</th>
@@ -357,7 +357,7 @@
                         </div>
                         <!-- Table 多个表格列表组合 -->
                         <div class="table-list-item">
-                            <table class="table table-hover table-bordered table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
                                     <th>预览</th>
                                     <th class="text-info">材料名称</th>

@@ -259,7 +259,7 @@
                                 <!-- 内表格 -->
                                 <tr>
                                     <td colspan="12">
-                                        <table class="table table-hover table-bordered table-condensed">
+                                        <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                             <tr class="info">
                                                 <th>与本人关系</th>
                                                 <th>姓名</th>
@@ -288,7 +288,7 @@
                             <!-- Default panel contents -->
                             <div class="panel-heading">部门审核打分</div>
                             <!-- Table -->
-                            <table class="table table-hover table-bordered table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
                                     <th>指标序号：</th>
                                     <th>${item.indicator.indexNum}</th>
@@ -316,7 +316,7 @@
                                     <td style="color: red" colspan="2">${item.scoreValue?default("-")}</td>
                                 </tr>
                             </table>
-                            <table class="table table-hover table-bordered table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                 <#if item.indicator.itemType==0>
                                     <tr class="info">
                                         <th>选择</th>
@@ -374,7 +374,7 @@
                         </div>
                         <!-- Table 多个表格列表组合 -->
                         <div class="table-list-item">
-                            <table class="table table-hover table-bordered table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
                                     <th colspan="2" class="text-info">选中表示已经提交过该材料</th>
                                 </tr>
@@ -402,7 +402,7 @@
                         </div>
                         <!-- Table 多个表格列表组合 -->
                         <div class="table-list-item">
-                            <table class="table table-hover table-bordered table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
                                     <th>预览(点击放大)</th>
                                     <th class="text-info">材料名称</th>
