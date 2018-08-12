@@ -294,6 +294,7 @@ public class ScoreRecordController {
                         Collections.singletonList(opRoleId));
         for (ScoreRecord scoreRecord : indicatorIdList) {
             Map msMap = new HashMap();
+            msMap.put("scoreRecordId", scoreRecord.getId());
             Indicator indicator = iIndicatorService.findById(scoreRecord.getIndicatorId());
             if (indicator == null) {
                 System.out.println(scoreRecord.getIndicatorId());

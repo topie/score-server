@@ -358,8 +358,16 @@
                                     </#if>
                                 </tr>
                                 <tr>
-                                    <td class="text-danger fontweight600" colspan="5">
+                                    <td class="text-danger fontweight600" colspan="4">
                                         <div class="alert alert-warning">请您按照指标体系要求打分</div>
+                                    </td>
+                                    <td class="" style="vertical-align: middle;" colspan="1">
+                                        <a class="btn btn-mini btn-danger" style="display: none;" href="javascript:void(0);"
+                                           id="button_${item.indicator.id?c}_${item.roleId?c}"
+                                           scoreRecord="${item.scoreRecordId?c}"
+                                           role="apply"
+                                           type="button">重新打分
+                                        </a>
                                     </td>
                                 </tr>
                             </table>
