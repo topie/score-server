@@ -246,7 +246,8 @@
                                 <!-- 内表格 -->
                                 <tr>
                                     <td colspan="12">
-                                        <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
+                                        <table style="font-size: 14px;"
+                                               class="table table-hover table-bordered table-condensed">
                                             <tr class="info">
                                                 <th>与本人关系</th>
                                                 <th>姓名</th>
@@ -348,18 +349,28 @@
                                     <#if item.indicator.id==1003 && view!=1>
                                         <td class="check_desc" colspan="5">
                                             <div class="text-info">取消资格说明：</div>
-                                            <textarea d-name="reason"  d-roleId="${item.roleId?c}" class="form-control" d-indicator="${item.indicator.id?c}" rows="3"></textarea>
+                                            <textarea d-name="reason" d-roleId="${item.roleId?c}" class="form-control"
+                                                      d-indicator="${item.indicator.id?c}" rows="3"></textarea>
                                         </td>
                                     <#else>
                                         <td class="check_desc" colspan="5">
                                             <div class="text-info">审核打分说明：</div>
-                                            <textarea class="form-control" rows="3" disabled>${item.indicator.note}</textarea>
+                                            <textarea class="form-control" rows="3"
+                                                      disabled>${item.indicator.note}</textarea>
                                         </td>
                                     </#if>
                                 </tr>
                                 <tr>
-                                    <td class="text-danger fontweight600" colspan="5">
+                                    <td class="text-danger fontweight600" colspan="4">
                                         <div class="alert alert-warning">请您按照指标体系要求打分</div>
+                                    </td>
+                                    <td class="" style="vertical-align: middle;" colspan="1">
+                                        <a class="btn btn-mini btn-danger" style="display: none;" href="javascript:void(0);"
+                                           id="button_${item.indicator.id?c}_${item.roleId?c}"
+                                           scoreRecord="${item.scoreRecordId?c}"
+                                           role="apply"
+                                           type="button">重新打分
+                                        </a>
                                     </td>
                                 </tr>
                             </table>
@@ -424,7 +435,7 @@
                                     $(".p-img").each(function () {
                                         var src = $(this).attr("src");
                                         var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
-                                        $(this).attr("src",newSrc);
+                                        $(this).attr("src", newSrc);
                                     });
                                     $("a.download").each(function () {
                                         var href = $(this).attr("href");
@@ -445,8 +456,8 @@
                                                 handle: function (m) {
                                                     m.$body.find("img").each(function (i, d) {
                                                         var that = this;
-                                                        $(this).css("height", $(that).height()*1.1);
-                                                        $(this).css("width",$(that).width()*1.1);
+                                                        $(this).css("height", $(that).height() * 1.1);
+                                                        $(this).css("width", $(that).width() * 1.1);
                                                     });
                                                 }
                                             }, {
@@ -455,8 +466,8 @@
                                                 handle: function (m) {
                                                     m.$body.find("img").each(function (i, d) {
                                                         var that = this;
-                                                        $(this).css("height", $(that).height()*0.9);
-                                                        $(this).css("width",$(that).width()*0.9);
+                                                        $(this).css("height", $(that).height() * 0.9);
+                                                        $(this).css("width", $(that).width() * 0.9);
                                                     });
                                                 }
                                             }

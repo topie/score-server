@@ -98,7 +98,7 @@ public class ScoreRecordController {
 
     @GetMapping(value = "/scoring")
     @ResponseBody
-    public Result scoring(ScoreRecord scoreRecord,@RequestParam(value = "sort_", required = false) String sort_,
+    public Result scoring(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -153,7 +153,7 @@ public class ScoreRecordController {
                     condition.orderBy(arr[0]).asc();
                 }
             }
-        }else{
+        } else {
             condition.orderBy("scoreDate").desc();
         }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
@@ -214,11 +214,22 @@ public class ScoreRecordController {
 
     @GetMapping(value = "/scored")
     @ResponseBody
-    public Result scored(ScoreRecord scoreRecord,@RequestParam(value = "sort_", required = false) String sort_,
+    public Result scored(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
-        Condition condition = new Condition(ScoreRecord.class);
+        Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("acceptAddressId", 2);
+        if (scoreRecord.getBatchId() != null) {
+            criteria.andEqualTo("batchId", scoreRecord.getBatchId());
+        }
+        List<IdentityInfo> identityInfoList = iIdentityInfoService.findByCondition(condition);
+        Set<Integer> binhaiIds = new HashSet<>();
+        for (IdentityInfo identityInfo : identityInfoList) {
+            binhaiIds.add(identityInfo.getId());
+        }
+        condition = new Condition(ScoreRecord.class);
+        criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
@@ -233,6 +244,12 @@ public class ScoreRecordController {
         }
         criteria.andIn("opRoleId", roles);
         criteria.andEqualTo("status", 4);
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            criteria.andNotIn("personId", binhaiIds);
+        } else if (securityUser.getUserType() == 1) {
+            criteria.andIn("personId", binhaiIds);
+        }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
         }
@@ -251,7 +268,7 @@ public class ScoreRecordController {
                     condition.orderBy(arr[0]).asc();
                 }
             }
-        }else{
+        } else {
             condition.orderBy("scoreDate").desc();
         }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);

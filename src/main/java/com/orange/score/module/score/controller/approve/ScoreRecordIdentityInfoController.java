@@ -232,10 +232,11 @@ public class ScoreRecordIdentityInfoController {
         List<ScoreRecord> indicatorIdList = iScoreRecordService
                 .selectIndicatorIdsByIdentityInfoIdAndRoleIds(identityInfoId, roles);
         for (ScoreRecord scoreRecord : indicatorIdList) {
+            Map msMap = new HashMap();
+            msMap.put("scoreRecordId", scoreRecord.getId());
             if (view != 1 && scoreRecord.getStatus() != null && scoreRecord.getStatus() == 4) {
                 continue;
             }
-            Map msMap = new HashMap();
             Indicator indicator = iIndicatorService.findById(scoreRecord.getIndicatorId());
             if (indicator == null) {
                 continue;
