@@ -31,4 +31,8 @@ public interface IIdentityInfoService extends IService<IdentityInfo> {
     List<Integer> selectApprovingRedCompanyId(IdentityInfo identityInfo,int limit);
 
     int countByCondition(Condition condition);
+
+    List<Map> selectExportList3(Map argMap);
+
+    PageInfo<Map> selectExportList3ByPage(Map argMap, int pageNum, int pageSize);
 }

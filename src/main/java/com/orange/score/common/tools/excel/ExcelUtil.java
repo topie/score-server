@@ -57,7 +57,7 @@ public class ExcelUtil {
      * 获取cell类型的文字描述
      *
      * @param cellType <pre>
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @return
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @return
      */
     private static String getCellTypeByInt(int cellType) {
         switch (cellType) {
@@ -537,10 +537,13 @@ public class ExcelUtil {
                     Map<String, Object> map = (Map<String, Object>) t;
                     int cellNum = 0;
                     for (String k : headers) {
+                        Object value = null;
                         if (map.containsKey(k) == false) {
-                            continue;
+                            value = "";
+                        } else {
+                            value = map.get(k);
                         }
-                        Object value = map.get(k);
+
                         XSSFCell cell = row.createCell(cellNum);
                         cell.setCellType(XSSFCellStyle.ALIGN_LEFT);
                         cell.setCellValue(String.valueOf(value));

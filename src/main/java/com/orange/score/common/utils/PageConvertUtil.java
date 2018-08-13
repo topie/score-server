@@ -44,4 +44,12 @@ public class PageConvertUtil {
         map.put("data", list);
         return map;
     }
+
+    public static Map grid(PageInfo<?> info, List<Map> columns) {
+        Map map = new HashMap();
+        map.put("total", info.getTotal());
+        map.put("data", info.getList());
+        map.put("columns", columns);
+        return map;
+    }
 }

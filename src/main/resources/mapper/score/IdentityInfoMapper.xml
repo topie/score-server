@@ -104,4 +104,55 @@
         </where>
         group by company_id having count(1)>=#{limit}
     </select>
+    <select id="selectExportList3" resultType="java.util.Map">
+        select
+        r.*,c.batch_name,i.accept_address
+        from t_pb_score_record r
+        left join t_identity_info i
+        on r.person_id = i.id
+        left join t_batch_conf c
+        on r.batch_id=c.id
+        <where>
+            <if test="item.batchId!=null">
+                and r.batch_id = #{item.batchId}
+            </if>
+            <if test="item.personName!=null and item.personName!=''">
+                and r.person_name like concat('%',concat(#{item.personName}, '%'))
+            </if>
+            <if test="item.personIdNum!=null and item.personIdNum!=''">
+                and r.person_id_num like concat('%',concat(#{item.personIdNum}, '%'))
+            </if>
+            <if test="item.companyName!=null and item.companyName!=''">
+                and r.company_name like concat('%',concat(#{item.companyName}, '%'))
+            </if>
+            <if test="item.indicatorName!=null and item.indicatorName!=''">
+                and r.indicator_name like concat('%',concat(#{item.indicatorName}, '%'))
+            </if>
+            <if test="item.status!=null">
+                and r.status = #{item.status}
+            </if>
+            <if test="item.acceptAddressId!=null">
+                and i.accept_address_id = #{item.acceptAddressId}
+            </if>
+            <if test="item.acceptDateBegin!=null">
+                <![CDATA[ and r.accept_date >= #{item.acceptDateBegin} ]]>
+            </if>
+            <if test="item.acceptDateEnd!=null">
+                <![CDATA[ and r.accept_date < #{item.acceptDateEnd}  ]]>
+            </if>
+            <if test="item.submitDateBegin!=null">
+                <![CDATA[ and r.submit_date >= #{item.submitDateBegin} ]]>
+            </if>
+            <if test="item.submitDateEnd!=null">
+                <![CDATA[ and r.submit_date < #{item.submitDateEnd}  ]]>
+            </if>
+            <if test="item.scoreDateBegin!=null">
+                <![CDATA[ and r.score_date >= #{item.scoreDateBegin} ]]>
+            </if>
+            <if test="item.scoreDateEnd!=null">
+                <![CDATA[ and r.score_date < #{item.scoreDateEnd}  ]]>
+            </if>
+        </where>
+
+    </select>
 </mapper>

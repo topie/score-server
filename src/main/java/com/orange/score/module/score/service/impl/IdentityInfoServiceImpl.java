@@ -166,5 +166,17 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
     public int countByCondition(Condition condition) {
         return identityInfoMapper.selectCountByCondition(condition);
     }
+
+    @Override
+    public List<Map> selectExportList3(Map argMap) {
+        return identityInfoMapper.selectExportList3(argMap);
+    }
+
+    @Override
+    public PageInfo<Map> selectExportList3ByPage(Map argMap, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Map> list = selectExportList3(argMap);
+        return new PageInfo<>(list);
+    }
 }
 
