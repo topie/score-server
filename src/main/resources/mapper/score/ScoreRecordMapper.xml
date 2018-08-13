@@ -86,7 +86,7 @@
     </select>
     <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIdsAndIndicatorId"
             resultMap="BaseResultMap">
-        select indicator_id,op_role_id,max(op_role) op_role,max(status) status from t_pb_score_record
+        select indicator_id,op_role_id,max(op_role) op_role,max(status) status,max(id) id from t_pb_score_record
         where
         person_id=#{identityInfoId}
         and indicator_id=#{indicatorId}

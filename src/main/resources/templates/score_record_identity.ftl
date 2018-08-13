@@ -365,12 +365,19 @@
                                         <div class="alert alert-warning">请您按照指标体系要求打分</div>
                                     </td>
                                     <td class="" style="vertical-align: middle;" colspan="1">
-                                        <a class="btn btn-mini btn-danger" style="display: none;" href="javascript:void(0);"
+                                        <a class="btn btn-mini btn-danger" style="display: none;"
+                                           href="javascript:void(0);"
                                            id="button_${item.indicator.id?c}_${item.roleId?c}"
                                            scoreRecord="${item.scoreRecordId?c}"
                                            role="apply"
                                            type="button">重新打分
                                         </a>
+                                        <#if item.minzheng != -1 && item.minzheng != -2 >
+                                            <div class="alert alert-info">民政局打分: ${item.minzheng}</div>
+                                        </#if>
+                                        <#if item.minzheng == -1 >
+                                            <div class="alert alert-info">民政局未打分</div>
+                                        </#if>
                                     </td>
                                 </tr>
                             </table>
