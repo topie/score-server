@@ -368,10 +368,10 @@
                                            role="apply"
                                            type="button">重新打分
                                         </a>
-                                        <#if item.minzheng != -1 && item.minzheng != -2 >
-                                            <div class="alert alert-info">民政局打分: ${item.minzheng}</div>
+                                        <#if item.jiaowei != -1 && item.jiaowei != -2 >
+                                            <div class="alert alert-info">民政局打分: ${item.jiaowei}</div>
                                         </#if>
-                                        <#if item.minzheng == -1 >
+                                        <#if item.jiaowei == -1 >
                                             <div class="alert alert-info">民政局未打分</div>
                                         </#if>
                                     </td>

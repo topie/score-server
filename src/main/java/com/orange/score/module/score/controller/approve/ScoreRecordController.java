@@ -309,18 +309,18 @@ public class ScoreRecordController {
             msMap.put("indicatorItems", indicatorItems);
             msMap.put("roleId", scoreRecord.getOpRoleId());
             msMap.put("opRole", scoreRecord.getOpRole());
-            msMap.put("minzheng", -2);
-            if (scoreRecord.getIndicatorId() == 14 && scoreRecord.getOpRoleId() == 3) {
+            msMap.put("jiaowei", -2);
+            if (scoreRecord.getIndicatorId() == 3 && scoreRecord.getOpRoleId() == 3) {
                 condition = new Condition(ScoreRecord.class);
                 criteria = condition.createCriteria();
-                criteria.andEqualTo("indicatorId", 14);
-                criteria.andEqualTo("opRoleId", 5);
+                criteria.andEqualTo("indicatorId", 3);
+                criteria.andEqualTo("opRoleId", 6);
                 criteria.andEqualTo("personId", identityInfoId);
                 List<ScoreRecord> minzhenList = iScoreRecordService.findByCondition(condition);
                 if (minzhenList != null && minzhenList.size() > 0 && minzhenList.get(0).getScoreValue() != null) {
-                    msMap.put("minzheng", minzhenList.get(0).getScoreValue());
+                    msMap.put("jiaowei", minzhenList.get(0).getScoreValue());
                 } else {
-                    msMap.put("minzheng", -1);
+                    msMap.put("jiaowei", -1);
                 }
             }
             scoreList.add(msMap);

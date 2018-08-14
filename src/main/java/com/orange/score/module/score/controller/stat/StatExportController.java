@@ -220,4 +220,103 @@ public class StatExportController {
         ExcelFileUtil.download(response, savePath, "列表3.xlsx");
     }
 
+    @GetMapping(value = "/list4")
+    @ResponseBody
+    public Result list4(@RequestParam(value = "batchId", required = false) Integer batchId,
+            @RequestParam(value = "personName", required = false) String personName,
+            @RequestParam(value = "personIdNum", required = false) String personIdNum,
+            @RequestParam(value = "companyName", required = false) String companyName,
+            @RequestParam(value = "indicatorName", required = false) String indicatorName,
+            @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        Map argMap = new HashMap();
+        argMap.put("batchId", batchId);
+        if (StringUtils.isNotEmpty(personName)) {
+            argMap.put("personName", personName);
+        }
+        if (StringUtils.isNotEmpty(personIdNum)) {
+            argMap.put("personIdNum", personIdNum);
+        }
+        if (StringUtils.isNotEmpty(companyName)) {
+            argMap.put("companyName", companyName);
+        }
+        if (StringUtils.isNotEmpty(indicatorName)) {
+            argMap.put("indicatorName", indicatorName);
+        }
+        if (acceptAddressId != null) {
+            argMap.put("acceptAddressId", acceptAddressId);
+        }
+        String[] titles = new String[] { "区县名称", "部门名称", "申报批次名称", "身份证号", "姓名", "单位名称", "评分指标名称", "得分值", "状态", "受理人",
+                "受理时间", "送达人", "送达时间", "打分人", "打分时间" };
+        String[] fields = new String[] { "ACCEPT_ADDRESS", "OP_ROLE", "BATCH_NAME", "PERSON_ID_NUM", "PERSON_NAME",
+                "COMPANY_NAME", "INDICATOR_NAME", "SCORE_VALUE", "STATUS", "ACCEPT_PERSON", "ACCEPT_DATE", "OP_USER",
+                "SUBMIT_DATE", "OP_USER", "SCORE_DATE" };
+        List<Map> columns = new ArrayList<>();
+        for (int i = 0; i < titles.length; i++) {
+            Map column = new HashMap();
+            column.put("title", titles[i]);
+            column.put("field", fields[i]);
+            columns.add(column);
+        }
+        PageInfo<Map> pageInfo = iIdentityInfoService.selectExportList3ByPage(argMap, pageNum, pageSize);
+        for (Map map : pageInfo.getList()) {
+            Integer status = ((BigDecimal) map.get("STATUS")).intValue();
+            switch (status) {
+                case 1:
+                    map.put("STATUS", "材料未提交");
+                    break;
+                case 2:
+                    map.put("STATUS", "材料未提交");
+                    break;
+                case 3:
+                    map.put("STATUS", "材料已提交");
+                    break;
+                case 4:
+                    map.put("STATUS", "已打分");
+                    break;
+                default:
+                    map.put("STATUS", "未打分");
+            }
+        }
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo, columns));
+    }
+
+    @GetMapping(value = "/export4")
+    @ResponseBody
+    public void export4(HttpServletRequest request, HttpServletResponse response,
+            @RequestParam(value = "batchId", required = false) Integer batchId,
+            @RequestParam(value = "personName", required = false) String personName,
+            @RequestParam(value = "personIdNum", required = false) String personIdNum,
+            @RequestParam(value = "companyName", required = false) String companyName,
+            @RequestParam(value = "indicatorName", required = false) String indicatorName,
+            @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId) throws Exception {
+        Map argMap = new HashMap();
+        argMap.put("batchId", batchId);
+        if (StringUtils.isNotEmpty(personName)) {
+            argMap.put("personName", personName);
+        }
+        if (StringUtils.isNotEmpty(personIdNum)) {
+            argMap.put("personIdNum", personIdNum);
+        }
+        if (StringUtils.isNotEmpty(companyName)) {
+            argMap.put("companyName", companyName);
+        }
+        if (StringUtils.isNotEmpty(indicatorName)) {
+            argMap.put("indicatorName", indicatorName);
+        }
+        if (acceptAddressId != null) {
+            argMap.put("acceptAddressId", acceptAddressId);
+        }
+        List<Map> allList = iIdentityInfoService.selectExportList3(argMap);
+        String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
+                .currentTimeMillis() + ".xlsx";
+        ExcelFileUtil.exportXlsx(savePath, allList,
+                new String[] { "受理编码", "身份证号码", "姓名", "受理日期", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1", "备注2", "性别",
+                        "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期", "单位名称", "单位电话",
+                        "经办人姓名", "本人电话", "受理经办人姓名" },
+                new String[] { "accept_number", "id_number", "name" });
+        ExcelFileUtil.download(response, savePath, "列表3.xlsx");
+    }
+
 }
