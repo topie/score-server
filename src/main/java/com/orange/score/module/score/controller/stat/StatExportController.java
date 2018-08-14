@@ -5,6 +5,8 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.excel.ExcelFileUtil;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.database.score.model.BatchConf;
+import com.orange.score.module.score.service.IBatchConfService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class StatExportController {
 
     @Value("${upload.folder}")
     private String uploadPath;
+
+    @Autowired
+    private IBatchConfService iBatchConfService;
 
     @GetMapping(value = "/list1")
     @ResponseBody
@@ -231,7 +236,12 @@ public class StatExportController {
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Map argMap = new HashMap();
-        argMap.put("batchId", batchId);
+        BatchConf batchConf = new BatchConf();
+        batchConf.setStatus(1);
+        List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+        if (list.size() > 0) {
+            argMap.put("batchId", list.get(0).getId());
+        }
         if (StringUtils.isNotEmpty(personName)) {
             argMap.put("personName", personName);
         }
@@ -314,8 +324,7 @@ public class StatExportController {
         ExcelFileUtil.exportXlsx(savePath, allList,
                 new String[] { "受理编码", "身份证号码", "姓名", "受理日期", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1", "备注2", "性别",
                         "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期", "单位名称", "单位电话",
-                        "经办人姓名", "本人电话", "受理经办人姓名" },
-                new String[] { "accept_number", "id_number", "name" });
+                        "经办人姓名", "本人电话", "受理经办人姓名" }, new String[] { "accept_number", "id_number", "name" });
         ExcelFileUtil.download(response, savePath, "列表3.xlsx");
     }
 
