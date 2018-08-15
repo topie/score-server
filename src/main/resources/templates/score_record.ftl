@@ -369,10 +369,10 @@
                                            type="button">重新打分
                                         </a>
                                         <#if item.jiaowei != -1 && item.jiaowei != -2 >
-                                            <div class="alert alert-info">民政局打分: ${item.jiaowei}</div>
+                                            <div class="alert alert-info">教委打分: ${item.jiaowei}</div>
                                         </#if>
                                         <#if item.jiaowei == -1 >
-                                            <div class="alert alert-info">民政局未打分</div>
+                                            <div class="alert alert-info">教委未打分</div>
                                         </#if>
                                     </td>
                                 </tr>
