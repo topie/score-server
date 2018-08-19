@@ -145,6 +145,17 @@ public class ScoreRecord {
     @Column(name = "c_time")
     private Date cTime;
 
+    public Integer getEdit() {
+        return edit;
+    }
+
+    public void setEdit(Integer edit) {
+        this.edit = edit;
+    }
+
+    @Transient
+    private Integer edit;
+
     public String getPersonMobilePhone() {
         return personMobilePhone;
     }

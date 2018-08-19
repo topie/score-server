@@ -490,6 +490,12 @@ public class ScoreRecordController {
         result.put("searchItems", searchItems);
         Map scoreRecordStatus = iDictService.selectMapByAlias("scoreRecordStatus");
         result.put("scoreRecordStatus", scoreRecordStatus);
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        if (roles.contains(4) || roles.contains(6)) {
+            result.put("edit", true);
+        }
         return ResponseUtil.success(result);
     }
 

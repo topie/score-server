@@ -10,14 +10,17 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.Option;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.database.core.model.Log;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
+import com.orange.score.module.core.service.ILogService;
 import com.orange.score.module.core.service.IRegionService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.score.ws.SOAP3Response;
 import com.orange.score.module.score.ws.WebServiceClient;
+import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.beanutils.BeanUtils;
@@ -87,6 +90,9 @@ public class IdentityInfoController {
     @Autowired
     private IOfficeService iOfficeService;
 
+    @Autowired
+    private ILogService iLogService;
+
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(IdentityInfo identityInfo,
@@ -138,6 +144,8 @@ public class IdentityInfoController {
     @PostMapping("/updateEdit")
     public Result updateEdit(@RequestParam Integer identityInfoId, @RequestParam String editInfo)
             throws InvocationTargetException, IllegalAccessException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         JSONArray jsonArray = JSONArray.parseArray(editInfo);
         IdentityInfo identityInfo = new IdentityInfo();
         identityInfo.setId(identityInfoId);
@@ -177,6 +185,11 @@ public class IdentityInfoController {
         iIdentityInfoService.update(identityInfo);
         iHouseMoveService.update(houseMove);
         iHouseOtherService.update(houseOther);
+        Log log = new Log();
+        log.setLogTime(new Date());
+        log.setLogContent("修改" + identityInfo.getName() + "信息");
+        log.setLogUser(securityUser.getLoginName());
+        iLogService.save(log);
         return ResponseUtil.success();
     }
 
