@@ -235,7 +235,8 @@ public class StatExportController {
 
     @GetMapping(value = "/list4")
     @ResponseBody
-    public Result list4(@RequestParam(value = "personName", required = false) String personName,
+    public Result list4(
+            @RequestParam(value = "personName", required = false) String personName,
             @RequestParam(value = "personIdNum", required = false) String personIdNum,
             @RequestParam(value = "companyName", required = false) String companyName,
             @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId,
