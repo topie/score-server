@@ -126,6 +126,9 @@ public class MaterialReceiveIdentityInfoController {
         if (scoreRecord.getBatchId() != null) {
             argMap.put("batchId", scoreRecord.getBatchId());
         }
+        if (scoreRecord.getCompanyId() != null) {
+            argMap.put("companyId", scoreRecord.getCompanyId());
+        }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");
             if (arr.length == 2) {
@@ -185,6 +188,9 @@ public class MaterialReceiveIdentityInfoController {
         }
         if (scoreRecord.getBatchId() != null) {
             argMap.put("batchId", scoreRecord.getBatchId());
+        }
+        if (scoreRecord.getCompanyId() != null) {
+            argMap.put("companyId", scoreRecord.getCompanyId());
         }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");

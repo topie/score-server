@@ -56,6 +56,9 @@
             <if test="item.personIdNum!=null">
                 and sr.person_id_num like concat(concat('%',#{item.personIdNum}),'%')
             </if>
+            <if test="item.companyId!=null">
+                and i.company_id = #{item.companyId}
+            </if>
             <if test="item.personName!=null">
                 and sr.person_name like concat(concat('%',#{item.personName}),'%')
             </if>

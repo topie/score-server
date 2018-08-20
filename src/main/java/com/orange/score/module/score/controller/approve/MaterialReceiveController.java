@@ -131,6 +131,9 @@ public class MaterialReceiveController {
         if (scoreRecord.getIndicatorId() != null) {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
         }
+        if (scoreRecord.getCompanyId() != null) {
+            criteria.andEqualTo("companyId", scoreRecord.getCompanyId());
+        }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");
             if (arr.length == 2) {
@@ -191,6 +194,9 @@ public class MaterialReceiveController {
         }
         if (scoreRecord.getIndicatorId() != null) {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
+        }
+        if (scoreRecord.getCompanyId() != null) {
+            criteria.andEqualTo("companyId", scoreRecord.getCompanyId());
         }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");
