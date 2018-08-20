@@ -310,6 +310,8 @@ public class StatExportController {
                     map.put("CULTURE_DEGREE", "大专学历");
                 case 6:
                     map.put("CULTURE_DEGREE", "高级技工学校高级班");
+                default:
+                    map.put("JOB_TYPE", "无");
             }
 
             Integer pt = ((BigDecimal) map.get("PROFESSION_TYPE")).intValue();
@@ -320,6 +322,8 @@ public class StatExportController {
                     map.put("PROFESSION_TYPE", "具有职称");
                 case 3:
                     map.put("PROFESSION_TYPE", "具有职业资格");
+                default:
+                    map.put("JOB_TYPE", "无");
             }
             Integer jt = ((BigDecimal) map.get("JOB_TYPE")).intValue();
             switch (jt) {
@@ -330,6 +334,8 @@ public class StatExportController {
                 case 29:
                     map.put("JOB_TYPE", "一般紧缺职业");
                 case 30:
+                    map.put("JOB_TYPE", "无");
+                default:
                     map.put("JOB_TYPE", "无");
             }
         }
@@ -386,6 +392,8 @@ public class StatExportController {
                     map.put("CULTURE_DEGREE", "大专学历");
                 case 6:
                     map.put("CULTURE_DEGREE", "高级技工学校高级班");
+                default:
+                    map.put("JOB_TYPE", "无");
             }
 
             Integer pt = ((BigDecimal) map.get("PROFESSION_TYPE")).intValue();
@@ -396,6 +404,8 @@ public class StatExportController {
                     map.put("PROFESSION_TYPE", "具有职称");
                 case 3:
                     map.put("PROFESSION_TYPE", "具有职业资格");
+                default:
+                    map.put("JOB_TYPE", "无");
             }
             Integer jt = ((BigDecimal) map.get("JOB_TYPE")).intValue();
             switch (jt) {
@@ -406,6 +416,8 @@ public class StatExportController {
                 case 29:
                     map.put("JOB_TYPE", "一般紧缺职业");
                 case 30:
+                    map.put("JOB_TYPE", "无");
+                default:
                     map.put("JOB_TYPE", "无");
             }
         }
