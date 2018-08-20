@@ -357,7 +357,7 @@ public class RenshePrevApproveController {
     }
 
     @PostMapping("/sendCompanyMsg")
-    public Result sendCompanyMsg(@RequestParam String phone, @RequestParam Integer name) throws IOException {
+    public Result sendCompanyMsg(@RequestParam String phone, @RequestParam String name) throws IOException {
         SmsUtil.send(phone, "您单位的两位经办人,只有一人符合条件,请经办人" + name + "于预约日期到窗口办理相关手续。");
         return ResponseUtil.success();
     }

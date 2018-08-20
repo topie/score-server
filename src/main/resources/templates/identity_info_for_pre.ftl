@@ -345,7 +345,7 @@
                                     var name = $(this).prev().text();
                                     var phone = $(this).attr("phone");
                                     $.ajax({
-                                        type: "GET",
+                                        type: "POST",
                                         dataType: "json",
                                         url: App.href + "/api/score/approve/renshePrevApprove/sendCompanyMsg",
                                         data: {
