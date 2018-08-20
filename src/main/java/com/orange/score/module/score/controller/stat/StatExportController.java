@@ -108,7 +108,8 @@ public class StatExportController {
 
     @GetMapping(value = "/list3")
     @ResponseBody
-    public Result list3(@RequestParam(value = "personName", required = false) String personName,
+    public Result list3(@RequestParam(value = "period", required = false) String period,
+            @RequestParam(value = "personName", required = false) String personName,
             @RequestParam(value = "personIdNum", required = false) String personIdNum,
             @RequestParam(value = "companyName", required = false) String companyName,
             @RequestParam(value = "indicatorName", required = false) String indicatorName,
@@ -121,6 +122,11 @@ public class StatExportController {
         List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
         if (list.size() > 0) {
             argMap.put("batchId", list.get(0).getId());
+        }
+        if (StringUtils.isNotEmpty(period)) {
+            String[] arr = period.split(" 到 ");
+            argMap.put("acceptDateBegin", arr[0]);
+            argMap.put("acceptDateEnd", arr[1]);
         }
         if (StringUtils.isNotEmpty(personName)) {
             argMap.put("personName", personName);
@@ -175,6 +181,7 @@ public class StatExportController {
     @GetMapping(value = "/export3")
     @ResponseBody
     public void export3(HttpServletRequest request, HttpServletResponse response,
+            @RequestParam(value = "period", required = false) String period,
             @RequestParam(value = "personName", required = false) String personName,
             @RequestParam(value = "personIdNum", required = false) String personIdNum,
             @RequestParam(value = "companyName", required = false) String companyName,
@@ -186,6 +193,11 @@ public class StatExportController {
         List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
         if (list.size() > 0) {
             argMap.put("batchId", list.get(0).getId());
+        }
+        if (StringUtils.isNotEmpty(period)) {
+            String[] arr = period.split(" 到 ");
+            argMap.put("acceptDateBegin", arr[0]);
+            argMap.put("acceptDateEnd", arr[1]);
         }
         if (StringUtils.isNotEmpty(personName)) {
             argMap.put("personName", personName);
@@ -235,7 +247,7 @@ public class StatExportController {
 
     @GetMapping(value = "/list4")
     @ResponseBody
-    public Result list4(
+    public Result list4(@RequestParam(value = "period", required = false) String period,
             @RequestParam(value = "personName", required = false) String personName,
             @RequestParam(value = "personIdNum", required = false) String personIdNum,
             @RequestParam(value = "companyName", required = false) String companyName,
@@ -248,6 +260,11 @@ public class StatExportController {
         List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
         if (list.size() > 0) {
             argMap.put("batchId", list.get(0).getId());
+        }
+        if (StringUtils.isNotEmpty(period)) {
+            String[] arr = period.split(" 到 ");
+            argMap.put("acceptDateBegin", arr[0]);
+            argMap.put("acceptDateEnd", arr[1]);
         }
         if (StringUtils.isNotEmpty(personName)) {
             argMap.put("personName", personName);
@@ -322,6 +339,7 @@ public class StatExportController {
     @GetMapping(value = "/export4")
     @ResponseBody
     public void export4(HttpServletRequest request, HttpServletResponse response,
+            @RequestParam(value = "period", required = false) String period,
             @RequestParam(value = "personName", required = false) String personName,
             @RequestParam(value = "personIdNum", required = false) String personIdNum,
             @RequestParam(value = "companyName", required = false) String companyName,
@@ -332,6 +350,11 @@ public class StatExportController {
         List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
         if (list.size() > 0) {
             argMap.put("batchId", list.get(0).getId());
+        }
+        if (StringUtils.isNotEmpty(period)) {
+            String[] arr = period.split(" 到 ");
+            argMap.put("acceptDateBegin", arr[0]);
+            argMap.put("acceptDateEnd", arr[1]);
         }
         if (StringUtils.isNotEmpty(personName)) {
             argMap.put("personName", personName);

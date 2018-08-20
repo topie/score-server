@@ -135,10 +135,10 @@
                 and i.accept_address_id = #{item.acceptAddressId}
             </if>
             <if test="item.acceptDateBegin!=null">
-                <![CDATA[ and r.accept_date >= #{item.acceptDateBegin} ]]>
+                <![CDATA[ and TO_CHAR(r.accept_date,'yyyy-mm-dd') >= #{item.acceptDateBegin} ]]>
             </if>
             <if test="item.acceptDateEnd!=null">
-                <![CDATA[ and r.accept_date < #{item.acceptDateEnd}  ]]>
+                <![CDATA[ and TO_CHAR(r.accept_date,'yyyy-mm-dd') < #{item.acceptDateEnd}  ]]>
             </if>
             <if test="item.submitDateBegin!=null">
                 <![CDATA[ and r.submit_date >= #{item.submitDateBegin} ]]>
@@ -181,6 +181,7 @@
         on i.id=p.identity_info_id
         left join t_company_info c on i.company_id=c.id
         left join t_house_relationship r on i.id=r.identity_info_id and r.relationship='配偶'
+        left join t_pb_status_record sr on i.id=sr.person_id and status_int=5
         <where>
             <if test="item.batchId!=null">
                 and i.batch_id = #{item.batchId}
@@ -196,6 +197,12 @@
             </if>
             <if test="item.companyName!=null and item.companyName!=''">
                 and c.company_name like concat('%',concat(#{item.companyName}, '%'))
+            </if>
+            <if test="item.acceptDateBegin!=null">
+                <![CDATA[ and TO_CHAR(sr.status_time,'yyyy-mm-dd') >= #{item.acceptDateBegin} ]]>
+            </if>
+            <if test="item.acceptDateEnd!=null">
+                <![CDATA[ and TO_CHAR(sr.status_time,'yyyy-mm-dd') < #{item.acceptDateEnd}  ]]>
             </if>
         </where>
     </select>
