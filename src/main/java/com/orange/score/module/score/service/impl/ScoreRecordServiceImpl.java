@@ -142,6 +142,7 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
         for (Indicator indicator : indicators) {
             ScoreRecord record = new ScoreRecord();
             record.setBatchId(batchId);
+            record.setAcceptAddressId(identityInfo.getAcceptAddressId());
             record.setAcceptDate(new Date());
             record.setAcceptNumber(identityInfo.getAcceptNumber());
             record.setIndicatorId(indicator.getId());

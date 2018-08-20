@@ -14,7 +14,7 @@ public class ScoreRecord {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_pb_score_record_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_pb_score_record_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -139,11 +139,25 @@ public class ScoreRecord {
     @Column(name = "score_detail")
     private String scoreDetail;
 
+    @Column(name = "accept_address_id")
+    private Integer acceptAddressId;
+
     /**
      * 创建时间
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    @Transient
+    private Integer edit;
+
+    public Integer getAcceptAddressId() {
+        return acceptAddressId;
+    }
+
+    public void setAcceptAddressId(Integer acceptAddressId) {
+        this.acceptAddressId = acceptAddressId;
+    }
 
     public Integer getEdit() {
         return edit;
@@ -152,9 +166,6 @@ public class ScoreRecord {
     public void setEdit(Integer edit) {
         this.edit = edit;
     }
-
-    @Transient
-    private Integer edit;
 
     public String getPersonMobilePhone() {
         return personMobilePhone;

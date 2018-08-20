@@ -116,9 +116,9 @@ public class MaterialReceiveController {
         }
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser.getUserType() == 0) {
-            criteria.andNotIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 1);
         } else if (securityUser.getUserType() == 1) {
-            criteria.andIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 2);
         }
         criteria.andEqualTo("status", 2);
         criteria.andIn("opRoleId", roles);
@@ -179,9 +179,9 @@ public class MaterialReceiveController {
         criteria.andIn("opRoleId", roles);
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser.getUserType() == 0) {
-            criteria.andNotIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 1);
         } else if (securityUser.getUserType() == 1) {
-            criteria.andIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 2);
         }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());

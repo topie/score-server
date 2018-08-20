@@ -131,9 +131,9 @@ public class ScoreRecordController {
         criteria.andIn("status", CollectionUtils.arrayToList(integers));
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser.getUserType() == 0) {
-            criteria.andNotIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 1);
         } else if (securityUser.getUserType() == 1) {
-            criteria.andIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 2);
         }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
@@ -195,9 +195,9 @@ public class ScoreRecordController {
         criteria.andIn("status", CollectionUtils.arrayToList(integers));
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser.getUserType() == 0) {
-            criteria.andNotIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 1);
         } else if (securityUser.getUserType() == 1) {
-            criteria.andIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 2);
         }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
@@ -246,9 +246,9 @@ public class ScoreRecordController {
         criteria.andEqualTo("status", 4);
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser.getUserType() == 0) {
-            criteria.andNotIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 1);
         } else if (securityUser.getUserType() == 1) {
-            criteria.andIn("personId", binhaiIds);
+            criteria.andEqualTo("acceptAddressId", 2);
         }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
             criteria.andEqualTo("personIdNum", scoreRecord.getPersonIdNum());
