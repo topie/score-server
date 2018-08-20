@@ -41,12 +41,19 @@
                                     <td colspan="6">机构代码：<strong>${company.societyCode}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4">联系人1：<strong>${company.operator}</strong></td>
+                                    <td colspan="4">联系人1：<strong>${company.operator}</strong><#if renshe==true>
+                                        <button role="msm_btn" phone="${other.selfPhone}" class="btn btn-mini btn-info"
+                                                type="button">发送短信
+                                        </button></#if></td>
                                     <td colspan="4">身份证1：<strong>${company.idCardNumber_1}</strong></td>
-                                    <td colspan="4">联系电话1：<strong>${company.operatorMobile}</strong></td>
+                                    <td colspan="4">联系电话1：<strong>${company.operatorMobile}</strong>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4">联系人2：<strong>${company.operator2}</strong></td>
+                                    <td colspan="4">联系人2：<strong>${company.operator2}</strong><#if renshe==true>
+                                        <button role="msm_btn" phone="${other.selfPhone}" class="btn btn-mini btn-info"
+                                                type="button">发送短信
+                                        </button></#if></td>
                                     <td colspan="4">身份证2：<strong>${company.idCardNumber_2}</strong></td>
                                     <td colspan="4">联系电话2：<strong>${company.operatorMobile2}</strong></td>
                                 </tr>
@@ -245,7 +252,8 @@
                                 <!-- 内表格 -->
                                 <tr>
                                     <td colspan="12">
-                                        <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
+                                        <table style="font-size: 14px;"
+                                               class="table table-hover table-bordered table-condensed">
                                             <tr class="info">
                                                 <th>与本人关系</th>
                                                 <th>姓名</th>
@@ -325,7 +333,7 @@
                                     $(".p-img").each(function () {
                                         var src = $(this).attr("src");
                                         var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
-                                        $(this).attr("src",newSrc);
+                                        $(this).attr("src", newSrc);
                                     });
                                     $("a.download").each(function () {
                                         var href = $(this).attr("href");
@@ -333,6 +341,25 @@
                                         $(this).attr("href", newHref);
                                     });
                                 }
+                                $("button[role=msm_btn]").on("click", function () {
+                                    var name = $(this).prev().text();
+                                    var phone = $(this).attr("phone");
+                                    $.ajax({
+                                        type: "GET",
+                                        dataType: "json",
+                                        url: App.href + "/api/score/approve/renshePrevApprove/sendCompanyMsg",
+                                        data: {
+                                            name: name,
+                                            phone: phone
+                                        },
+                                        success: function (data) {
+                                            alert("发送成功!")
+                                        },
+                                        error: function (e) {
+                                            console.error("请求异常。");
+                                        }
+                                    });
+                                });
                                 $(".p-img").off("click");
                                 $(".p-img").on("click", function () {
                                     var img = $('<img src="' + $(this).attr("src") + '">');
@@ -346,8 +373,8 @@
                                                 handle: function (m) {
                                                     m.$body.find("img").each(function (i, d) {
                                                         var that = this;
-                                                        $(this).css("height", $(that).height()*1.1);
-                                                        $(this).css("width",$(that).width()*1.1);
+                                                        $(this).css("height", $(that).height() * 1.1);
+                                                        $(this).css("width", $(that).width() * 1.1);
                                                     });
                                                 }
                                             }, {
@@ -356,8 +383,8 @@
                                                 handle: function (m) {
                                                     m.$body.find("img").each(function (i, d) {
                                                         var that = this;
-                                                        $(this).css("height", $(that).height()*0.9);
-                                                        $(this).css("width",$(that).width()*0.9);
+                                                        $(this).css("height", $(that).height() * 0.9);
+                                                        $(this).css("width", $(that).width() * 0.9);
                                                     });
                                                 }
                                             }

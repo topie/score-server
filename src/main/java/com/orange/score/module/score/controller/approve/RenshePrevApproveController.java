@@ -355,4 +355,10 @@ public class RenshePrevApproveController {
         SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料未通过居住证积分网上预审，请根据提示尽快补正材料。");
         return ResponseUtil.success();
     }
+
+    @PostMapping("/sendCompanyMsg")
+    public Result sendCompanyMsg(@RequestParam String phone, @RequestParam Integer name) throws IOException {
+        SmsUtil.send(phone, "您单位的两位经办人,只有一人符合条件,请经办人" + name + "于预约日期到窗口办理相关手续。");
+        return ResponseUtil.success();
+    }
 }

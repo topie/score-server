@@ -339,7 +339,9 @@ public class IdentityInfoController {
         criteria.andEqualTo("regionLevel", 2);
         List<Office> officeList2 = iOfficeService.findByCondition(condition);
         params.put("officeList2", officeList2);
-
+        if (roles.contains(3)) {
+            params.put("renshe", true);
+        }
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, template + ".ftl", params);
         Map result = new HashMap();
