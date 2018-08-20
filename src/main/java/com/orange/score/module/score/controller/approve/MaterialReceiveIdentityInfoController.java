@@ -199,6 +199,11 @@ public class MaterialReceiveIdentityInfoController {
             }
         }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
+        for (ScoreRecord record : pageInfo.getList()) {
+            if (roles.contains(4) || roles.contains(6)) {
+                record.setEdit(1);
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
