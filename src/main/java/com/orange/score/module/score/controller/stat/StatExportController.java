@@ -412,13 +412,13 @@ public class StatExportController {
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[] { "受理编码", "身份证号码", "姓名", "本人电话", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1", "备注2", "性别",
-                        "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期", "单位名称", "单位电话",
-                        "经办人姓名", "经办人电话" },
-                new String[] { "ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "BLANK1", "BLANK2", "BLANK3",
-                        "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER", "CULTURE_DEGREE",
-                        "PROFESSION_TYPE", "JOB_TYPE", "CERTIFICATE_CODE", "ISSUING_AUTHORITY", "ISSUING_DATE",
-                        "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE" });
+                new String[] { "受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1", "备注2",
+                        "性别", "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期", "单位名称",
+                        "单位电话", "经办人姓名", "经办人电话" },
+                new String[] { "ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "BLANK1", "BLANK2",
+                        "BLANK3", "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER",
+                        "CULTURE_DEGREE", "PROFESSION_TYPE", "JOB_TYPE", "CERTIFICATE_CODE", "ISSUING_AUTHORITY",
+                        "ISSUING_DATE", "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE" });
         ExcelFileUtil.download(response, savePath, "列表4.xlsx");
     }
 

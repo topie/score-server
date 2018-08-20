@@ -173,7 +173,8 @@
         c.operator,
         c.operator_mobile,
         r.name partner_name,
-        r.id_number partner_id_number
+        r.id_number partner_id_number,
+        sr.status_time accept_date
         from t_identity_info i
         left join t_house_other o
         on i.id=o.identity_info_id
