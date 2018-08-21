@@ -311,7 +311,7 @@ public class StatExportController {
                 case 6:
                     map.put("CULTURE_DEGREE", "高级技工学校高级班");
                 default:
-                    map.put("JOB_TYPE", "无");
+                    map.put("CULTURE_DEGREE", "无");
             }
 
             Integer pt = ((BigDecimal) map.get("PROFESSION_TYPE")).intValue();
@@ -323,9 +323,9 @@ public class StatExportController {
                 case 3:
                     map.put("PROFESSION_TYPE", "具有职业资格");
                 default:
-                    map.put("JOB_TYPE", "无");
+                    map.put("PROFESSION_TYPE", "无");
             }
-            Integer jt = ((BigDecimal) map.get("JOB_TYPE")).intValue();
+            Integer jt = Integer.parseInt((String) map.get("JOB_TYPE"));
             switch (jt) {
                 case 27:
                     map.put("JOB_TYPE", "非常紧缺的职业");
@@ -393,7 +393,7 @@ public class StatExportController {
                 case 6:
                     map.put("CULTURE_DEGREE", "高级技工学校高级班");
                 default:
-                    map.put("JOB_TYPE", "无");
+                    map.put("CULTURE_DEGREE", "无");
             }
 
             Integer pt = ((BigDecimal) map.get("PROFESSION_TYPE")).intValue();
@@ -405,7 +405,7 @@ public class StatExportController {
                 case 3:
                     map.put("PROFESSION_TYPE", "具有职业资格");
                 default:
-                    map.put("JOB_TYPE", "无");
+                    map.put("PROFESSION_TYPE", "无");
             }
             Integer jt = ((BigDecimal) map.get("JOB_TYPE")).intValue();
             switch (jt) {
