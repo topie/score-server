@@ -325,7 +325,7 @@ public class StatExportController {
                 default:
                     map.put("PROFESSION_TYPE", "无");
             }
-            Integer jt = Integer.parseInt((String) map.get("JOB_TYPE"));
+            Integer jt = ((BigDecimal) map.get("JOB_TYPE")).intValue();
             switch (jt) {
                 case 27:
                     map.put("JOB_TYPE", "非常紧缺的职业");
