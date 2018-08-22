@@ -183,7 +183,7 @@
         on i.id=p.identity_info_id
         left join t_company_info c on i.company_id=c.id
         left join t_house_relationship r on i.id=r.identity_info_id and r.relationship='配偶'
-        left join t_pb_status_record sr on i.id=sr.person_id and status_int=5
+        left join t_pb_status_record sr on i.id=sr.person_id and status_dict_alias='hallStatus' and status_int=5
         <where>
             <if test="item.batchId!=null">
                 and i.batch_id = #{item.batchId}
