@@ -162,6 +162,7 @@
         i.name,
         o.self_phone,
         i.sex,
+        i.opuser4,
         o.culture_degree,
         p.profession_type,
         p.job_type,

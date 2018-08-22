@@ -5,6 +5,8 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.excel.ExcelFileUtil;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.date.DateStyle;
+import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.BatchConf;
 import com.orange.score.module.score.service.IBatchConfService;
 import com.orange.score.module.score.service.IIdentityInfoService;
@@ -16,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/score/stat/export")
@@ -278,11 +277,11 @@ public class StatExportController {
         if (acceptAddressId != null) {
             argMap.put("acceptAddressId", acceptAddressId);
         }
-        String[] titles = new String[] { "受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1",
-                "备注2", "性别", "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期", "单位名称",
-                "单位电话", "经办人姓名", "经办人电话" };
-        String[] fields = new String[] { "ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "BLANK1",
-                "BLANK2", "BLANK3", "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER",
+        String[] titles = new String[] { "受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "受理人", "实际交件日期", "打包位置", "特殊记录", "分类",
+                "备注1", "备注2", "性别", "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期",
+                "单位名称", "单位电话", "经办人姓名", "经办人电话" };
+        String[] fields = new String[] { "ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "OPUSER4    ",
+                "BLANK1", "BLANK2", "BLANK3", "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER",
                 "CULTURE_DEGREE", "PROFESSION_TYPE", "JOB_TYPE", "CERTIFICATE_CODE", "ISSUING_AUTHORITY",
                 "ISSUING_DATE", "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE" };
         List<Map> columns = new ArrayList<>();
@@ -304,12 +303,16 @@ public class StatExportController {
             switch (cd) {
                 case 11:
                     map.put("CULTURE_DEGREE", "无");
+                    break;
                 case 4:
                     map.put("CULTURE_DEGREE", "本科及以上学历");
+                    break;
                 case 5:
                     map.put("CULTURE_DEGREE", "大专学历");
+                    break;
                 case 6:
                     map.put("CULTURE_DEGREE", "高级技工学校高级班");
+                    break;
                 default:
                     map.put("CULTURE_DEGREE", "无");
             }
@@ -318,10 +321,13 @@ public class StatExportController {
             switch (pt) {
                 case 1:
                     map.put("PROFESSION_TYPE", "无");
+                    break;
                 case 2:
                     map.put("PROFESSION_TYPE", "具有职称");
+                    break;
                 case 3:
                     map.put("PROFESSION_TYPE", "具有职业资格");
+                    break;
                 default:
                     map.put("PROFESSION_TYPE", "无");
             }
@@ -329,15 +335,21 @@ public class StatExportController {
             switch (jt) {
                 case 27:
                     map.put("JOB_TYPE", "非常紧缺的职业");
+                    break;
                 case 28:
                     map.put("JOB_TYPE", "紧缺职业");
+                    break;
                 case 29:
                     map.put("JOB_TYPE", "一般紧缺职业");
+                    break;
                 case 30:
                     map.put("JOB_TYPE", "无");
+                    break;
                 default:
                     map.put("JOB_TYPE", "无");
             }
+            Date acceptDate = (Date) map.get("ACCEPT_DATE");
+            map.put("ACCEPT_DATE", DateUtil.DateToString(acceptDate, DateStyle.YYYY_MM_DD));
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo, columns));
     }
@@ -386,12 +398,16 @@ public class StatExportController {
             switch (cd) {
                 case 11:
                     map.put("CULTURE_DEGREE", "无");
+                    break;
                 case 4:
                     map.put("CULTURE_DEGREE", "本科及以上学历");
+                    break;
                 case 5:
                     map.put("CULTURE_DEGREE", "大专学历");
+                    break;
                 case 6:
                     map.put("CULTURE_DEGREE", "高级技工学校高级班");
+                    break;
                 default:
                     map.put("CULTURE_DEGREE", "无");
             }
@@ -400,10 +416,13 @@ public class StatExportController {
             switch (pt) {
                 case 1:
                     map.put("PROFESSION_TYPE", "无");
+                    break;
                 case 2:
                     map.put("PROFESSION_TYPE", "具有职称");
+                    break;
                 case 3:
                     map.put("PROFESSION_TYPE", "具有职业资格");
+                    break;
                 default:
                     map.put("PROFESSION_TYPE", "无");
             }
@@ -411,24 +430,30 @@ public class StatExportController {
             switch (jt) {
                 case 27:
                     map.put("JOB_TYPE", "非常紧缺的职业");
+                    break;
                 case 28:
                     map.put("JOB_TYPE", "紧缺职业");
+                    break;
                 case 29:
                     map.put("JOB_TYPE", "一般紧缺职业");
+                    break;
                 case 30:
                     map.put("JOB_TYPE", "无");
+                    break;
                 default:
                     map.put("JOB_TYPE", "无");
             }
+            Date acceptDate = (Date) map.get("ACCEPT_DATE");
+            map.put("ACCEPT_DATE", DateUtil.DateToString(acceptDate, DateStyle.YYYY_MM_DD));
         }
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[] { "受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1", "备注2",
-                        "性别", "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期", "单位名称",
-                        "单位电话", "经办人姓名", "经办人电话" },
-                new String[] { "ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "BLANK1", "BLANK2",
-                        "BLANK3", "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER",
+                new String[] { "受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "受理人", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1",
+                        "备注2", "性别", "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期",
+                        "单位名称", "单位电话", "经办人姓名", "经办人电话" },
+                new String[] { "ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "OPUSER4", "BLANK1",
+                        "BLANK2", "BLANK3", "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER",
                         "CULTURE_DEGREE", "PROFESSION_TYPE", "JOB_TYPE", "CERTIFICATE_CODE", "ISSUING_AUTHORITY",
                         "ISSUING_DATE", "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE" });
         ExcelFileUtil.download(response, savePath, "列表4.xlsx");
