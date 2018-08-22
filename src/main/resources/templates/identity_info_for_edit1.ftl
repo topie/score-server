@@ -10,22 +10,22 @@
 <div>
     <table style="font-size: 14px;" class="table table-bordered table-hover table-condensed">
         <tr>
-            <td colspan="4">居住证号（身份证号）：
+            <td colspan="6">居住证号（身份证号）：
                 <input data-id="${person.id?c}" data-name="person.idNumber"
                        class="edit input-large" style="height: 25px;"
                        value="${person.idNumber}">
             </td>
-            <td colspan="4">居住证申领日期：
+            <td colspan="6">居住证申领日期：
                 <input data-id="${other.id?c}" data-name="other.applicationDate"
                        class="edit input-large" style="height: 25px;"
                        value="${other.applicationDate}">
             </td>
         </tr>
         <tr>
-            <td colspan="4">姓名：<input data-id="${person.id?c}" data-name="person.name"
+            <td colspan="6">姓名：<input data-id="${person.id?c}" data-name="person.name"
                                       class="edit input-large" style="height: 25px;"
                                       value="${person.name}"></td>
-            <td colspan="4">性别：
+            <td colspan="6">性别：
                 <select data-id="${person.id?c}" data-name="person.sex" class="edit"
                         style="height: 25px;">
                     <option <#if person.sex==0>selected</#if> value=0>未选择</option>
@@ -74,7 +74,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="8">迁出地省（市自治区）：
+            <td colspan="12">迁出地省（市自治区）：
                 <select data-id="${move.id?c}" data-name="move.moveProvince" class="edit"
                         style="height: 25px;">
                                     <#list provinceList as item>
@@ -105,14 +105,14 @@
             </td>
         </tr>
         <tr>
-            <td colspan="8">迁出详细地址：
+            <td colspan="12">迁出详细地址：
                 <input data-id="${move.id?c}" data-name="move.moveAddress"
                        class="edit input-large" style="height: 25px;"
                        value="${move.moveAddress}">
             </td>
         </tr>
         <tr>
-            <td colspan="4">现户口性质：<select data-id="${move.id?c}" data-name="move.houseNature"
+            <td colspan="6">现户口性质：<select data-id="${move.id?c}" data-name="move.houseNature"
                                           class="edit" style="height: 25px;">
                 <option <#if move.houseNature==1>selected</#if> value="1">未落常住户口</option>
                 <option <#if move.houseNature==2>selected</#if> value="2">非农业家庭户口</option>
@@ -125,7 +125,7 @@
                 <option <#if move.houseNature==9>selected</#if> value="9">地方城镇居民户口</option>
                 <option <#if move.houseNature==10>selected</#if> value="10">其他户口</option>
             </select></td>
-            <td colspan="4">落户性质：
+            <td colspan="6">落户性质：
                 <select data-id="${move.id?c}" data-name="move.settledNature" class="edit"
                         style="height: 25px;">
                     <option <#if move.settledNature==1>selected</#if> value="1">本单位集体户口</option>
@@ -136,14 +136,14 @@
             </td>
         </tr>
         <tr>
-            <td colspan="8">现户籍登记机关：
+            <td colspan="12">现户籍登记机关：
                 <input data-id="${move.id?c}" data-name="move.moveRegisteredOffice"
                        class="edit input-large" style="height: 25px;"
                        value="${move.moveRegisteredOffice}">
             </td>
         </tr>
         <tr>
-            <td colspan="8">迁入地户籍登记机关：
+            <td colspan="12">迁入地户籍登记机关：
                 <select data-id="${move.id?c}" data-name="move.registeredOffice" class="edit"
                         style="height: 25px;">
                                             <#list officeList1 as item>
@@ -163,14 +163,14 @@
             </td>
         </tr>
         <tr>
-            <td colspan="8">迁入地详细地址：
+            <td colspan="12">迁入地详细地址：
                 <input data-id="${move.id?c}" data-name="move.address" class="edit input-large"
                        style="height: 25px;"
                        value="${move.address}">
             </td>
         </tr>
         <tr>
-            <td colspan="4">拟落户地区：
+            <td colspan="6">拟落户地区：
                 <select data-id="${move.id?c}" data-name="move.region" class="edit"
                         style="height: 25px;">
                     <option <#if move.region==21>selected</#if>
@@ -223,19 +223,19 @@
                     </option>
                 </select>
             </td>
-            <td colspan="4">收件人：
+            <td colspan="6">收件人：
                 <input data-id="${move.id?c}" data-name="move.witness" class="edit input-large"
                        style="height: 25px;"
                        value="${move.witness}">
             </td>
         </tr>
         <tr>
-            <td colspan="4">联系电话：
+            <td colspan="6">联系电话：
                 <input data-id="${move.id?c}" data-name="move.witnessPhone"
                        class="edit input-large" style="height: 25px;"
                        value="${move.witnessPhone}">
             </td>
-            <td colspan="4">邮寄地址：
+            <td colspan="6">邮寄地址：
                 <input data-id="${move.id?c}" data-name="move.witnessAddress"
                        class="edit input-large" style="height: 25px;"
                        value="${move.witnessAddress}">
@@ -243,7 +243,7 @@
         </tr>
         <!-- 内表格 -->
         <tr>
-            <td colspan="8">
+            <td colspan="12">
                 <table id="move-table" class="table table-hover table-bordered table-condensed">
                     <tr class="info">
                         <th>与本人关系</th>
