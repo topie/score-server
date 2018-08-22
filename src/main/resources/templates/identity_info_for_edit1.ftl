@@ -63,6 +63,15 @@
                     <option <#if other.politicalStatus==13>selected</#if> value="13">群众</option>
                 </select>
             </td>
+            <td colspan="4">文化程度：
+                <select data-id="${other.id?c}" data-name="other.cultureDegree" class="edit"
+                        style="height: 25px;">
+                    <option <#if other.cultureDegree==11>selected</#if> value="11">无</option>
+                    <option <#if other.cultureDegree==4>selected</#if> value="4">本科及以上学历</option>
+                    <option <#if other.cultureDegree==5>selected</#if> value="5">大专学历</option>
+                    <option <#if other.cultureDegree==6>selected</#if> value="6">高级技工学校高级班</option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td colspan="8">迁出地省（市自治区）：
