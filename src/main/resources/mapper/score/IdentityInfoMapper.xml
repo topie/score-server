@@ -141,16 +141,16 @@
                 <![CDATA[ and TO_CHAR(r.accept_date,'yyyy-mm-dd') < #{item.acceptDateEnd}  ]]>
             </if>
             <if test="item.submitDateBegin!=null">
-                <![CDATA[ and r.submit_date >= #{item.submitDateBegin} ]]>
+                <![CDATA[ and TO_CHAR(r.submit_date,'yyyy-mm-dd') >= #{item.submitDateBegin} ]]>
             </if>
             <if test="item.submitDateEnd!=null">
-                <![CDATA[ and r.submit_date < #{item.submitDateEnd}  ]]>
+                <![CDATA[ and TO_CHAR(r.submit_date,'yyyy-mm-dd') <= #{item.submitDateEnd}  ]]>
             </if>
             <if test="item.scoreDateBegin!=null">
-                <![CDATA[ and r.score_date >= #{item.scoreDateBegin} ]]>
+                <![CDATA[ and TO_CHAR(r.score_date,'yyyy-mm-dd') >= #{item.scoreDateBegin} ]]>
             </if>
             <if test="item.scoreDateEnd!=null">
-                <![CDATA[ and r.score_date < #{item.scoreDateEnd}  ]]>
+                <![CDATA[ and TO_CHAR(r.score_date,'yyyy-mm-dd') <= #{item.scoreDateEnd}  ]]>
             </if>
         </where>
 
@@ -204,7 +204,7 @@
                 <![CDATA[ and TO_CHAR(sr.status_time,'yyyy-mm-dd') >= #{item.acceptDateBegin} ]]>
             </if>
             <if test="item.acceptDateEnd!=null">
-                <![CDATA[ and TO_CHAR(sr.status_time,'yyyy-mm-dd') < #{item.acceptDateEnd}  ]]>
+                <![CDATA[ and TO_CHAR(sr.status_time,'yyyy-mm-dd') <= #{item.acceptDateEnd}  ]]>
             </if>
         </where>
     </select>
