@@ -138,7 +138,7 @@
                 <![CDATA[ and TO_CHAR(r.accept_date,'yyyy-mm-dd') >= #{item.acceptDateBegin} ]]>
             </if>
             <if test="item.acceptDateEnd!=null">
-                <![CDATA[ and TO_CHAR(r.accept_date,'yyyy-mm-dd') < #{item.acceptDateEnd}  ]]>
+                <![CDATA[ and TO_CHAR(r.accept_date,'yyyy-mm-dd') <= #{item.acceptDateEnd}  ]]>
             </if>
             <if test="item.submitDateBegin!=null">
                 <![CDATA[ and TO_CHAR(r.submit_date,'yyyy-mm-dd') >= #{item.submitDateBegin} ]]>
