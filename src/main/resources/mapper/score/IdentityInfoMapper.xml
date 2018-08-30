@@ -98,9 +98,6 @@
             <if test="item.batchId!=null">
                 and batch_id=#{item.batchId}
             </if>
-            <if test="item.acceptAddressId!=null">
-                and accept_address_id=#{item.acceptAddressId}
-            </if>
         </where>
         group by company_id having count(1)>=#{limit}
     </select>
