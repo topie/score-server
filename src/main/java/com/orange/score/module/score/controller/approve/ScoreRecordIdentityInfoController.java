@@ -635,6 +635,7 @@ public class ScoreRecordIdentityInfoController {
         criteria.andEqualTo("personId", identityInfoId);
         criteria.andEqualTo("batchId", person.getBatchId());
         criteria.andIn("opRoleId", roles);
+        condition.orderBy("id").asc();
         List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
         Map scoreRecordStatus = iDictService.selectMapByAlias("scoreRecordStatus");
         for (ScoreRecord item : scoreRecords) {
@@ -725,6 +726,7 @@ public class ScoreRecordIdentityInfoController {
         criteria.andEqualTo("personId", identityInfoId);
         criteria.andEqualTo("batchId", person.getBatchId());
         criteria.andIn("opRoleId", roles);
+        condition.orderBy("id").asc();
         List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
         Map scoreRecordStatus = iDictService.selectMapByAlias("scoreRecordStatus");
         for (ScoreRecord item : scoreRecords) {
