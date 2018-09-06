@@ -288,6 +288,7 @@ public class PoliceApproveController {
                 tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
                 criteria.andEqualTo("materialInfoId", mId);
                 criteria.andEqualTo("personId", identityInfo.getId());
+                criteria.andNotEqualTo("status", 2);
                 condition.orderBy("id").desc();
                 List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
                 if (materials.size() > 0) {

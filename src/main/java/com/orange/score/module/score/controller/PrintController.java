@@ -395,6 +395,7 @@ public class PrintController extends BaseController {
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", identityInfo.getId());
         criteria.andEqualTo("batchId", identityInfo.getBatchId());
+        criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
         for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
@@ -485,6 +486,7 @@ public class PrintController extends BaseController {
         criteria = condition.createCriteria();
         criteria.andEqualTo("personId", identityInfo.getId());
         criteria.andEqualTo("batchId", identityInfo.getBatchId());
+        criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> onlinePersonMaterials = iOnlinePersonMaterialService.findByCondition(condition);
         for (OnlinePersonMaterial onlinePersonMaterial : onlinePersonMaterials) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
@@ -568,6 +570,7 @@ public class PrintController extends BaseController {
         criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());
+        criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleMaterialInfoList = new ArrayList<>();
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
