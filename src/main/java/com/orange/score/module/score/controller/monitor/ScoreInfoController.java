@@ -82,6 +82,9 @@ public class ScoreInfoController {
     @Autowired
     private IOfficeService iOfficeService;
 
+    @Autowired
+    private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
+
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(IdentityInfo identityInfo,
@@ -131,6 +134,28 @@ public class ScoreInfoController {
         result.put("searchItems", searchItems);
         Map reservationStatus = iDictService.selectMapByAlias("reservationStatus");
         result.put("reservationStatus", reservationStatus);
+        List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
+        Map companyMap = new HashMap();
+        for (CompanyInfo companyInfo : companyInfos) {
+            companyMap.put(companyInfo.getId(), companyInfo.getCompanyName());
+        }
+        result.put("companyNames", companyMap);
+        /*
+        2018年10月12日，xgr
+        添加“受理日期”列（通过人社受理审核日期）
+         */
+        Condition condition = new Condition(PersonBatchStatusRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("statusInt", 5);
+        List<PersonBatchStatusRecord> personBatchStatusRecords = iPersonBatchStatusRecordService.findByCondition(condition);
+        Map personBatcheStatusRecordsMap = new HashMap();
+        for(PersonBatchStatusRecord personBatchStatusRecord : personBatchStatusRecords){
+            if(personBatchStatusRecord.getStatusInt() == 5){
+                personBatcheStatusRecordsMap.put(personBatchStatusRecord.getPersonId(), personBatchStatusRecord.getStatusTime());
+            }
+        }
+        result.put("personBatchStatusRecords", personBatcheStatusRecordsMap);
         return ResponseUtil.success(result);
     }
 
