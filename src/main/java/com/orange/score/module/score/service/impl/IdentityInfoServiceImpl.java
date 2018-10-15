@@ -13,6 +13,7 @@ import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.database.core.model.ColumnJson;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.dao.IdentityInfoMapper;
+import com.orange.score.database.score.model.CompanyInfo;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.score.dto.SearchDto;
@@ -39,6 +40,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
 
     @Autowired
     private IColumnJsonService iColumnJsonService;
+
+    @Autowired
+    private IIdentityInfoService iIdentityInfoService;
 
     @Override
     public PageInfo<IdentityInfo> selectByFilterAndPage(IdentityInfo identityInfo, int pageNum, int pageSize) {
@@ -82,6 +86,19 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             }
             if (identityInfo.getAcceptAddressId() != null) {
                 criteria.andEqualTo("acceptAddressId", identityInfo.getAcceptAddressId());
+            }
+            /*
+            2018年10月15日，增加一个锁定人的搜索条件
+             */
+//            List<IdentityInfo> identityInfos = iIdentityInfoService.findAll();
+//            String lockUser2 = null;
+//            for (IdentityInfo idenInfo : identityInfos){
+//                if(idenInfo.getId() == identityInfo.getId()){
+//                    lockUser2 = idenInfo.getLockUser2();
+//                }
+//            }
+            if (identityInfo.getLockUser2() != null && identityInfo.getLockUser2() != "") {
+                criteria.andEqualTo("lockUser2", identityInfo.getLockUser2());
             }
             ColumnJson columnJson = new ColumnJson();
             columnJson.setTableName("t_identity_info");
@@ -189,6 +206,14 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
         PageHelper.startPage(pageNum, pageSize);
         List<Map> list = selectExportList4(argMap);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public List<IdentityInfo> selectByFilter2(IdentityInfo identityInfo) {
+//        identityInfoMapper.selectByFilter2();
+        Condition condition = new Condition(IdentityInfo.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        return identityInfoMapper.selectByCondition(condition);
     }
 }
 

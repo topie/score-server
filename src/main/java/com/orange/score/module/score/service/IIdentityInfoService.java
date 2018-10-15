@@ -18,6 +18,11 @@ public interface IIdentityInfoService extends IService<IdentityInfo> {
 
     List<IdentityInfo> selectByFilter(IdentityInfo identityInfo);
 
+    /*
+    2018年10月13日，添加另外一个获取所有锁定人名字的方法
+     */
+    List<IdentityInfo> selectByFilter2(IdentityInfo identityInfo);
+
     PageInfo<IdentityInfo> selectByCompany(SearchDto searchDto, Integer pageNum, Integer pageSize);
 
     PageInfo<Map> selectExportList1ByPage(Map argMap, int pageNum, int pageSize);

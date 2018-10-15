@@ -571,4 +571,25 @@ public class IdentityInfoController {
         r.put("info", soapResponse);
         return ResponseUtil.success(r);
     }
+
+    /*
+    2018年10月12日，xgr
+    修改需求：审核中心-人社预审-待审核，搜索面板中加入“锁定人”搜索项，对应待审核列表中的“锁定人”列。
+     */
+    @RequestMapping("/options")
+    @ResponseBody
+    public List<Option> options(){
+        List<Option> options = new ArrayList<>();
+        IdentityInfo identityInfo = new IdentityInfo();
+//        List<IdentityInfo> identityInfos = iIdentityInfoService.selectByFilter2(identityInfo);
+        List<IdentityInfo> identityInfos = iIdentityInfoService.findAll();
+        Map<String,Integer> map = new HashMap<String,Integer>();
+        for (IdentityInfo identityInfo2 : identityInfos){
+            map.put(identityInfo2.getLockUser2(),identityInfo2.getId());
+        }
+        for(Map.Entry<String, Integer> entry: map.entrySet()){
+            options.add(new Option(entry.getKey(),entry.getKey()));
+        }
+        return options;
+    }
 }

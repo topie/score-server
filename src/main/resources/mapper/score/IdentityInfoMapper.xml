@@ -209,4 +209,9 @@
             </if>
         </where>
     </select>
+
+    <!--2018-10-15 查询锁定人的名单-->
+    <select id="selectByFilter2" resultType="com.orange.score.database.score.model.IdentityInfo">
+        select distinct LOCK_USER_2,id from t_identity_info ORDER  by LOCK_USER_2
+    </select>
 </mapper>
