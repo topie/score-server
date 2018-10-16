@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -150,9 +152,12 @@ public class ScoreInfoController {
         criteria.andEqualTo("statusInt", 5);
         List<PersonBatchStatusRecord> personBatchStatusRecords = iPersonBatchStatusRecordService.findByCondition(condition);
         Map personBatcheStatusRecordsMap = new HashMap();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate = null;
         for(PersonBatchStatusRecord personBatchStatusRecord : personBatchStatusRecords){
             if(personBatchStatusRecord.getStatusInt() == 5){
-                personBatcheStatusRecordsMap.put(personBatchStatusRecord.getPersonId(), personBatchStatusRecord.getStatusTime());
+                strDate = sdf.format(personBatchStatusRecord.getStatusTime());
+                personBatcheStatusRecordsMap.put(personBatchStatusRecord.getPersonId(), strDate);
             }
         }
         result.put("personBatchStatusRecords", personBatcheStatusRecordsMap);
