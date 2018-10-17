@@ -5,13 +5,16 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.database.score.model.PersonBatchStatusRecord;
 import com.orange.score.module.core.service.ICommonQueryService;
+import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,9 @@ public class PersonBatchStatusRecordController {
     @Autowired
     private ICommonQueryService iCommonQueryService;
 
+    @Autowired
+    private IIdentityInfoService iIdentityInfoService;
+
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(PersonBatchStatusRecord personBatchStatusRecord,
@@ -39,6 +45,14 @@ public class PersonBatchStatusRecordController {
         }
         PageInfo<PersonBatchStatusRecord> pageInfo = iPersonBatchStatusRecordService
                 .selectByFilterAndPage(personBatchStatusRecord, pageNum, pageSize);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for(PersonBatchStatusRecord p :pageInfo.getList()){
+            if(p.getStatusInt() == 11){
+                IdentityInfo ideInfo = iIdentityInfoService.findById(p.getPersonId());
+                String reseDate = sdf.format(ideInfo.getReservationDate());
+                p.setStatusStr(p.getStatusStr()+"  (预约日期："+reseDate+")");
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
