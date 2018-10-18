@@ -52,6 +52,11 @@ public class PersonBatchStatusRecordController {
                 String reseDate = sdf.format(ideInfo.getReservationDate());
                 p.setStatusStr(p.getStatusStr()+"  (预约日期："+reseDate+")");
             }
+            if(p.getStatusInt() == 7){
+                IdentityInfo ideInfo2 = iIdentityInfoService.findById(p.getPersonId());
+                String loc = (ideInfo2.getAcceptAddress().equals(1)) ? "市级行政许可中心" : "滨海新区行政服务中心";
+                p.setStatusStr(p.getStatusStr() + "("+loc+")");
+            }
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

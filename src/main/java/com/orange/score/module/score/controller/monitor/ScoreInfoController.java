@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -111,6 +112,33 @@ public class ScoreInfoController {
         }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+    /*
+    根据person_id获取当前人的总分
+     */
+    @GetMapping(value =  "/score/SumScoreValue")
+    @ResponseBody
+    public Result SumScoreValue(ScoreRecord scoreRecord,
+                                @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                                @RequestParam(value = "pageSize", required = false, defaultValue = "100") int pageSize){
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        if (scoreRecord.getPersonId() != null) {
+            IdentityInfo identityInfo = iIdentityInfoService.findById(scoreRecord.getPersonId());
+            criteria.andEqualTo("personId", identityInfo.getId());
+            criteria.andEqualTo("batchId", identityInfo.getBatchId());
+        }
+        List<ScoreRecord> scoreRecs = iScoreRecordService.selectByFilter(condition);
+        BigDecimal sumScore = new BigDecimal(0);
+        for(ScoreRecord sr : scoreRecs){
+            System.out.println(sr.getScoreValue());
+            sumScore = sumScore.add(sr.getScoreValue().setScale(2,BigDecimal.ROUND_DOWN));
+        }
+        sumScore.setScale(2 , BigDecimal.ROUND_DOWN);
+        Map result = new HashMap<>();
+        result.put("sumScore",sumScore);
+        return ResponseUtil.success(result);
     }
 
     @GetMapping(value = "/score/formItems")
