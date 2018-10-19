@@ -222,7 +222,10 @@ public class PolicePrevApproveController {
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 9);
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您的申请信息网上预审未通过。");
+            if(identityInfo.getUnionApproveStatus2() != 3){
+                SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您的申请信息网上预审未通过。");
+            }
+
         }
         return ResponseUtil.success();
     }
@@ -278,7 +281,10 @@ public class PolicePrevApproveController {
             }
         }
         HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-        SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料未通过居住证积分网上预审，请根据提示尽快补正材料。");
+        if(identityInfo.getUnionApproveStatus2() != 3){
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料未通过居住证积分网上预审，请根据提示尽快补正材料。");
+        }
+
         return ResponseUtil.success();
     }
 
