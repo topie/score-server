@@ -54,7 +54,7 @@ public class PersonBatchStatusRecordController {
             }
             if(p.getStatusInt() == 7){
                 IdentityInfo ideInfo2 = iIdentityInfoService.findById(p.getPersonId());
-                String loc = (ideInfo2.getAcceptAddress().equals(1)) ? "市区" : "滨海";
+                String loc = (ideInfo2.getAcceptAddress().equals("市级行政许可中心")) ? "市区" : "滨海";
                 p.setStatusStr(p.getStatusStr() + "("+loc+")");
             }
         }
