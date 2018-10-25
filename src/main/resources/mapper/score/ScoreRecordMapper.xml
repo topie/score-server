@@ -38,6 +38,7 @@
         from t_pb_score_record sr inner join t_identity_info i
         on sr.person_id=i.id
         <where>
+            i.cancel_status = 0
             <if test="item.status!=null">
                 and sr.status in
                 <foreach item="it" collection="item.status" open="(" separator="," close=")">
