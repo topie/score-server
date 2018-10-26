@@ -111,6 +111,9 @@ public class ScoreInfoController {
             criteria.andEqualTo("batchId", identityInfo.getBatchId());
         }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
+        for (ScoreRecord sr : pageInfo.getList()){
+            sr.setScoreValue(sr.getScoreValue().setScale(2,BigDecimal.ROUND_DOWN));
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -132,7 +135,7 @@ public class ScoreInfoController {
         List<ScoreRecord> scoreRecs = iScoreRecordService.selectByFilter(condition);
         BigDecimal sumScore = new BigDecimal(0);
         for(ScoreRecord sr : scoreRecs){
-            System.out.println(sr.getScoreValue());
+//            System.out.println(sr.getScoreValue());
             sumScore = sumScore.add(sr.getScoreValue().setScale(2,BigDecimal.ROUND_DOWN));
         }
         sumScore.setScale(2 , BigDecimal.ROUND_DOWN);

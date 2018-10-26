@@ -592,4 +592,111 @@ public class IdentityInfoController {
         }
         return options;
     }
+
+    /*
+    全程监控——积分批次管理，列表中操作列加入“人数统计”按钮
+     */
+    @RequestMapping("/applicationCount")
+    @ResponseBody
+    public Result applicationCount(AcceptDateConf acceptDateConf) throws FileNotFoundException {
+        Condition condition = new Condition(IdentityInfo.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        if (acceptDateConf.getBatchId() != null) {
+            criteria.andEqualTo("batchId", acceptDateConf.getBatchId());
+        }
+        List<IdentityInfo> identityInfoList = iIdentityInfoService.findByCondition(condition);
+        String registerSum = identityInfoList.size()+"";//已在系统注册的人数
+        int passSeltTest = 0;//已经通过自助测评的人数
+        int applyingInterPre = 0;//已申请网上预审的人数
+        int applyedInterPre = 0;//已通过网上预审的人数
+        int reservationSum = 0;//已预约的人数
+        int acceptedCheck = 0;//人社受理审核通过的人数
+
+        //市区
+        int passSeltTest_1 = 0;//已经通过自助测评的人数
+        int applyingInterPre_1 = 0;//已申请网上预审的人数
+        int applyedInterPre_1 = 0;//已通过网上预审的人数
+        int reservationSum_1 = 0;//已预约的人数
+        int acceptedCheck_1 = 0;//人社受理审核通过的人数
+
+        //滨海新区
+        int passSeltTest_2 = 0;//已经通过自助测评的人数
+        int applyingInterPre_2 = 0;//已申请网上预审的人数
+        int applyedInterPre_2 = 0;//已通过网上预审的人数
+        int reservationSum_2 = 0;//已预约的人数
+        int acceptedCheck_2 = 0;//人社受理审核通过的人数
+
+        for (IdentityInfo ideInfo : identityInfoList){
+            if(ideInfo.getReservationStatus() == 6){
+                passSeltTest ++;
+            }
+            if (ideInfo.getReservationStatus() == 8){
+                applyingInterPre ++;
+            }
+            if(ideInfo.getReservationStatus() == 10 && ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2){
+                applyedInterPre ++;
+            }
+            if(ideInfo.getReservationStatus() == 11 && ideInfo.getPoliceApproveStatus() == 1 && ideInfo.getReservationDate() != null){
+                reservationSum ++;
+            }
+            if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3){
+                acceptedCheck ++;
+            }
+
+            //市区
+            if (ideInfo.getReservationStatus() == 8 && ideInfo.getAcceptAddressId() == 1){
+                applyingInterPre_1 ++;
+            }
+            if(ideInfo.getReservationStatus() == 10 && ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2 && ideInfo.getAcceptAddressId() == 1){
+                applyedInterPre_1 ++;
+            }
+            if(ideInfo.getReservationStatus() == 11 && ideInfo.getPoliceApproveStatus() == 1 && ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 1){
+                reservationSum_1 ++;
+            }
+            if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 1){
+                acceptedCheck_1 ++;
+            }
+            //滨海新区
+            if (ideInfo.getReservationStatus() == 8 && ideInfo.getAcceptAddressId() == 1){
+                applyingInterPre_2 ++;
+            }
+            if(ideInfo.getReservationStatus() == 10 && ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2 && ideInfo.getAcceptAddressId() == 1){
+                applyedInterPre_2 ++;
+            }
+            if(ideInfo.getReservationStatus() == 11 && ideInfo.getPoliceApproveStatus() == 1 && ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 1){
+                reservationSum_2 ++;
+            }
+            if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 1){
+                acceptedCheck_2 ++;
+            }
+        }
+
+        Map params = new HashMap();
+        params.put("registerSum", registerSum);
+        params.put("passSeltTest", passSeltTest+"");
+        params.put("applyingInterPre", applyingInterPre+"");
+        params.put("applyedInterPre", applyedInterPre+"");
+        params.put("reservationSum", reservationSum+"");
+        params.put("acceptedCheck", acceptedCheck+"");
+
+        params.put("applyingInterPre_1", applyingInterPre_1+"");
+        params.put("applyedInterPre_1", applyedInterPre_1+"");
+        params.put("reservationSum_1", reservationSum_1+"");
+        params.put("acceptedCheck_1", acceptedCheck_1+"");
+
+        params.put("applyingInterPre_2", applyingInterPre_2+"");
+        params.put("applyedInterPre_2", applyedInterPre_2+"");
+        params.put("reservationSum_2", reservationSum_2+"");
+        params.put("acceptedCheck_2", acceptedCheck_2+"");
+
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "application_count.ftl", params);
+
+        Map result = new HashMap();
+        result.put("html", html);
+        return ResponseUtil.success(result);
+    }
+
+
+
 }
