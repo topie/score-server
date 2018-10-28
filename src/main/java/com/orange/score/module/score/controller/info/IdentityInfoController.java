@@ -627,16 +627,16 @@ public class IdentityInfoController {
         int acceptedCheck_2 = 0;//人社受理审核通过的人数
 
         for (IdentityInfo ideInfo : identityInfoList){
-            if(ideInfo.getReservationStatus() == 6){
+            if(ideInfo.getReservationStatus() >= 6){
                 passSeltTest ++;
             }
-            if (ideInfo.getReservationStatus() == 8){
+            if (ideInfo.getReservationStatus() >= 8){
                 applyingInterPre ++;
             }
-            if(ideInfo.getReservationStatus() == 10 && ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2){
+            if(ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2){
                 applyedInterPre ++;
             }
-            if(ideInfo.getReservationStatus() == 11 && ideInfo.getPoliceApproveStatus() == 1 && ideInfo.getReservationDate() != null){
+            if(ideInfo.getReservationStatus() == 11 && ideInfo.getReservationDate() != null){
                 reservationSum ++;
             }
             if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3){
@@ -644,29 +644,29 @@ public class IdentityInfoController {
             }
 
             //市区
-            if (ideInfo.getReservationStatus() == 8 && ideInfo.getAcceptAddressId() == 1){
+            if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 1){
                 applyingInterPre_1 ++;
             }
-            if(ideInfo.getReservationStatus() == 10 && ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2 && ideInfo.getAcceptAddressId() == 1){
+            if(ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2 && ideInfo.getAcceptAddressId() == 1){
                 applyedInterPre_1 ++;
             }
-            if(ideInfo.getReservationStatus() == 11 && ideInfo.getPoliceApproveStatus() == 1 && ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 1){
+            if(ideInfo.getReservationStatus() == 11 && ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 1){
                 reservationSum_1 ++;
             }
             if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 1){
                 acceptedCheck_1 ++;
             }
             //滨海新区
-            if (ideInfo.getReservationStatus() == 8 && ideInfo.getAcceptAddressId() == 1){
+            if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 2){
                 applyingInterPre_2 ++;
             }
-            if(ideInfo.getReservationStatus() == 10 && ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2 && ideInfo.getAcceptAddressId() == 1){
+            if(ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2 && ideInfo.getAcceptAddressId() == 2){
                 applyedInterPre_2 ++;
             }
-            if(ideInfo.getReservationStatus() == 11 && ideInfo.getPoliceApproveStatus() == 1 && ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 1){
+            if(ideInfo.getReservationStatus() == 11&& ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 2){
                 reservationSum_2 ++;
             }
-            if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 1){
+            if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 2){
                 acceptedCheck_2 ++;
             }
         }
