@@ -17,4 +17,6 @@ public interface IPersonBatchStatusRecordService extends IService<PersonBatchSta
     List<PersonBatchStatusRecord> selectByFilter(PersonBatchStatusRecord personBatchStatusRecord);
 
     void insertStatus(Integer batchId, Integer personId, String alias, Integer status);
+
+    PersonBatchStatusRecord getPassPreCheck(PersonBatchStatusRecord personBatchStatusRecord);
 }

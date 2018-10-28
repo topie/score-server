@@ -14,4 +14,7 @@
     <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
     <result column="status_reason" jdbcType="VARCHAR" property="statusReason" />
   </resultMap>
+  <select id="getPassPreCheck" resultType="com.orange.score.database.score.model.PersonBatchStatusRecord">
+    select id,batch_id,person_id,status_dict_alias,status_int,status_str,status_time,status_reason from t_pb_status_record where status_int=10 and person_id = #{p.personId}
+  </select>
 </mapper>

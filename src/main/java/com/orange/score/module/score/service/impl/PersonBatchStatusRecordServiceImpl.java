@@ -142,5 +142,12 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
             save(personBatchStatusRecord);
         }
     }
+
+
+    @Override
+    public PersonBatchStatusRecord getPassPreCheck(PersonBatchStatusRecord personBatchStatusRecord) {
+        return personBatchStatusRecordMapper.getPassPreCheck(personBatchStatusRecord);
+    }
+
 }
 

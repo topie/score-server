@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -254,7 +255,29 @@ public class RenshePrevApproveController {
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 10);
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
+//            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
+
+            /*
+            2018年10月29日通过联合预审的申请人短信内容调整：
+             */
+//            Condition condition = new Condition(PersonBatchStatusRecord.class);
+//            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+//            criteria = condition.createCriteria();
+//            criteria.andEqualTo("statusInt", 10);
+//            criteria.andEqualTo("personId", identityInfo.getId());
+//            List<PersonBatchStatusRecord> pbs = iPersonBatchStatusRecordService.findByCondition(condition);
+            PersonBatchStatusRecord pbsr = new PersonBatchStatusRecord();
+            pbsr.setStatusInt(10);
+            pbsr.setPersonId(identityInfo.getId());
+            PersonBatchStatusRecord pbs = iPersonBatchStatusRecordService.getPassPreCheck(pbsr);
+            PersonBatchStatusRecord pbs2 = iPersonBatchStatusRecordService.findById(pbs.getId());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String passDate = sdf.format(pbs2.getStatusTime());
+            if(pbs2.getStatusInt() == 10 && passDate.equals("2018-10-28")){
+                SmsUtil.send(houseOther.getSelfPhone(), identityInfo.getName() + "，恭喜您已通过网上预审，请预约10月30日到窗口提交材料。");
+            } else{
+                SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
+            }
         }
 
         return ResponseUtil.success();
