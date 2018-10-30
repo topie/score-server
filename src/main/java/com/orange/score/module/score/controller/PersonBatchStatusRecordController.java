@@ -49,7 +49,12 @@ public class PersonBatchStatusRecordController {
         for(PersonBatchStatusRecord p :pageInfo.getList()){
             if(p.getStatusInt() == 11){
                 IdentityInfo ideInfo = iIdentityInfoService.findById(p.getPersonId());
-                String reseDate = sdf.format(ideInfo.getReservationDate());
+                String reseDate = "";
+                if(ideInfo.getReservationDate()==null || ideInfo.getReservationDate().toString().equals("")){
+                    reseDate = "空";
+                } else{
+                    reseDate = sdf.format(ideInfo.getReservationDate());
+                }
                 p.setStatusStr(p.getStatusStr()+"  (预约日期："+reseDate+")");
             }
             if(p.getStatusInt() == 7){
