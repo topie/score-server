@@ -276,7 +276,7 @@ public class RenshePrevApproveController {
             if(pbs2.getStatusInt() == 10 && passDate.equals("2018-10-29")){
                 SmsUtil.send(houseOther.getSelfPhone(), identityInfo.getName() + "，恭喜您已通过网上预审，请预约10月30日到窗口提交材料。");
             } else{
-                SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
+//                SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
             }
         }
 
