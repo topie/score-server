@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -155,7 +156,21 @@ public class StatExportController {
             columns.add(column);
         }
         PageInfo<Map> pageInfo = iIdentityInfoService.selectExportList3ByPage(argMap, pageNum, pageSize);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (Map map : pageInfo.getList()) {
+            /*
+            2018年11月9日 xgr
+            因浏览器端显示的时间有8个小时的时差，所以格式化一下
+             */
+            if(map.get("ACCEPT_DATE") != null){
+                map.put("ACCEPT_DATE", sdf.format(map.get("ACCEPT_DATE")));
+            }
+            if (map.get("SUBMIT_DATE") != null){
+                map.put("SUBMIT_DATE", sdf.format(map.get("SUBMIT_DATE")));
+            }
+            if(map.get("SCORE_DATE") != null){
+                map.put("SCORE_DATE", sdf.format(map.get("SCORE_DATE")));
+            }
             Integer status = ((BigDecimal) map.get("STATUS")).intValue();
             switch (status) {
                 case 1:
