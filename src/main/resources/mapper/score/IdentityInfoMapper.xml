@@ -187,7 +187,7 @@
         left join t_pb_status_record sr on i.id=sr.person_id and status_dict_alias='hallStatus' and status_int=5
         <where>
             <if test="item.batchId!=null">
-                and i.batch_id = #{item.batchId}
+                and i.batch_id = #{item.batchId} and i.reservation_status = 11 and i.renshe_accept_status = 3
             </if>
             <if test="item.acceptAddressId!=null">
                 and i.accept_address_id = #{item.acceptAddressId}
