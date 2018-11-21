@@ -128,6 +128,16 @@ CREATE TABLE t_batch_conf (
   COMMENT '公示结束日期',
   self_score_end    DATE                 DEFAULT '0000-00-00'
   COMMENT '自测结束日期',
+
+  close_function_time DATE               DEFAULT '0000-00-00 00:00'
+  COMMENT '关闭功能时间',
+  open_function_time DATE                DEFAULT '0000-00-00 00:00'
+  COMMENT '打开功能时间',
+  close_login_time DATE                  DEFAULT '0000-00-00 00:00'
+  COMMENT '关闭登录功能',
+  open_login_time DATE                   DEFAULT '0000-00-00 00:00'
+  COMMENT '打开登录功',
+
   indicator_type    INT(11)     NOT NULL DEFAULT 0
   COMMENT '指标方式 0:总人数选取 1:分数线选取',
   indicator_value   INT(11)              DEFAULT 0

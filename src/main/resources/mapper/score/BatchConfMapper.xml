@@ -17,6 +17,11 @@
         <result column="notice_begin" jdbcType="DATE" property="noticeBegin"/>
         <result column="notice_end" jdbcType="DATE" property="noticeEnd"/>
         <result column="self_score_end" jdbcType="DATE" property="selfScoreEnd"/>
+
+        <result column="close_function_time" jdbcType="DATE" property="closeFunctionTime"/>
+        <result column="open_function_time" jdbcType="DATE" property="openFunctionTime"/>
+        <result column="close_login_time" jdbcType="DATE" property="closeLoginTime"/>
+        <result column="open_login_time" jdbcType="DATE" property="openLoginTime"/>
         <result column="accept_address_id" jdbcType="INTEGER" property="acceptAddressId"/>
         <result column="indicator_type" jdbcType="INTEGER" property="indicatorType"/>
         <result column="indicator_value" jdbcType="INTEGER" property="indicatorValue"/>

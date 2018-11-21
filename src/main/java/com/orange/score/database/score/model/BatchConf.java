@@ -125,6 +125,35 @@ public class BatchConf {
     private Integer process;
 
     /**
+     * 2018年11月12日，添加4个字段
+     * 1、关闭单位注册、填写申请人信息、自助测评、申请预审功能的时间；
+     * 2、打开单位注册、填写申请人信息、自助测评、申请预审功能的时间；
+     * 3、关闭申请人登录功能的时间；
+     * 4、打开申请人登录功能的时间；
+     */
+    //关闭功能
+    @Column(name = "close_function_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date closeFunctionTime;
+
+    //打开功能
+    @Column(name = "open_function_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date openFunctionTime;
+
+    //关闭登录功能
+    @Column(name = "close_login_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date closeLoginTime;
+
+    //打开登录功能的时间，精确到分钟
+    @Column(name = "open_login_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date openLoginTime;
+
+
+
+    /**
      * 获取id
      *
      * @return id - id
@@ -455,5 +484,42 @@ public class BatchConf {
      */
     public void setProcess(Integer process) {
         this.process = process;
+    }
+
+
+    public void setCloseFunctionTime(Date closeFunctionTime) {
+        this.closeFunctionTime = closeFunctionTime;
+    }
+
+    public void setOpenFunctionTime(Date openFunctionTime) {
+        this.openFunctionTime = openFunctionTime;
+    }
+
+    public void setCloseLoginTime(Date closeLoginTime) {
+        this.closeLoginTime = closeLoginTime;
+    }
+
+    public void setOpenLoginTime(Date openLoginTime) {
+        this.openLoginTime = openLoginTime;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
+    public Date getCloseFunctionTime() {
+        return closeFunctionTime;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
+    public Date getOpenFunctionTime() {
+        return openFunctionTime;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
+    public Date getCloseLoginTime() {
+        return closeLoginTime;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
+    public Date getOpenLoginTime() {
+        return openLoginTime;
     }
 }
