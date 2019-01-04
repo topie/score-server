@@ -167,6 +167,11 @@ public class CheckInfoController {
         return ResponseUtil.success(PageConvertUtil.grid(identityInfos));
     }
 
+    /**
+     * 汇总发布
+     * @param batchId
+     * @return
+     */
     @PostMapping("/checkBatch")
     public Result checkBatch(@RequestParam Integer batchId) {
         BatchConf batchConf = iBatchConfService.findById(batchId);

@@ -152,6 +152,14 @@ public class BatchConf {
     private Date openLoginTime;
 
 
+    /**
+     * 2019年1月4日 增加一个字段值
+     * 表示名单公示的最低分数线
+     */
+    @Column(name = "score_value")
+    private Integer scoreValue;
+
+
 
     /**
      * 获取id
@@ -521,5 +529,13 @@ public class BatchConf {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
     public Date getOpenLoginTime() {
         return openLoginTime;
+    }
+
+    public Integer getScoreValue() {
+        return scoreValue;
+    }
+
+    public void setScoreValue(Integer scoreValue) {
+        this.scoreValue = scoreValue;
     }
 }

@@ -172,7 +172,7 @@ public class StatExportController {
                 map.put("SCORE_DATE", sdf.format(map.get("SCORE_DATE")));
             }
             if(map.get("SCORE_VALUE") != null){
-                map.put("SCORE_VALUE", ((BigDecimal) map.get("SCORE_VALUE")).setScale(2,BigDecimal.ROUND_DOWN));
+                map.put("SCORE_VALUE", ((BigDecimal) map.get("SCORE_VALUE")).setScale(2));
             }
             Integer status = ((BigDecimal) map.get("STATUS")).intValue();
             switch (status) {

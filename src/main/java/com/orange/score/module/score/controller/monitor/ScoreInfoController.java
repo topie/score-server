@@ -112,7 +112,7 @@ public class ScoreInfoController {
         }
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
         for (ScoreRecord sr : pageInfo.getList()){
-            sr.setScoreValue(sr.getScoreValue().setScale(2,BigDecimal.ROUND_DOWN));
+            sr.setScoreValue(sr.getScoreValue().setScale(2));
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -136,9 +136,9 @@ public class ScoreInfoController {
         BigDecimal sumScore = new BigDecimal(0);
         for(ScoreRecord sr : scoreRecs){
 //            System.out.println(sr.getScoreValue());
-            sumScore = sumScore.add(sr.getScoreValue().setScale(2,BigDecimal.ROUND_DOWN));
+            sumScore = sumScore.add(sr.getScoreValue().setScale(2));
         }
-        sumScore.setScale(2 , BigDecimal.ROUND_DOWN);
+        sumScore.setScale(2);
         Map result = new HashMap<>();
         result.put("sumScore",sumScore);
         return ResponseUtil.success(result);

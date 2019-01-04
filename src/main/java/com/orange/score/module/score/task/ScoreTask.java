@@ -95,6 +95,9 @@ public class ScoreTask {
         }
     }
 
+    /**
+     * 名单公示开始的定时任务
+     */
     @Scheduled(cron = "15 0 0 * * ? ")
     public void listBeginTask() {
         Date today = DateUtil.getToday();
@@ -109,6 +112,9 @@ public class ScoreTask {
         }
     }
 
+    /**
+     * 名单公示结束的定时任务
+     */
     @Scheduled(cron = "20 0 0 * * ? ")
     public void listEndTask() {
         Date nextDay = DateUtil.addDay(DateUtil.getToday(), 1);
