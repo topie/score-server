@@ -2,7 +2,7 @@ package com.orange.score.database.core.model;
 
 import javax.persistence.*;
 
-@Table(name = "t_region_2")
+@Table(name = "t_region")
 public class Region {
     /**
      * 主键ID

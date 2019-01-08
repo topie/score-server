@@ -11,6 +11,6 @@
         <result column="level_type" jdbcType="INTEGER" property="level"/>
     </resultMap>
     <select id="selectTreeNodes" resultType="com.orange.score.common.utils.TreeNode">
-      select id,name,parent_id as pId from t_region_2
+      select id,name,parent_id as pId from t_region
     </select>
 </mapper>
