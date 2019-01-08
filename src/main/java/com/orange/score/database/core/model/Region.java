@@ -2,7 +2,7 @@ package com.orange.score.database.core.model;
 
 import javax.persistence.*;
 
-@Table(name = "t_region")
+@Table(name = "t_region_2")
 public class Region {
     /**
      * 主键ID
@@ -27,6 +27,15 @@ public class Region {
      */
     @Column(name = "region_level")
     private Integer level;
+
+
+    /**
+     * 2018年12月29日
+     * 添加行政区划代码，区划代码来自公安局提供
+     * 在数据库中只保存了“省市县”3级中的第3级别
+     */
+    @Column(name = "police_code")
+    private Integer police_code;
 
     /**
      * 获取主键ID
@@ -98,5 +107,13 @@ public class Region {
      */
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public Integer getPolice_code() {
+        return police_code;
+    }
+
+    public void setPolice_code(Integer police_code) {
+        this.police_code = police_code;
     }
 }

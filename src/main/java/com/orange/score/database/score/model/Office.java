@@ -2,7 +2,7 @@ package com.orange.score.database.score.model;
 
 import javax.persistence.*;
 
-@Table(name = "T_OFFICE")
+@Table(name = "T_OFFICE_2")
 public class Office {
 
     @Id
@@ -21,6 +21,9 @@ public class Office {
 
     @Column(name = "REGION_LEVEL")
     private Integer regionLevel;
+
+    @Column(name = "POLICE_CODE")
+    private String policeCode;
 
     /**
      * @return ID
@@ -90,5 +93,13 @@ public class Office {
      */
     public void setRegionLevel(Integer regionLevel) {
         this.regionLevel = regionLevel;
+    }
+
+    public String getPoliceCode() {
+        return policeCode;
+    }
+
+    public void setPoliceCode(String policeCode) {
+        this.policeCode = policeCode;
     }
 }

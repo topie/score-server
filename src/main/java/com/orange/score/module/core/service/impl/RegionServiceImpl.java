@@ -56,7 +56,7 @@ public class RegionServiceImpl extends BaseService<Region> implements IRegionSer
                 criteria.andEqualTo("parentId", region.getParentId());
             }
             ColumnJson columnJson = new ColumnJson();
-            columnJson.setTableName("t_region");
+            columnJson.setTableName("t_region_2");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
             if (list.size() > 0) {
                 List<SearchItem> searchItems = new ArrayList<>();

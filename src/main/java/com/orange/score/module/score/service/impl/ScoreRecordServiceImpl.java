@@ -25,10 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-16.
@@ -398,6 +395,15 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
             List<Integer> roles) {
         return scoreRecordMapper
                 .selectIndicatorIdsByIdentityInfoIdAndRoleIdsAndIndicatorId(identityInfoId, indicatorId, roles);
+    }
+
+    @Override
+    public List<ScoreRecord> provideDataToPolice(BatchConf batchConf) {
+        Map map = new HashMap();
+        map.put("id",batchConf.getId());
+        map.put("indicatorValue",batchConf.getIndicatorValue());
+        map.put("scoreValue",batchConf.getScoreValue());
+        return scoreRecordMapper.provideDataToPolice(map);
     }
 
     private BigDecimal findScoreRecordResultType0(Integer batchId, Integer personId, Integer indicatorId) {

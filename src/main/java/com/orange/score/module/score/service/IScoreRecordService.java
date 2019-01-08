@@ -2,6 +2,7 @@ package com.orange.score.module.score.service;
 
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.IService;
+import com.orange.score.database.score.model.BatchConf;
 import com.orange.score.database.score.model.ScoreRecord;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -39,5 +40,7 @@ public interface IScoreRecordService extends IService<ScoreRecord> {
     List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIds(Integer identityInfoId, List<Integer> roles);
 
     List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIds(Integer identityInfoId,Integer indicatorId, List<Integer> roles);
+
+    List<ScoreRecord> provideDataToPolice(BatchConf batchConf);
 
 }

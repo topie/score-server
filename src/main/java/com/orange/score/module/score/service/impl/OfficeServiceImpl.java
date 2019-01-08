@@ -55,7 +55,7 @@ public class OfficeServiceImpl extends BaseService<Office> implements IOfficeSer
                 criteria.andEqualTo("parentId", office.getParentId());
             }
             ColumnJson columnJson = new ColumnJson();
-            columnJson.setTableName("t_office");
+            columnJson.setTableName("t_office_2");
             List<ColumnJson> list = iColumnJsonService.selectByFilter(columnJson);
             if (list.size() > 0) {
                 List<SearchItem> searchItems = new ArrayList<>();

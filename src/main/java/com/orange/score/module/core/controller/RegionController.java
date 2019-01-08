@@ -44,8 +44,8 @@ public class RegionController {
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
-        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_region");
-        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_region");
+        List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_region_2");
+        List searchItems = iCommonQueryService.selectSearchItemsByTable("t_region_2");
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);

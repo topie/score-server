@@ -24,7 +24,8 @@ import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.beanutils.BeanUtils;
-import org.dom4j.DocumentException;
+import org.apache.regexp.RE;
+import org.dom4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
@@ -32,10 +33,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -92,6 +96,12 @@ public class IdentityInfoController {
 
     @Autowired
     private ILogService iLogService;
+
+    @Autowired
+    private IScoreRecordService iScoreRecordService;
+
+    @Autowired
+    private IBatchConfService iBatchConfService;
 
     @GetMapping(value = "/list")
     @ResponseBody
@@ -698,5 +708,335 @@ public class IdentityInfoController {
     }
 
 
+    /**
+     * 2018年12月26日
+     * 给公安局提供发放准迁证的数据，xml格式的数据
+     */
+    @RequestMapping("/provideDataToPolice")
+    @ResponseBody
+    public Result provideDataToPolice(AcceptDateConf acceptDateConf,HttpServletResponse response){
+        /*
+        1、根据人社局提供的分数线与划定的人数限制，获得有资格的人的ID；
+        2、生成xml格式的文档；
+         */
+        Condition condition = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("id", acceptDateConf.getBatchId());
+        List<BatchConf> list = iBatchConfService.findByCondition(condition);
+        List<ScoreRecord> scoreRecords = iScoreRecordService.provideDataToPolice(list.get(0));
+        Integer sum = scoreRecords.size();
 
+        Element PACKAGE = createRootXml("PACKAGE");
+
+        /*
+        消息头 packageHead
+         */
+        Element PACKAGEHEAD = PACKAGE.addElement("PACKAGEHEAD");
+        Element JLS = PACKAGEHEAD.addElement("JLS");//记录数，表示封装了多少人
+        addText(JLS,sum.toString());
+
+        Element FSSL = PACKAGEHEAD.addElement("FSSL");//发送时间，当前的时间
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String date2 = sdf.format(date);
+        FSSL.addText(date2);
+
+        /*
+        数据包编号，如：2205000000002018062601606
+        构成方式为：
+        1、220500000000：是固定的；
+        2、20180626：年月日；
+        3、01606：流水号，可以自定义；目前暂定为00001；
+         */
+        Element SJBBH = PACKAGEHEAD.addElement("SJBBH");
+        String bh = "220500000000"+date2+"00001";
+        SJBBH.addText(bh);
+
+        /*
+        date 节点封装申请人的数据
+         */
+        Element DATA = PACKAGE.addElement("DATA");
+        for(int i=0;i<scoreRecords.size();i++){
+            /*
+            1、获取申请人的信息
+            a、申请人的信息；
+            b、随迁人的信息；
+            c、迁出、迁入地的信息
+             */
+            Condition condition_IdentityInfo = new Condition(IdentityInfo.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria_IdentityInfo = condition_IdentityInfo.createCriteria();
+            criteria_IdentityInfo.andEqualTo("id", scoreRecords.get(i).getId());
+            List<IdentityInfo> list_IdeInfo = iIdentityInfoService.findByCondition(condition_IdentityInfo);
+
+            condition = new Condition(HouseRelationship.class);
+            criteria = condition.createCriteria();
+            criteria.andEqualTo("identityInfoId", scoreRecords.get(i).getId());
+            criteria.andEqualTo("isRemove", 1);//是否随迁 1：是，2：否
+            List<String> list_rs = new ArrayList();
+            list_rs.add("子");
+            list_rs.add("女");
+            criteria.andIn("relationship",list_rs);//与申请人关系
+            List<HouseRelationship> list_relationship = iHouseRelationshipService.findByCondition(condition);
+
+
+            Condition cond_move = new Condition(HouseMove.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria_move = cond_move.createCriteria();
+            criteria_move.andEqualTo("identityInfoId", scoreRecords.get(i).getId());
+            List<HouseMove> list_move = iHouseMoveService.findByCondition(cond_move);
+
+            /*
+            通过 HouseMove的 moveRegion 属性值获取表 字典表的t_region的 police_code 值
+             */
+            Condition cond_region = new Condition(Region.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria_region = cond_region.createCriteria();
+            criteria_region.andEqualTo("id", list_move.get(0).getMoveRegion());
+            List<Region> list_region = iRegionService.findByCondition(cond_region);
+            if (list_region.size()==0){
+                System.out.println("迁出地 省市县（区）："+list_move.get(0).getMoveRegion()+":"+list_move.get(0).getIdentityInfoId());
+            }
+
+            /*
+            2019年1月2日
+            核对好公安局派出所单位名称、代码后，进行赋值
+             */
+            Condition cond_office = new Condition(Office.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria_office = cond_office.createCriteria();
+            criteria_office.andIsNotNull("policeCode");
+//            criteria_office.andEqualTo("id",505);
+            List<Office> list_office = iOfficeService.findByCondition(cond_office);
+
+            Element RECORD = DATA.addElement("RECORD");
+            //添加两个属性：SID、NO
+            RECORD.addAttribute("SID","010122");//SID属性值是固定的010122
+            int j = i+1;
+            RECORD.addAttribute("NO",new Integer(j).toString());//表示xml文档中的第几个申请人
+
+            //添加节点值
+            Element YWLSH = RECORD.addElement("YWLSH");//业务流水号
+            YWLSH.addText(list_IdeInfo.get(0).getAcceptNumber());
+            Element SQR_GMSFHM = RECORD.addElement("SQR_GMSFHM");//申请人-公民身份号码
+            SQR_GMSFHM.addText(list_IdeInfo.get(0).getIdNumber().replace(" ", ""));
+            Element SQR_XM = RECORD.addElement("SQR_XM");//申请人姓名
+            SQR_XM.addText(list_IdeInfo.get(0).getName());
+            Element SQR_ZZ_SSXQDM = RECORD.addElement("SQR_ZZ_SSXQDM");//住址 省市县（区），与迁出地省市县（区）一致
+            SQR_ZZ_SSXQDM.addText(list_region.get(0).getPolice_code().toString());
+            Element SQR_ZZ_QHNXXDZ = RECORD.addElement("SQR_ZZ_QHNXXDZ");//住址 区划内详细地址
+            SQR_ZZ_QHNXXDZ.addText(list_move.get(0).getMoveAddress());
+            Element SQR_HKDJJG_GAJGJGDM = RECORD.addElement("SQR_HKDJJG_GAJGJGDM");//户口登记机关 公安机关机构代码
+            SQR_HKDJJG_GAJGJGDM.addText("");
+            Element SQR_HKDJJG_GAJGMC = RECORD.addElement("SQR_HKDJJG_GAJGMC");//户口登记机关 公安机关名称
+            SQR_HKDJJG_GAJGMC.addText(list_move.get(0).getMoveRegisteredOffice());
+            Element QCD_SSXQDM = RECORD.addElement("QCD_SSXQDM");//迁出地 省市县（区）
+            QCD_SSXQDM.addText(list_region.get(0).getPolice_code().toString());
+            Element QCD_QHNXXDZ = RECORD.addElement("QCD_QHNXXDZ");//迁出地 区划内详细地址
+            QCD_QHNXXDZ.addText(list_move.get(0).getMoveAddress());
+            Element QCD_HKDJJG_GAJGJGDM = RECORD.addElement("QCD_HKDJJG_GAJGJGDM");//迁出地 户口登记机关 公安机关机构代码
+            QCD_HKDJJG_GAJGJGDM.addText("");
+            Element QCD_HKDJJG_GAJGMC = RECORD.addElement("QCD_HKDJJG_GAJGMC");//迁出地 户口登记机关 公安机关名称
+            QCD_HKDJJG_GAJGMC.addText(list_move.get(0).getMoveRegisteredOffice());
+            Element QRD_SSXQDM = RECORD.addElement("QRD_SSXQDM");//迁入地 省市县（区）
+            QRD_SSXQDM.addText(getCode(list_move.get(0).getRegion().toString()));
+            Element QRD_QHNXXDZ = RECORD.addElement("QRD_QHNXXDZ");// 迁入地 区划内详细地址
+            QRD_QHNXXDZ.addText(list_move.get(0).getAddress());
+            Element QRD_HKDJJG_GAJGJGDM = RECORD.addElement("QRD_HKDJJG_GAJGJGDM");//迁入地 户口登记机关 公安机关机构代码
+            Element QRD_HKDJJG_GAJGMC = RECORD.addElement("QRD_HKDJJG_GAJGMC");//迁入地 户口登记机关 公安机构名称
+            for (Office of : list_office){
+                if (of.getId().toString().equals(list_move.get(0).getRegisteredRegion())){
+                    QRD_HKDJJG_GAJGJGDM.addText(of.getPoliceCode());
+                    QRD_HKDJJG_GAJGMC.addText(of.getName());
+                    break;
+                }
+            }
+
+            Element  CBR_XM = RECORD.addElement("CBR_XM");//承办人姓名
+            CBR_XM.addText(list_IdeInfo.get(0).getName());
+            Element BZ = RECORD.addElement("BZ");//备注
+            BZ.addText("");
+            Element QYLDYYDM = RECORD.addElement("QYLDYYDM"); // 迁移（流动）原因，固定值 950
+            QYLDYYDM.addText("950");
+            Element YXQJZRQ = RECORD.addElement("YXQJZRQ");//有效期截止日期
+            YXQJZRQ.addText("");
+            Element SLSJ = RECORD.addElement("SLSJ");//受理时间，用创建时间代替的
+            SLSJ.addText(sdf.format(list_IdeInfo.get(0).getcTime()));
+
+            /*
+            迁移人节点内有两个属性
+             */
+            int index = 1;
+            Element QYR = RECORD.addElement("QYR");
+            QYR.addAttribute("NO",new Integer(index).toString());// 顺序号
+            QYR.addAttribute("SID","010123");// 顺序号
+            Element YSQRGX_JTGXDM = QYR.addElement("YSQRGX_JTGXDM");//与申请人关系_家庭关系，01：本人，20：子，30：女
+            YSQRGX_JTGXDM.addText("01");
+            Element GMSFHM = QYR.addElement("GMSFHM");//公民身份号码
+            GMSFHM.addText(list_IdeInfo.get(0).getIdNumber().replace(" ", ""));
+            Element XM = QYR.addElement("XM");//姓名
+            XM.addText(list_IdeInfo.get(0).getName());
+            Element XBDM = QYR.addElement("XBDM");//性别
+            String id_number = list_IdeInfo.get(0).getIdNumber();
+            if (id_number.substring(id_number.length()-2,id_number.length()-1).equals("1")){
+                XBDM.addText("1");
+            }else {
+                XBDM.addText("2");
+            }
+            Element CSRQ = QYR.addElement("CSRQ");//出生日期
+            CSRQ.addText(list_IdeInfo.get(0).getIdNumber().replace(" ", "").substring(6,14));
+            Element YHLX = QYR.addElement("YHLX");//原户类型，10 家庭户，20集体户
+            if(list_move.get(0).getHouseNature()==4 || list_move.get(0).getHouseNature()==5){
+                YHLX.addText("20");
+            }else{
+                YHLX.addText("10");
+            }
+            Element HLX = QYR.addElement("HLX");//户类型
+            if (list_move.get(0).getSettledNature()==1 || list_move.get(0).getSettledNature()==2){
+                HLX.addText("20");
+            }else {
+                HLX.addText("10");
+            }
+            Element LHYXRQ = QYR.addElement("LHYXRQ");//落户有效期限
+            LHYXRQ.addText("");
+            if(list_relationship.size()>0){
+                for(HouseRelationship h : list_relationship){
+                    QYR = RECORD.addElement("QYR");
+                    QYR.addAttribute("NO",new Integer(++index).toString());// 顺序号
+                    QYR.addAttribute("SID","010123");// 顺序号
+                    YSQRGX_JTGXDM = QYR.addElement("YSQRGX_JTGXDM");//与申请人关系_家庭关系
+                    if (h.getRelationship().equals("子")){
+                        YSQRGX_JTGXDM.addText("20");
+                    }else{
+                        YSQRGX_JTGXDM.addText("30");
+                    }
+                    GMSFHM = QYR.addElement("GMSFHM");//公民身份号码
+                    GMSFHM.addText(h.getIdNumber().replace(" ", ""));
+                    XM = QYR.addElement("XM");//姓名
+                    XM.addText(h.getName());
+                    XBDM = QYR.addElement("XBDM");//性别
+                    if (h.getRelationship().equals("子")){
+                        XBDM.addText("1");
+                    }else{
+                        XBDM.addText("2");
+                    }
+                    CSRQ = QYR.addElement("CSRQ");//出生日期
+                    System.out.println(h.getName()+":"+h.getIdNumber());
+                    CSRQ.addText(h.getIdNumber().replace(" ", "").substring(6,14));
+                    YHLX = QYR.addElement("YHLX");//原户类型
+                    if(list_move.get(0).getHouseNature()==4 || list_move.get(0).getHouseNature()==5){
+                        YHLX.addText("20");
+                    }else{
+                        YHLX.addText("10");
+                    }
+                    HLX = QYR.addElement("HLX");//户类型
+                    if (list_move.get(0).getSettledNature()==1 || list_move.get(0).getSettledNature()==2){
+                        HLX.addText("20");
+                    }else {
+                        HLX.addText("10");
+                    }
+                    LHYXRQ = QYR.addElement("LHYXRQ");//落户有效期限
+                    LHYXRQ.addText("");
+                }
+            }
+
+        }
+
+        /*
+        xml数据生成String 并写入文档
+         */
+        String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"+PACKAGE.asXML();
+        /*FileWriter fw = null;
+        File f = new File("E:\\"+date2+(new Date().getTime())+"police.xml");
+        try {
+            fw = new FileWriter(f, true);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        PrintWriter pw = new PrintWriter(fw);
+        pw.println(xmlString);
+        pw.flush();
+        try {
+            fw.flush();
+            pw.close();
+            fw.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }*/
+
+        //1.设置文件下载的response响应格式
+        String fileName = date2+(new Date().getTime())+"toPolice";  //文件名
+        String fileType = "xml";    //文件类型
+//        HttpServletResponse response = ServletActionContext.getResponse();
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + fileType);
+        response.setContentType("multipart/form-data");
+        Cookie cookie = new Cookie("fileDownload", "true");
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        try {
+            //3.将内容转为byte[]格式
+            byte[] data = xmlString.getBytes("UTF-8");
+
+            //4.将内容写入响应流
+
+            OutputStream out = response.getOutputStream();
+            out.write(data);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        Map result = new HashMap();
+        result.put("ok", "ok");
+        return ResponseUtil.success(result);
+
+    }
+
+    /**
+     * 创建xml根节点
+     * @param rootName：根节点名称
+     * @return
+     */
+    private static Element createRootXml(String rootName){
+        org.dom4j.Document document = DocumentHelper.createDocument();
+        //2、添加根节点
+        Element root = document.addElement(rootName);
+        return root;
+    }
+
+    /**
+     * 主要是往元素里面加值，不是设置参数,就是root加完元素后网里面加值。
+     * 这里，ele.setText(String value),所以里面的值都是字符串
+     */
+    public static void addText(Element ele,String value){
+        if(!StringUtils.isEmpty(value)){
+            ele.setText(value);
+        }else{
+            ele.setText("");
+        }
+    }
+
+
+    public static String getCode(String code){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("21","120101");//和平区
+        map.put("22","120102");//河东区
+        map.put("23","120103");//河西区
+        map.put("24","120104");//南开区
+        map.put("25","120105");//河北区
+        map.put("26","120106");//红桥区
+        map.put("27","120110");//东丽区
+        map.put("28","120111");//西青区
+        map.put("29","120112");//津南区
+        map.put("30","120113");//北辰区
+        map.put("31","120114");//武清区
+        map.put("32","120115");//宝坻区
+        map.put("33","120116");//滨海新区
+        map.put("34","120117");//宁河区
+        map.put("35","120118");//静海区
+        map.put("36","120225");//蓟县
+
+        String policeCode =(String)map.get(code);
+        return policeCode;
+    }
 }
