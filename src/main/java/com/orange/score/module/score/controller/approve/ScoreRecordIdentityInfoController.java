@@ -247,7 +247,32 @@ public class ScoreRecordIdentityInfoController {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
             condition.orderBy("score").desc().orderBy("id").asc();
             List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition);
-            msMap.put("indicatorItems", indicatorItems);
+            List<IndicatorItem> indicatorItems_2 = new ArrayList<IndicatorItem>();
+            /*
+            2019年1月9日
+            人社权限用户应显示的打分项为：1、高级技工学校高级班；2、无；
+            教委权限用户应显示的打分项为：1、本科及以上学历；2、大专学历；3、无；
+             */
+            if(indicatorItems.size()>0 && indicatorItems.get(0).getIndicatorId()==3 && scoreRecord.getOpRole().equals("人社")){
+                for(IndicatorItem indicatorItem : indicatorItems){
+                    if(indicatorItem.getContent().equals("高级技工学校高级班") || indicatorItem.getContent().equals("无")){
+                        indicatorItems_2.add(indicatorItem);
+                    }
+                }
+            }
+            if(indicatorItems.size()>0 && indicatorItems.get(0).getIndicatorId()==3 && (scoreRecord.getOpRole().equals("市教委") || scoreRecord.getOpRole().equals("教委"))){
+                for(IndicatorItem indicatorItem : indicatorItems){
+                    if(indicatorItem.getContent().equals("本科及以上学历") || indicatorItem.getContent().equals("大专学历")  || indicatorItem.getContent().equals("无")){
+                        indicatorItems_2.add(indicatorItem);
+                    }
+                }
+            }
+            if(indicatorItems.size()>0 && indicatorItems.get(0).getIndicatorId()==3){
+                msMap.put("indicatorItems", indicatorItems_2);
+            }else {
+                msMap.put("indicatorItems", indicatorItems);
+            }
+
             msMap.put("roleId", scoreRecord.getOpRoleId());
             msMap.put("opRole", scoreRecord.getOpRole());
             msMap.put("jiaowei", -2);
