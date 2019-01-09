@@ -87,6 +87,9 @@ public class MaterialReceiveIdentityInfoController {
     @Autowired
     private IBatchConfService iBatchConfService;
 
+    /*
+    材料送达-未送达
+     */
     @GetMapping(value = "/receiving")
     @ResponseBody
     public Result receiving(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
