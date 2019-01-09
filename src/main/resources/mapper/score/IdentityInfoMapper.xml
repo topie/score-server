@@ -176,13 +176,15 @@
         c.operator_mobile,
         r.name partner_name,
         r.id_number partner_id_number,
-        sr.status_time accept_date
+        sr.status_time accept_date,
+        th.COMPANY_NAME COMPANY_NAME_other
         from t_identity_info i
         left join t_house_other o
         on i.id=o.identity_info_id
         left join t_house_profession p
         on i.id=p.identity_info_id
         left join t_company_info c on i.company_id=c.id
+        LEFT join t_house_other th on th.IDENTITY_INFO_ID=i.id
         left join t_house_relationship r on i.id=r.identity_info_id and r.relationship='配偶'
         left join t_pb_status_record sr on i.id=sr.person_id and status_dict_alias='hallStatus' and status_int=5
         <where>

@@ -40,7 +40,7 @@
                             <table style="font-size: 14px;" class="table table-hover table-condensed">
                                 <!-- 两组数据信息的 -->
                                 <tr>
-                                    <td colspan="6">单位名称：${company.companyName}</td>
+                                    <td colspan="6">申报单位名称：${company.companyName}</td>
                                     <td colspan="6">机构代码：<strong>${company.societyCode}</strong></td>
                                 </tr>
                                 <tr>
@@ -231,7 +231,7 @@
                                     <td colspan="6">邮寄地址：<strong>${move.witnessAddress}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">单位名称：<strong>${other.companyName}</strong></td>
+                                    <td colspan="6">实际用工单位：<strong>${other.companyName}</strong></td>
                                     <td colspan="6">单位电话：<strong>${other.companyPhone}</strong></td>
                                 </tr>
                                 <tr>
