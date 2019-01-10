@@ -756,7 +756,7 @@ public class IdentityInfoController {
         date 节点封装申请人的数据
          */
         Element DATA = PACKAGE.addElement("DATA");
-        for(int i=0;i<10;i++){
+        for(int i=0;i<scoreRecords.size();i++){
             /*
             1、获取申请人的信息
             a、申请人的信息；
