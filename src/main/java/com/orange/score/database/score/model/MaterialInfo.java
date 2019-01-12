@@ -48,6 +48,32 @@ public class MaterialInfo {
     private Integer isUpload;
 
     /**
+     * 申请人“材料上传”页面顺序较乱，增加两个字段修正顺序
+     * 1） 分类，1：必传材料；2：人力社保局材料；3:公安局材料；
+     * 2） 分类，21：高级技工学校高级班相关材料；22：专业技术人员职业资格证书相关材料；23：技能职业资格证书相关材料；24：奖项及荣誉称号相关材料；25：其他；
+     */
+    @Column(name = "category")
+    private String category;
+    @Column(name = "category_renshe")
+    private String categoryRenshe;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getCategoryRenshe() {
+        return categoryRenshe;
+    }
+
+    public void setCategoryRenshe(String categoryRenshe) {
+        this.categoryRenshe = categoryRenshe;
+    }
+
+    /**
      * 材料标题
      */
     private String title;
