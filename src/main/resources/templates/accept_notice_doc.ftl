@@ -51,5 +51,5 @@
     <br/>
 
     <p style="text-align:left;white-space:pre-wrap;"><span style="float:left;width:300pt;font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理部门：${department}</span><span style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理人：${user.displayName}</span></p>
-    <p style="text-align:left;white-space:pre-wrap;"><span style="float:left;width:300pt;font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理时间：${now}</span><span style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">联系电话${user.contactPhone}</span></p>
+    <p style="text-align:left;white-space:pre-wrap;"><span style="float:left;width:300pt;font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">受理时间：${now}</span><span style="font-family:'Cambria';font-size:20.0pt;color:#000000;white-space:pre-wrap;">联系电话：<#--${user.contactPhone}--></span></p>
 </div>
