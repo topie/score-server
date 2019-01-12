@@ -1,4 +1,4 @@
-<div style="width:505.3pt;margin-top:30.0pt;"><p><span
+<div style="width:595.3pt;margin-top:30.0pt;"><p><span
         style="font-size:24.0pt;color:#000000;white-space:pre-wrap;">申报编号：</span><span
         style="font-size:24.0pt;color:#000000;white-space:pre-wrap;">${person.acceptNumber}</span></p>
     <p style="text-align:center;white-space:pre-wrap;"><span
