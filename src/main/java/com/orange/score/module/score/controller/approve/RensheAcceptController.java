@@ -208,6 +208,9 @@ public class RensheAcceptController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
+    /*
+    人社受理审核-待审核-通过 “按钮”
+     */
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
@@ -226,6 +229,7 @@ public class RensheAcceptController {
             identityInfo.setOpuser4(securityUser.getDisplayName());
             identityInfo.setHallStatus(5);
             identityInfo.setRensheAcceptStatus(3);
+            identityInfo.setRenshePassTime(new Date());//人社受理审核通过时间
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 5);

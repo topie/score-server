@@ -135,6 +135,12 @@ public class IdentityInfo {
     @Column(name = "u_time")
     private Date uTime;
 
+    /**
+     * 人社受理审核通过时间，用来控制自动接收材料的时间
+     */
+    @Column(name = "renshePass_time")
+    private Date renshePassTime;
+
     @Column(name = "renshe_accept_supply_et")
     private Date rensheAcceptSupplyEt;
 
@@ -718,4 +724,62 @@ public class IdentityInfo {
     public void setuTime(Date uTime) {
         this.uTime = uTime;
     }
+
+
+    public Date getRenshePassTime() {
+        return renshePassTime;
+    }
+
+    public void setRenshePassTime(Date renshePassTime) {
+        this.renshePassTime = renshePassTime;
+    }
+
+
+
+    //2019-1-9添加卫健委信息
+    @Column(name = "formerName")
+    private String formerName;//"曾用名"
+
+    @Column(name = "pregnantPromise")
+    private String pregnantPromise;//本人或配偶目前 1.承诺 2.不承诺 已怀孕_周
+
+    @Column(name = "pregnantWeek")
+    private String pregnantWeek;//本人或配偶目前(不)承诺 已怀孕_周
+
+    @Column(name = "thirdPregnantPromise")
+    private String thirdPregnantPromise;//本人或配偶1.承诺 2.不承诺目前未处于政策外第三个及以上子女怀孕期间
+
+    public String getFormerName() {
+        return formerName;
+    }
+
+    public void setFormerName(String formerName) {
+        this.formerName = formerName;
+    }
+
+    public String getPregnantPromise() {
+        return pregnantPromise;
+    }
+
+    public void setPregnantPromise(String pregnantPromise) {
+        this.pregnantPromise = pregnantPromise;
+    }
+
+    public String getPregnantWeek() {
+        return pregnantWeek;
+    }
+
+    public void setPregnantWeek(String pregnantWeek) {
+        this.pregnantWeek = pregnantWeek;
+    }
+
+    public String getThirdPregnantPromise() {
+        return thirdPregnantPromise;
+    }
+
+    public void setThirdPregnantPromise(String thirdPregnantPromise) {
+        this.thirdPregnantPromise = thirdPregnantPromise;
+    }
+
+//2019-1-9添加卫健委信息END
 }
