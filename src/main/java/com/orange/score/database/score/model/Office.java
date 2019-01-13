@@ -2,7 +2,7 @@ package com.orange.score.database.score.model;
 
 import javax.persistence.*;
 
-@Table(name = "T_OFFICE")
+@Table(name = "T_OFFICE_2")
 public class Office {
 
     @Id

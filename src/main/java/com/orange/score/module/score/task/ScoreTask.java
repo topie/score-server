@@ -1,19 +1,19 @@
 package com.orange.score.module.score.task;
 
 import com.orange.score.common.utils.date.DateUtil;
-import com.orange.score.database.score.model.BatchConf;
-import com.orange.score.database.score.model.IdentityInfo;
-import com.orange.score.database.score.model.Indicator;
+import com.orange.score.database.score.model.*;
 import com.orange.score.module.score.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.connection.SortParameters;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Condition;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component
 public class ScoreTask {
@@ -35,6 +35,13 @@ public class ScoreTask {
 
     @Autowired
     private IHouseOtherService iHouseOtherService;
+
+    @Autowired
+    private IAcceptDateConfService iAcceptDateConfService;
+
+    @Autowired
+    private IScoreRecordService iScoreRecordService;
+
 
     @Scheduled(cron = "3 0 0 * * ? ")
     public void batchStartTask() {
@@ -127,6 +134,130 @@ public class ScoreTask {
             batchConf.setProcess(5);
             iBatchConfService.update(batchConf);
         }
+    }
+
+    /**
+     * 2019年1月11日
+     * 自动接收材料，自动打分，每天凌晨执行任务
+     * 应用场景：
+     * “审核中心——人社受理审核——待审核”页面中的“审核”按钮中点击“通过”后的场景改为3天后自动接收材料；
+     * 确认自动接收材料、自动打分功能的应用场景：
+     * 在人社受理审核通过的第4个工作日，市教委、市税务、市知识产权局、民政、住建委自动接收材料并打分为0；
+     */
+    @Scheduled(cron = "20 0 0 * * ? ")
+    public void autoAcceptMaterialAndMark(){
+        /*
+        步骤
+        1、从表 t_accept_date_conf 中获取工作日；
+        2、从对象 IdentityInfo中得到字段 renshePassTime （人社受理审核通过的时间）；
+        3、若通过后的第4个工作日申请人没有提交材料，则系统自动判定为接收材料、自动打分为0；到达指标打分-已打分流程
+        4、进入此流程的所有操作，用户留痕为“系统自动操作”
+         */
+
+
+        Condition condition_bc = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria_bc = condition_bc.createCriteria();
+        criteria_bc.andEqualTo("status", 1);
+        //criteria_bc.andGreaterThanOrEqualTo("applyBegin",new Date());//大于身亲开始日期
+        //criteria_bc.andLessThanOrEqualTo("closeFunctionTime",new Date());//关闭单位注册的时间
+        List<BatchConf> list_bc = iBatchConfService.findByCondition(condition_bc);
+
+        /*
+        在取得批次信息后才能打分；
+        为了预防
+         */
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        if(list_bc.size()>0) {
+
+            Condition condition = new Condition(AcceptDateConf.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            condition.orderBy("acceptDate").asc();//受理日期升序排列
+            criteria.andEqualTo("batchId", list_bc.get(0).getId());
+            List<AcceptDateConf> list_ac = iAcceptDateConfService.findByCondition(condition);
+
+            condition = new Condition(IdentityInfo.class);
+            criteria = condition.createCriteria();
+            criteria.andEqualTo("batchId", list_bc.get(0).getId());
+            criteria.andEqualTo("hallStatus", 5);//人社受理审核通过状态
+            criteria.andEqualTo("rensheAcceptStatus", 3);
+            List<IdentityInfo> identityInfos = iIdentityInfoService.findByCondition(condition);
+
+            for(IdentityInfo identityInfo : identityInfos){
+                String renshePassTime = sdf.format(identityInfo.getRenshePassTime());
+                String todayString = sdf.format(date);
+                int index_renshe = 0;
+                int index_today = 0;
+                int index = 0;
+                for(AcceptDateConf acceptDateConf : list_ac){
+                    if(sdf.format(acceptDateConf.getAcceptDate()).equals(renshePassTime)){//
+                        index_renshe = acceptDateConf.getId();
+                    }
+                    if(sdf.format(acceptDateConf.getAcceptDate()).equals(todayString)){//
+                        index_today = acceptDateConf.getId();
+                    }
+                }
+                if ((index_today-index_renshe)>=4){
+                    List<Integer> roles = new ArrayList<Integer>();
+                    roles.add(5);//民政
+                    roles.add(6);//教委
+                    roles.add(7);//知识产权
+                    roles.add(8);//民政
+                    roles.add(9);//住建委（国土房管局）
+                    condition = new Condition(ScoreRecord.class);
+                    criteria = condition.createCriteria();
+                    criteria.andEqualTo("personId", identityInfo.getId());
+                    criteria.andEqualTo("batchId", list_bc.get(0).getId());
+                    criteria.andIn("opRoleId", roles);
+                    criteria.andNotEqualTo("status",4);//未打分状态的记录才会被执行定时任务
+                    condition.orderBy("id").asc();
+                    List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+                    for (ScoreRecord scoreRecord : scoreRecords){
+                        scoreRecord.setStatus(4);//材料已送达，并打分为0；（3：材料已送达；4：已打分）
+                        scoreRecord.setScoreValue(new BigDecimal(0));//材料已送达，并打分为0；（3：材料已送达；4：已打分）
+                        scoreRecord.setOpUser("系统自动操作");//留痕要求：进入此流程的所有操作，用户留痕为“系统自动操作”
+                        scoreRecord.setScoreDate(new Date());
+                        if (scoreRecord.getOpRoleId()==5){
+                            scoreRecord.setItemId(37);//婚姻状况，无
+                        }
+                        if (scoreRecord.getOpRoleId()==6){
+                            scoreRecord.setItemId(1013);//市教委，无
+                        }
+                        if (scoreRecord.getOpRoleId()==7){
+                            scoreRecord.setItemId(39);//知识产权局，无
+                        }
+                        if (scoreRecord.getOpRoleId()==8){
+                            scoreRecord.setItemId(35);//市税务局，无
+                        }
+                        if (scoreRecord.getOpRoleId()==9){
+                            scoreRecord.setItemId(26);//市国土房管局，无
+                        }
+                        iScoreRecordService.update(scoreRecord);
+                    }
+                    if (scoreRecords.size()>0){
+                        /*
+                        留痕记录
+                         */
+                        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                        personBatchStatusRecord.setPersonId(identityInfo.getId());
+                        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+                        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+                        personBatchStatusRecord.setStatusStr("自动接收材料、打分结束");
+                        personBatchStatusRecord.setStatusTime(new Date());
+                        personBatchStatusRecord.setStatusReason("申请人超过3个工作日没有提交材料");
+                        personBatchStatusRecord.setStatusTypeDesc("超过3个工作日自动接收材料、打分（教委、税务、知识产权、民政、住建委）");
+                        personBatchStatusRecord.setStatusInt(100);
+                        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+                    }
+                }
+
+
+
+            }
+        }
+
+
+
     }
 
 //    @Scheduled(cron = "0/30 * * * * ? ")
