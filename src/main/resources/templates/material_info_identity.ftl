@@ -84,7 +84,31 @@
                                     <td colspan="4">年龄：<strong>${person.age}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12"><strong>专业：${other.profession}</strong>
+                                    <td colspan="4"><strong>专业：${other.profession}</strong>
+                                    </td>
+                                    <td colspan="8"><strong>曾用名：${person.formerName}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">本人或配偶目前
+                                        <select disabled style="height: 25px;">
+                                            <option <#if person.pregnantPromise==0>selected</#if> value="0">
+                                                &nbsp;&nbsp;
+                                            </option>
+                                            <option <#if person.pregnantPromise==1>selected</#if> value="1">承诺</option>
+                                            <option <#if person.pregnantPromise==2>selected</#if> value="2">不承诺</option>
+                                        </select>已怀孕&nbsp;&nbsp;${person.pregnantWeek}&nbsp;&nbsp;周
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">本人或配偶
+                                        <select disabled style="height: 25px;">
+                                            <option <#if person.thirdPregnantPromise==0>selected</#if> value="0">&nbsp;&nbsp;</option>
+                                            <option <#if person.thirdPregnantPromise==1>selected</#if> value="1">承诺
+                                            </option>
+                                            <option <#if person.thirdPregnantPromise==2>selected</#if> value="2">不承诺
+                                            </option>
+                                        </select>目前未处于政策外第三个及以上子女怀孕期间
                                     </td>
                                 </tr>
                                 <tr>
@@ -245,24 +269,124 @@
                                 <!-- 内表格 -->
                                 <tr>
                                     <td colspan="12">
-                                        <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
-                                            <tr class="info">
-                                                <th>与本人关系</th>
-                                                <th>姓名</th>
-                                                <th>身份证号</th>
-                                                <th>文化程度</th>
-                                                <th>是否随迁</th>
-                                            </tr>
-                                        <#list relation as ritem>
-                                            <tr>
-                                                <td>${ritem.relationship}</td>
-                                                <td>${ritem.name}</td>
-                                                <td>${ritem.idNumber}</td>
-                                                <td>${ritem.cultureDegree}</td>
-                                                <td><#if ritem.isRemove == 1>是<#else>否</#if></td>
-                                            </tr>
-                                        </#list>
-                                        </table>
+                                    <#list relation as ritem>
+                                        <#if ritem.relationship=="配偶">
+                                            <table style="font-size: 14px;"
+                                                   class="table table-bordered table-condensed">
+                                                <tr class="active">
+                                                    <th colspan="5">与本人关系:${ritem.relationship}</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB" style="width: 25%;">姓名:</td>
+                                                    <td style="width: 75%;">${ritem.name}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">身份证号:</td>
+                                                    <td>${ritem.idNumber}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">文化程度:</td>
+                                                    <td>${ritem.cultureDegree}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">是否随迁:</td>
+                                                    <td><#if ritem.isRemove == 1>是<#else>否</#if></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">配偶曾用名:</td>
+                                                    <td>${ritem.formerName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">配偶户籍地详细地址:</td>
+                                                    <td>${ritem.spouse_HJAddress}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">配偶现居住地详细地址:</td>
+                                                    <td>${ritem.spouse_LivingAddress}</td>
+                                                </tr>
+                                            </table>
+                                        <#else>
+                                            <table style="font-size: 14px;"
+                                                   class="table table-bordered table-condensed">
+                                                <tr class="active">
+                                                    <th colspan="2">与本人关系:${ritem.relationship}</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB" style="width: 25%;">姓名:</td>
+                                                    <td style="width: 75%;">${ritem.name}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">身份证号:</td>
+                                                    <td>${ritem.idNumber}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">文化程度:</td>
+                                                    <td>${ritem.cultureDegree}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">是否随迁:</td>
+                                                    <td><#if ritem.isRemove == 1>是<#else>否</#if></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">曾用名:</td>
+                                                    <td>${ritem.formerName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">政策属性:</td>
+                                                    <td><select disabled>
+                                                        <option <#if ritem.policyAttribute=='一孩'>selected</#if> value="一孩">一孩</option>
+                                                        <option <#if ritem.policyAttribute=='政策内二孩'>selected</#if> value="政策内二孩">政策内二孩</option>
+                                                        <option <#if ritem.policyAttribute=='政策外二孩'>selected</#if> value="政策外二孩">政策外二孩</option>
+                                                        <option <#if ritem.policyAttribute=='政策内多孩'>selected</#if> value="政策内多孩">政策内多孩</option>
+                                                        <option <#if ritem.policyAttribute=='政策外多孩'>selected</#if> value="政策外多孩">政策外多孩</option>
+                                                    </select></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">出生医学证明编号:</td>
+                                                    <td>${ritem.medical_number}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">出生医学证明签证机构:</td>
+                                                    <td>${ritem.medical_authority}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">收养子女:</td>
+                                                    <td><#if ritem.isAdopt == 1>是<#else>否</#if></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">出生地:</td>
+                                                    <td>${ritem.birthplace}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="garyB" style="text-align: center">再生育审批情况:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">审批时间:</td>
+                                                    <td>${ritem.approval_time}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">审批证明编号:</td>
+                                                    <td>${ritem.approval_number}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">审批单位名称:</td>
+                                                    <td>${ritem.approval_companyName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">审批条例适用:</td>
+                                                    <td>${ritem.approval_rules}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">与第几任妻子/丈夫所生:</td>
+                                                    <td>${ritem.approval_which}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">抚养权归属:</td>
+                                                    <td>${ritem.approval_custody}</td>
+                                                </tr>
+                                            </table>
+                                        </#if>
+                                    </#list>
                                     </td>
                                 </tr>
                             </table>
