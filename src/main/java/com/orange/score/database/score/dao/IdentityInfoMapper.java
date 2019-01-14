@@ -20,7 +20,10 @@ public interface IdentityInfoMapper extends Mapper<IdentityInfo> {
 
     List<Map> selectExportList3(@Param("item") Map argMap);
 
-    List<Map> selectExportList4(@Param("item")Map argMap);
+    List<Map> selectExportList4(@Param("item") Map argMap);
 
     List<IdentityInfo> selectByFilter2(@Param("item") IdentityInfo identityInfo);
+
+    //根据batchid和score_value的数据获取申请人
+    List<Map> selectIdentityInfoRecipientList(@Param("item") Map argMap);
 }

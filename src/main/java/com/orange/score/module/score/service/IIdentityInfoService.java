@@ -44,4 +44,7 @@ public interface IIdentityInfoService extends IService<IdentityInfo> {
     List<Map> selectExportList4(Map argMap);
 
     PageInfo<Map> selectExportList4ByPage(Map argMap, int pageNum, int pageSize);
+
+    //根据batchid和score_value的数据获取申请人
+    List<Map> selectIdentityInfoRecipientList(Map argMap);
 }

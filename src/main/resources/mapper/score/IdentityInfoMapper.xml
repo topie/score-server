@@ -214,6 +214,66 @@
 
     <!--2018-10-15 查询锁定人的名单-->
     <select id="selectByFilter2" resultType="com.orange.score.database.score.model.IdentityInfo">
-        select distinct LOCK_USER_2,id from t_identity_info ORDER  by LOCK_USER_2
+        select distinct LOCK_USER_2,id
+        from t_identity_info
+        ORDER by LOCK_USER_2
     </select>
+
+    <!--根据batchid和score_value的数据获取申请人-->
+    <select id="selectIdentityInfoRecipientList" resultType="java.util.Map">
+        select t2.person_id_num,
+        t2.person_name,
+        t2.score_value,
+        case when t1.sex = 1 then '男' when t1.sex = 2 then '女' end SEX
+        ,
+        t1.accept_address,
+        t1.LUOHU_NUMBER,
+        tof.name                                                   registration,
+        tr.name                                                    areaname,
+        tm.address,
+        tm.witness,
+        tm.witness_phone,
+        tm.witness_address
+        from t_identity_info t1,
+        (
+        select a.person_id_num,max(a.person_name) person_name,round(nvl(sum(a.SCORE), 0), 2) score_value
+        from (
+        select t.PERSON_NAME, t.OP_ROLE,t.person_id_num,t.score_value as score
+        from t_pb_score_record t
+        where t.indicator_id != 3
+        and t.indicator_id != 14
+        and batch_id = #{item.batchId}
+        union all
+        select max(t.PERSON_NAME)    PERSON_NAME,
+        max(t.OP_ROLE)        OP_ROLE,
+        t.person_id_num,
+        max(t.score_value) as score
+        from t_pb_score_record t
+        where t.indicator_id = 3
+        and t.batch_id = #{item.batchId}
+        group by t.person_id_num
+        union all
+        select max(t.PERSON_NAME)                       PERSON_NAME,
+        max(t.OP_ROLE)                           OP_ROLE,
+        t.person_id_num,
+        decode(sum(t.score_value), 20, 10, 0) as score
+        from t_pb_score_record t
+        where t.indicator_id = 14
+        and t.batch_id = #{item.batchId}
+        group by t.person_id_num
+        ) a
+        group by a.person_id_num
+        ) t2,
+        t_house_move tm,
+        t_office tof,
+        t_region tr
+        where t1.id_number = t2.person_id_num
+        and t1.hall_status = 6
+        and t1.id = tm.identity_info_id
+        and tm.registered_region = tof.id
+        and tm.region = tr.id
+        and t2.score_value &gt;= #{item.scoreValue}
+        order by t2.score_value desc
+    </select>
+
 </mapper>

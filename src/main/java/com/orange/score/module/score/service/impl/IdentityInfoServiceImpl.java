@@ -209,6 +209,11 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
     }
 
     @Override
+    public List<Map> selectIdentityInfoRecipientList(Map argMap) {
+        return identityInfoMapper.selectIdentityInfoRecipientList(argMap);
+    }
+
+    @Override
     public List<IdentityInfo> selectByFilter2(IdentityInfo identityInfo) {
 //        identityInfoMapper.selectByFilter2();
         Condition condition = new Condition(IdentityInfo.class);

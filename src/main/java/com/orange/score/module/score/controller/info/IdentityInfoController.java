@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
+import com.orange.score.common.tools.excel.ExcelFileUtil;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.Option;
@@ -27,6 +28,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.regexp.RE;
 import org.dom4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPException;
 import java.io.*;
@@ -103,11 +106,14 @@ public class IdentityInfoController {
     @Autowired
     private IBatchConfService iBatchConfService;
 
+    @Value("${upload.folder}")
+    private String uploadPath;
+
     @GetMapping(value = "/list")
     @ResponseBody
     public Result list(IdentityInfo identityInfo,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                       @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                       @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -211,7 +217,7 @@ public class IdentityInfoController {
 
     @GetMapping("/detailAll")
     public Result detailAll(@RequestParam Integer identityInfoId,
-            @RequestParam(value = "template", required = false) String template) throws FileNotFoundException {
+                            @RequestParam(value = "template", required = false) String template) throws FileNotFoundException {
         if (StringUtils.isEmpty(template)) {
             template = "identity_info";
         }
@@ -588,17 +594,17 @@ public class IdentityInfoController {
      */
     @RequestMapping("/options")
     @ResponseBody
-    public List<Option> options(){
+    public List<Option> options() {
         List<Option> options = new ArrayList<>();
         IdentityInfo identityInfo = new IdentityInfo();
-//        List<IdentityInfo> identityInfos = iIdentityInfoService.selectByFilter2(identityInfo);
+        //        List<IdentityInfo> identityInfos = iIdentityInfoService.selectByFilter2(identityInfo);
         List<IdentityInfo> identityInfos = iIdentityInfoService.findAll();
-        Map<String,Integer> map = new HashMap<String,Integer>();
-        for (IdentityInfo identityInfo2 : identityInfos){
-            map.put(identityInfo2.getLockUser2(),identityInfo2.getId());
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        for (IdentityInfo identityInfo2 : identityInfos) {
+            map.put(identityInfo2.getLockUser2(), identityInfo2.getId());
         }
-        for(Map.Entry<String, Integer> entry: map.entrySet()){
-            options.add(new Option(entry.getKey(),entry.getKey()));
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            options.add(new Option(entry.getKey(), entry.getKey()));
         }
         return options;
     }
@@ -615,7 +621,7 @@ public class IdentityInfoController {
             criteria.andEqualTo("batchId", acceptDateConf.getBatchId());
         }
         List<IdentityInfo> identityInfoList = iIdentityInfoService.findByCondition(condition);
-        String registerSum = identityInfoList.size()+"";//已在系统注册的人数
+        String registerSum = identityInfoList.size() + "";//已在系统注册的人数
         int passSeltTest = 0;//已经通过自助测评的人数
         int applyingInterPre = 0;//已申请网上预审的人数
         int applyedInterPre = 0;//已通过网上预审的人数
@@ -636,68 +642,68 @@ public class IdentityInfoController {
         int reservationSum_2 = 0;//已预约的人数
         int acceptedCheck_2 = 0;//人社受理审核通过的人数
 
-        for (IdentityInfo ideInfo : identityInfoList){
-            if(ideInfo.getReservationStatus() >= 6){
-                passSeltTest ++;
+        for (IdentityInfo ideInfo : identityInfoList) {
+            if (ideInfo.getReservationStatus() >= 6) {
+                passSeltTest++;
             }
-            if (ideInfo.getReservationStatus() >= 8){
-                applyingInterPre ++;
+            if (ideInfo.getReservationStatus() >= 8) {
+                applyingInterPre++;
             }
-            if(ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2){
-                applyedInterPre ++;
+            if (ideInfo.getUnionApproveStatus2() == 2 && ideInfo.getUnionApproveStatus1() == 2) {
+                applyedInterPre++;
             }
-            if(ideInfo.getReservationStatus() == 11 && ideInfo.getReservationDate() != null){
-                reservationSum ++;
+            if (ideInfo.getReservationStatus() == 11 && ideInfo.getReservationDate() != null) {
+                reservationSum++;
             }
-            if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3){
-                acceptedCheck ++;
+            if (ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3) {
+                acceptedCheck++;
             }
 
             //市区
-            if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 1){
-                applyingInterPre_1 ++;
+            if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 1) {
+                applyingInterPre_1++;
             }
-            if(ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2 && ideInfo.getAcceptAddressId() == 1){
-                applyedInterPre_1 ++;
+            if (ideInfo.getUnionApproveStatus2() == 2 && ideInfo.getUnionApproveStatus1() == 2 && ideInfo.getAcceptAddressId() == 1) {
+                applyedInterPre_1++;
             }
-            if(ideInfo.getReservationStatus() == 11 && ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 1){
-                reservationSum_1 ++;
+            if (ideInfo.getReservationStatus() == 11 && ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 1) {
+                reservationSum_1++;
             }
-            if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 1){
-                acceptedCheck_1 ++;
+            if (ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 1) {
+                acceptedCheck_1++;
             }
             //滨海新区
-            if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 2){
-                applyingInterPre_2 ++;
+            if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 2) {
+                applyingInterPre_2++;
             }
-            if(ideInfo.getUnionApproveStatus2()==2 && ideInfo.getUnionApproveStatus1()==2 && ideInfo.getAcceptAddressId() == 2){
-                applyedInterPre_2 ++;
+            if (ideInfo.getUnionApproveStatus2() == 2 && ideInfo.getUnionApproveStatus1() == 2 && ideInfo.getAcceptAddressId() == 2) {
+                applyedInterPre_2++;
             }
-            if(ideInfo.getReservationStatus() == 11&& ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 2){
-                reservationSum_2 ++;
+            if (ideInfo.getReservationStatus() == 11 && ideInfo.getReservationDate() != null && ideInfo.getAcceptAddressId() == 2) {
+                reservationSum_2++;
             }
-            if(ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 2){
-                acceptedCheck_2 ++;
+            if (ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 2) {
+                acceptedCheck_2++;
             }
         }
 
         Map params = new HashMap();
         params.put("registerSum", registerSum);
-        params.put("passSeltTest", passSeltTest+"");
-        params.put("applyingInterPre", applyingInterPre+"");
-        params.put("applyedInterPre", applyedInterPre+"");
-        params.put("reservationSum", reservationSum+"");
-        params.put("acceptedCheck", acceptedCheck+"");
+        params.put("passSeltTest", passSeltTest + "");
+        params.put("applyingInterPre", applyingInterPre + "");
+        params.put("applyedInterPre", applyedInterPre + "");
+        params.put("reservationSum", reservationSum + "");
+        params.put("acceptedCheck", acceptedCheck + "");
 
-        params.put("applyingInterPre_1", applyingInterPre_1+"");
-        params.put("applyedInterPre_1", applyedInterPre_1+"");
-        params.put("reservationSum_1", reservationSum_1+"");
-        params.put("acceptedCheck_1", acceptedCheck_1+"");
+        params.put("applyingInterPre_1", applyingInterPre_1 + "");
+        params.put("applyedInterPre_1", applyedInterPre_1 + "");
+        params.put("reservationSum_1", reservationSum_1 + "");
+        params.put("acceptedCheck_1", acceptedCheck_1 + "");
 
-        params.put("applyingInterPre_2", applyingInterPre_2+"");
-        params.put("applyedInterPre_2", applyedInterPre_2+"");
-        params.put("reservationSum_2", reservationSum_2+"");
-        params.put("acceptedCheck_2", acceptedCheck_2+"");
+        params.put("applyingInterPre_2", applyingInterPre_2 + "");
+        params.put("applyedInterPre_2", applyedInterPre_2 + "");
+        params.put("reservationSum_2", reservationSum_2 + "");
+        params.put("acceptedCheck_2", acceptedCheck_2 + "");
 
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "application_count.ftl", params);
@@ -714,7 +720,7 @@ public class IdentityInfoController {
      */
     @RequestMapping("/provideDataToPolice")
     @ResponseBody
-    public Result provideDataToPolice(AcceptDateConf acceptDateConf,HttpServletResponse response){
+    public Result provideDataToPolice(AcceptDateConf acceptDateConf, HttpServletResponse response) {
         /*
         1、根据人社局提供的分数线与划定的人数限制，获得有资格的人的ID；
         2、生成xml格式的文档；
@@ -733,7 +739,7 @@ public class IdentityInfoController {
          */
         Element PACKAGEHEAD = PACKAGE.addElement("PACKAGEHEAD");
         Element JLS = PACKAGEHEAD.addElement("JLS");//记录数，表示封装了多少人
-        addText(JLS,sum.toString());
+        addText(JLS, sum.toString());
 
         Element FSSL = PACKAGEHEAD.addElement("FSSL");//发送时间，当前的时间
         Date date = new Date();
@@ -749,14 +755,14 @@ public class IdentityInfoController {
         3、01606：流水号，可以自定义；目前暂定为00001；
          */
         Element SJBBH = PACKAGEHEAD.addElement("SJBBH");
-        String bh = "220500000000"+date2+"00001";
+        String bh = "220500000000" + date2 + "00001";
         SJBBH.addText(bh);
 
         /*
         date 节点封装申请人的数据
          */
         Element DATA = PACKAGE.addElement("DATA");
-        for(int i=0;i<scoreRecords.size();i++){
+        for (int i = 0; i < scoreRecords.size(); i++) {
             /*
             1、获取申请人的信息
             a、申请人的信息；
@@ -775,7 +781,7 @@ public class IdentityInfoController {
             List<String> list_rs = new ArrayList();
             list_rs.add("子");
             list_rs.add("女");
-            criteria.andIn("relationship",list_rs);//与申请人关系
+            criteria.andIn("relationship", list_rs);//与申请人关系
             List<HouseRelationship> list_relationship = iHouseRelationshipService.findByCondition(condition);
 
 
@@ -791,8 +797,8 @@ public class IdentityInfoController {
             tk.mybatis.mapper.entity.Example.Criteria criteria_region = cond_region.createCriteria();
             criteria_region.andEqualTo("id", list_move.get(0).getMoveRegion());
             List<Region> list_region = iRegionService.findByCondition(cond_region);
-            if (list_region.size()==0){
-                System.out.println("迁出地 省市县（区）："+list_move.get(0).getMoveRegion()+":"+list_move.get(0).getIdentityInfoId());
+            if (list_region.size() == 0) {
+                System.out.println("迁出地 省市县（区）：" + list_move.get(0).getMoveRegion() + ":" + list_move.get(0).getIdentityInfoId());
             }
 
             /*
@@ -802,14 +808,14 @@ public class IdentityInfoController {
             Condition cond_office = new Condition(Office.class);
             tk.mybatis.mapper.entity.Example.Criteria criteria_office = cond_office.createCriteria();
             criteria_office.andIsNotNull("policeCode");
-//            criteria_office.andEqualTo("id",505);
+            //            criteria_office.andEqualTo("id",505);
             List<Office> list_office = iOfficeService.findByCondition(cond_office);
 
             Element RECORD = DATA.addElement("RECORD");
             //添加两个属性：SID、NO
-            RECORD.addAttribute("SID","010122");//SID属性值是固定的010122
-            int j = i+1;
-            RECORD.addAttribute("NO",new Integer(j).toString());//表示xml文档中的第几个申请人
+            RECORD.addAttribute("SID", "010122");//SID属性值是固定的010122
+            int j = i + 1;
+            RECORD.addAttribute("NO", new Integer(j).toString());//表示xml文档中的第几个申请人
 
             //添加节点值
             Element YWLSH = RECORD.addElement("YWLSH");//业务流水号
@@ -840,15 +846,15 @@ public class IdentityInfoController {
             QRD_QHNXXDZ.addText(list_move.get(0).getAddress());
             Element QRD_HKDJJG_GAJGJGDM = RECORD.addElement("QRD_HKDJJG_GAJGJGDM");//迁入地 户口登记机关 公安机关机构代码
             Element QRD_HKDJJG_GAJGMC = RECORD.addElement("QRD_HKDJJG_GAJGMC");//迁入地 户口登记机关 公安机构名称
-            for (Office of : list_office){
-                if (of.getId().toString().equals(list_move.get(0).getRegisteredRegion())){
+            for (Office of : list_office) {
+                if (of.getId().toString().equals(list_move.get(0).getRegisteredRegion())) {
                     QRD_HKDJJG_GAJGJGDM.addText(of.getPoliceCode());
                     QRD_HKDJJG_GAJGMC.addText(of.getName());
                     break;
                 }
             }
 
-            Element  CBR_XM = RECORD.addElement("CBR_XM");//承办人姓名
+            Element CBR_XM = RECORD.addElement("CBR_XM");//承办人姓名
             CBR_XM.addText(list_IdeInfo.get(0).getName());
             Element BZ = RECORD.addElement("BZ");//备注
             BZ.addText("");
@@ -864,8 +870,8 @@ public class IdentityInfoController {
              */
             int index = 1;
             Element QYR = RECORD.addElement("QYR");
-            QYR.addAttribute("NO",new Integer(index).toString());// 顺序号
-            QYR.addAttribute("SID","010123");// 顺序号
+            QYR.addAttribute("NO", new Integer(index).toString());// 顺序号
+            QYR.addAttribute("SID", "010123");// 顺序号
             Element YSQRGX_JTGXDM = QYR.addElement("YSQRGX_JTGXDM");//与申请人关系_家庭关系，01：本人，20：子，30：女
             YSQRGX_JTGXDM.addText("01");
             Element GMSFHM = QYR.addElement("GMSFHM");//公民身份号码
@@ -874,36 +880,36 @@ public class IdentityInfoController {
             XM.addText(list_IdeInfo.get(0).getName());
             Element XBDM = QYR.addElement("XBDM");//性别
             String id_number = list_IdeInfo.get(0).getIdNumber();
-            if (id_number.substring(id_number.length()-2,id_number.length()-1).equals("1")){
+            if (id_number.substring(id_number.length() - 2, id_number.length() - 1).equals("1")) {
                 XBDM.addText("1");
-            }else {
+            } else {
                 XBDM.addText("2");
             }
             Element CSRQ = QYR.addElement("CSRQ");//出生日期
-            CSRQ.addText(list_IdeInfo.get(0).getIdNumber().replace(" ", "").substring(6,14));
+            CSRQ.addText(list_IdeInfo.get(0).getIdNumber().replace(" ", "").substring(6, 14));
             Element YHLX = QYR.addElement("YHLX");//原户类型，10 家庭户，20集体户
-            if(list_move.get(0).getHouseNature()==4 || list_move.get(0).getHouseNature()==5){
+            if (list_move.get(0).getHouseNature() == 4 || list_move.get(0).getHouseNature() == 5) {
                 YHLX.addText("20");
-            }else{
+            } else {
                 YHLX.addText("10");
             }
             Element HLX = QYR.addElement("HLX");//户类型
-            if (list_move.get(0).getSettledNature()==1 || list_move.get(0).getSettledNature()==2){
+            if (list_move.get(0).getSettledNature() == 1 || list_move.get(0).getSettledNature() == 2) {
                 HLX.addText("20");
-            }else {
+            } else {
                 HLX.addText("10");
             }
             Element LHYXRQ = QYR.addElement("LHYXRQ");//落户有效期限
             LHYXRQ.addText("");
-            if(list_relationship.size()>0){
-                for(HouseRelationship h : list_relationship){
+            if (list_relationship.size() > 0) {
+                for (HouseRelationship h : list_relationship) {
                     QYR = RECORD.addElement("QYR");
-                    QYR.addAttribute("NO",new Integer(++index).toString());// 顺序号
-                    QYR.addAttribute("SID","010123");// 顺序号
+                    QYR.addAttribute("NO", new Integer(++index).toString());// 顺序号
+                    QYR.addAttribute("SID", "010123");// 顺序号
                     YSQRGX_JTGXDM = QYR.addElement("YSQRGX_JTGXDM");//与申请人关系_家庭关系
-                    if (h.getRelationship().equals("子")){
+                    if (h.getRelationship().equals("子")) {
                         YSQRGX_JTGXDM.addText("20");
-                    }else{
+                    } else {
                         YSQRGX_JTGXDM.addText("30");
                     }
                     GMSFHM = QYR.addElement("GMSFHM");//公民身份号码
@@ -911,24 +917,24 @@ public class IdentityInfoController {
                     XM = QYR.addElement("XM");//姓名
                     XM.addText(h.getName());
                     XBDM = QYR.addElement("XBDM");//性别
-                    if (h.getRelationship().equals("子")){
+                    if (h.getRelationship().equals("子")) {
                         XBDM.addText("1");
-                    }else{
+                    } else {
                         XBDM.addText("2");
                     }
                     CSRQ = QYR.addElement("CSRQ");//出生日期
-                    System.out.println(h.getName()+":"+h.getIdNumber());
-                    CSRQ.addText(h.getIdNumber().replace(" ", "").substring(6,14));
+                    System.out.println(h.getName() + ":" + h.getIdNumber());
+                    CSRQ.addText(h.getIdNumber().replace(" ", "").substring(6, 14));
                     YHLX = QYR.addElement("YHLX");//原户类型
-                    if(list_move.get(0).getHouseNature()==4 || list_move.get(0).getHouseNature()==5){
+                    if (list_move.get(0).getHouseNature() == 4 || list_move.get(0).getHouseNature() == 5) {
                         YHLX.addText("20");
-                    }else{
+                    } else {
                         YHLX.addText("10");
                     }
                     HLX = QYR.addElement("HLX");//户类型
-                    if (list_move.get(0).getSettledNature()==1 || list_move.get(0).getSettledNature()==2){
+                    if (list_move.get(0).getSettledNature() == 1 || list_move.get(0).getSettledNature() == 2) {
                         HLX.addText("20");
-                    }else {
+                    } else {
                         HLX.addText("10");
                     }
                     LHYXRQ = QYR.addElement("LHYXRQ");//落户有效期限
@@ -941,7 +947,7 @@ public class IdentityInfoController {
         /*
         xml数据生成String 并写入文档
          */
-        String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"+PACKAGE.asXML();
+        String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + PACKAGE.asXML();
         /*FileWriter fw = null;
         File f = new File("E:\\"+date2+(new Date().getTime())+"police.xml");
         try {
@@ -963,9 +969,9 @@ public class IdentityInfoController {
         }*/
 
         //1.设置文件下载的response响应格式
-        String fileName = date2+(new Date().getTime())+"toPolice";  //文件名
+        String fileName = date2 + (new Date().getTime()) + "toPolice";  //文件名
         String fileType = "xml";    //文件类型
-//        HttpServletResponse response = ServletActionContext.getResponse();
+        //        HttpServletResponse response = ServletActionContext.getResponse();
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + fileType);
         response.setContentType("multipart/form-data");
         Cookie cookie = new Cookie("fileDownload", "true");
@@ -993,11 +999,59 @@ public class IdentityInfoController {
     }
 
     /**
+     * 2018年1月14日
+     * 提供申请人收件地址的数据，excel格式的数据
+     */
+    @RequestMapping("/identityInfoRecipient")
+    @ResponseBody
+    public Result identityInfoRecipient(AcceptDateConf acceptDateConf, HttpServletResponse response, HttpServletRequest request) {
+        String message = "";
+        try {
+            Condition condition = new Condition(BatchConf.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("id", acceptDateConf.getBatchId());
+            List<BatchConf> list = iBatchConfService.findByCondition(condition);
+            Map argMap = new HashMap();
+            if (list.size() > 0) {
+                argMap.put("batchId", list.get(0).getId());
+                Integer scoreValue = list.get(0).getScoreValue();
+                if (scoreValue != null) {
+                    argMap.put("scoreValue", scoreValue);
+                } else {
+                    //不存在打分标准时抛出异常
+                    message = "不存在打分标准";
+                    throw new NullPointerException();
+                }
+            } else {
+                //不存在batchid时抛出异常
+                message = "该ID不存在";
+                throw new NullPointerException();
+            }
+
+            List<Map> allList = iIdentityInfoService.selectIdentityInfoRecipientList(argMap);
+            String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System.currentTimeMillis() + ".xlsx";
+            ExcelFileUtil.exportXlsx(savePath, allList,
+                    new String[]{"身份张号", "姓名", "总分", "性别", "落户地区", "公安编号", "迁入地户口登记机关", "拟落户地区名称", "迁入地详细地址", "收件人", "收件人电话", "收件地址"},
+                    new String[]{"PERSON_ID_NUM", "PERSON_NAME", "SCORE_VALUE", "SEX", "ACCEPT_ADDRESS", "LUOHU_NUMBER", "REGISTRATION", "AREANAME", "ADDRESS", "WITNESS", "WITNESS_PHONE", "WITNESS_ADDRESS"});
+            ExcelFileUtil.download(response, savePath, "有落户资格的申请人名单与收件地址.xlsx");
+            return ResponseUtil.success(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if ("".equals(message)) {
+                message = "下载失败";
+            }
+            return ResponseUtil.error(message);
+        }
+    }
+
+
+    /**
      * 创建xml根节点
+     *
      * @param rootName：根节点名称
      * @return
      */
-    private static Element createRootXml(String rootName){
+    private static Element createRootXml(String rootName) {
         org.dom4j.Document document = DocumentHelper.createDocument();
         //2、添加根节点
         Element root = document.addElement(rootName);
@@ -1008,35 +1062,35 @@ public class IdentityInfoController {
      * 主要是往元素里面加值，不是设置参数,就是root加完元素后网里面加值。
      * 这里，ele.setText(String value),所以里面的值都是字符串
      */
-    public static void addText(Element ele,String value){
-        if(!StringUtils.isEmpty(value)){
+    public static void addText(Element ele, String value) {
+        if (!StringUtils.isEmpty(value)) {
             ele.setText(value);
-        }else{
+        } else {
             ele.setText("");
         }
     }
 
 
-    public static String getCode(String code){
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("21","120101");//和平区
-        map.put("22","120102");//河东区
-        map.put("23","120103");//河西区
-        map.put("24","120104");//南开区
-        map.put("25","120105");//河北区
-        map.put("26","120106");//红桥区
-        map.put("27","120110");//东丽区
-        map.put("28","120111");//西青区
-        map.put("29","120112");//津南区
-        map.put("30","120113");//北辰区
-        map.put("31","120114");//武清区
-        map.put("32","120115");//宝坻区
-        map.put("33","120116");//滨海新区
-        map.put("34","120117");//宁河区
-        map.put("35","120118");//静海区
-        map.put("36","120225");//蓟县
+    public static String getCode(String code) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("21", "120101");//和平区
+        map.put("22", "120102");//河东区
+        map.put("23", "120103");//河西区
+        map.put("24", "120104");//南开区
+        map.put("25", "120105");//河北区
+        map.put("26", "120106");//红桥区
+        map.put("27", "120110");//东丽区
+        map.put("28", "120111");//西青区
+        map.put("29", "120112");//津南区
+        map.put("30", "120113");//北辰区
+        map.put("31", "120114");//武清区
+        map.put("32", "120115");//宝坻区
+        map.put("33", "120116");//滨海新区
+        map.put("34", "120117");//宁河区
+        map.put("35", "120118");//静海区
+        map.put("36", "120225");//蓟县
 
-        String policeCode =(String)map.get(code);
+        String policeCode = (String) map.get(code);
         return policeCode;
     }
 }
