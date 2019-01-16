@@ -95,28 +95,28 @@
                                 <tr>
                                     <td colspan="12">迁出地省（市自治区）：
                                         <select disabled style="height: 25px;">
-                                    <#list provinceList as item>
-                                        <option <#if move.moveProvince==item.id>selected</#if>
-                                                value="${item.id}">${item.name}</option>
-                                    </#list>
+                                        <#list provinceList as item>
+                                            <option <#if move.moveProvince==item.id>selected</#if>
+                                                    value="${item.id}">${item.name}</option>
+                                        </#list>
                                         </select>
                                         市：
                                         <select disabled style="height: 25px;">
-                                    <#list cityList as item>
-                                        <#if item.parentId==move.moveProvince>
-                                            <option <#if move.moveCity==item.id>selected</#if>
-                                                    value="${item.id}">${item.name}</option>
-                                        </#if>
-                                    </#list>
+                                        <#list cityList as item>
+                                            <#if item.parentId==move.moveProvince>
+                                                <option <#if move.moveCity==item.id>selected</#if>
+                                                        value="${item.id}">${item.name}</option>
+                                            </#if>
+                                        </#list>
                                         </select>
                                         区县：
                                         <select disabled style="height: 25px;">
-                                    <#list areaList as item>
-                                        <#if item.parentId==move.moveCity>
-                                        <option <#if move.moveRegion==item.id>selected</#if>
-                                                value="${item.id}">${item.name}</option>
-                                        </#if>
-                                    </#list>
+                                        <#list areaList as item>
+                                            <#if item.parentId==move.moveCity>
+                                                <option <#if move.moveRegion==item.id>selected</#if>
+                                                        value="${item.id}">${item.name}</option>
+                                            </#if>
+                                        </#list>
                                         </select>
                                     </td>
                                 </tr>
@@ -151,10 +151,10 @@
                                 <tr>
                                     <td colspan="12">迁入地户籍登记机关：
                                         <select disabled style="height: 25px;">
-                                            <#list officeList1 as item>
-                                                <option <#if move.registeredOffice==item.id?string>selected</#if>
-                                                        value="${item.id}">${item.name}</option>
-                                            </#list>
+                                        <#list officeList1 as item>
+                                            <option <#if move.registeredOffice==item.id?string>selected</#if>
+                                                    value="${item.id}">${item.name}</option>
+                                        </#list>
                                         </select>
                                     </td>
                                 </tr>
@@ -164,56 +164,56 @@
                                 <tr>
                                     <td colspan="6">拟落户地区：
                                         <select disabled style="height: 25px;">
-                                            <#list officeList1 as item>
-                                                <option <#if move.region==21>selected</#if>
-                                                        value="21">和平区
-                                                </option>
-                                                <option <#if move.region==22>selected</#if>
-                                                        value="22">河东区
-                                                </option>
-                                                <option <#if move.region==23>selected</#if>
-                                                        value="23">河西区
-                                                </option>
-                                                <option <#if move.region==24>selected</#if>
-                                                        value="24">南开区
-                                                </option>
-                                                <option <#if move.region==25>selected</#if>
-                                                        value="25">河北区
-                                                </option>
-                                                <option <#if move.region==26>selected</#if>
-                                                        value="26">红桥区
-                                                </option>
-                                                <option <#if move.region==27>selected</#if>
-                                                        value="27">东丽区
-                                                </option>
-                                                <option <#if move.region==28>selected</#if>
-                                                        value="28">西青区
-                                                </option>
-                                                <option <#if move.region==29>selected</#if>
-                                                        value="29">津南区
-                                                </option>
-                                                <option <#if move.region==30>selected</#if>
-                                                        value="30">北辰区
-                                                </option>
-                                                <option <#if move.region==31>selected</#if>
-                                                        value="31">武清区
-                                                </option>
-                                                <option <#if move.region==32>selected</#if>
-                                                        value="32">宝坻区
-                                                </option>
-                                                <option <#if move.region==33>selected</#if>
-                                                        value="33">滨海新区
-                                                </option>
-                                                <option <#if move.region==34>selected</#if>
-                                                        value="34">宁河区
-                                                </option>
-                                                <option <#if move.region==35>selected</#if>
-                                                        value="35">静海区
-                                                </option>
-                                                <option <#if move.region==36>selected</#if>
-                                                        value="36">蓟州区
-                                                </option>
-                                            </#list>
+                                        <#list officeList1 as item>
+                                            <option <#if move.region==21>selected</#if>
+                                                    value="21">和平区
+                                            </option>
+                                            <option <#if move.region==22>selected</#if>
+                                                    value="22">河东区
+                                            </option>
+                                            <option <#if move.region==23>selected</#if>
+                                                    value="23">河西区
+                                            </option>
+                                            <option <#if move.region==24>selected</#if>
+                                                    value="24">南开区
+                                            </option>
+                                            <option <#if move.region==25>selected</#if>
+                                                    value="25">河北区
+                                            </option>
+                                            <option <#if move.region==26>selected</#if>
+                                                    value="26">红桥区
+                                            </option>
+                                            <option <#if move.region==27>selected</#if>
+                                                    value="27">东丽区
+                                            </option>
+                                            <option <#if move.region==28>selected</#if>
+                                                    value="28">西青区
+                                            </option>
+                                            <option <#if move.region==29>selected</#if>
+                                                    value="29">津南区
+                                            </option>
+                                            <option <#if move.region==30>selected</#if>
+                                                    value="30">北辰区
+                                            </option>
+                                            <option <#if move.region==31>selected</#if>
+                                                    value="31">武清区
+                                            </option>
+                                            <option <#if move.region==32>selected</#if>
+                                                    value="32">宝坻区
+                                            </option>
+                                            <option <#if move.region==33>selected</#if>
+                                                    value="33">滨海新区
+                                            </option>
+                                            <option <#if move.region==34>selected</#if>
+                                                    value="34">宁河区
+                                            </option>
+                                            <option <#if move.region==35>selected</#if>
+                                                    value="35">静海区
+                                            </option>
+                                            <option <#if move.region==36>selected</#if>
+                                                    value="36">蓟州区
+                                            </option>
+                                        </#list>
                                         </select>
                                     </td>
                                     <td colspan="6">收件人：<strong>${move.witness}</strong></td>
@@ -275,7 +275,7 @@
                             <!-- Default panel contents -->
                             <div class="panel-heading">部门审核打分</div>
                             <!-- Table -->
-                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
+                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed table_needScore">
                                 <tr class="info">
                                     <th>指标序号：</th>
                                     <th>${item.indicator.indexNum}</th>
@@ -284,7 +284,7 @@
                                 </tr>
                                 <tr class="info">
                                     <th>指标名称：</th>
-                                    <th colspan="4">${item.indicator.name}</th>
+                                    <th colspan="4" class="th_needScore">${item.indicator.name}</th>
                                 </tr>
                                 <tr class="info">
                                     <th>打分部门：</th>
@@ -301,11 +301,11 @@
                                     <#list item.indicatorItems as sitem>
                                         <tr>
                                             <td class="text-center">
-                                                <input type="radio"
+                                                <input type="radio" class="needscore_checkBoxValue" id="${item.indicator.id?c}_${sitem.id?c}_${item.roleId?c}"
                                                        value="${item.indicator.id?c}_${sitem.id?c}_${item.roleId?c}"
                                                        name="score_${item.indicator.id?c}_${item.roleId?c}">
                                             </td>
-                                            <td style="width: 60%" colspan="3">${sitem.content}</td>
+                                            <td style="width: 60%" colspan="3"><label for="${item.indicator.id?c}_${sitem.id?c}_${item.roleId?c}">${sitem.content}</label></td>
                                             <td class="text-danger">${sitem.score}分</td>
                                         </tr>
                                     </#list>
@@ -315,32 +315,32 @@
                                         <th>分值</th>
                                     </tr>
                                     <tr>
-                                 <#if item.indicator.id==7 && view!=1>
-                                        <td colspan="2" class="text-danger">
-                                            <input type="text" reaonly value=""
-                                                   d-roleId="${item.roleId?c}"
-                                                   d-indicator="${item.indicator.id?c}"
-                                                   d-name="manScore"
-                                                   name="score_${item.indicator.id?c}_${item.roleId?c}">
-                                            <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
-                                            </button>
+                                        <#if item.indicator.id==7 && view!=1>
+                                            <td colspan="2" class="text-danger">
+                                                <input type="text" readonly="readonly" value=""
+                                                       d-roleId="${item.roleId?c}"
+                                                       d-indicator="${item.indicator.id?c}"
+                                                       d-name="manScore"
+                                                       name="score_${item.indicator.id?c}_${item.roleId?c}">
+                                                <button id="social_btn" data-person="${person.id?c}" type="button">获取分数
+                                                </button>
 
-                                        </td>
-                                        <td colspan="2" class="text-danger">
-                                            <input type="text" value=""
-                                                   d-roleId="${item.roleId?c}"
-                                                   d-indicator="${item.indicator.id?c}"
-                                                   d-name="manScore"
-                                                   name="score_${item.indicator.id?c}_${item.roleId?c}">
-                                        </td>
-                                 <#else>
-                                     <td colspan="4" class="text-danger">
-                                         <input type="text" value=""
-                                                d-roleId="${item.roleId?c}"
-                                                d-indicator="${item.indicator.id?c}"
-                                                name="score_${item.indicator.id?c}_${item.roleId?c}">
-                                     </td>
-                                 </#if>
+                                            </td>
+                                            <td colspan="2" class="text-danger">
+                                                <input type="text" value=""
+                                                       d-roleId="${item.roleId?c}"
+                                                       d-indicator="${item.indicator.id?c}"
+                                                       d-name="manScore" class="needscore_inputValue"
+                                                       name="score_${item.indicator.id?c}_${item.roleId?c}">
+                                            </td>
+                                        <#else>
+                                            <td colspan="4" class="text-danger">
+                                                <input type="text" value="" class="needscore_inputValue"
+                                                       d-roleId="${item.roleId?c}"
+                                                       d-indicator="${item.indicator.id?c}"
+                                                       name="score_${item.indicator.id?c}_${item.roleId?c}">
+                                            </td>
+                                        </#if>
                                         <td class="text-danger">手动输入</td>
                                     </tr>
                                 </#if>
@@ -395,16 +395,16 @@
                                     <th>预览(点击放大)</th>
                                     <th class="text-info">材料名称</th>
                                 </tr>
-                                <#list materialInfos as item>
-                                    <#if item.onlinePersonMaterial??>
-                                        <#if item.onlinePersonMaterial.materialUri=="">
+                            <#list materialInfos as item>
+                                <#if item.onlinePersonMaterial??>
+                                    <#if item.onlinePersonMaterial.materialUri=="">
                                         <tr>
                                             <td class="text-center">
                                                 未上传
                                             </td>
                                             <td>${item.name}</td>
                                         </tr>
-                                        <#else>
+                                    <#else>
                                         <tr>
                                             <td style="width:100px;height:100px" class="text-center">
                                                 <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
@@ -421,16 +421,16 @@
                                                 </a>
                                             </td>
                                         </tr>
-                                        </#if>
-                                    <#else>
-                                        <tr>
-                                            <td class="text-center">
-                                                未上传
-                                            </td>
-                                            <td>${item.name}</td>
-                                        </tr>
                                     </#if>
-                                </#list>
+                                <#else>
+                                    <tr>
+                                        <td class="text-center">
+                                            未上传
+                                        </td>
+                                        <td>${item.name}</td>
+                                    </tr>
+                                </#if>
+                            </#list>
                             </table>
                             <script type="text/javascript">
                                 var hostName = window.location.host;

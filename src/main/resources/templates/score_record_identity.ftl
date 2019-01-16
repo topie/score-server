@@ -89,9 +89,9 @@
                                     <td colspan="4">年龄：<strong>${person.age}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4"><strong>专业：${other.profession}</strong>
+                                    <td colspan="4">专业：<strong>${other.profession}</strong>
                                     </td>
-                                    <td colspan="8"><strong>曾用名：${person.formerName}</strong>
+                                    <td colspan="8">曾用名：<strong>${person.formerName}</strong>
                                     </td>
                                 </tr>
                                 <tr>
@@ -404,7 +404,7 @@
                             <div class="panel-heading">部门审核打分</div>
                             <!-- Table -->
                             <table style="font-size: 14px;"
-                                   class="table table-hover table-bordered table-condensed">
+                                   class="table table-hover table-bordered table-condensed table_needScore">
                                 <tr class="info">
                                     <th>指标序号：</th>
                                     <th>${item.indicator.indexNum}</th>
@@ -413,7 +413,7 @@
                                 </tr>
                                 <tr class="info">
                                     <th>指标名称：</th>
-                                    <th colspan="4">${item.indicator.name}</th>
+                                    <th colspan="4" class="th_needScore">${item.indicator.name}</th>
                                 </tr>
                                 <tr class="info">
                                     <th>打分部门：</th>
@@ -431,11 +431,11 @@
                                     <#list item.indicatorItems as sitem>
                                         <tr>
                                             <td class="text-center">
-                                                <input type="radio"
+                                                <input type="radio" class="needscore_checkBoxValue" id="${item.indicator.id?c}_${sitem.id?c}_${item.roleId?c}"
                                                        value="${item.indicator.id?c}_${sitem.id?c}_${item.roleId?c}"
                                                        name="score_${item.indicator.id?c}_${item.roleId?c}">
                                             </td>
-                                            <td style="width: 60%" colspan="3">${sitem.content}</td>
+                                            <td style="width: 60%" colspan="3"><label for="${item.indicator.id?c}_${sitem.id?c}_${item.roleId?c}">${sitem.content}</label></td>
                                             <td class="text-danger">${sitem.score}分</td>
                                         </tr>
                                     </#list>
@@ -461,12 +461,12 @@
                                                 <input type="text" value=""
                                                        d-indicator="${item.indicator.id?c}"
                                                        d-roleId="${item.roleId?c}"
-                                                       d-name="manScore"
+                                                       d-name="manScore" class="needscore_inputValue"
                                                        name="score_${item.indicator.id?c}_${item.roleId?c}">
                                             </td>
                                         <#else>
                                             <td colspan="4" class="text-danger">
-                                                <input type="text" value=""
+                                                <input type="text" value="" class="needscore_inputValue"
                                                        d-indicator="${item.indicator.id?c}"
                                                        d-roleId="${item.roleId?c}"
                                                        name="score_${item.indicator.id?c}_${item.roleId?c}">

@@ -6,6 +6,10 @@
     .table-list-item .table {
         margin-bottom: 0;
     }
+
+    .garyB {
+        background-color: #EEEEEE;
+    }
 </style>
 <div class="widget-box transparent">
     <div class="widget-header">
