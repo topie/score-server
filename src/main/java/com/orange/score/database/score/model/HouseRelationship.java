@@ -9,7 +9,7 @@ public class HouseRelationship {
      * 主键ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select t_house_relationship_seq.nextval from dual")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select t_house_relationship_seq.nextval from dual")
     private Integer id;
 
     /**
@@ -51,6 +51,209 @@ public class HouseRelationship {
      */
     @Column(name = "c_time")
     private Date cTime;
+
+    //2019-1-9添加卫健委信息
+
+    @Column(name = "formerName")
+    private String formerName;//"曾用名"
+
+    @Column(name = "sex")
+    private Integer sex;//"性别：1、男；2、女"
+
+    @Column(name = "spouse_HJAddress")
+    private String spouse_HJAddress;//"配偶户籍地详细地址"
+
+    @Column(name = "spouse_LivingAddress")
+    private String spouse_LivingAddress;//"配偶现居住地详细地址"
+
+    @Column(name = "policyAttribute")
+    private String policyAttribute;//"政策属性"
+
+    @Column(name = "medical_number")
+    private String medical_number;//"出生医学证明_编号"
+
+    @Column(name = "medical_authority")
+    private String medical_authority;//"出生医学证明_签证机构"
+
+    @Column(name = "isAdopt")
+    private Integer isAdopt;//"收养子女1、是；2、否"
+
+    @Column(name = "birthplace")
+    private String birthplace;//"出生地"
+
+    @Column(name = "approval_time")
+    private java.sql.Date approval_time;//"审批时间"
+
+    @Column(name = "approval_number")
+    private String approval_number;//"审批证明编号"
+
+    @Column(name = "approval_companyName")
+    private String approval_companyName;//"审批单位名称"
+
+    @Column(name = "approval_rules")
+    private String approval_rules;//"审批条例适用"
+
+    @Column(name = "approval_which")
+    private String approval_which;//"与第几任妻子/丈夫所生"
+
+    @Column(name = "approval_custody")
+    private String approval_custody;//"抚养权归属"
+
+    //2019-1-17增加字段
+
+    @Column(name = "marriageStatus")
+    private Integer marriageStatus;  //配偶婚姻状况 0.请选择 7.初婚 8.复婚 9.再婚
+
+    public Integer getMarriageStatus() {
+        return marriageStatus;
+    }
+
+    public void setMarriageStatus(Integer marriageStatus) {
+        this.marriageStatus = marriageStatus;
+    }
+
+    public String getStringMarriageStatus() {
+        if (this.marriageStatus == null) {
+            return "";
+        } else {
+            switch (this.marriageStatus) {
+                case 0:
+                    return "";
+                case 7:
+                    return "初婚";
+                case 8:
+                    return "复婚";
+                case 9:
+                    return "再婚";
+                default:
+                    return "";
+            }
+        }
+    }
+
+    //2019-1-17增加字段End
+
+    public String getFormerName() {
+        return formerName;
+    }
+
+    public void setFormerName(String formerName) {
+        this.formerName = formerName;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public String getSpouse_HJAddress() {
+        return spouse_HJAddress;
+    }
+
+    public void setSpouse_HJAddress(String spouse_HJAddress) {
+        this.spouse_HJAddress = spouse_HJAddress;
+    }
+
+    public String getSpouse_LivingAddress() {
+        return spouse_LivingAddress;
+    }
+
+    public void setSpouse_LivingAddress(String spouse_LivingAddress) {
+        this.spouse_LivingAddress = spouse_LivingAddress;
+    }
+
+    public String getPolicyAttribute() {
+        return policyAttribute;
+    }
+
+    public void setPolicyAttribute(String policyAttribute) {
+        this.policyAttribute = policyAttribute;
+    }
+
+    public String getMedical_number() {
+        return medical_number;
+    }
+
+    public void setMedical_number(String medical_number) {
+        this.medical_number = medical_number;
+    }
+
+    public String getMedical_authority() {
+        return medical_authority;
+    }
+
+    public void setMedical_authority(String medical_authority) {
+        this.medical_authority = medical_authority;
+    }
+
+    public Integer getIsAdopt() {
+        return isAdopt;
+    }
+
+    public void setIsAdopt(Integer isAdopt) {
+        this.isAdopt = isAdopt;
+    }
+
+    public String getBirthplace() {
+        return birthplace;
+    }
+
+    public void setBirthplace(String birthplace) {
+        this.birthplace = birthplace;
+    }
+
+    public java.sql.Date getApproval_time() {
+        return approval_time;
+    }
+
+    public void setApproval_time(java.sql.Date approval_time) {
+        this.approval_time = approval_time;
+    }
+
+    public String getApproval_number() {
+        return approval_number;
+    }
+
+    public void setApproval_number(String approval_number) {
+        this.approval_number = approval_number;
+    }
+
+    public String getApproval_companyName() {
+        return approval_companyName;
+    }
+
+    public void setApproval_companyName(String approval_companyName) {
+        this.approval_companyName = approval_companyName;
+    }
+
+    public String getApproval_rules() {
+        return approval_rules;
+    }
+
+    public void setApproval_rules(String approval_rules) {
+        this.approval_rules = approval_rules;
+    }
+
+    public String getApproval_which() {
+        return approval_which;
+    }
+
+    public void setApproval_which(String approval_which) {
+        this.approval_which = approval_which;
+    }
+
+    public String getApproval_custody() {
+        return approval_custody;
+    }
+
+    public void setApproval_custody(String approval_custody) {
+        this.approval_custody = approval_custody;
+    }
+
+    //2019-1-9添加卫健委信息END
 
     /**
      * 获取主键ID
@@ -196,190 +399,33 @@ public class HouseRelationship {
         this.cTime = cTime;
     }
 
-    //2019-1-9添加卫健委信息
-
-    @Column(name = "formerName")
-    private String formerName;//"曾用名"
-
-    @Column(name = "sex")
-    private Integer sex;//"性别：1、男；2、女"
-
-    @Column(name = "spouse_HJAddress")
-    private String spouse_HJAddress;//"配偶户籍地详细地址"
-
-    @Column(name = "spouse_LivingAddress")
-    private String spouse_LivingAddress;//"配偶现居住地详细地址"
-
-    @Column(name = "policyAttribute")
-    private String policyAttribute;//"政策属性"
-
-    @Column(name = "medical_number")
-    private String medical_number;//"出生医学证明_编号"
-
-    @Column(name = "medical_authority")
-    private String medical_authority;//"出生医学证明_签证机构"
-
-    @Column(name = "isAdopt")
-    private String isAdopt;//"收养子女1、是；2、否"
-
-    @Column(name = "birthplace")
-    private String birthplace;//"出生地"
-
-    @Column(name = "approval_time")
-    private java.sql.Date approval_time;//"审批时间"
-
-    @Column(name = "approval_number")
-    private String approval_number;//"审批证明编号"
-
-    @Column(name = "approval_companyName")
-    private String approval_companyName;//"审批单位名称"
-
-    @Column(name = "approval_rules")
-    private String approval_rules;//"审批条例适用"
-
-    @Column(name = "approval_which")
-    private String approval_which;//"与第几任妻子/丈夫所生"
-
-    @Column(name = "approval_custody")
-    private String approval_custody;//"抚养权归属"
-
-    public String getFormerName() {
-        return formerName;
-    }
-
-    public void setFormerName(String formerName) {
-        this.formerName = formerName;
-    }
-
-    public Integer getSex() {
-        return sex;
-    }
-
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
-
-    public String getSpouse_HJAddress() {
-        return spouse_HJAddress;
-    }
-
-    public void setSpouse_HJAddress(String spouse_HJAddress) {
-        this.spouse_HJAddress = spouse_HJAddress;
-    }
-
-    public String getSpouse_LivingAddress() {
-        return spouse_LivingAddress;
-    }
-
-    public void setSpouse_LivingAddress(String spouse_LivingAddress) {
-        this.spouse_LivingAddress = spouse_LivingAddress;
-    }
-
-    public String getPolicyAttribute() {
-        return policyAttribute;
-    }
-
-    public void setPolicyAttribute(String policyAttribute) {
-        this.policyAttribute = policyAttribute;
-    }
-
-    public String getMedical_number() {
-        return medical_number;
-    }
-
-    public void setMedical_number(String medical_number) {
-        this.medical_number = medical_number;
-    }
-
-    public String getMedical_authority() {
-        return medical_authority;
-    }
-
-    public void setMedical_authority(String medical_authority) {
-        this.medical_authority = medical_authority;
-    }
-
-    public String getIsAdopt() {
-        return isAdopt;
-    }
-
-    public void setIsAdopt(String isAdopt) {
-        this.isAdopt = isAdopt;
-    }
-
-    public String getBirthplace() {
-        return birthplace;
-    }
-
-    public void setBirthplace(String birthplace) {
-        this.birthplace = birthplace;
-    }
-
-    public java.sql.Date getApproval_time() {
-        return approval_time;
-    }
-
-    public void setApproval_time(java.sql.Date approval_time) {
-        this.approval_time = approval_time;
-    }
-
-    public String getApproval_number() {
-        return approval_number;
-    }
-
-    public void setApproval_number(String approval_number) {
-        this.approval_number = approval_number;
-    }
-
-    public String getApproval_companyName() {
-        return approval_companyName;
-    }
-
-    public void setApproval_companyName(String approval_companyName) {
-        this.approval_companyName = approval_companyName;
-    }
-
-    public String getApproval_rules() {
-        return approval_rules;
-    }
-
-    public void setApproval_rules(String approval_rules) {
-        this.approval_rules = approval_rules;
-    }
-
-    public String getApproval_which() {
-        return approval_which;
-    }
-
-    public void setApproval_which(String approval_which) {
-        this.approval_which = approval_which;
-    }
-
-    public String getApproval_custody() {
-        return approval_custody;
-    }
-
-    public void setApproval_custody(String approval_custody) {
-        this.approval_custody = approval_custody;
-    }
-
-
-    public String[] getApproval_rulesArray() {
-        if (this.approval_rules != null && !"".equals(this.approval_rules)) {
-            int firstIndex = this.approval_rules.indexOf("省（市/自治区）人口与计划生育条例, 第");
-            int secondIndex = this.approval_rules.indexOf("条第");
-            int thirdIndex = this.approval_rules.indexOf("款第");
-            int fourthIndex = this.approval_rules.indexOf("项");
-            return new String[]{this.approval_rules.substring(0, firstIndex),
-                    this.approval_rules.substring(firstIndex + 20, secondIndex),
-                    this.approval_rules.substring(secondIndex + 2, thirdIndex),
-                    this.approval_rules.substring(thirdIndex + 2, fourthIndex)};
+    public String getStringIsAdopt() {
+        if (this.isAdopt == null) {
+            return "";
         } else {
-            return new String[]{"", "", "", ""};
+            switch (this.isAdopt) {
+                case 1:
+                    return "是";
+                case 2:
+                    return "否";
+                default:
+                    return "";
+            }
         }
-
     }
 
-    //2019-1-9添加卫健委信息END
-
+    public String getStringSex() {
+        if (this.sex == null) {
+            return "";
+        } else {
+            switch (this.sex) {
+                case 1:
+                    return "男";
+                case 2:
+                    return "女";
+                default:
+                    return "";
+            }
+        }
+    }
 }

@@ -3,11 +3,11 @@ package com.orange.score.module.score.controller.approve;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
+import com.orange.score.common.tools.excel.ExcelFileUtil;
+import com.orange.score.common.tools.excel.ExcelUtil;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
-import com.orange.score.common.utils.CamelUtil;
-import com.orange.score.common.utils.PageConvertUtil;
-import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.*;
 import com.orange.score.common.utils.date.DateStyle;
 import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.core.model.Region;
@@ -20,13 +20,22 @@ import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
-import java.io.FileNotFoundException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -87,15 +96,18 @@ public class MaterialReceiveIdentityInfoController {
     @Autowired
     private IBatchConfService iBatchConfService;
 
+    @Value("${upload.folder}")
+    private String uploadPath;
+
     /*
     材料送达-未送达
      */
     @GetMapping(value = "/receiving")
     @ResponseBody
     public Result receiving(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
-            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
+                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
@@ -156,9 +168,9 @@ public class MaterialReceiveIdentityInfoController {
     @GetMapping(value = "/received")
     @ResponseBody
     public Result received(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
-            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                           @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
+                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
@@ -438,6 +450,280 @@ public class MaterialReceiveIdentityInfoController {
             iScoreRecordService.update(scoreRecord);
         }
         return ResponseUtil.success();
+    }
+
+    //心情烦躁,随便写的,有大神有时间可以优化一下,懒得想了
+    @GetMapping(value = "/getIdentityInfoExcelWJW")
+    @ResponseBody
+    public void getIdentityInfoExcelWJW(HttpServletRequest request, HttpServletResponse response,
+                                        @RequestParam(value = "identityInfoId", required = false) Integer identityInfoId) throws Exception {
+        IdentityInfo identityInfo = iIdentityInfoService.findById(identityInfoId);
+        Condition condition = new Condition(HouseRelationship.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("identityInfoId", identityInfoId);
+        List<HouseRelationship> relationshipList = iHouseRelationshipService.findByCondition(condition);
+        if (CollectionUtils.isEmpty(relationshipList)) {
+            relationshipList = new ArrayList<>();
+        }
+        HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", identityInfoId);
+        if (houseMove == null) {
+            houseMove = new HouseMove();
+        }
+        HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
+        if (other == null) {
+            other = new HouseOther();
+        }
+
+        String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + System.currentTimeMillis() + ".xlsx";
+        File tempfile = createTempFile();
+        if (!tempfile.exists()) {
+            tempfile.createNewFile();
+        }
+        FileOutputStream out;
+        try {
+            out = new FileOutputStream(tempfile);
+            XSSFWorkbook workBook = new XSSFWorkbook();
+            XSSFSheet sheet = workBook.createSheet();
+            //合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 17));
+            sheet.addMergedRegion(new CellRangeAddress(1, 1, 7, 12));
+            sheet.addMergedRegion(new CellRangeAddress(1, 1, 13, 17));
+            sheet.addMergedRegion(new CellRangeAddress(2, 2, 7, 12));
+            sheet.addMergedRegion(new CellRangeAddress(2, 2, 13, 17));
+            sheet.addMergedRegion(new CellRangeAddress(3, 3, 7, 12));
+            sheet.addMergedRegion(new CellRangeAddress(3, 3, 13, 17));
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 1));
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 2, 4));
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 5, 6));
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 7, 8));
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 9, 10));
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 11, 13));
+            sheet.addMergedRegion(new CellRangeAddress(4, 4, 15, 17));
+            sheet.addMergedRegion(new CellRangeAddress(5, 5, 0, 17));
+            sheet.addMergedRegion(new CellRangeAddress(6, 7, 0, 0));
+            sheet.addMergedRegion(new CellRangeAddress(6, 7, 1, 1));
+            sheet.addMergedRegion(new CellRangeAddress(6, 7, 2, 2));
+            sheet.addMergedRegion(new CellRangeAddress(6, 7, 3, 3));
+            sheet.addMergedRegion(new CellRangeAddress(6, 7, 4, 4));
+            sheet.addMergedRegion(new CellRangeAddress(6, 6, 5, 7));
+            sheet.addMergedRegion(new CellRangeAddress(6, 7, 8, 8));
+            sheet.addMergedRegion(new CellRangeAddress(6, 6, 9, 10));
+            sheet.addMergedRegion(new CellRangeAddress(6, 7, 11, 11));
+            sheet.addMergedRegion(new CellRangeAddress(6, 6, 12, 15));
+            sheet.addMergedRegion(new CellRangeAddress(6, 7, 16, 16));
+            sheet.addMergedRegion(new CellRangeAddress(6, 7, 17, 17));
+            HouseRelationship houseRelationshipSpouse = new HouseRelationship();
+            int relationshipListSize = relationshipList.size();
+            for (HouseRelationship h : relationshipList) {
+                if ("配偶".equals(h.getRelationship())) {
+                    houseRelationshipSpouse = h;
+                    relationshipListSize--;
+                    break;
+                }
+            }
+            int lastRow = relationshipListSize + 8;
+            sheet.addMergedRegion(new CellRangeAddress(lastRow, lastRow, 0, 1));
+            sheet.addMergedRegion(new CellRangeAddress(lastRow, lastRow, 2, 6));
+            sheet.addMergedRegion(new CellRangeAddress(lastRow, lastRow, 7, 11));
+            sheet.addMergedRegion(new CellRangeAddress(lastRow, lastRow, 12, 17));
+
+            //赋值
+            Map<Integer, String> stringMap = new HashMap<>();
+            stringMap.put(0, "天津市居住证积分审核表(市卫健委)");
+            stringMap.put(19, "姓名");
+            stringMap.put(20, "曾用名");
+            stringMap.put(21, "性别");
+            stringMap.put(22, "身份证号码");
+            stringMap.put(23, "婚姻状况");
+            stringMap.put(24, "佐证材料");
+            stringMap.put(25, "户籍地地址");
+            stringMap.put(31, "现居住地址");
+            stringMap.put(36, "申请人情况");
+            stringMap.put(37, identityInfo.getName());
+            stringMap.put(38, identityInfo.getFormerName());
+            stringMap.put(39, identityInfo.getStringSex());
+            stringMap.put(40, identityInfo.getIdNumber());
+            stringMap.put(41, houseMove.getMarriageStatusStr());
+            stringMap.put(42, "-");
+            stringMap.put(43, houseMove.getMoveAddress());
+            stringMap.put(49, houseMove.getMoveNowAddress());
+            stringMap.put(54, "配偶情况");
+            stringMap.put(55, houseRelationshipSpouse.getName());
+            stringMap.put(56, houseRelationshipSpouse.getFormerName());
+            stringMap.put(57, houseRelationshipSpouse.getStringSex());
+            stringMap.put(58, houseRelationshipSpouse.getIdNumber());
+            stringMap.put(59, houseRelationshipSpouse.getStringMarriageStatus());
+            stringMap.put(60, "-");
+            stringMap.put(61, houseRelationshipSpouse.getSpouse_HJAddress());
+            stringMap.put(67, houseRelationshipSpouse.getSpouse_LivingAddress());
+            stringMap.put(72, "申请人联系电话");
+            stringMap.put(74, other.getSelfPhone());
+            stringMap.put(77, "申请人单位电话");
+            stringMap.put(79, other.getCompanyPhone());
+            stringMap.put(81, "申请人单位名称");
+            stringMap.put(83, other.getCompanyName());
+            stringMap.put(86, "申请人单位地址");
+            stringMap.put(87, other.getCompanyAddress());
+            stringMap.put(90, "以下填写申请人及配偶的子女情况，包括亲生子女（具体指婚生子女、非婚生子女、离异时抚养权判予对方的子女）和收养子女。");
+            stringMap.put(108, "序号");
+            stringMap.put(109, "姓名");
+            stringMap.put(110, "曾用名");
+            stringMap.put(111, "性别");
+            stringMap.put(112, "身份证号码");
+            stringMap.put(113, "出生医学证明");
+            stringMap.put(116, "出生地");
+            stringMap.put(117, "收养子女");
+            stringMap.put(119, "政策属性");
+            stringMap.put(120, "再生育审批情况");
+            stringMap.put(124, "与第几任妻子/丈夫所生");
+            stringMap.put(125, "抚养权归属");
+            stringMap.put(131, "编号");
+            stringMap.put(132, "签证机构");
+            stringMap.put(133, "佐证材料");
+            stringMap.put(135, "是/否");
+            stringMap.put(136, "佐证材料");
+            stringMap.put(138, "审批时间");
+            stringMap.put(139, "审批证明编号");
+            stringMap.put(140, "审批单位名称");
+            stringMap.put(141, "审批条例适用");
+
+            int startIndex = 144;
+            int listIndex = 1;
+            for (HouseRelationship h : relationshipList) {
+                if ("配偶".equals(h.getRelationship())) {
+                    continue;
+                }
+                stringMap.put(startIndex, String.valueOf(listIndex));
+                startIndex++;
+                stringMap.put(startIndex, h.getName());
+                startIndex++;
+                stringMap.put(startIndex, h.getFormerName());
+                startIndex++;
+                stringMap.put(startIndex, h.getStringSex());
+                startIndex++;
+                stringMap.put(startIndex, h.getIdNumber());
+                startIndex++;
+                stringMap.put(startIndex, h.getMedical_number());
+                startIndex++;
+                stringMap.put(startIndex, h.getMedical_authority());
+                startIndex++;
+                stringMap.put(startIndex, "-");
+                startIndex++;
+                stringMap.put(startIndex, h.getBirthplace());
+                startIndex++;
+                stringMap.put(startIndex, h.getStringIsAdopt());
+                startIndex++;
+                stringMap.put(startIndex, "-");
+                startIndex++;
+                stringMap.put(startIndex, h.getPolicyAttribute());
+                startIndex++;
+                if (h.getApproval_time() != null) {
+                    stringMap.put(startIndex, h.getApproval_time().toString());
+                } else {
+                    stringMap.put(startIndex, "");
+                }
+                startIndex++;
+                stringMap.put(startIndex, h.getApproval_number());
+                startIndex++;
+                stringMap.put(startIndex, h.getApproval_companyName());
+                startIndex++;
+                stringMap.put(startIndex, h.getApproval_rules());
+                startIndex++;
+                stringMap.put(startIndex, h.getApproval_which());
+                startIndex++;
+                stringMap.put(startIndex, h.getApproval_custody());
+                startIndex++;
+                listIndex++;
+            }
+            startIndex += 2;
+            String pregnantWeek = identityInfo.getPregnantWeek();
+            if (pregnantWeek == null) {
+                pregnantWeek = "_";
+            }
+
+            stringMap.put(startIndex, "本人或配偶目前" + identityInfo.getStringPregnantPromise() + "已怀孕" + pregnantWeek + "周");
+            startIndex += 5;
+            stringMap.put(startIndex, "本人及配偶" + identityInfo.getStringThirdPregnantPromise() + "目前未处于政策外第三个及以上子女怀孕期间。");
+            int stringIndex = 0;
+            XSSFFont font = workBook.createFont();
+            font.setFontName("宋体");
+            XSSFCell cell;
+            XSSFRow row;
+            XSSFCellStyle cellStyle = workBook.createCellStyle();
+            cellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+            cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+            cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+            cellStyle.setFont(font);
+            for (int i = 0; i <= lastRow; i++) {
+                row = sheet.createRow(i);
+                if (i > 7) {
+                    row.setHeight((short) (600));
+                } else {
+                    row.setHeight((short) (300));
+                }
+                for (int j = 0; j < 18; j++) {
+                    cell = row.createCell(j);
+                    cell.setCellValue(stringMap.get(stringIndex));
+                    cell.setCellStyle(cellStyle);
+                    stringIndex++;
+                }
+            }
+            row = sheet.getRow(5);
+            row.setHeight((short) (650));
+            row = sheet.getRow(lastRow);
+            row.setHeight((short) (300));
+            row = sheet.getRow(0);
+            row.setHeight((short) (700));
+            cell = row.getCell(0);
+            XSSFFont font2 = workBook.createFont();
+            XSSFCellStyle cellStyle2 = workBook.createCellStyle();
+            cellStyle2.cloneStyleFrom(cell.getCellStyle());
+            font2.setFontHeightInPoints((short) 18);
+            font2.setFontName("宋体");
+            font2.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            cellStyle2.setFont(font2);
+            cell.setCellStyle(cellStyle2);
+
+            //自动设宽度对这种复杂的表格不太好使,而且又是中文,就更不支持了,自己写吧...望大神优化
+            sheet.setColumnWidth(0, 3000);
+            sheet.setColumnWidth(1, 2000);
+            sheet.setColumnWidth(2, 2000);
+            sheet.setColumnWidth(3, 2000);
+            sheet.setColumnWidth(4, 6000);
+            sheet.setColumnWidth(5, 4000);
+            sheet.setColumnWidth(6, 4000);
+            sheet.setColumnWidth(7, 2000);
+            sheet.setColumnWidth(8, 8000);
+            sheet.setColumnWidth(9, 2000);
+            sheet.setColumnWidth(10, 2000);
+            sheet.setColumnWidth(11, 3000);
+            sheet.setColumnWidth(12, 4000);
+            sheet.setColumnWidth(13, 5000);
+            sheet.setColumnWidth(14, 6000);
+            sheet.setColumnWidth(15, 14000);
+            sheet.setColumnWidth(16, 6000);
+            sheet.setColumnWidth(17, 5000);
+
+            workBook.write(out);
+            InputStream inputStream = new FileInputStream(tempfile);
+            File file = new File(savePath);
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            if (!file.exists()) file.createNewFile();
+            FileUtil.saveFileFromInputStream(inputStream, savePath);
+            ExcelFileUtil.download(response, savePath, "天津市居住证积分审核表(市卫健委).xlsx");
+            //file.delete();
+        } finally {
+            tempfile.delete();
+        }
+    }
+
+    private static File createTempFile() throws IOException {
+        return new File(PropertiesUtil.get("application.properties", "temp.folder") + System.currentTimeMillis());
     }
 
 }

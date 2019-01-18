@@ -152,6 +152,9 @@
                                     <td colspan="12">迁出详细地址：<strong>${move.moveAddress}</strong></td>
                                 </tr>
                                 <tr>
+                                    <td colspan="12">现居住地址：<strong>${move.moveNowAddress}</strong></td>
+                                </tr>
+                                <tr>
                                     <td colspan="6">现户口性质：<select disabled style="height: 25px;">
                                         <option <#if move.houseNature==1>selected</#if> value="1">未落常住户口</option>
                                         <option <#if move.houseNature==2>selected</#if> value="2">非农业家庭户口</option>
@@ -296,6 +299,15 @@
                                                 <tr>
                                                     <td class="garyB">是否随迁:</td>
                                                     <td><#if ritem.isRemove == 1>是<#else>否</#if></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">配偶婚姻状况:</td>
+                                                    <td><select disabled>
+                                                        <option <#if ritem.marriageStatus=='0'>selected</#if> value="0">请选择</option>
+                                                        <option <#if ritem.marriageStatus=='7'>selected</#if> value="7">初婚</option>
+                                                        <option <#if ritem.marriageStatus=='8'>selected</#if> value="8">复婚</option>
+                                                        <option <#if ritem.marriageStatus=='9'>selected</#if> value="9">再婚</option>
+                                                    </select></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="garyB">配偶曾用名:</td>

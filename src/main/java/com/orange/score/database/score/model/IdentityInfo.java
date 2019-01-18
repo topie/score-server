@@ -99,6 +99,83 @@ public class IdentityInfo {
      */
     private Integer region;
 
+    //2019-1-9添加卫健委信息
+    @Column(name = "formerName")
+    private String formerName;//"曾用名"
+
+    @Column(name = "pregnantPromise")
+    private Integer pregnantPromise;//本人或配偶目前 1.承诺 2.不承诺 已怀孕_周
+
+    public String getStringPregnantPromise() {
+        if (this.pregnantPromise == null) {
+            return "_";
+        } else {
+            switch (this.pregnantPromise) {
+                case 1:
+                    return "承诺";
+                case 2:
+                    return "不承诺";
+                default:
+                    return "_";
+            }
+        }
+    }
+
+    @Column(name = "pregnantWeek")
+    private String pregnantWeek;//本人或配偶目前(不)承诺 已怀孕_周
+
+    @Column(name = "thirdPregnantPromise")
+    private Integer thirdPregnantPromise;//本人或配偶1.承诺 2.不承诺目前未处于政策外第三个及以上子女怀孕期间
+
+    public String getStringThirdPregnantPromise() {
+        if (this.thirdPregnantPromise == null) {
+            return "_";
+        } else {
+            switch (this.thirdPregnantPromise) {
+                case 1:
+                    return "承诺";
+                case 2:
+                    return "不承诺";
+                default:
+                    return "_";
+            }
+        }
+    }
+
+    public String getFormerName() {
+        return formerName;
+    }
+
+    public void setFormerName(String formerName) {
+        this.formerName = formerName;
+    }
+
+    public String getPregnantWeek() {
+        return pregnantWeek;
+    }
+
+    public void setPregnantWeek(String pregnantWeek) {
+        this.pregnantWeek = pregnantWeek;
+    }
+
+    public Integer getPregnantPromise() {
+        return pregnantPromise;
+    }
+
+    public void setPregnantPromise(Integer pregnantPromise) {
+        this.pregnantPromise = pregnantPromise;
+    }
+
+    public Integer getThirdPregnantPromise() {
+        return thirdPregnantPromise;
+    }
+
+    public void setThirdPregnantPromise(Integer thirdPregnantPromise) {
+        this.thirdPregnantPromise = thirdPregnantPromise;
+    }
+
+    //2019-1-9添加卫健委信息END
+
     @Column(name = "reservation_status")
     private Integer reservationStatus;
 
@@ -258,7 +335,7 @@ public class IdentityInfo {
 
     public String getEpStatus() {
         int min = 0;
-        if(unionApprove1Et==null)
+        if (unionApprove1Et == null)
             return "-";
         Date now = new Date();
         if (unionApproveStatus1 == 2 && unionApproveStatus2 == 2) {
@@ -725,7 +802,6 @@ public class IdentityInfo {
         this.uTime = uTime;
     }
 
-
     public Date getRenshePassTime() {
         return renshePassTime;
     }
@@ -734,52 +810,19 @@ public class IdentityInfo {
         this.renshePassTime = renshePassTime;
     }
 
-
-
-    //2019-1-9添加卫健委信息
-    @Column(name = "formerName")
-    private String formerName;//"曾用名"
-
-    @Column(name = "pregnantPromise")
-    private String pregnantPromise;//本人或配偶目前 1.承诺 2.不承诺 已怀孕_周
-
-    @Column(name = "pregnantWeek")
-    private String pregnantWeek;//本人或配偶目前(不)承诺 已怀孕_周
-
-    @Column(name = "thirdPregnantPromise")
-    private String thirdPregnantPromise;//本人或配偶1.承诺 2.不承诺目前未处于政策外第三个及以上子女怀孕期间
-
-    public String getFormerName() {
-        return formerName;
+    public String getStringSex() {
+        if (this.sex == null) {
+            return "";
+        } else {
+            switch (this.sex) {
+                case 1:
+                    return "男";
+                case 2:
+                    return "女";
+                default:
+                    return "";
+            }
+        }
     }
 
-    public void setFormerName(String formerName) {
-        this.formerName = formerName;
-    }
-
-    public String getPregnantPromise() {
-        return pregnantPromise;
-    }
-
-    public void setPregnantPromise(String pregnantPromise) {
-        this.pregnantPromise = pregnantPromise;
-    }
-
-    public String getPregnantWeek() {
-        return pregnantWeek;
-    }
-
-    public void setPregnantWeek(String pregnantWeek) {
-        this.pregnantWeek = pregnantWeek;
-    }
-
-    public String getThirdPregnantPromise() {
-        return thirdPregnantPromise;
-    }
-
-    public void setThirdPregnantPromise(String thirdPregnantPromise) {
-        this.thirdPregnantPromise = thirdPregnantPromise;
-    }
-
-//2019-1-9添加卫健委信息END
 }

@@ -121,6 +121,21 @@ public class HouseMove {
     @Column(name = "c_time")
     private Date cTime;
 
+    //2019-1-17增加字段
+
+    @Column(name = "moveNowAddress")
+    private String moveNowAddress; //申请人现居住地址
+
+    public String getMoveNowAddress() {
+        return moveNowAddress;
+    }
+
+    public void setMoveNowAddress(String moveNowAddress) {
+        this.moveNowAddress = moveNowAddress;
+    }
+
+    //2019-1-17增加字段End
+
     public String getRegisteredRegion() {
         return registeredRegion;
     }
@@ -221,6 +236,12 @@ public class HouseMove {
                 return "丧偶";
             case 4:
                 return "离婚";
+            case 7:
+                return "初婚";
+            case 8:
+                return "复婚";
+            case 9:
+                return "再婚";
         }
         return "-";
     }
