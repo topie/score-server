@@ -77,10 +77,30 @@ public class CompanyInfo {
     @Column(name = "add_user")
     private String addUser;
 
-    /**
-     * 状态
-     */
-    private Integer status;
+    //19-1-15增加
+    @Column(name = "STATUS")
+    private Integer status;//"是否修改过经办人信息状态,1为已修改过"
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    @Column(name = "BUSINESSLICENSESRC")
+    private String businessLicenseSrc;//营业执照路径
+
+    public String getBusinessLicenseSrc() {
+        return businessLicenseSrc;
+    }
+
+    public void setBusinessLicenseSrc(String businessLicenseSrc) {
+        this.businessLicenseSrc = businessLicenseSrc;
+    }
+
+    //19-1-15 END
 
     /**
      * 备注说明
@@ -345,24 +365,6 @@ public class CompanyInfo {
      */
     public void setAddUser(String addUser) {
         this.addUser = addUser;
-    }
-
-    /**
-     * 获取状态
-     *
-     * @return status - 状态
-     */
-    public Integer getStatus() {
-        return status;
-    }
-
-    /**
-     * 设置状态
-     *
-     * @param status 状态
-     */
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     /**

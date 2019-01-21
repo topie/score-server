@@ -294,12 +294,12 @@ public class MaterialReceiveIdentityInfoController {
         criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
+
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roles.contains(3) || roles.contains(4)) {
                 if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
-                    onlinePersonMaterial
-                            .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                    onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
                     roleUploadMaterialList.add(onlinePersonMaterial);
                 }
                 //公安单独处理随迁信息
@@ -317,6 +317,7 @@ public class MaterialReceiveIdentityInfoController {
                 }
             }
         }
+
         params.put("materialInfos", roleMaterialInfoList);
 
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
@@ -324,6 +325,19 @@ public class MaterialReceiveIdentityInfoController {
             companyInfo = new CompanyInfo();
         }
         params.put("company", companyInfo);
+        //添加营业执照,只有人社添加
+        if (roles.contains(3)) {
+            MaterialInfo businessLicenseMaterialInfo = new MaterialInfo();
+            businessLicenseMaterialInfo.setName("营业执照");
+            OnlinePersonMaterial businessLicenseMaterial = new OnlinePersonMaterial();
+            businessLicenseMaterial.setMaterialUri(companyInfo.getBusinessLicenseSrc());
+            businessLicenseMaterial.setId(-1);
+            businessLicenseMaterial.setPersonId(-1);
+            businessLicenseMaterial.setMaterialInfoName("营业执照");
+            businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
+            roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
+        }
+
         HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
         if (other == null) {
             other = new HouseOther();
