@@ -73,6 +73,18 @@ public class MaterialInfo {
         this.categoryRenshe = categoryRenshe;
     }
 
+    //排序字段
+    @Column(name = "sortColumns")
+    private Integer sortColumns;
+
+    public Integer getSortColumns() {
+        return sortColumns;
+    }
+
+    public void setSortColumns(Integer sortColumns) {
+        this.sortColumns = sortColumns;
+    }
+
     /**
      * 材料标题
      */
