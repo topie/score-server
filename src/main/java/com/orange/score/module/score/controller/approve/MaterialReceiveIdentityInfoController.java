@@ -535,7 +535,8 @@ public class MaterialReceiveIdentityInfoController {
                     break;
                 }
             }
-            int lastRow = relationshipListSize + 8;
+            int lastRow = relationshipListSize + 8 + 1;
+            sheet.addMergedRegion(new CellRangeAddress(lastRow - 1, lastRow - 1, 0, 17));
             sheet.addMergedRegion(new CellRangeAddress(lastRow, lastRow, 0, 1));
             sheet.addMergedRegion(new CellRangeAddress(lastRow, lastRow, 2, 6));
             sheet.addMergedRegion(new CellRangeAddress(lastRow, lastRow, 7, 11));
@@ -649,13 +650,15 @@ public class MaterialReceiveIdentityInfoController {
                 startIndex++;
                 listIndex++;
             }
+            //往後一行
+            startIndex += 18;
+
             startIndex += 2;
             String pregnantWeek = identityInfo.getPregnantWeek();
             if (pregnantWeek == null) {
                 pregnantWeek = "_";
             }
-
-            stringMap.put(startIndex, "本人或配偶目前" + identityInfo.getStringPregnantPromise() + "已怀孕" + pregnantWeek + "周");
+            stringMap.put(startIndex, "本人及配偶目前" + identityInfo.getStringPregnantPromise() + "已怀孕" + pregnantWeek + "周");
             startIndex += 5;
             stringMap.put(startIndex, "本人及配偶" + identityInfo.getStringThirdPregnantPromise() + "目前未处于政策外第三个及以上子女怀孕期间。");
             int stringIndex = 0;
