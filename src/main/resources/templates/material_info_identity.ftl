@@ -362,6 +362,15 @@
                                                     <td>${ritem.birthplace}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="garyB">与第几任妻子/丈夫所生:</td>
+                                                    <td>与第${ritem.approval_index}任${ritem.approval_spouse} ${ritem.approval_which}所生</td>
+                                                <#--<td>${ritem.approval_which}</td>-->
+                                                </tr>
+                                                <tr>
+                                                    <td class="garyB">抚养权归属:</td>
+                                                    <td>${ritem.approval_custody}</td>
+                                                </tr>
+                                                <tr>
                                                     <td colspan="2" class="garyB" style="text-align: center">再生育审批情况:</td>
                                                 </tr>
                                                 <tr>
@@ -380,14 +389,7 @@
                                                     <td class="garyB">审批条例适用:</td>
                                                     <td>${ritem.approval_rules}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td class="garyB">与第几任妻子/丈夫所生:</td>
-                                                    <td>${ritem.approval_which}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="garyB">抚养权归属:</td>
-                                                    <td>${ritem.approval_custody}</td>
-                                                </tr>
+
                                             </table>
                                         </#if>
                                     </#list>
