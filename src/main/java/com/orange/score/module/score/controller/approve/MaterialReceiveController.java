@@ -5,6 +5,7 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
+import com.orange.score.common.utils.CollectionUtil;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.core.model.Region;
@@ -87,8 +88,8 @@ public class MaterialReceiveController {
     @GetMapping(value = "/receiving")
     @ResponseBody
     public Result receiving(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -151,8 +152,8 @@ public class MaterialReceiveController {
     @GetMapping(value = "/received")
     @ResponseBody
     public Result received(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(IdentityInfo.class);
@@ -216,7 +217,7 @@ public class MaterialReceiveController {
 
     @GetMapping("/detailAll")
     public Result detailAll(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId,
-            @RequestParam Integer opRoleId) throws FileNotFoundException {
+                            @RequestParam Integer opRoleId) throws FileNotFoundException {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
@@ -270,7 +271,7 @@ public class MaterialReceiveController {
         }
         List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
-        for (MaterialInfo materialInfo : materialInfoList) {
+        /*for (MaterialInfo materialInfo : materialInfoList) {
             if (roles.contains(3) || roles.contains(4)) {
                 if (materialInfo.getIsUpload() == 1) {
                     if (roleMidSet.contains(materialInfo.getId())) {
@@ -282,6 +283,17 @@ public class MaterialReceiveController {
                     roleMaterialInfoList.add(materialInfo);
                 }
             }
+        }*/
+        //该权限可以查看的所有材料
+        Set<Integer> rolesSet = new HashSet<>(roles);
+        for (MaterialInfo materialInfo : materialInfoList) {
+            if (CollectionUtil.isHaveUnionBySet(rolesSet, materialInfo.getMaterialInfoRoleSet())) {
+                if (materialInfo.getIsUpload() == 1) {
+                    if (roleMidSet.contains(materialInfo.getId())) {
+                        roleMaterialInfoList.add(materialInfo);
+                    }
+                }
+            }
         }
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
@@ -290,7 +302,7 @@ public class MaterialReceiveController {
         criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
-        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+        /*for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roles.contains(3) || roles.contains(4)) {
                 if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
@@ -304,7 +316,16 @@ public class MaterialReceiveController {
                     roleUploadMaterialList.add(onlinePersonMaterial);
                 }
             }
+        }*/
+
+        //用户上传的材料
+        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
+            }
         }
+
         params.put("onlinePersonMaterials", roleUploadMaterialList);
         for (MaterialInfo materialInfo : roleMaterialInfoList) {
             for (OnlinePersonMaterial onlinePersonMaterial : roleUploadMaterialList) {
@@ -404,7 +425,7 @@ public class MaterialReceiveController {
 
     @PostMapping("/confirmReceived")
     public Result update(@RequestParam("personId") Integer personId, String[] mIds, Integer opRoleId,
-            Integer indicatorId) {
+                         Integer indicatorId) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         Integer userId = securityUser.getId();

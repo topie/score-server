@@ -93,8 +93,14 @@ public class HouseRelationship {
     @Column(name = "approval_rules")
     private String approval_rules;//"审批条例适用"
 
+    @Column(name = "approval_index")
+    private String approval_index;//"与第几任妻子/丈夫所生" 范围 1-6
+
+    @Column(name = "approval_spouse")
+    private String approval_spouse;//范围：妻子、丈夫
+
     @Column(name = "approval_which")
-    private String approval_which;//"与第几任妻子/丈夫所生"
+    private String approval_which;//配偶名字
 
     @Column(name = "approval_custody")
     private String approval_custody;//"抚养权归属"
@@ -427,5 +433,21 @@ public class HouseRelationship {
                     return "";
             }
         }
+    }
+
+    public String getApproval_index() {
+        return approval_index;
+    }
+
+    public void setApproval_index(String approval_index) {
+        this.approval_index = approval_index;
+    }
+
+    public String getApproval_spouse() {
+        return approval_spouse;
+    }
+
+    public void setApproval_spouse(String approval_spouse) {
+        this.approval_spouse = approval_spouse;
     }
 }

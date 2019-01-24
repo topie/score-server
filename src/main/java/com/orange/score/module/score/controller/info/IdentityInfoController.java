@@ -8,6 +8,7 @@ import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.excel.ExcelFileUtil;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
+import com.orange.score.common.utils.CollectionUtil;
 import com.orange.score.common.utils.Option;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
@@ -243,7 +244,19 @@ public class IdentityInfoController {
 
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
         Map mMap = new HashMap();
+        Set<Integer> rolesSet = new HashSet<>(roles);
+        //该权限可以查看的所有材料
         for (MaterialInfo materialInfo : materialInfos) {
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
+            if (CollectionUtil.isHaveUnionBySet(rolesSet, materialInfo.getMaterialInfoRoleSet())) {
+                if (materialInfo.getIsUpload() == 1) {
+                    if (roleMidSet.contains(materialInfo.getId())) {
+                        roleMaterialInfoList.add(materialInfo);
+                    }
+                }
+            }
+        }
+       /* for (MaterialInfo materialInfo : materialInfos) {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
             if (roles.contains(3) || roles.contains(4)) {
                 if (materialInfo.getIsUpload() == 1) {
@@ -256,7 +269,7 @@ public class IdentityInfoController {
                     roleMaterialInfoList.add(materialInfo);
                 }
             }
-        }
+        }*/
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
@@ -264,7 +277,7 @@ public class IdentityInfoController {
         criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
-        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+        /*for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roles.contains(3) || roles.contains(4)) {
                 if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId()) && 17 != onlinePersonMaterial
@@ -278,6 +291,13 @@ public class IdentityInfoController {
                         .contains(onlinePersonMaterial.getId())) {
                     roleUploadMaterialList.add(onlinePersonMaterial);
                 }
+            }
+        }*/
+        //用户上传的材料
+        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
             }
         }
         params.put("onlinePersonMaterials", roleUploadMaterialList);
@@ -404,7 +424,19 @@ public class IdentityInfoController {
         List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
         Map mMap = new HashMap();
+        Set<Integer> rolesSet = new HashSet<>(roles);
+        //该权限可以查看的所有材料
         for (MaterialInfo materialInfo : materialInfos) {
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
+            if (CollectionUtil.isHaveUnionBySet(rolesSet, materialInfo.getMaterialInfoRoleSet())) {
+                if (materialInfo.getIsUpload() == 1) {
+                    if (roleMidSet.contains(materialInfo.getId())) {
+                        roleMaterialInfoList.add(materialInfo);
+                    }
+                }
+            }
+        }
+       /* for (MaterialInfo materialInfo : materialInfos) {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
             if (roles.contains(3) || roles.contains(4)) {
                 if (materialInfo.getIsUpload() == 1) {
@@ -417,7 +449,7 @@ public class IdentityInfoController {
                     roleMaterialInfoList.add(materialInfo);
                 }
             }
-        }
+        }*/
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
@@ -425,7 +457,7 @@ public class IdentityInfoController {
         criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
-        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+        /*for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roles.contains(3) || roles.contains(4)) {
                 if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId()) && 17 != onlinePersonMaterial
@@ -439,6 +471,13 @@ public class IdentityInfoController {
                         .contains(onlinePersonMaterial.getId())) {
                     roleUploadMaterialList.add(onlinePersonMaterial);
                 }
+            }
+        }*/
+        //用户上传的材料
+        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
             }
         }
         params.put("onlinePersonMaterials", roleUploadMaterialList);

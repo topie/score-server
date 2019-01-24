@@ -274,17 +274,18 @@ public class MaterialReceiveIdentityInfoController {
         }
         List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
+        Set<Integer> rolesSet = new HashSet<>(roles);
         for (MaterialInfo materialInfo : materialInfoList) {
-            if (roles.contains(3) || roles.contains(4)) {
+            if (CollectionUtil.isHaveUnionBySet(rolesSet, materialInfo.getMaterialInfoRoleSet())) {
                 if (materialInfo.getIsUpload() == 1) {
                     if (roleMidSet.contains(materialInfo.getId())) {
                         roleMaterialInfoList.add(materialInfo);
                     }
                 }
-                //公安单独处理随迁信息
+               /* //公安单独处理随迁信息
                 if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
                     roleMaterialInfoList.add(materialInfo);
-                }
+                }*/
             }
         }
         Condition condition = new Condition(OnlinePersonMaterial.class);
@@ -295,19 +296,20 @@ public class MaterialReceiveIdentityInfoController {
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
 
+
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
-            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-            if (roles.contains(3) || roles.contains(4)) {
-                if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
-                    onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-                    roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-                //公安单独处理随迁信息
-                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17)
+
+            //if (roles.contains(3) || roles.contains(4)) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
+            }
+            //公安单独处理随迁信息
+                /*if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17)
                         .contains(onlinePersonMaterial.getId())) {
                     roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-            }
+                }*/
+            //}
         }
         params.put("onlinePersonMaterials", roleUploadMaterialList);
         for (MaterialInfo materialInfo : roleMaterialInfoList) {
@@ -742,5 +744,4 @@ public class MaterialReceiveIdentityInfoController {
     private static File createTempFile() throws IOException {
         return new File(PropertiesUtil.get("application.properties", "temp.folder") + System.currentTimeMillis());
     }
-
 }

@@ -5,6 +5,7 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
+import com.orange.score.common.utils.CollectionUtil;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.database.core.model.Region;
@@ -99,8 +100,8 @@ public class ScoreRecordController {
     @GetMapping(value = "/scoring")
     @ResponseBody
     public Result scoring(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                          @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                          @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(IdentityInfo.class);
@@ -163,8 +164,8 @@ public class ScoreRecordController {
     @GetMapping(value = "/scoringForRenshe")
     @ResponseBody
     public Result scoringForRenshe(ScoreRecord scoreRecord,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                                   @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                                   @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(IdentityInfo.class);
@@ -215,8 +216,8 @@ public class ScoreRecordController {
     @GetMapping(value = "/scored")
     @ResponseBody
     public Result scored(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                         @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                         @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("acceptAddressId", 2);
@@ -278,8 +279,8 @@ public class ScoreRecordController {
     /*审核打分*/
     @GetMapping("/detailAll")
     public Result detailAll(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId,
-            @RequestParam Integer opRoleId,
-            @RequestParam(value = "view", required = false, defaultValue = "0") Integer view)
+                            @RequestParam Integer opRoleId,
+                            @RequestParam(value = "view", required = false, defaultValue = "0") Integer view)
             throws FileNotFoundException {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
@@ -408,7 +409,7 @@ public class ScoreRecordController {
         }
         List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
-        for (MaterialInfo materialInfo : materialInfoList) {
+       /* for (MaterialInfo materialInfo : materialInfoList) {
             if (roles.contains(3) || roles.contains(4)) {
                 if (materialInfo.getIsUpload() == 1) {
                     if (roleMidSet.contains(materialInfo.getId())) {
@@ -420,6 +421,17 @@ public class ScoreRecordController {
                     roleMaterialInfoList.add(materialInfo);
                 }
             }
+        }*/
+        //该权限可以查看的所有材料
+        Set<Integer> rolesSet = new HashSet<>(roles);
+        for (MaterialInfo materialInfo : materialInfoList) {
+            if (CollectionUtil.isHaveUnionBySet(rolesSet, materialInfo.getMaterialInfoRoleSet())) {
+                if (materialInfo.getIsUpload() == 1) {
+                    if (roleMidSet.contains(materialInfo.getId())) {
+                        roleMaterialInfoList.add(materialInfo);
+                    }
+                }
+            }
         }
         condition = new Condition(OnlinePersonMaterial.class);
         criteria = condition.createCriteria();
@@ -428,7 +440,7 @@ public class ScoreRecordController {
         criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
-        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+       /* for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
             if (roles.contains(3) || roles.contains(4)) {
                 if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
@@ -441,6 +453,13 @@ public class ScoreRecordController {
                         .contains(onlinePersonMaterial.getId())) {
                     roleUploadMaterialList.add(onlinePersonMaterial);
                 }
+            }
+        }*/
+        //用户上传的材料
+        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
             }
         }
         params.put("onlinePersonMaterials", roleUploadMaterialList);
@@ -502,9 +521,9 @@ public class ScoreRecordController {
 
     @PostMapping("/score")
     public Result score(@RequestParam("personId") Integer personId,
-            @RequestParam(value = "sIds", required = false) String[] sIds,
-            @RequestParam(value = "sAns", required = false) String[] sAns,
-            @RequestParam(value = "sDetails", required = false) String[] sDetails) {
+                        @RequestParam(value = "sIds", required = false) String[] sIds,
+                        @RequestParam(value = "sAns", required = false) String[] sAns,
+                        @RequestParam(value = "sDetails", required = false) String[] sDetails) {
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         Integer userId = user.getId();
         if (userId == null) throw new AuthBusinessException("用户未登录");

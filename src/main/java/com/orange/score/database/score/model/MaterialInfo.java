@@ -1,7 +1,10 @@
 package com.orange.score.database.score.model;
 
+import com.orange.score.common.utils.CollectionUtil;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.util.*;
 
 @Table(name = "t_material_info")
 public class MaterialInfo {
@@ -85,6 +88,20 @@ public class MaterialInfo {
         this.sortColumns = sortColumns;
     }
 
+    @Column(name = "materialInfoRole")
+    private String materialInfoRole;
+
+    public String getMaterialInfoRole() {
+        return materialInfoRole;
+    }
+
+    public void setMaterialInfoRole(String materialInfoRole) {
+        this.materialInfoRole = materialInfoRole;
+        if (materialInfoRole != null) {
+            this.materialInfoRoleSet = new HashSet<>(Arrays.asList(CollectionUtil.StringToIntegerArr(materialInfoRole)));
+        }
+    }
+
     /**
      * 材料标题
      */
@@ -115,6 +132,21 @@ public class MaterialInfo {
 
     public void setOnlinePersonMaterial(OnlinePersonMaterial onlinePersonMaterial) {
         this.onlinePersonMaterial = onlinePersonMaterial;
+    }
+
+    //可以查看该材料的权限集合
+    @Transient
+    private Set<Integer> materialInfoRoleSet;
+
+    public Set getMaterialInfoRoleSet() {
+        return materialInfoRoleSet;
+    }
+
+    public void setMaterialInfoRoleSet(Set<Integer> materialInfoRoleSet) {
+        this.materialInfoRoleSet = materialInfoRoleSet;
+        if (materialInfoRoleSet != null) {
+            materialInfoRole = StringUtils.join(materialInfoRoleSet, ",");
+        }
     }
 
     /**
