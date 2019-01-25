@@ -330,6 +330,7 @@ public class MaterialReceiveIdentityInfoController {
         //添加营业执照,只有人社添加
         if (roles.contains(3)) {
             MaterialInfo businessLicenseMaterialInfo = new MaterialInfo();
+            businessLicenseMaterialInfo.setId(-1);
             businessLicenseMaterialInfo.setName("营业执照");
             OnlinePersonMaterial businessLicenseMaterial = new OnlinePersonMaterial();
             businessLicenseMaterial.setMaterialUri(companyInfo.getBusinessLicenseSrc());

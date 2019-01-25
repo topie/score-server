@@ -338,6 +338,9 @@ public class ScoreRecordController {
             companyInfo = new CompanyInfo();
         }
         params.put("company", companyInfo);
+
+
+
         HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
         if (other == null) {
             other = new HouseOther();
@@ -409,6 +412,20 @@ public class ScoreRecordController {
         }
         List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
+
+        //添加营业执照,只有人社添加
+        if (roles.contains(3)) {
+            MaterialInfo businessLicenseMaterialInfo = new MaterialInfo();
+            businessLicenseMaterialInfo.setId(-1);
+            businessLicenseMaterialInfo.setName("营业执照");
+            OnlinePersonMaterial businessLicenseMaterial = new OnlinePersonMaterial();
+            businessLicenseMaterial.setMaterialUri(companyInfo.getBusinessLicenseSrc());
+            businessLicenseMaterial.setId(-1);
+            businessLicenseMaterial.setPersonId(-1);
+            businessLicenseMaterial.setMaterialInfoName("营业执照");
+            businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
+            roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
+        }
        /* for (MaterialInfo materialInfo : materialInfoList) {
             if (roles.contains(3) || roles.contains(4)) {
                 if (materialInfo.getIsUpload() == 1) {

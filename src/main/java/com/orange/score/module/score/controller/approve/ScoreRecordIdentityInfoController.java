@@ -303,6 +303,9 @@ public class ScoreRecordIdentityInfoController {
             companyInfo = new CompanyInfo();
         }
         params.put("company", companyInfo);
+
+
+
         HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
         if (other == null) {
             other = new HouseOther();
@@ -325,6 +328,8 @@ public class ScoreRecordIdentityInfoController {
         if (CollectionUtils.isEmpty(relationshipList)) {
             relationshipList = new ArrayList<>();
         }
+
+
         params.put("relation", relationshipList);
         condition = new Condition(Region.class);
         criteria = condition.createCriteria();
@@ -388,6 +393,20 @@ public class ScoreRecordIdentityInfoController {
                 }
             }
         }*/
+
+        //添加营业执照,只有人社添加
+        if (roles.contains(3)) {
+            MaterialInfo businessLicenseMaterialInfo = new MaterialInfo();
+            businessLicenseMaterialInfo.setId(-1);
+            businessLicenseMaterialInfo.setName("营业执照");
+            OnlinePersonMaterial businessLicenseMaterial = new OnlinePersonMaterial();
+            businessLicenseMaterial.setMaterialUri(companyInfo.getBusinessLicenseSrc());
+            businessLicenseMaterial.setId(-1);
+            businessLicenseMaterial.setPersonId(-1);
+            businessLicenseMaterial.setMaterialInfoName("营业执照");
+            businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
+            roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
+        }
 
         //该权限可以查看的所有材料
         Set<Integer> rolesSet = new HashSet<>(roles);
