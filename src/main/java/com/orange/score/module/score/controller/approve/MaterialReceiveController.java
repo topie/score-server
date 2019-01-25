@@ -269,7 +269,9 @@ public class MaterialReceiveController {
                 }
             }
         }
-        List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
+        Condition condition = new Condition(MaterialInfo.class);
+        condition.setOrderByClause("sortColumns");
+        List<MaterialInfo> materialInfoList = iMaterialInfoService.findByCondition(condition);
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
         /*for (MaterialInfo materialInfo : materialInfoList) {
             if (roles.contains(3) || roles.contains(4)) {
@@ -295,7 +297,7 @@ public class MaterialReceiveController {
                 }
             }
         }
-        Condition condition = new Condition(OnlinePersonMaterial.class);
+        condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());

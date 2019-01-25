@@ -240,8 +240,10 @@ public class IdentityInfoController {
                 }
             }
         }
-        List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
 
+        Condition condition = new Condition(MaterialInfo.class);
+        condition.setOrderByClause("sortColumns");
+        List<MaterialInfo> materialInfos = iMaterialInfoService.findByCondition(condition);
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
         Map mMap = new HashMap();
         Set<Integer> rolesSet = new HashSet<>(roles);
@@ -270,7 +272,7 @@ public class IdentityInfoController {
                 }
             }
         }*/
-        Condition condition = new Condition(OnlinePersonMaterial.class);
+        condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
         criteria.andEqualTo("batchId", person.getBatchId());

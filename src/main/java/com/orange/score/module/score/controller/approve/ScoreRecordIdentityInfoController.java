@@ -377,7 +377,9 @@ public class ScoreRecordIdentityInfoController {
             List<Integer> iIds = iIndicatorService.selectBindMaterialIds(itemId);
             roleMidSet.addAll(iIds);
         }
-        List<MaterialInfo> materialInfoList = iMaterialInfoService.findAll();
+        condition = new Condition(MaterialInfo.class);
+        condition.setOrderByClause("sortColumns");
+        List<MaterialInfo> materialInfoList = iMaterialInfoService.findByCondition(condition);
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
 
        /* for (MaterialInfo materialInfo : materialInfoList) {
