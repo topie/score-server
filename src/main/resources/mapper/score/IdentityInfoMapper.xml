@@ -224,21 +224,34 @@
         select t2.person_id_num,
         t2.person_name,
         t2.score_value,
-        case when t1.sex = 1 then '男' when t1.sex = 2 then '女' end SEX
-        ,
+        case
+        when t1.sex = 1 then
+        '男'
+        when t1.sex = 2 then
+        '女'
+        end  SEX,
         t1.accept_address,
         t1.LUOHU_NUMBER,
-        tof.name                                                   registration,
-        tr.name                                                    areaname,
+        tof.name registration,
+        tr.name  areaname,
         tm.address,
         tm.witness,
         tm.witness_phone,
-        tm.witness_address
+        tm.witness_address,
+        tp.operator,
+        tp.operator_mobile,
+        tp.operator2,
+        tp.operator_obile2,
+        th.self_phone,
+        th.company_phone
         from t_identity_info t1,
-        (
-        select a.person_id_num,max(a.person_name) person_name,round(nvl(sum(a.SCORE), 0), 2) score_value
-        from (
-        select t.PERSON_NAME, t.OP_ROLE,t.person_id_num,t.score_value as score
+        (select a.person_id_num,
+        max(a.person_name)             person_name,
+        round(nvl(sum(a.SCORE), 0), 2) score_value
+        from (select t.PERSON_NAME,
+        t.OP_ROLE,
+        t.person_id_num,
+        t.score_value as score
         from t_pb_score_record t
         where t.indicator_id != 3
         and t.indicator_id != 14
@@ -260,19 +273,22 @@
         from t_pb_score_record t
         where t.indicator_id = 14
         and t.batch_id = #{item.batchId}
-        group by t.person_id_num
-        ) a
-        group by a.person_id_num
-        ) t2,
+        group by t.person_id_num) a
+        group by a.person_id_num) t2,
         t_house_move tm,
         t_office tof,
-        t_region tr
+        t_region tr,
+        t_company_info tp,
+        t_house_other th
         where t1.id_number = t2.person_id_num
         and t1.hall_status = 6
         and t1.id = tm.identity_info_id
         and tm.registered_region = tof.id
         and tm.region = tr.id
-        and t2.score_value &gt;= #{item.scoreValue}
+        and t1.company_id = tp.id
+        and t1.id = th.identity_info_id
+        and t2.score_value &gt;
+        = #{item.scoreValue}
         order by t2.score_value desc
     </select>
 
