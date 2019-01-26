@@ -289,6 +289,7 @@
                                 <tr class="info">
                                     <th>预览</th>
                                     <th class="text-info">材料名称</th>
+                                    <th class="text-info">失败原因</th>
                                 </tr>
                                 <#list materialInfos as item>
                                     <#if item.onlinePersonMaterial??>
@@ -298,6 +299,7 @@
                                                 未上传
                                             </td>
                                             <td>${item.name}</td>
+                                            <td></td>
                                         </tr>
                                         <#else>
                                         <tr>
@@ -315,6 +317,7 @@
                                                     下载
                                                 </a>
                                             </td>
+                                            <td>${item.onlinePersonMaterial.reason}</td>
                                         </tr>
                                         </#if>
                                     <#else>
@@ -323,6 +326,7 @@
                                                 未上传
                                             </td>
                                             <td>${item.name}</td>
+                                            <td></td>
                                         </tr>
                                     </#if>
                                 </#list>
