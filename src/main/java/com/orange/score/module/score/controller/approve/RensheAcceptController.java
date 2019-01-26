@@ -326,13 +326,17 @@ public class RensheAcceptController {
                 List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
                 if (materials.size() > 0) {
                     OnlinePersonMaterial onlinePersonMaterial = materials.get(0);
-                    onlinePersonMaterial.setReason(reason);
+                    if(StringUtils.isNotEmpty(onlinePersonMaterial.getReason())){
+                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason()+"<br/>"+"人社受理审核："+reason);
+                    }else {
+                        onlinePersonMaterial.setReason("人社受理审核："+reason);
+                    }
                     onlinePersonMaterial.setStatus(1);
                     iOnlinePersonMaterialService.update(onlinePersonMaterial);
                 } else {
                     OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
                     onlinePersonMaterial.setMaterialInfoId(mId);
-                    onlinePersonMaterial.setReason(reason);
+                    onlinePersonMaterial.setReason("人社受理审核："+reason);
                     onlinePersonMaterial.setStatus(1);
                     onlinePersonMaterial.setcTime(new Date());
                     onlinePersonMaterial.setPersonId(identityInfo.getId());

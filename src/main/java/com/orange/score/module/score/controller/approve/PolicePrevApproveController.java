@@ -288,13 +288,17 @@ public class PolicePrevApproveController {
                 List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
                 if (materials.size() > 0) {
                     OnlinePersonMaterial onlinePersonMaterial = materials.get(0);
-                    onlinePersonMaterial.setReason(reason);
+                    if(StringUtils.isNotEmpty(onlinePersonMaterial.getReason())){
+                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason()+"<br/>"+"公安预审："+reason);
+                    }else {
+                        onlinePersonMaterial.setReason("公安预审："+reason);
+                    }
                     onlinePersonMaterial.setStatus(1);
                     iOnlinePersonMaterialService.update(onlinePersonMaterial);
                 } else {
                     OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
                     onlinePersonMaterial.setMaterialInfoId(mId);
-                    onlinePersonMaterial.setReason(reason);
+                    onlinePersonMaterial.setReason("公安预审："+reason);
                     onlinePersonMaterial.setStatus(1);
                     onlinePersonMaterial.setcTime(new Date());
                     onlinePersonMaterial.setPersonId(identityInfo.getId());
