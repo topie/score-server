@@ -286,19 +286,22 @@ public class PolicePrevApproveController {
                 criteria.andNotEqualTo("status", 2);
                 condition.orderBy("id").desc();
                 List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                String strDate = sdf.format(date);
                 if (materials.size() > 0) {
                     OnlinePersonMaterial onlinePersonMaterial = materials.get(0);
                     if(StringUtils.isNotEmpty(onlinePersonMaterial.getReason())){
-                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason()+"<br/>"+"公安预审："+reason);
+                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason()+"<br/>"+strDate+"-公安预审："+reason);
                     }else {
-                        onlinePersonMaterial.setReason("公安预审："+reason);
+                        onlinePersonMaterial.setReason(strDate+"-公安预审："+reason);
                     }
                     onlinePersonMaterial.setStatus(1);
                     iOnlinePersonMaterialService.update(onlinePersonMaterial);
                 } else {
                     OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
                     onlinePersonMaterial.setMaterialInfoId(mId);
-                    onlinePersonMaterial.setReason("公安预审："+reason);
+                    onlinePersonMaterial.setReason(strDate+"公安预审："+reason);
                     onlinePersonMaterial.setStatus(1);
                     onlinePersonMaterial.setcTime(new Date());
                     onlinePersonMaterial.setPersonId(identityInfo.getId());

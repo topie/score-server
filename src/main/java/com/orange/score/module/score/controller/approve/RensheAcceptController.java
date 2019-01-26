@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -324,19 +325,22 @@ public class RensheAcceptController {
                 criteria.andNotEqualTo("status", 2);
                 condition.orderBy("id").desc();
                 List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                String strDate = sdf.format(date);
                 if (materials.size() > 0) {
                     OnlinePersonMaterial onlinePersonMaterial = materials.get(0);
                     if(StringUtils.isNotEmpty(onlinePersonMaterial.getReason())){
-                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason()+"<br/>"+"人社受理审核："+reason);
+                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason()+"<br/>"+strDate+"-人社受理审核："+reason);
                     }else {
-                        onlinePersonMaterial.setReason("人社受理审核："+reason);
+                        onlinePersonMaterial.setReason(strDate+"-人社受理审核："+reason);
                     }
                     onlinePersonMaterial.setStatus(1);
                     iOnlinePersonMaterialService.update(onlinePersonMaterial);
                 } else {
                     OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
                     onlinePersonMaterial.setMaterialInfoId(mId);
-                    onlinePersonMaterial.setReason("人社受理审核："+reason);
+                    onlinePersonMaterial.setReason(strDate+"-人社受理审核："+reason);
                     onlinePersonMaterial.setStatus(1);
                     onlinePersonMaterial.setcTime(new Date());
                     onlinePersonMaterial.setPersonId(identityInfo.getId());
