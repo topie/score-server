@@ -1,5 +1,7 @@
 package com.orange.score.module.score.controller.approve;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
@@ -36,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -95,6 +98,9 @@ public class MaterialReceiveIdentityInfoController {
 
     @Autowired
     private IBatchConfService iBatchConfService;
+
+    @Autowired
+    private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
 
     @Value("${upload.folder}")
     private String uploadPath;
@@ -156,12 +162,25 @@ public class MaterialReceiveIdentityInfoController {
                 }
             }
         }
+
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
-        for (ScoreRecord record : pageInfo.getList()) {
+        IdentityInfo identityInfo;
+        Set<Integer> rolesSet = new HashSet<>(roles);
+        Iterator<ScoreRecord> it = pageInfo.getList().iterator();
+        while (it.hasNext()) {
+            ScoreRecord record = it.next();
             if (roles.contains(4) || roles.contains(6)) {
                 record.setEdit(1);
             }
+            identityInfo = iIdentityInfoService.findById(record.getPersonId());
+            //如果被该部门驳回，就删除该申请人
+            if (identityInfo.getMaterialStatus() != null && identityInfo.getMaterialStatus() == 1) {
+                if (CollectionUtil.isHaveUnionBySet(rolesSet, identityInfo.getOpuser6RoleSet())) {
+                    it.remove();
+                }
+            }
         }
+
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -219,6 +238,7 @@ public class MaterialReceiveIdentityInfoController {
                 }
             }
         }
+
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
         for (ScoreRecord record : pageInfo.getList()) {
             if (roles.contains(4) || roles.contains(6)) {
@@ -468,6 +488,71 @@ public class MaterialReceiveIdentityInfoController {
             scoreRecord.setSubmitDate(new Date());
             iScoreRecordService.update(scoreRecord);
         }
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/supply")
+    public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (!"[]".equals(supplyArr)) {
+            IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+            if (identityInfo != null) {
+                identityInfo.setMaterialStatus(1);
+                identityInfo.setOpuser5(securityUser.getDisplayName());
+                Set<Integer> set = identityInfo.getOpuser6RoleSet();
+                if (set != null) {
+                    set.addAll(userService.findUserDepartmentRoleByUserId(securityUser.getId()));
+                } else {
+                    identityInfo.setOpuser6RoleSet(new HashSet<>(userService.findUserDepartmentRoleByUserId(securityUser.getId())));
+                }
+                iIdentityInfoService.update(identityInfo);
+                iPersonBatchStatusRecordService
+                        .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4);
+            } else {
+                return ResponseUtil.error("申请人不存在！");
+            }
+            JSONArray jsonArray = JSONArray.parseArray(supplyArr);
+            for (Object o : jsonArray) {
+                Integer mId = ((JSONObject) o).getInteger("id");
+                String reason = ((JSONObject) o).getString("reason");
+                Condition condition = new Condition(OnlinePersonMaterial.class);
+                tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+                criteria.andEqualTo("materialInfoId", mId);
+                criteria.andEqualTo("personId", identityInfo.getId());
+                criteria.andNotEqualTo("status", 2);
+                condition.orderBy("id").desc();
+                List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                String strDate = sdf.format(date);
+                if (materials.size() > 0) {
+                    OnlinePersonMaterial onlinePersonMaterial = materials.get(0);
+                    if (StringUtils.isNotEmpty(onlinePersonMaterial.getReason())) {
+                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason() + "<br/>" + strDate + "：" + reason);
+                    } else {
+                        onlinePersonMaterial.setReason(strDate + "：" + reason);
+                    }
+
+                    onlinePersonMaterial.setStatus(1);
+                    iOnlinePersonMaterialService.update(onlinePersonMaterial);
+                } else {
+                    OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
+                    onlinePersonMaterial.setMaterialInfoId(mId);
+                    onlinePersonMaterial.setReason(strDate + "：" + reason);
+                    onlinePersonMaterial.setStatus(1);
+                    onlinePersonMaterial.setcTime(new Date());
+                    onlinePersonMaterial.setPersonId(identityInfo.getId());
+                    onlinePersonMaterial.setBatchId(identityInfo.getBatchId());
+                    iOnlinePersonMaterialService.save(onlinePersonMaterial);
+                }
+            }
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料未通过居住证积分网上预审，请根据提示尽快补正材料。");
+        } else {
+            return ResponseUtil.error("没有勾选待补正材料！");
+        }
+
         return ResponseUtil.success();
     }
 

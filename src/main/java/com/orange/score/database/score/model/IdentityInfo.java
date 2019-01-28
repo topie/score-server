@@ -1,11 +1,16 @@
 package com.orange.score.database.score.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.orange.score.common.utils.CollectionUtil;
 import com.orange.score.common.utils.date.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Table(name = "t_identity_info")
 public class IdentityInfo {
@@ -260,6 +265,32 @@ public class IdentityInfo {
     @Column(name = "lock_user_2")
     private String lockUser2;
 
+    @Column(name = "materialStatus")
+    private Integer materialStatus;//"材料送达补正状态"
+
+    public Integer getMaterialStatus() {
+        return materialStatus;
+    }
+
+    public void setMaterialStatus(Integer materialStatus) {
+        this.materialStatus = materialStatus;
+    }
+
+    //驳回材料部门的集合
+    @Transient
+    private Set<Integer> opuser6RoleSet;
+
+    public Set<Integer> getOpuser6RoleSet() {
+        return opuser6RoleSet;
+    }
+
+    public void setOpuser6RoleSet(Set<Integer> opuser6RoleSet) {
+        this.opuser6RoleSet = opuser6RoleSet;
+        if (opuser6RoleSet != null) {
+            opuser6 = StringUtils.join(opuser6RoleSet, ",");
+        }
+    }
+
     @Transient
     private Integer companyWarning = 0;
 
@@ -413,6 +444,9 @@ public class IdentityInfo {
 
     public void setOpuser6(String opuser6) {
         this.opuser6 = opuser6;
+        if (StringUtils.isNotEmpty(opuser6)) {
+            this.opuser6RoleSet = new HashSet<>(Arrays.asList(CollectionUtil.StringToIntegerArr(opuser6)));
+        }
     }
 
     public Date getRensheAcceptSupplyEt() {
