@@ -42,6 +42,9 @@ public class ScoreTask {
     @Autowired
     private IScoreRecordService iScoreRecordService;
 
+    @Autowired
+    private ICompanyInfoService iCompanyInfoService;
+
 
     @Scheduled(cron = "3 0 0 * * ? ")
     public void batchStartTask() {
@@ -257,6 +260,41 @@ public class ScoreTask {
         }
 
 
+
+    }
+
+
+    /*
+    2019年1月28日
+    添加定时任务：每一期的积分开办时，申请人可以重新修改一次经办人的信息；
+     */
+    //@Scheduled(cron = "20 0 0 * * ? ")  //每天凌晨执行此任务
+    @Scheduled(cron = "20 0 0 * * ? ") // 没两分钟执行一次
+    public void limitedChangeOperater(){
+        /*
+        1、选取正在开办的一期居住证积分；
+        2、若有积分批次，获得关闭登录时间、重新打开登录时间，在此期间执行定时任务；把修改次数改为1；
+           若无，不执行任务;
+        3、把status 状态变为0
+         */
+        Condition condition = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("status", 1);
+        Date today = DateUtil.getToday();
+        criteria.andLessThanOrEqualTo("closeLoginTime",today);//大于关闭时间
+        criteria.andGreaterThanOrEqualTo("openLoginTime",today);//小于再次打开时间
+        List<BatchConf> list = iBatchConfService.findByCondition(condition);
+
+        if(list.size()>0){
+            Condition condition2 = new Condition(CompanyInfo.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria2 = condition2.createCriteria();
+            List<CompanyInfo> list2 = iCompanyInfoService.findByCondition(condition2);
+
+            for (CompanyInfo companyInfo : list2){
+                companyInfo.setStatus(0);
+                iCompanyInfoService.update(companyInfo);
+            }
+        }
 
     }
 
