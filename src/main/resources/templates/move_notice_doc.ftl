@@ -392,16 +392,16 @@
             </td>
             <td class="td9" colspan="3">
                 <p class="p5">
-                    <#list officeList1 as it>
-                        <#if it.id==move.registeredOffice>
-                            ${it.name}
-                        </#if>
-                    </#list>
+                <#list officeList1 as it>
+                    <#if it.id==move.registeredOffice>
+                    ${it.name}
+                    </#if>
+                </#list>
                     <#list officeList2 as it>
-                        <#if it.id==move.registeredRegion>
-                            ${it.name}
-                        </#if>
-                    </#list>
+                    <#if it.id==move.registeredRegion>
+                    ${it.name}
+                    </#if>
+                </#list>
                 </p>
             </td>
         </tr>
@@ -498,7 +498,8 @@
             </td>
             <td class="td20">
                 <p class="p5">
-                    <span class="s2"><#if ritem.isRemove == 1>是<#else>否</#if></strong></span>
+                    <span class="s2"><#if ritem.isRemove == 1>是</#if>
+                        <#if ritem.isRemove == 2>否</#if></strong></span>
                 </p>
             </td>
         </tr>

@@ -81,7 +81,13 @@
 
     </select>
     <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIds" resultMap="BaseResultMap">
-        select indicator_id,op_role_id,max(op_role) op_role,max(status) status,max(id) id from t_pb_score_record
+        select indicator_id,
+        op_role_id,
+        max(op_role) op_role,
+        max(status) status,
+        max(id) id,
+        max(SCORE_DETAIL) SCORE_DETAIL
+        from t_pb_score_record
         where person_id=#{identityInfoId} and op_role_id in
         <foreach item="item" collection="roles" open="(" separator="," close=")">
             #{item}
@@ -102,42 +108,45 @@
         group by indicator_id,op_role_id
         order by indicator_id
     </select>
-    
+
     <select id="provideDataToPolice" resultMap="BaseResultMap">
         select t2.person_id_num,t1.id,t2.person_name,t2.score_value from t_identity_info t1,
-                (
-                select a.person_id_num,max(a.person_name) person_name,round(nvl(sum(a.SCORE), 0),2) score_value
-                from
-                (
-                select t.PERSON_NAME, t.OP_ROLE,t.person_id_num,t.score_value as score from t_pb_score_record t where t.indicator_id!=3 and t.indicator_id!=14
-                 /*and batch_id = 1011*/
+        (
+        select a.person_id_num,max(a.person_name) person_name,round(nvl(sum(a.SCORE), 0),2) score_value
+        from
+        (
+        select t.PERSON_NAME, t.OP_ROLE,t.person_id_num,t.score_value as score from t_pb_score_record t where
+        t.indicator_id!=3 and t.indicator_id!=14
+        /*and batch_id = 1011*/
 
-                    <if test="item.id!=null">
-                        and batch_id = #{item.id}
-                    </if>
-                       union all
-                select max(t.PERSON_NAME) PERSON_NAME, max(t.OP_ROLE) OP_ROLE, t.person_id_num, max(t.score_value) as score from t_pb_score_record t where t.indicator_id=3
-                  /*and t.batch_id = 1011*/
-                    <if test="item.id!=null">
-                        and t.batch_id  = #{item.id}
-                    </if>
-                    group by t.person_id_num
-                       union all
-                select max(t.PERSON_NAME) PERSON_NAME, max(t.OP_ROLE) OP_ROLE, t.person_id_num, decode(sum(t.score_value),20,10,0) as score  from t_pb_score_record t where t.indicator_id=14
+        <if test="item.id!=null">
+            and batch_id = #{item.id}
+        </if>
+        union all
+        select max(t.PERSON_NAME) PERSON_NAME, max(t.OP_ROLE) OP_ROLE, t.person_id_num, max(t.score_value) as score from
+        t_pb_score_record t where t.indicator_id=3
+        /*and t.batch_id = 1011*/
+        <if test="item.id!=null">
+            and t.batch_id = #{item.id}
+        </if>
+        group by t.person_id_num
+        union all
+        select max(t.PERSON_NAME) PERSON_NAME, max(t.OP_ROLE) OP_ROLE, t.person_id_num,
+        decode(sum(t.score_value),20,10,0) as score from t_pb_score_record t where t.indicator_id=14
         /*and t.batch_id = 1011 */
-                    <if test="item.id!=null">
-                        and t.batch_id  = #{item.id}
-                    </if>
-                      group by t.person_id_num
-                ) a
-                group by a.person_id_num
-                ) t2
-            where t1.id_number = t2.person_id_num and t1.hall_status=6
-        /*and  t2.score_value>=146*/
+        <if test="item.id!=null">
+            and t.batch_id = #{item.id}
+        </if>
+        group by t.person_id_num
+        ) a
+        group by a.person_id_num
+        ) t2
+        where t1.id_number = t2.person_id_num and t1.hall_status=6
+        /*and t2.score_value>=146*/
 
-                <if test="item.scoreValue!=null">
-                    and t2.score_value  >= #{item.scoreValue}
-                </if>
-             order by t2.score_value desc
+        <if test="item.scoreValue!=null">
+            and t2.score_value >= #{item.scoreValue}
+        </if>
+        order by t2.score_value desc
     </select>
 </mapper>

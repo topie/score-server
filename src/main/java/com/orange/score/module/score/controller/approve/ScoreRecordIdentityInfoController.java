@@ -242,6 +242,11 @@ public class ScoreRecordIdentityInfoController {
             if (indicator == null) {
                 continue;
             }
+
+            String scoreDetail = scoreRecord.getScoreDetail();
+            if (StringUtils.isNotEmpty(scoreDetail)) {
+                indicator.setNote(scoreDetail);
+            }
             msMap.put("indicator", indicator);
             Condition condition = new Condition(IndicatorItem.class);
             tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
@@ -303,7 +308,6 @@ public class ScoreRecordIdentityInfoController {
             companyInfo = new CompanyInfo();
         }
         params.put("company", companyInfo);
-
 
 
         HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
@@ -382,20 +386,6 @@ public class ScoreRecordIdentityInfoController {
         List<MaterialInfo> materialInfoList = iMaterialInfoService.findByCondition(condition);
         List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
 
-       /* for (MaterialInfo materialInfo : materialInfoList) {
-            if (roles.contains(3) || roles.contains(4)) {
-                if (materialInfo.getIsUpload() == 1) {
-                    if (roleMidSet.contains(materialInfo.getId())) {
-                        roleMaterialInfoList.add(materialInfo);
-                    }
-                }
-                //公安单独处理随迁信息
-                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
-                    roleMaterialInfoList.add(materialInfo);
-                }
-            }
-        }*/
-
         //添加营业执照,只有人社添加
         if (roles.contains(3)) {
             MaterialInfo businessLicenseMaterialInfo = new MaterialInfo();
@@ -429,21 +419,6 @@ public class ScoreRecordIdentityInfoController {
         criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
-        /*for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
-            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-            if (roles.contains(3) || roles.contains(4)) {
-                if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
-                    onlinePersonMaterial
-                            .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-                    roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-                //公安单独处理随迁信息
-                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17)
-                        .contains(onlinePersonMaterial.getId())) {
-                    roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-            }
-        }*/
         //用户上传的材料
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {

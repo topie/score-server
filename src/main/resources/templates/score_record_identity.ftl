@@ -298,7 +298,8 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="garyB">是否随迁:</td>
-                                                    <td><#if ritem.isRemove == 1>是<#else>否</#if></td>
+                                                    <td><#if ritem.isRemove == 1>是</#if>
+                                                        <#if ritem.isRemove == 2>否</#if></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="garyB">配偶婚姻状况:</td>
@@ -342,7 +343,8 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="garyB">是否随迁:</td>
-                                                    <td><#if ritem.isRemove == 1>是<#else>否</#if></td>
+                                                    <td><#if ritem.isRemove == 1>是</#if>
+                                                        <#if ritem.isRemove == 2>否</#if></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="garyB">曾用名:</td>
@@ -491,7 +493,7 @@
                                 <tr>
                                     <#if item.indicator.id==1003 && view!=1>
                                         <td class="check_desc" colspan="5">
-                                            <div class="text-info">取消资格说明：</div>
+                                            <div class="text-info">审核打分说明：</div>
                                             <textarea d-name="reason" d-roleId="${item.roleId?c}"
                                                       class="form-control"
                                                       d-indicator="${item.indicator.id?c}" rows="3"></textarea>

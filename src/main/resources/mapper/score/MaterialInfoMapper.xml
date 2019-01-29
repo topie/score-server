@@ -15,10 +15,10 @@
         <result column="template_img" jdbcType="VARCHAR" property="templateImg"/>
     </resultMap>
     <select id="selectMaterialTreeNodes" resultType="com.orange.score.common.utils.TreeNode">
-      select id,name,0 pId from t_material_info
+        select id,name,0 pId from t_material_info order by SORTCOLUMNS
     </select>
     <select id="findByIndicatorId" resultMap="BaseResultMap">
-      select m.* from t_material_info m inner join t_relate_indicator_material r on m.id = r.material_id
-      where r.indicator_id=#{indicatorId}
+        select m.* from t_material_info m inner join t_relate_indicator_material r on m.id = r.material_id
+        where r.indicator_id=#{indicatorId}
     </select>
 </mapper>
