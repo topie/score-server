@@ -33,6 +33,18 @@ public class CmsModule {
     @Column(name = "c_time")
     private Date cTime;
 
+    //排序
+    @Column(name = "sortcolumns")
+    private String sortcolumns;
+
+    public String getSortcolumns() {
+        return sortcolumns;
+    }
+
+    public void setSortcolumns(String sortcolumns) {
+        this.sortcolumns = sortcolumns;
+    }
+
     /**
      * 内容
      */
