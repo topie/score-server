@@ -269,7 +269,7 @@ public class ScoreTask {
     添加定时任务：每一期的积分开办时，申请人可以重新修改一次经办人的信息；
      */
     //@Scheduled(cron = "20 0 0 * * ? ")  //每天凌晨执行此任务
-    @Scheduled(cron = "20 0 0 * * ? ") // 没两分钟执行一次
+    //@Scheduled(cron = "20 0 0 * * ? ") // 没两分钟执行一次
     public void limitedChangeOperater(){
         /*
         1、选取正在开办的一期居住证积分；
