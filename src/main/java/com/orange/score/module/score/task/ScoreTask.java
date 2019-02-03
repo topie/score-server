@@ -147,7 +147,7 @@ public class ScoreTask {
      * 确认自动接收材料、自动打分功能的应用场景：
      * 在人社受理审核通过的第4个工作日，市教委、市税务、市知识产权局、民政、住建委自动接收材料并打分为0；
      */
-    @Scheduled(cron = "20 0 0 * * ? ")
+    //@Scheduled(cron = "20 0 0 * * ? ")
     public void autoAcceptMaterialAndMark(){
         /*
         步骤
@@ -269,7 +269,7 @@ public class ScoreTask {
     添加定时任务：每一期的积分开办时，申请人可以重新修改一次经办人的信息；
      */
     //@Scheduled(cron = "20 0 0 * * ? ")  //每天凌晨执行此任务
-    //@Scheduled(cron = "20 0 0 * * ? ") // 没两分钟执行一次
+    @Scheduled(cron = "20 0 0 * * ? ") // 
     public void limitedChangeOperater(){
         /*
         1、选取正在开办的一期居住证积分；
