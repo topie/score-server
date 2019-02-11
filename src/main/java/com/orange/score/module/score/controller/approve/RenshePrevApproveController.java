@@ -84,8 +84,8 @@ public class RenshePrevApproveController {
     @GetMapping(value = "/approving")
     @ResponseBody
     public Result approving(IdentityInfo identityInfo,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         if (identityInfo.getBatchId() == null) {
@@ -135,8 +135,8 @@ public class RenshePrevApproveController {
     @GetMapping(value = "/approved")
     @ResponseBody
     public Result approved(IdentityInfo identityInfo,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         if (identityInfo.getBatchId() == null) {
@@ -166,8 +166,8 @@ public class RenshePrevApproveController {
     @GetMapping(value = "/rejected")
     @ResponseBody
     public Result rejected(IdentityInfo identityInfo,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         if (identityInfo.getBatchId() == null) {
@@ -197,8 +197,8 @@ public class RenshePrevApproveController {
     @GetMapping(value = "/supply")
     @ResponseBody
     public Result supply(IdentityInfo identityInfo,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                         @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                         @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         if (identityInfo.getBatchId() == null) {
@@ -285,8 +285,8 @@ public class RenshePrevApproveController {
 
     @PostMapping("/disAgree")
     public Result disAgree(@RequestParam Integer id,
-            @RequestParam(value = "reasonType", required = false, defaultValue = "其它") String reasonType,
-            @RequestParam(value = "rejectReason", required = false, defaultValue = "") String rejectReason)
+                           @RequestParam(value = "reasonType", required = false, defaultValue = "其它") String reasonType,
+                           @RequestParam(value = "rejectReason", required = false, defaultValue = "") String rejectReason)
             throws IOException {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
@@ -362,7 +362,7 @@ public class RenshePrevApproveController {
                 condition.orderBy("id").desc();
                 List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
                 Date date = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 String strDate = sdf.format(date);
                 if (materials.size() > 0) {
                     OnlinePersonMaterial onlinePersonMaterial = materials.get(0);

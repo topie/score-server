@@ -37,9 +37,9 @@ public class StatExportController {
     @GetMapping(value = "/list1")
     @ResponseBody
     public Result list1(@RequestParam("batchId") Integer batchId,
-            @RequestParam(value = "idNumber", required = false) String idNumber,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                        @RequestParam(value = "idNumber", required = false) String idNumber,
+                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Map argMap = new HashMap();
         argMap.put("batchId", batchId);
         if (StringUtils.isNotEmpty(idNumber)) {
@@ -52,8 +52,8 @@ public class StatExportController {
     @GetMapping(value = "/export1")
     @ResponseBody
     public void export1(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("batchId") Integer batchId,
-            @RequestParam(value = "idNumber", required = false) String idNumber) throws Exception {
+                        @RequestParam("batchId") Integer batchId,
+                        @RequestParam(value = "idNumber", required = false) String idNumber) throws Exception {
         Map argMap = new HashMap();
         argMap.put("batchId", batchId);
         if (StringUtils.isNotEmpty(idNumber)) {
@@ -63,20 +63,20 @@ public class StatExportController {
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[] { "受理编号", "身份证号", "姓名", "受理日期", "性别", "文化程度", "现有职业资格", "工种", "单位名称", "单位电话", "本人电话",
-                        "证书编号", "发证机关", "发证日期" },
-                new String[] { "ACCEPT_NUMBER", "ID_NUMBER", "NAME", "RESERVATION_DATE", "SEX", "CULTURE_DEGREE",
+                new String[]{"受理编号", "身份证号", "姓名", "受理日期", "性别", "文化程度", "现有职业资格", "工种", "单位名称", "单位电话", "本人电话",
+                        "证书编号", "发证机关", "发证日期"},
+                new String[]{"ACCEPT_NUMBER", "ID_NUMBER", "NAME", "RESERVATION_DATE", "SEX", "CULTURE_DEGREE",
                         "PROFESSION_TYPE", "JOB_TYPE", "COMPANY_NAME", "COMPANY_MOBILE", "SELF_PHONE",
-                        "CERTIFICATE_CODE", "ISSUING_AUTHORITY", "ISSUING_DATE" });
+                        "CERTIFICATE_CODE", "ISSUING_AUTHORITY", "ISSUING_DATE"});
         ExcelFileUtil.download(response, savePath, "列表1.xlsx");
     }
 
     @GetMapping(value = "/list2")
     @ResponseBody
     public Result list2(@RequestParam("batchId") Integer batchId,
-            @RequestParam(value = "idNumber", required = false) String idNumber,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                        @RequestParam(value = "idNumber", required = false) String idNumber,
+                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Map argMap = new HashMap();
         argMap.put("batchId", batchId);
         if (StringUtils.isNotEmpty(idNumber)) {
@@ -89,8 +89,8 @@ public class StatExportController {
     @GetMapping(value = "/export2")
     @ResponseBody
     public void export2(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("batchId") Integer batchId,
-            @RequestParam(value = "idNumber", required = false) String idNumber) throws Exception {
+                        @RequestParam("batchId") Integer batchId,
+                        @RequestParam(value = "idNumber", required = false) String idNumber) throws Exception {
         Map argMap = new HashMap();
         argMap.put("batchId", batchId);
         if (StringUtils.isNotEmpty(idNumber)) {
@@ -100,22 +100,22 @@ public class StatExportController {
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[] { "受理编号", "申请人类型", "姓名", "身份证号", "职业资格", "工种", "专业", "拟落户地区", "户口所在地" },
-                new String[] { "ACCEPT_NUMBER", "APPLICANT_TYPE", "NAME", "ID_NUMBER", "PROFESSION_TYPE", "JOB_TYPE",
-                        "PROFESSION", "REGION", "MOVE_REGISTERED_OFFICE" });
+                new String[]{"受理编号", "申请人类型", "姓名", "身份证号", "职业资格", "工种", "专业", "拟落户地区", "户口所在地"},
+                new String[]{"ACCEPT_NUMBER", "APPLICANT_TYPE", "NAME", "ID_NUMBER", "PROFESSION_TYPE", "JOB_TYPE",
+                        "PROFESSION", "REGION", "MOVE_REGISTERED_OFFICE"});
         ExcelFileUtil.download(response, savePath, "列表2.xlsx");
     }
 
     @GetMapping(value = "/list3")
     @ResponseBody
     public Result list3(@RequestParam(value = "period", required = false) String period,
-            @RequestParam(value = "personName", required = false) String personName,
-            @RequestParam(value = "personIdNum", required = false) String personIdNum,
-            @RequestParam(value = "companyName", required = false) String companyName,
-            @RequestParam(value = "indicatorName", required = false) String indicatorName,
-            @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                        @RequestParam(value = "personName", required = false) String personName,
+                        @RequestParam(value = "personIdNum", required = false) String personIdNum,
+                        @RequestParam(value = "companyName", required = false) String companyName,
+                        @RequestParam(value = "indicatorName", required = false) String indicatorName,
+                        @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId,
+                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Map argMap = new HashMap();
         BatchConf batchConf = new BatchConf();
         batchConf.setStatus(1);
@@ -143,11 +143,11 @@ public class StatExportController {
         if (acceptAddressId != null) {
             argMap.put("acceptAddressId", acceptAddressId);
         }
-        String[] titles = new String[] { "区县名称", "部门名称", "申报批次名称", "身份证号", "姓名", "单位名称", "评分指标名称", "得分值", "状态", "受理人",
-                "受理时间", "送达人", "送达时间", "打分人", "打分时间" };
-        String[] fields = new String[] { "ACCEPT_ADDRESS", "OP_ROLE", "BATCH_NAME", "PERSON_ID_NUM", "PERSON_NAME",
+        String[] titles = new String[]{"区县名称", "部门名称", "申报批次名称", "身份证号", "姓名", "单位名称", "评分指标名称", "得分值", "状态", "受理人",
+                "受理时间", "送达人", "送达时间", "打分人", "打分时间"};
+        String[] fields = new String[]{"ACCEPT_ADDRESS", "OP_ROLE", "BATCH_NAME", "PERSON_ID_NUM", "PERSON_NAME",
                 "COMPANY_NAME", "INDICATOR_NAME", "SCORE_VALUE", "STATUS", "ACCEPT_PERSON", "ACCEPT_DATE", "OP_USER",
-                "SUBMIT_DATE", "OP_USER", "SCORE_DATE" };
+                "SUBMIT_DATE", "OP_USER", "SCORE_DATE"};
         List<Map> columns = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
             Map column = new HashMap();
@@ -162,17 +162,17 @@ public class StatExportController {
             2018年11月9日 xgr
             因浏览器端显示的时间有8个小时的时差，所以格式化一下
              */
-            if(map.get("ACCEPT_DATE") != null){
+            if (map.get("ACCEPT_DATE") != null) {
                 map.put("ACCEPT_DATE", sdf.format(map.get("ACCEPT_DATE")));
             }
-            if (map.get("SUBMIT_DATE") != null){
+            if (map.get("SUBMIT_DATE") != null) {
                 map.put("SUBMIT_DATE", sdf.format(map.get("SUBMIT_DATE")));
             }
-            if(map.get("SCORE_DATE") != null){
+            if (map.get("SCORE_DATE") != null) {
                 map.put("SCORE_DATE", sdf.format(map.get("SCORE_DATE")));
             }
-            if(map.get("SCORE_VALUE") != null){
-                map.put("SCORE_VALUE", ((BigDecimal) map.get("SCORE_VALUE")).setScale(2));
+            if (map.get("SCORE_VALUE") != null) {
+                map.put("SCORE_VALUE", ((BigDecimal) map.get("SCORE_VALUE")).setScale(2, BigDecimal.ROUND_HALF_UP));
             }
             Integer status = ((BigDecimal) map.get("STATUS")).intValue();
             switch (status) {
@@ -198,12 +198,12 @@ public class StatExportController {
     @GetMapping(value = "/export3")
     @ResponseBody
     public void export3(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam(value = "period", required = false) String period,
-            @RequestParam(value = "personName", required = false) String personName,
-            @RequestParam(value = "personIdNum", required = false) String personIdNum,
-            @RequestParam(value = "companyName", required = false) String companyName,
-            @RequestParam(value = "indicatorName", required = false) String indicatorName,
-            @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId) throws Exception {
+                        @RequestParam(value = "period", required = false) String period,
+                        @RequestParam(value = "personName", required = false) String personName,
+                        @RequestParam(value = "personIdNum", required = false) String personIdNum,
+                        @RequestParam(value = "companyName", required = false) String companyName,
+                        @RequestParam(value = "indicatorName", required = false) String indicatorName,
+                        @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId) throws Exception {
         Map argMap = new HashMap();
         BatchConf batchConf = new BatchConf();
         batchConf.setStatus(1);
@@ -254,23 +254,23 @@ public class StatExportController {
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[] { "区县名称", "部门名称", "申报批次名称", "身份证号", "姓名", "单位名称", "评分指标名称", "得分值", "状态", "受理人", "受理时间",
-                        "送达人", "送达时间", "打分人", "打分时间" },
-                new String[] { "ACCEPT_ADDRESS", "OP_ROLE", "BATCH_NAME", "PERSON_ID_NUM", "PERSON_NAME",
+                new String[]{"区县名称", "部门名称", "申报批次名称", "身份证号", "姓名", "单位名称", "评分指标名称", "得分值", "状态", "受理人", "受理时间",
+                        "送达人", "送达时间", "打分人", "打分时间"},
+                new String[]{"ACCEPT_ADDRESS", "OP_ROLE", "BATCH_NAME", "PERSON_ID_NUM", "PERSON_NAME",
                         "COMPANY_NAME", "INDICATOR_NAME", "SCORE_VALUE", "STATUS", "ACCEPT_PERSON", "ACCEPT_DATE",
-                        "OP_USER", "SUBMIT_DATE", "OP_USER", "SCORE_DATE" });
+                        "OP_USER", "SUBMIT_DATE", "OP_USER", "SCORE_DATE"});
         ExcelFileUtil.download(response, savePath, "列表3.xlsx");
     }
 
     @GetMapping(value = "/list4")
     @ResponseBody
     public Result list4(@RequestParam(value = "period", required = false) String period,
-            @RequestParam(value = "personName", required = false) String personName,
-            @RequestParam(value = "personIdNum", required = false) String personIdNum,
-            @RequestParam(value = "companyName", required = false) String companyName,
-            @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                        @RequestParam(value = "personName", required = false) String personName,
+                        @RequestParam(value = "personIdNum", required = false) String personIdNum,
+                        @RequestParam(value = "companyName", required = false) String companyName,
+                        @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId,
+                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Map argMap = new HashMap();
         BatchConf batchConf = new BatchConf();
         batchConf.setStatus(1);
@@ -295,13 +295,13 @@ public class StatExportController {
         if (acceptAddressId != null) {
             argMap.put("acceptAddressId", acceptAddressId);
         }
-        String[] titles = new String[] { "受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "受理人", "实际交件日期", "打包位置", "特殊记录", "分类",
+        String[] titles = new String[]{"受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "受理人", "实际交件日期", "打包位置", "特殊记录", "分类",
                 "备注1", "备注2", "性别", "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期",
-                "单位名称", "单位电话", "经办人姓名", "经办人电话" ,"实际用工单位"};
-        String[] fields = new String[] { "ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "OPUSER4",
+                "单位名称", "单位电话", "经办人姓名", "经办人电话", "实际用工单位"};
+        String[] fields = new String[]{"ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "OPUSER4",
                 "BLANK1", "BLANK2", "BLANK3", "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER",
                 "CULTURE_DEGREE", "JOB_LEVEL", "JOB_NAME", "CERTIFICATE_CODE", "ISSUING_AUTHORITY", "ISSUING_DATE",
-                "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE","COMPANY_NAME_OTHER" };
+                "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE", "COMPANY_NAME_OTHER"};
         List<Map> columns = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
             Map column = new HashMap();
@@ -1366,11 +1366,11 @@ public class StatExportController {
     @GetMapping(value = "/export4")
     @ResponseBody
     public void export4(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam(value = "period", required = false) String period,
-            @RequestParam(value = "personName", required = false) String personName,
-            @RequestParam(value = "personIdNum", required = false) String personIdNum,
-            @RequestParam(value = "companyName", required = false) String companyName,
-            @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId) throws Exception {
+                        @RequestParam(value = "period", required = false) String period,
+                        @RequestParam(value = "personName", required = false) String personName,
+                        @RequestParam(value = "personIdNum", required = false) String personIdNum,
+                        @RequestParam(value = "companyName", required = false) String companyName,
+                        @RequestParam(value = "acceptAddressId", required = false) Integer acceptAddressId) throws Exception {
         Map argMap = new HashMap();
         BatchConf batchConf = new BatchConf();
         batchConf.setStatus(1);
@@ -1470,13 +1470,13 @@ public class StatExportController {
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[] { "受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "受理人", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1",
+                new String[]{"受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "受理人", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1",
                         "备注2", "性别", "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期",
-                        "单位名称", "单位电话", "经办人姓名", "经办人电话" ,"实际用工单位"},
-                new String[] { "ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "OPUSER4", "BLANK1",
+                        "单位名称", "单位电话", "经办人姓名", "经办人电话", "实际用工单位"},
+                new String[]{"ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "OPUSER4", "BLANK1",
                         "BLANK2", "BLANK3", "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER",
                         "CULTURE_DEGREE", "JOB_LEVEL", "JOB_NAME", "CERTIFICATE_CODE", "ISSUING_AUTHORITY",
-                        "ISSUING_DATE", "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE" , "COMPANY_NAME_OTHER"});
+                        "ISSUING_DATE", "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE", "COMPANY_NAME_OTHER"});
         ExcelFileUtil.download(response, savePath, "列表4.xlsx");
     }
 
