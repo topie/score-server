@@ -357,9 +357,9 @@
             <td class="td9" colspan="3">
                 <p class="p5">
                 <#list provinceList as item><#if move.moveProvince==item.id>${item.name}</#if></#list>
-                <#list cityList as item><#if move.moveCity==item.id>${item.name}</#if></#list>
-                <#list areaList as item><#if move.moveRegion==item.id>${item.name}</#if></#list>
-                ${move.moveAddress}</p>
+                    <#list cityList as item><#if move.moveCity==item.id>${item.name}</#if></#list>
+                    <#list areaList as item><#if move.moveRegion==item.id>${item.name}</#if></#list>
+                    ${move.moveAddress}</p>
             </td>
         </tr>
         <tr class="r4">
@@ -498,8 +498,10 @@
             </td>
             <td class="td20">
                 <p class="p5">
-                    <span class="s2"><#if ritem.isRemove == 1>是</#if>
-                        <#if ritem.isRemove == 2>否</#if></strong></span>
+                    <span class="s2">
+                        <#if ritem.isRemove == 1 && ritem.relationship != '配偶'>是
+                        <#else>否</#if>
+                    </span>
                 </p>
             </td>
         </tr>
@@ -520,6 +522,9 @@
     </p>
     <p class="p7"></p>
     <p class="p7">
-        <span>申请人（或经办人）签字：                确认日期：年  月  日</span>
+        <span>申请人（或经办人）签字：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;确认日期：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</span>
+    </p>
+    <p class="p7">
+        <span>复核人：<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;打分人：<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></span>
     </p>
 </div>

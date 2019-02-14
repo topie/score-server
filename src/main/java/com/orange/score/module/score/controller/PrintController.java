@@ -18,6 +18,7 @@ import com.orange.score.module.security.SecurityUtil;
 import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
@@ -183,6 +184,49 @@ public class PrintController extends BaseController {
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "approve_empty_doc.ftl", params);
         Map result = new HashMap<>();
+        result.put("html", html);
+        return ResponseUtil.success(result);
+    }
+
+    @GetMapping(value = "/approvewjwExcel")
+    @ResponseBody
+    public Result approvewjwExcel(@RequestParam Integer identityInfoId) throws FileNotFoundException {
+        Map<String, Object> params = new HashMap<>();
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
+        if (person == null) {
+            person = new IdentityInfo();
+        }
+        params.put("person", person);
+        Condition condition = new Condition(HouseRelationship.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("identityInfoId", identityInfoId);
+        List<HouseRelationship> relationshipList = iHouseRelationshipService.findByCondition(condition);
+        if (!CollectionUtils.isEmpty(relationshipList)) {
+            Iterator<HouseRelationship> iterList = relationshipList.iterator();
+            HouseRelationship spouse;
+            while (iterList.hasNext()) {
+                spouse = iterList.next();
+                if ("配偶".equals(spouse.getRelationship())) {
+                    params.put("Spouse", spouse);
+                    iterList.remove();
+                }
+            }
+            params.put("relationshipList", relationshipList);
+        }
+        HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", identityInfoId);
+        if (houseMove != null) {
+            params.put("houseMove", houseMove);
+        }
+        HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
+        if (other != null) {
+            params.put("other", other);
+        }
+
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "shiweijianwei_excel.ftl", params);
+        Map<String, String> result = new HashMap<>();
         result.put("html", html);
         return ResponseUtil.success(result);
     }
