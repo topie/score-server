@@ -209,6 +209,11 @@ public class PrintController extends BaseController {
             while (iterList.hasNext()) {
                 spouse = iterList.next();
                 if ("配偶".equals(spouse.getRelationship())) {
+                    if (person.getStringSex().equals("女")){
+                        spouse.setSex(1);
+                    }else {
+                        spouse.setSex(2);
+                    }
                     params.put("Spouse", spouse);
                     iterList.remove();
                 }

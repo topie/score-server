@@ -94,18 +94,18 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">本人或配偶目前
+                                    <td colspan="12">本人及配偶
                                         <select disabled style="height: 25px;">
                                             <option <#if person.pregnantPromise==0>selected</#if> value="0">
                                                 &nbsp;&nbsp;
                                             </option>
                                             <option <#if person.pregnantPromise==1>selected</#if> value="1">承诺</option>
                                             <option <#if person.pregnantPromise==2>selected</#if> value="2">不承诺</option>
-                                        </select>已怀孕&nbsp;&nbsp;${person.pregnantWeek}&nbsp;&nbsp;周
+                                        </select>目前已怀孕&nbsp;&nbsp;${person.pregnantWeek}&nbsp;&nbsp;周
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">本人或配偶
+                                    <td colspan="12">本人及配偶
                                         <select disabled style="height: 25px;">
                                             <option <#if person.thirdPregnantPromise==0>selected</#if> value="0">&nbsp;&nbsp;</option>
                                             <option <#if person.thirdPregnantPromise==1>selected</#if> value="1">承诺

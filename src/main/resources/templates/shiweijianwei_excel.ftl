@@ -251,7 +251,8 @@
                     ${ritem.approval_rules}
                 </td>
                 <td height="40" width="187">
-                    ${ritem.approval_which}
+                    <#--${ritem.approval_which}-->
+                    与第${ritem.approval_index}任${ritem.approval_spouse} ${ritem.approval_which}所生
                 </td>
                 <td height="40" width="156">
                     ${ritem.approval_custody}
@@ -266,10 +267,10 @@
             <td colspan="2" height="20" width="186">
             </td>
             <td colspan="5" height="20" width="528">
-                本人及配偶目前${person.getStringPregnantPromise()}已怀孕${person.pregnantWeek}周
+                本人及配偶${person.getStringPregnantPromise()}目前已怀孕${person.pregnantWeek}周
             </td>
             <td colspan="5" height="20" width="508">
-                本人及配偶${person.getStringThirdPregnantPromise()}目前未处于政策外第三个及以上子女怀孕期间。
+                本人及配偶${person.getStringThirdPregnantPromise()}目前未处于政策外第三个及以上子女怀孕期间
             </td>
             <td colspan="6" height="20" width="1217">
             </td>

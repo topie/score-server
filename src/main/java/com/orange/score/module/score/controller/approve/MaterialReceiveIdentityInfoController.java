@@ -655,7 +655,14 @@ public class MaterialReceiveIdentityInfoController {
             stringMap.put(54, "配偶情况");
             stringMap.put(55, houseRelationshipSpouse.getName());
             stringMap.put(56, houseRelationshipSpouse.getFormerName());
-            stringMap.put(57, houseRelationshipSpouse.getStringSex());
+            String strSex = "";
+            if(identityInfo.getStringSex().equals("女")){
+                strSex = "男";
+            }else{
+                strSex = "女";
+            }
+            //stringMap.put(57, houseRelationshipSpouse.getStringSex());
+            stringMap.put(57, strSex);
             stringMap.put(58, houseRelationshipSpouse.getIdNumber());
             stringMap.put(59, houseRelationshipSpouse.getStringMarriageStatus());
             stringMap.put(60, "-");
@@ -734,7 +741,9 @@ public class MaterialReceiveIdentityInfoController {
                 startIndex++;
                 stringMap.put(startIndex, h.getApproval_rules());
                 startIndex++;
-                stringMap.put(startIndex, h.getApproval_which());
+                //与第${ritem.approval_index}任${ritem.approval_spouse} ${ritem.approval_which}所生
+                //stringMap.put(startIndex, h.getApproval_which());
+                stringMap.put(startIndex, "与第"+h.getApproval_index()+"任"+h.getApproval_spouse()+" "+h.getApproval_which()+"所生");
                 startIndex++;
                 stringMap.put(startIndex, h.getApproval_custody());
                 startIndex++;
@@ -748,9 +757,9 @@ public class MaterialReceiveIdentityInfoController {
             if (pregnantWeek == null) {
                 pregnantWeek = "_";
             }
-            stringMap.put(startIndex, "本人及配偶目前" + identityInfo.getStringPregnantPromise() + "已怀孕" + pregnantWeek + "周");
+            stringMap.put(startIndex, "本人及配偶" + identityInfo.getStringPregnantPromise() + "目前已怀孕" + pregnantWeek + "周");
             startIndex += 5;
-            stringMap.put(startIndex, "本人及配偶" + identityInfo.getStringThirdPregnantPromise() + "目前未处于政策外第三个及以上子女怀孕期间。");
+            stringMap.put(startIndex, "本人及配偶" + identityInfo.getStringThirdPregnantPromise() + "目前未处于政策外第三个及以上子女怀孕期间");
             int stringIndex = 0;
             XSSFFont font = workBook.createFont();
             font.setFontName("宋体");
