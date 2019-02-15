@@ -22,10 +22,7 @@ import tk.mybatis.mapper.entity.Condition;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-02.
@@ -107,11 +104,21 @@ public class RenshePrevApproveController {
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
 
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
-        for (IdentityInfo info : pageInfo.getList()) {
+        Iterator<IdentityInfo> iterator = pageInfo.getList().iterator();
+        IdentityInfo info;
+        CompanyInfo companyInfo;
+        while (iterator.hasNext()) {
+            info = iterator.next();
+            companyInfo = iCompanyInfoService.findById(info.getCompanyId());
+            if (StringUtils.isEmpty(companyInfo.getBusinessLicenseSrc())) {
+                iterator.remove();
+                continue;
+            }
             if (companyIds.contains(info.getCompanyId())) {
                 info.setCompanyWarning(1);
             }
         }
+
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -255,17 +262,17 @@ public class RenshePrevApproveController {
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 10);
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-//            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
+            //            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
 
             /*
             2018年10月29日通过联合预审的申请人短信内容调整：
              */
-//            Condition condition = new Condition(PersonBatchStatusRecord.class);
-//            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-//            criteria = condition.createCriteria();
-//            criteria.andEqualTo("statusInt", 10);
-//            criteria.andEqualTo("personId", identityInfo.getId());
-//            List<PersonBatchStatusRecord> pbs = iPersonBatchStatusRecordService.findByCondition(condition);
+            //            Condition condition = new Condition(PersonBatchStatusRecord.class);
+            //            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            //            criteria = condition.createCriteria();
+            //            criteria.andEqualTo("statusInt", 10);
+            //            criteria.andEqualTo("personId", identityInfo.getId());
+            //            List<PersonBatchStatusRecord> pbs = iPersonBatchStatusRecordService.findByCondition(condition);
             PersonBatchStatusRecord pbsr = new PersonBatchStatusRecord();
             pbsr.setStatusInt(10);
             pbsr.setPersonId(identityInfo.getId());
@@ -273,10 +280,10 @@ public class RenshePrevApproveController {
             PersonBatchStatusRecord pbs2 = iPersonBatchStatusRecordService.findById(pbs.getId());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String passDate = sdf.format(pbs2.getStatusTime());
-            if(pbs2.getStatusInt() == 10 && passDate.equals("2018-10-29")){
+            if (pbs2.getStatusInt() == 10 && passDate.equals("2018-10-29")) {
                 SmsUtil.send(houseOther.getSelfPhone(), identityInfo.getName() + "，恭喜您已通过网上预审，请预约10月30日到窗口提交材料。");
-            } else{
-//                SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
+            } else {
+                //                SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，恭喜您已通过网上预审，下一步可以进行网上预约。");
             }
         }
 
@@ -313,7 +320,7 @@ public class RenshePrevApproveController {
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 9);
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-            if(identityInfo.getUnionApproveStatus1() != 3){
+            if (identityInfo.getUnionApproveStatus1() != 3) {
                 SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您的申请信息网上预审未通过。");
             }
 
@@ -326,20 +333,21 @@ public class RenshePrevApproveController {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        if (StringUtils.isNotEmpty(identityInfo.getLockUser2()) && !identityInfo.getLockUser2()
-                .equals(securityUser.getUsername())) {
-            return ResponseUtil.error("该申请人的预审状态已被" + identityInfo.getLockUser2() + "锁定");
-        }
-        if (2 == identityInfo.getUnionApproveStatus2()) {
-            return ResponseUtil.error("该申请人人社预审已通过，无法进行此操作");
-        }
-        if (3 == identityInfo.getUnionApproveStatus2()) {
-            return ResponseUtil.error("该申请人人社预审驳回，无法进行此操作");
-        }
-        if (StringUtils.isEmpty(identityInfo.getLockUser2())) {
-            return ResponseUtil.error("该申请人的预审状态未被锁定，请先锁定！");
-        }
         if (identityInfo != null) {
+            if (StringUtils.isNotEmpty(identityInfo.getLockUser2()) && !identityInfo.getLockUser2()
+                    .equals(securityUser.getUsername())) {
+                return ResponseUtil.error("该申请人的预审状态已被" + identityInfo.getLockUser2() + "锁定");
+            }
+            if (2 == identityInfo.getUnionApproveStatus2()) {
+                return ResponseUtil.error("该申请人人社预审已通过，无法进行此操作");
+            }
+            if (3 == identityInfo.getUnionApproveStatus2()) {
+                return ResponseUtil.error("该申请人人社预审驳回，无法进行此操作");
+            }
+            if (StringUtils.isEmpty(identityInfo.getLockUser2())) {
+                return ResponseUtil.error("该申请人的预审状态未被锁定，请先锁定！");
+            }
+
             identityInfo.setOpuser2(securityUser.getDisplayName());
             identityInfo.setLockUser2("");
             identityInfo.setUnionApproveStatus2(4);
@@ -353,6 +361,17 @@ public class RenshePrevApproveController {
             JSONArray jsonArray = JSONArray.parseArray(supplyArr);
             for (Object o : jsonArray) {
                 Integer mId = ((JSONObject) o).getInteger("id");
+                //营业执照单独处理
+                if (mId == -1) {
+                    CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getCompanyId());
+                    companyInfo.setBusinessLicenseSrc("");
+                    iCompanyInfoService.update(companyInfo);
+                    if (jsonArray.size() == 1) {
+                        return ResponseUtil.success();
+                    } else {
+                        continue;
+                    }
+                }
                 String reason = ((JSONObject) o).getString("reason");
                 Condition condition = new Condition(OnlinePersonMaterial.class);
                 tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
@@ -366,10 +385,10 @@ public class RenshePrevApproveController {
                 String strDate = sdf.format(date);
                 if (materials.size() > 0) {
                     OnlinePersonMaterial onlinePersonMaterial = materials.get(0);
-                    if(StringUtils.isNotEmpty(onlinePersonMaterial.getReason())){
-                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason()+"<br/>"+strDate+"-人社预审："+reason);
-                    }else {
-                        onlinePersonMaterial.setReason(strDate+"-人社预审："+reason);
+                    if (StringUtils.isNotEmpty(onlinePersonMaterial.getReason())) {
+                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason() + "<br/>" + strDate + "-人社预审：" + reason);
+                    } else {
+                        onlinePersonMaterial.setReason(strDate + "-人社预审：" + reason);
                     }
 
                     onlinePersonMaterial.setStatus(1);
@@ -377,7 +396,7 @@ public class RenshePrevApproveController {
                 } else {
                     OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
                     onlinePersonMaterial.setMaterialInfoId(mId);
-                    onlinePersonMaterial.setReason(strDate+"-人社预审："+reason);
+                    onlinePersonMaterial.setReason(strDate + "-人社预审：" + reason);
                     onlinePersonMaterial.setStatus(1);
                     onlinePersonMaterial.setcTime(new Date());
                     onlinePersonMaterial.setPersonId(identityInfo.getId());
@@ -387,7 +406,7 @@ public class RenshePrevApproveController {
             }
         }
         HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-        if(identityInfo.getUnionApproveStatus1() != 3){
+        if (identityInfo.getUnionApproveStatus1() != 3) {
             SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料未通过居住证积分网上预审，请根据提示尽快补正材料。");
         }
 

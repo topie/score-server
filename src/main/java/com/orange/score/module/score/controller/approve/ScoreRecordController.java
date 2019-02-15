@@ -298,7 +298,7 @@ public class ScoreRecordController {
             msMap.put("scoreRecordId", scoreRecord.getId());
             Indicator indicator = iIndicatorService.findById(scoreRecord.getIndicatorId());
             if (indicator == null) {
-                System.out.println(scoreRecord.getIndicatorId());
+                //System.out.println(scoreRecord.getIndicatorId());
                 continue;
             }
             msMap.put("indicator", indicator);
@@ -338,7 +338,6 @@ public class ScoreRecordController {
             companyInfo = new CompanyInfo();
         }
         params.put("company", companyInfo);
-
 
 
         HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
@@ -428,19 +427,7 @@ public class ScoreRecordController {
             businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
             roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
         }
-       /* for (MaterialInfo materialInfo : materialInfoList) {
-            if (roles.contains(3) || roles.contains(4)) {
-                if (materialInfo.getIsUpload() == 1) {
-                    if (roleMidSet.contains(materialInfo.getId())) {
-                        roleMaterialInfoList.add(materialInfo);
-                    }
-                }
-                //公安单独处理随迁信息
-                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
-                    roleMaterialInfoList.add(materialInfo);
-                }
-            }
-        }*/
+
         //该权限可以查看的所有材料
         Set<Integer> rolesSet = new HashSet<>(roles);
         for (MaterialInfo materialInfo : materialInfoList) {
@@ -459,21 +446,6 @@ public class ScoreRecordController {
         criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
-       /* for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
-            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-            if (roles.contains(3) || roles.contains(4)) {
-                if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
-                    onlinePersonMaterial
-                            .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-                    roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-                //公安单独处理随迁信息
-                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17)
-                        .contains(onlinePersonMaterial.getId())) {
-                    roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-            }
-        }*/
         //用户上传的材料
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {

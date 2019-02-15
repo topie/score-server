@@ -284,10 +284,14 @@
                         <div class="panel-heading">
                             申请人材料上传情况
                         </div>
+                        <div id="to_point" style="display: none;position: absolute">
+
+                        </div>
                         <!-- Table 多个表格列表组合 -->
                         <div class="table-list-item">
-                            <table style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
+                            <table id="picTable" style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
                                 <tr class="info">
+                                    <th>选择</th>
                                     <th>预览</th>
                                     <th class="text-info">材料名称</th>
                                     <th class="text-info">失败原因</th>
@@ -304,8 +308,11 @@
                                         </tr>
                                     <#else>
                                         <tr>
+                                            <td class="text-center">
+                                                <input name="checkMaterial" type="checkbox" checked="checked">
+                                            </td>
                                             <td style="width:100px;height:100px" class="text-center">
-                                                <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
+                                                <img name="picpic" class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
                                                      style="cursor: pointer;border: 1px solid gray;"
                                                      width="100" height="100"
                                                      src="${item.onlinePersonMaterial.materialUri}">

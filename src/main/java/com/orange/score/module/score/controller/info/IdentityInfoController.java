@@ -441,6 +441,25 @@ public class IdentityInfoController {
         Map mMap = new HashMap();
         Set<Integer> rolesSet = new HashSet<>(roles);
         //该权限可以查看的所有材料
+        //添加营业执照,只有人社添加
+        CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
+        if (companyInfo == null) {
+            companyInfo = new CompanyInfo();
+        }
+        params.put("company", companyInfo);
+        if (roles.contains(3)) {
+            MaterialInfo businessLicenseMaterialInfo = new MaterialInfo();
+            businessLicenseMaterialInfo.setId(-1);
+            businessLicenseMaterialInfo.setName("营业执照");
+            OnlinePersonMaterial businessLicenseMaterial = new OnlinePersonMaterial();
+            businessLicenseMaterial.setMaterialUri(companyInfo.getBusinessLicenseSrc());
+            businessLicenseMaterial.setId(-1);
+            businessLicenseMaterial.setPersonId(-1);
+            businessLicenseMaterial.setMaterialInfoName("营业执照");
+            businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
+            roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
+        }
+
         for (MaterialInfo materialInfo : materialInfos) {
             mMap.put(materialInfo.getId() + "", materialInfo.getName());
             if (CollectionUtil.isHaveUnionBySet(rolesSet, materialInfo.getMaterialInfoRoleSet())) {
@@ -451,20 +470,7 @@ public class IdentityInfoController {
                 }
             }
         }
-       /* for (MaterialInfo materialInfo : materialInfos) {
-            mMap.put(materialInfo.getId() + "", materialInfo.getName());
-            if (roles.contains(3) || roles.contains(4)) {
-                if (materialInfo.getIsUpload() == 1) {
-                    if (roleMidSet.contains(materialInfo.getId()) && 17 != materialInfo.getId()) {
-                        roleMaterialInfoList.add(materialInfo);
-                    }
-                }
-                //公安单独处理随迁信息
-                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
-                    roleMaterialInfoList.add(materialInfo);
-                }
-            }
-        }*/
+
         Condition condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
@@ -472,22 +478,6 @@ public class IdentityInfoController {
         criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
-        /*for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
-            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-            if (roles.contains(3) || roles.contains(4)) {
-                if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId()) && 17 != onlinePersonMaterial
-                        .getMaterialInfoId()) {
-                    onlinePersonMaterial
-                            .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-                    roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-                //公安单独处理随迁信息
-                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17)
-                        .contains(onlinePersonMaterial.getId())) {
-                    roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-            }
-        }*/
         //用户上传的材料
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
@@ -517,11 +507,7 @@ public class IdentityInfoController {
         params.put("allMaterialInfos", materialInfos);
 
         params.put("person", person);
-        CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
-        if (companyInfo == null) {
-            companyInfo = new CompanyInfo();
-        }
-        params.put("company", companyInfo);
+
         HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
         if (other == null) {
             other = new HouseOther();
