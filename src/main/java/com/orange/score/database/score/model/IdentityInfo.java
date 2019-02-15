@@ -117,9 +117,9 @@ public class IdentityInfo {
         } else {
             switch (this.pregnantPromise) {
                 case 1:
-                    return "承诺";
+                    return "已怀孕";
                 case 2:
-                    return "不承诺";
+                    return "未怀孕";
                 default:
                     return "_";
             }
@@ -138,9 +138,9 @@ public class IdentityInfo {
         } else {
             switch (this.thirdPregnantPromise) {
                 case 1:
-                    return "承诺";
+                    return "处于";
                 case 2:
-                    return "不承诺";
+                    return "未处于";
                 default:
                     return "_";
             }

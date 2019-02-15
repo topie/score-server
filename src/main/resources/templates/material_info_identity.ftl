@@ -94,25 +94,25 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">本人及配偶
+                                    <td colspan="12">本人及配偶承诺目前
                                         <select disabled style="height: 25px;">
                                             <option <#if person.pregnantPromise==0>selected</#if> value="0">
                                                 &nbsp;&nbsp;
                                             </option>
-                                            <option <#if person.pregnantPromise==1>selected</#if> value="1">承诺</option>
-                                            <option <#if person.pregnantPromise==2>selected</#if> value="2">不承诺</option>
-                                        </select>目前已怀孕&nbsp;&nbsp;${person.pregnantWeek}&nbsp;&nbsp;周
+                                            <option <#if person.pregnantPromise==1>selected</#if> value="1">已怀孕</option>
+                                            <option <#if person.pregnantPromise==2>selected</#if> value="2">未怀孕</option>
+                                        </select>&nbsp;&nbsp;${person.pregnantWeek}&nbsp;&nbsp;周
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">本人及配偶
+                                    <td colspan="12">本人及配偶承诺目前
                                         <select disabled style="height: 25px;">
                                             <option <#if person.thirdPregnantPromise==0>selected</#if> value="0">&nbsp;&nbsp;</option>
-                                            <option <#if person.thirdPregnantPromise==1>selected</#if> value="1">承诺
+                                            <option <#if person.thirdPregnantPromise==1>selected</#if> value="1">处于
                                             </option>
-                                            <option <#if person.thirdPregnantPromise==2>selected</#if> value="2">不承诺
+                                            <option <#if person.thirdPregnantPromise==2>selected</#if> value="2">未处于
                                             </option>
-                                        </select>目前未处于政策外第三个及以上子女怀孕期间
+                                        </select>政策外第三个及以上子女怀孕期间
                                     </td>
                                 </tr>
                                 <tr>
