@@ -310,7 +310,7 @@
                                             </td>
                                             <td>${item.onlinePersonMaterial.materialInfoName}
                                                 <br>
-                                                <a class="download btn btn-mini btn-info"
+                                                <a class="download btn btn-mini btn-info" target="_blank"
                                                    href="${item.onlinePersonMaterial.materialUri}"
                                                    download="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
                                                     下载
