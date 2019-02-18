@@ -283,6 +283,9 @@
                                     <option value="2" <#if ritem.isRemove == 2>selected</#if> >
                                         否
                                     </option>
+                                    <option value=null <#if ritem.isRemove == null>selected</#if> >
+                                        否
+                                    </option>
                                     </select>
                                 </td>
                             </tr>

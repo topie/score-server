@@ -267,8 +267,7 @@
                                                 <td>${ritem.name}</td>
                                                 <td>${ritem.idNumber}</td>
                                                 <td>${ritem.cultureDegree}</td>
-                                                <td> <#if ritem.isRemove == 1>是</#if>
-                                                    <#if ritem.isRemove == 2>否</#if></td>
+                                                <td> <#if ritem.isRemove == 1>是<#else>否</#if></td>
                                             </tr>
                                         </#list>
                                         </table>
