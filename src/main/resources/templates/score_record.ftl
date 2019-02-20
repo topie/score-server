@@ -456,6 +456,39 @@
                                         destroy: true,
                                         buttons: [
                                             {
+                                                text: '旋转',
+                                                cls: 'btn btn-info',
+                                                handle: function (m) {
+                                                    m.$body.find("img").each(function (i, d) {
+                                                        var transform = $(this).css('transform');
+
+                                                        if (transform == "none") {
+                                                            $(this).css("transform", 'rotate(90deg)');
+                                                        } else {
+                                                            function getmatrix(a, b, c, d, e, f) {
+                                                                var aa = Math.round(180 * Math.asin(a) / Math.PI);
+                                                                var bb = Math.round(180 * Math.acos(b) / Math.PI);
+                                                                var cc = Math.round(180 * Math.asin(c) / Math.PI);
+                                                                var dd = Math.round(180 * Math.acos(d) / Math.PI);
+                                                                var deg = 0;
+                                                                if (aa == bb || -aa == bb) {
+                                                                    deg = dd;
+                                                                } else if (-aa + bb == 180) {
+                                                                    deg = 180 + cc;
+                                                                } else if (aa + bb == 180) {
+                                                                    deg = 360 - cc || 360 - dd;
+                                                                }
+                                                                return deg >= 360 ? 0 : deg;
+                                                            }
+
+                                                            var deg = eval('get' + transform);
+                                                            var step = 90;//每次旋转多少度
+                                                            $(this).css({'transform': 'rotate(' + (deg + step) % 360 + 'deg)'});
+                                                        }
+                                                    });
+                                                }
+                                            },
+                                            {
                                                 text: '放大',
                                                 cls: 'btn btn-info',
                                                 handle: function (m) {
