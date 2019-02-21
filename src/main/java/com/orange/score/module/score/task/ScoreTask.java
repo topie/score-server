@@ -146,8 +146,10 @@ public class ScoreTask {
      * “审核中心——人社受理审核——待审核”页面中的“审核”按钮中点击“通过”后的场景改为3天后自动接收材料；
      * 确认自动接收材料、自动打分功能的应用场景：
      * 在人社受理审核通过的第4个工作日，市教委、市税务、市知识产权局、民政、住建委自动接收材料并打分为0；
+     * 0 0/5 * * * ?  ---每五分钟执行一次
      */
-    //@Scheduled(cron = "20 0 0 * * ? ")
+    //@Scheduled(cron = "0 0/2 * * * ? ")
+    @Scheduled(cron = "20 0 0 * * ? ")
     public void autoAcceptMaterialAndMark(){
         /*
         步骤
@@ -156,27 +158,26 @@ public class ScoreTask {
         3、若通过后的第4个工作日申请人没有提交材料，则系统自动判定为接收材料、自动打分为0；到达指标打分-已打分流程
         4、进入此流程的所有操作，用户留痕为“系统自动操作”
          */
-
-
         Condition condition_bc = new Condition(BatchConf.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria_bc = condition_bc.createCriteria();
         criteria_bc.andEqualTo("status", 1);
-        //criteria_bc.andGreaterThanOrEqualTo("applyBegin",new Date());//大于身亲开始日期
-        //criteria_bc.andLessThanOrEqualTo("closeFunctionTime",new Date());//关闭单位注册的时间
+        //criteria_bc.andGreaterThanOrEqualTo("applyBegin",new Date());//大于在线申请开始日期
+        criteria_bc.andLessThanOrEqualTo("applyBegin",new Date());//大于在线申请开始日期
         List<BatchConf> list_bc = iBatchConfService.findByCondition(condition_bc);
 
         /*
         在取得批次信息后才能打分；
-        为了预防
+        为了预防,只选中一个批次
          */
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
-        if(list_bc.size()>0) {
+        if(list_bc.size()==1) {
 
             Condition condition = new Condition(AcceptDateConf.class);
             tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
             condition.orderBy("acceptDate").asc();//受理日期升序排列
             criteria.andEqualTo("batchId", list_bc.get(0).getId());
+            criteria.andEqualTo("addressId", 1);
             List<AcceptDateConf> list_ac = iAcceptDateConfService.findByCondition(condition);
 
             condition = new Condition(IdentityInfo.class);
@@ -213,6 +214,7 @@ public class ScoreTask {
                     criteria.andEqualTo("batchId", list_bc.get(0).getId());
                     criteria.andIn("opRoleId", roles);
                     criteria.andNotEqualTo("status",4);//未打分状态的记录才会被执行定时任务
+                    criteria.andNotEqualTo("status",3);//未接收材料的记录才会被执行定时任务
                     condition.orderBy("id").asc();
                     List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
                     for (ScoreRecord scoreRecord : scoreRecords){
