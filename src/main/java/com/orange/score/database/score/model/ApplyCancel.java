@@ -81,6 +81,17 @@ public class ApplyCancel {
     @Column(name = "approve_user")
     private String approveUser;
 
+    @Column(name = "hall_status")
+    private Integer hallStatus;
+
+    public Integer getHallStatus() {
+        return hallStatus;
+    }
+
+    public void setHallStatus(Integer hallStatus) {
+        this.hallStatus = hallStatus;
+    }
+
     public Integer getCompanyId() {
         return companyId;
     }

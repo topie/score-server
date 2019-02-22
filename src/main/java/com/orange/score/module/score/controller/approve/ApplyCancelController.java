@@ -59,8 +59,8 @@ public class ApplyCancelController {
     @GetMapping(value = "/mine")
     @ResponseBody
     public Result mine(ApplyCancel applyCancel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                       @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                       @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(ApplyCancel.class);
@@ -75,7 +75,7 @@ public class ApplyCancelController {
         for (ApplyCancel cancel : pageInfo.getList()) {
             personIdSet.add(cancel.getPersonId());
         }
-        if(personIdSet.size()>0){
+        if (personIdSet.size() > 0) {
             condition = new Condition(IdentityInfo.class);
             criteria = condition.createCriteria();
             criteria.andIn("id", personIdSet);
@@ -95,8 +95,8 @@ public class ApplyCancelController {
     @GetMapping(value = "/ing")
     @ResponseBody
     public Result ing(ApplyCancel applyCancel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                      @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                      @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         if (user == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(ApplyScore.class);
@@ -116,7 +116,7 @@ public class ApplyCancelController {
         for (ApplyCancel cancel : pageInfo.getList()) {
             personIdSet.add(cancel.getPersonId());
         }
-        if(personIdSet.size()>0){
+        if (personIdSet.size() > 0) {
             condition = new Condition(IdentityInfo.class);
             criteria = condition.createCriteria();
             criteria.andIn("id", personIdSet);
@@ -136,8 +136,8 @@ public class ApplyCancelController {
     @GetMapping(value = "/agree")
     @ResponseBody
     public Result agree(ApplyCancel applyCancel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         if (user == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(ApplyScore.class);
@@ -156,7 +156,7 @@ public class ApplyCancelController {
         for (ApplyCancel cancel : pageInfo.getList()) {
             personIdSet.add(cancel.getPersonId());
         }
-        if(personIdSet.size()>0){
+        if (personIdSet.size() > 0) {
             condition = new Condition(IdentityInfo.class);
             criteria = condition.createCriteria();
             criteria.andIn("id", personIdSet);
@@ -176,8 +176,8 @@ public class ApplyCancelController {
     @GetMapping(value = "/disAgree")
     @ResponseBody
     public Result disAgree(ApplyCancel applyCancel,
-            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         if (user == null) throw new AuthBusinessException("用户未登录");
         Condition condition = new Condition(ApplyScore.class);
@@ -193,7 +193,7 @@ public class ApplyCancelController {
         for (ApplyCancel cancel : pageInfo.getList()) {
             personIdSet.add(cancel.getPersonId());
         }
-        if(personIdSet.size()>0){
+        if (personIdSet.size() > 0) {
             condition = new Condition(IdentityInfo.class);
             criteria = condition.createCriteria();
             criteria.andIn("id", personIdSet);
@@ -240,10 +240,13 @@ public class ApplyCancelController {
         applyCancel.setApproveContent("同意");
         applyCancel.setApproveStatus(1);
         applyCancel.setApproveUser(userName);
-        iApplyCancelService.update(applyCancel);
+
         IdentityInfo identityInfo = iIdentityInfoService.findById(applyCancel.getPersonId());
         identityInfo.setCancelStatus(1);
+        //保存申请人被取消资格前预约大厅状态
+        applyCancel.setHallStatus(identityInfo.getHallStatus());
         identityInfo.setHallStatus(8);
+        iApplyCancelService.update(applyCancel);
         iIdentityInfoService.update(identityInfo);
         iPersonBatchStatusRecordService.insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 8);
         return ResponseUtil.success();
@@ -258,6 +261,24 @@ public class ApplyCancelController {
         applyCancel.setApproveStatus(2);
         applyCancel.setApproveUser(userName);
         iApplyCancelService.update(applyCancel);
+        return ResponseUtil.success();
+    }
+
+
+    @PostMapping("/revocation")
+    public Result revocation(@RequestParam Integer id) {
+        String userName = SecurityUtil.getCurrentUserName();
+        if (userName == null) throw new AuthBusinessException("用户未登录");
+        ApplyCancel applyCancel = iApplyCancelService.findById(id);
+        applyCancel.setApproveContent("撤回同意取消资格");
+        applyCancel.setApproveStatus(0);
+        applyCancel.setApproveUser(userName);
+        IdentityInfo identityInfo = iIdentityInfoService.findById(applyCancel.getPersonId());
+        identityInfo.setCancelStatus(0);
+        identityInfo.setHallStatus(applyCancel.getHallStatus());
+        iApplyCancelService.update(applyCancel);
+        iIdentityInfoService.update(identityInfo);
+        iPersonBatchStatusRecordService.insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "revocationHallStatus", 20);
         return ResponseUtil.success();
     }
 
