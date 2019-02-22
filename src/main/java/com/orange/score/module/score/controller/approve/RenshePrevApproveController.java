@@ -350,7 +350,11 @@ public class RenshePrevApproveController {
 
             identityInfo.setOpuser2(securityUser.getDisplayName());
             identityInfo.setLockUser2("");
-            identityInfo.setUnionApproveStatus2(4);
+
+            if (!(StringUtils.isNotEmpty(supplyArr) && JSONArray.parseArray(supplyArr).size() == 1 && ((JSONObject) JSONArray.parseArray(supplyArr).get(0)).getInteger("id") == -1)) {
+                identityInfo.setUnionApproveStatus2(4);
+            }
+
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 4);
