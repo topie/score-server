@@ -167,6 +167,7 @@ public class MaterialReceiveIdentityInfoController {
         IdentityInfo identityInfo;
         Set<Integer> rolesSet = new HashSet<>(roles);
         Iterator<ScoreRecord> it = pageInfo.getList().iterator();
+        boolean isAdmin = userService.findUserRoleByUserId(userId).contains(1);
         while (it.hasNext()) {
             ScoreRecord record = it.next();
             if (roles.contains(4) || roles.contains(6)) {
@@ -174,7 +175,7 @@ public class MaterialReceiveIdentityInfoController {
             }
             identityInfo = iIdentityInfoService.findById(record.getPersonId());
             //如果被该部门驳回，就删除该申请人
-            if (identityInfo.getMaterialStatus() != null && identityInfo.getMaterialStatus() == 1) {
+            if (identityInfo.getMaterialStatus() != null && identityInfo.getMaterialStatus() == 1 && !isAdmin) {
                 if (CollectionUtil.isHaveUnionBySet(rolesSet, identityInfo.getOpuser6RoleSet())) {
                     it.remove();
                 }
@@ -656,9 +657,9 @@ public class MaterialReceiveIdentityInfoController {
             stringMap.put(55, houseRelationshipSpouse.getName());
             stringMap.put(56, houseRelationshipSpouse.getFormerName());
             String strSex = "";
-            if(identityInfo.getStringSex().equals("女")){
+            if (identityInfo.getStringSex().equals("女")) {
                 strSex = "男";
-            }else{
+            } else {
                 strSex = "女";
             }
             //stringMap.put(57, houseRelationshipSpouse.getStringSex());
@@ -743,7 +744,7 @@ public class MaterialReceiveIdentityInfoController {
                 startIndex++;
                 //与第${ritem.approval_index}任${ritem.approval_spouse} ${ritem.approval_which}所生
                 //stringMap.put(startIndex, h.getApproval_which());
-                stringMap.put(startIndex, "与第"+h.getApproval_index()+"任"+h.getApproval_spouse()+" "+h.getApproval_which()+"所生");
+                stringMap.put(startIndex, "与第" + h.getApproval_index() + "任" + h.getApproval_spouse() + " " + h.getApproval_which() + "所生");
                 startIndex++;
                 stringMap.put(startIndex, h.getApproval_custody());
                 startIndex++;
