@@ -148,7 +148,7 @@ public class ScoreTask {
      * 在人社受理审核通过的第4个工作日，市教委、市税务、市知识产权局、民政、住建委自动接收材料并打分为0；
      * 0 0/5 * * * ?  ---每五分钟执行一次
      */
-    //@Scheduled(cron = "0 0/2 * * * ? ")
+    //@Scheduled(cron = "0 0/2 * * * ? ")//测试用，时间频率，每隔两分钟执行一次；
     @Scheduled(cron = "20 0 0 * * ? ")
     public void autoAcceptMaterialAndMark(){
         /*
@@ -179,6 +179,14 @@ public class ScoreTask {
             criteria.andEqualTo("batchId", list_bc.get(0).getId());
             criteria.andEqualTo("addressId", 1);
             List<AcceptDateConf> list_ac = iAcceptDateConfService.findByCondition(condition);
+            /*
+            重新排序下ID值，因为设置开办日期时，有跨度较大的ID，两者相减大于4；
+            排除此情况，重新排下ID值；
+             */
+            int index_ac = 1;
+            for(AcceptDateConf acceptDateConf : list_ac){
+                acceptDateConf.setId(index_ac++);
+            }
 
             condition = new Condition(IdentityInfo.class);
             criteria = condition.createCriteria();
