@@ -130,6 +130,12 @@ public class IndicatorController {
         return iIndicatorService.selectDepartmentTreeNodes();
     }
 
+    @RequestMapping(value = "/department/treeNodesIndicators", method = RequestMethod.POST)
+    @ResponseBody
+    public List<TreeNode> treeNodesIndicators(){
+        return iIndicatorService.selectDepartmentTreeNodesIndicators();
+    }
+
     @PostMapping("/generateJson")
     public Result generateJson(@RequestParam Integer batchId) {
         JSONArray mainArray = JSONArray.parseArray("[]");

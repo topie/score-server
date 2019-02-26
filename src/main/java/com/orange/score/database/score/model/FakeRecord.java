@@ -1,9 +1,14 @@
 package com.orange.score.database.score.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.orange.score.common.utils.CollectionUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 
 @Table(name = "t_fake_record")
@@ -76,6 +81,39 @@ public class FakeRecord {
      */
     @Column(name = "add_user")
     private String addUser;
+
+
+
+    /**
+     * 5年内有提供虚假信息申办积分入户记录的（包括虚假户籍、学历、专业、就业、住房、投资、纳税证明等），每条减30分；
+     */
+    @Column(name = "indicatorRole")
+    private String indicatorRole;
+
+    public String getIndicatorRole() {
+        return indicatorRole;
+    }
+
+    public void setIndicatorRole(String indicatorRole) {
+        this.indicatorRole = indicatorRole;
+        if (indicatorRole != null) {
+            this.indicatorRoleSet = new HashSet<>(Arrays.asList(CollectionUtil.StringToIntegerArr(indicatorRole)));
+        }
+    }
+
+    @Transient
+    private Set<Integer> indicatorRoleSet;
+
+    public Set<Integer> getIndicatorRoleSet() {
+        return indicatorRoleSet;
+    }
+
+    public void setIndicatorRoleSet(Set<Integer> indicatorRoleSet) {
+        this.indicatorRoleSet = indicatorRoleSet;
+        if (indicatorRoleSet != null){
+            indicatorRole = StringUtils.join(indicatorRoleSet, ",");
+        }
+    }
 
     /**
      * 获取id

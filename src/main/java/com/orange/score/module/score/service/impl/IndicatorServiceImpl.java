@@ -78,6 +78,11 @@ public class IndicatorServiceImpl extends BaseService<Indicator> implements IInd
     }
 
     @Override
+    public List<TreeNode> selectDepartmentTreeNodesIndicators() {
+        return indicatorMapper.selectDepartmentTreeNodesIndicators();
+    }
+
+    @Override
     public List<Integer> selectDistinctIndicatorIdByMids(String[] mIds) {
         return indicatorMapper.selectDistinctIndicatorIdByMids(mIds);
     }
