@@ -99,8 +99,10 @@ public class RenshePrevApproveController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setUnionApproveStatus2(1);
-        identityInfo.setOrderByColumn("unionApprove2Et");
-        identityInfo.setOrderBy("asc");
+        identityInfo.setOrderByColumn("reservationDate");
+        identityInfo.setOrderBy("desc");
+//        identityInfo.setOrderByColumn("unionApprove2Et");
+//        identityInfo.setOrderBy("asc");
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
 
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
