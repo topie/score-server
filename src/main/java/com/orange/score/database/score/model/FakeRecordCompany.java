@@ -44,6 +44,13 @@ public class FakeRecordCompany {
     private Date recordDate;
 
     /*
+    惩罚截止时间
+     */
+    @Column(name = "FINISH_DATE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date finishDate;
+
+    /*
     录入用户
      */
     @Column(name = "ADD_USER")
@@ -110,5 +117,13 @@ public class FakeRecordCompany {
 
     public void setFakeContent(String fakeContent) {
         this.fakeContent = fakeContent;
+    }
+
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
     }
 }
