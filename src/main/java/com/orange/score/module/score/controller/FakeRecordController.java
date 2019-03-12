@@ -60,7 +60,6 @@ public class FakeRecordController {
 
     @PostMapping("/insert")
     public Result insert(FakeRecord fakeRecord) {
-        iFakeRecordService.save(fakeRecord);
         /*
         2019年2月27日，添加在虚假材料库中添加此人的留痕记录
          */
@@ -72,7 +71,7 @@ public class FakeRecordController {
         if (list.size() == 0){
             return ResponseUtil.error("请输入正确的身份证号，批次信息");
         } else {
-
+            iFakeRecordService.save(fakeRecord);
             SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
             if (securityUser == null) throw new AuthBusinessException("用户未登录");
 
