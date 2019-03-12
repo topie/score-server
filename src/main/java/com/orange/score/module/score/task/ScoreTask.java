@@ -61,7 +61,12 @@ public class ScoreTask {
         }
     }
 
-    @Scheduled(cron = "5 0 0 * * ? ")
+    /**
+     * 2019年3月7日
+     * 关闭此定时任务
+     * 原因是需要手动操作名单公示，汇总发布
+     */
+//    @Scheduled(cron = "5 0 0 * * ? ")
     public void checkStartTask() {
         Date today = DateUtil.getToday();
         Condition condition = new Condition(BatchConf.class);

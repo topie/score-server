@@ -5,19 +5,15 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
-import com.orange.score.database.score.model.BatchConf;
-import com.orange.score.database.score.model.IdentityInfo;
-import com.orange.score.database.score.model.Indicator;
+import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
-import com.orange.score.module.score.service.IBatchConfService;
-import com.orange.score.module.score.service.IIdentityInfoService;
-import com.orange.score.module.score.service.IIndicatorService;
-import com.orange.score.module.score.service.IScoreResultService;
+import com.orange.score.module.score.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -44,6 +40,12 @@ public class CheckInfoController {
 
     @Autowired
     private IIndicatorService iIndicatorService;
+
+    @Autowired
+    private IFakeRecordService iFakeRecordService;
+
+    @Autowired
+    private IScoreRecordService iScoreRecordService;
 
     @GetMapping(value = "/batch/list")
     @ResponseBody
@@ -230,6 +232,40 @@ public class CheckInfoController {
         if (batchConf == null) return ResponseUtil.error("批次不存在");
         batchConf.setProcess(3);
         iBatchConfService.update(batchConf);
+        return ResponseUtil.success();
+    }
+
+    /*
+    2019年3月12日，汇总发布后关联虚假材料库的申请人，进行相应分数的改变
+    1、从虚假数据库取得数据；
+    2、比对得分表，相应的减去30分；
+     */
+    @PostMapping("/relationFakeRecord")
+    public Result relationFakeRecord(@RequestParam Integer batchId) {
+        BatchConf batchConf = iBatchConfService.findById(batchId);
+        if (batchConf == null) return ResponseUtil.error("批次不存在");
+        List<FakeRecord> fakeRecords = iFakeRecordService.findAll();
+        Date date = new Date();
+        for (FakeRecord fakeRecord : fakeRecords){
+            if (date.getTime() < fakeRecord.getRecordDate().getTime()){
+                Condition condition = new Condition(ScoreRecord.class);
+                tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+                criteria.andEqualTo("personIdNum", fakeRecord.getIdNumber());
+                List<String> indicators = Arrays.asList(fakeRecord.getIndicatorRole().split(","));
+                List<Integer> list = new ArrayList<Integer>();
+                for(int i=0;i<indicators.size();i++){
+                    list.add(Integer.parseInt(indicators.get(i)));
+                }
+                criteria.andIn("indicatorId", list);
+                List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+                for (ScoreRecord scoreRecord : scoreRecords){
+                    BigDecimal fakeScore = new BigDecimal(-30);
+                    scoreRecord.setScoreValue(scoreRecord.getScoreValue().add(fakeScore));
+                    iScoreRecordService.update(scoreRecord);
+                }
+            }
+        }
+
         return ResponseUtil.success();
     }
 
