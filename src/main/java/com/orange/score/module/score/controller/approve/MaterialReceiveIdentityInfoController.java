@@ -549,7 +549,7 @@ public class MaterialReceiveIdentityInfoController {
                 }
             }
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料未通过居住证积分网上预审，请根据提示尽快补正材料。");
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料需要补正，请根据提示尽快补正材料。");
         } else {
             return ResponseUtil.error("没有勾选待补正材料！");
         }
