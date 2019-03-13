@@ -496,6 +496,42 @@ public class MaterialReceiveIdentityInfoController {
     public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        /*
+        1、获取账号的地域权限；
+        2、获取账号所在的部门；
+         */
+        String str = "";
+        if (securityUser.getUserType() == 0){
+            str = str + "市区";
+        }else if (securityUser.getUserType() == 1){
+            str = str + "滨海";
+        }
+        Map<Integer, String> map = new HashMap<Integer, String>();
+        map.put(3,"人社");
+        map.put(4,"市公安局");
+        map.put(5,"市民政局");
+        map.put(6,"市教委");
+        map.put(7,"知识产权局");
+        map.put(8,"市税务局");
+        map.put(9,"市住建委");
+        map.put(10,"住房公积金中心");
+        map.put(11,"人民银行");
+        map.put(12,"市卫健委");
+
+        for (int i=0;i< securityUser.getAuthorities().size();i++){
+            String str2 = securityUser.getAuthorities().toString().replace("[","").replace("]","").replace(" ","");
+            String[] strArr = str2.split(",");
+            Integer index = Integer.valueOf(strArr[i]);
+            if (map.get(index) != null){
+                str = str + map.get(index);
+            }
+        }
+
+        if (securityUser.getUserType() == 2){
+            str = "";
+            str = str + "天津落户积分管理中心";
+        }
+
         if (!"[]".equals(supplyArr)) {
             IdentityInfo identityInfo = iIdentityInfoService.findById(id);
             if (identityInfo != null) {
@@ -549,7 +585,7 @@ public class MaterialReceiveIdentityInfoController {
                 }
             }
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料需要补正，请根据提示尽快补正材料。");
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料需要补正，请根据提示尽快补正材料。（"+str.replace(" ","")+"）");
         } else {
             return ResponseUtil.error("没有勾选待补正材料！");
         }
