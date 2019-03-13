@@ -148,6 +148,18 @@ public class ScoreRecord {
     @Column(name = "c_time")
     private Date cTime;
 
+    /**
+     * 原始分数，用来保存提供虚假材料的申请人没被扣分前的得分
+     */
+    @Column(name = "ORIGINAL_SCORE_VALUE")
+    private BigDecimal originalScoreValue;
+
+    /**
+     * 是否已经扣分，1：已经扣过
+     */
+    @Column(name = "ISDEDUCTED")
+    private String isDeducted;
+
     @Transient
     private Integer edit;
 
@@ -562,5 +574,21 @@ public class ScoreRecord {
      */
     public void setcTime(Date cTime) {
         this.cTime = cTime;
+    }
+
+    public BigDecimal getOriginalScoreValue() {
+        return originalScoreValue;
+    }
+
+    public void setOriginalScoreValue(BigDecimal originalScoreValue) {
+        this.originalScoreValue = originalScoreValue;
+    }
+
+    public String getIsDeducted() {
+        return isDeducted;
+    }
+
+    public void setIsDeducted(String isDeducted) {
+        this.isDeducted = isDeducted;
     }
 }

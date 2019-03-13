@@ -259,9 +259,13 @@ public class CheckInfoController {
                 criteria.andIn("indicatorId", list);
                 List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
                 for (ScoreRecord scoreRecord : scoreRecords){
-                    BigDecimal fakeScore = new BigDecimal(-30);
-                    scoreRecord.setScoreValue(scoreRecord.getScoreValue().add(fakeScore));
-                    iScoreRecordService.update(scoreRecord);
+                    if (scoreRecord.getIsDeducted() == null ){
+                        BigDecimal fakeScore = new BigDecimal(-30);
+                        scoreRecord.setOriginalScoreValue(scoreRecord.getScoreValue());//保存原始分数
+                        scoreRecord.setIsDeducted("1");//已经扣过分，状态位变化
+                        scoreRecord.setScoreValue(scoreRecord.getScoreValue().add(fakeScore));
+                        iScoreRecordService.update(scoreRecord);
+                    }
                 }
             }
         }
