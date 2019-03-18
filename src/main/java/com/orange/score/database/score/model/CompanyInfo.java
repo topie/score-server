@@ -1,5 +1,7 @@
 package com.orange.score.database.score.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -69,6 +71,7 @@ public class CompanyInfo {
      * 创建时间
      */
     @Column(name = "create_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     /**
