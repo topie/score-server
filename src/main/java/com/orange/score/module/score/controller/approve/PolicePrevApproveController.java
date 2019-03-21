@@ -272,7 +272,7 @@ public class PolicePrevApproveController {
             identityInfo.setOpuser1(securityUser.getDisplayName());
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
-                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus1", 4);
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus1", 4, "公安");
         }
         if (StringUtils.isNotEmpty(supplyArr)) {
             JSONArray jsonArray = JSONArray.parseArray(supplyArr);

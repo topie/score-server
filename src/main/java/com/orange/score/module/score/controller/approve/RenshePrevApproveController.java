@@ -359,7 +359,7 @@ public class RenshePrevApproveController {
 
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
-                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 4);
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 4, "人社");
         } else {
             return ResponseUtil.error("申请人不存在！");
         }

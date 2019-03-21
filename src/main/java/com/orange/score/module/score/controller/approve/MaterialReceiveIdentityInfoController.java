@@ -545,7 +545,7 @@ public class MaterialReceiveIdentityInfoController {
                 }
                 iIdentityInfoService.update(identityInfo);
                 iPersonBatchStatusRecordService
-                        .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4);
+                        .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4,str);
             } else {
                 return ResponseUtil.error("申请人不存在！");
             }

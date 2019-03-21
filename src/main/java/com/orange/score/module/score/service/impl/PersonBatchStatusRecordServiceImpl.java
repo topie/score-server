@@ -143,6 +143,46 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
         }
     }
 
+    @Override
+    public void insertStatus(Integer batchId, Integer personId, String alias, Integer status, String dept) {
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setBatchId(batchId);
+        personBatchStatusRecord.setPersonId(personId);
+        IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        if (identityInfo == null) {
+            throw new DefaultBusinessException("用户信息不存在!");
+        }
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusDictAlias(alias);
+        personBatchStatusRecord.setStatusInt(status);
+        personBatchStatusRecord.setStatusTime(new Date());
+        Dict dict = new Dict();
+        dict.setAlias(alias);
+        dict.setValue(status);
+        List<Dict> dicts = iDictService.selectByFilter(dict);
+        if (dicts.size() > 0) {
+            personBatchStatusRecord.setStatusStr(dicts.get(0).getText());
+            personBatchStatusRecord.setStatusTypeDesc(dicts.get(0).getAliasName());
+        }
+        PersonBatchStatusRecord search = new PersonBatchStatusRecord();
+        search.setBatchId(batchId);
+        search.setPersonId(personId);
+        search.setStatusDictAlias(alias);
+        search.setStatusInt(status);
+        List<PersonBatchStatusRecord> searchList = personBatchStatusRecordMapper.select(search);
+        if (searchList.size() > 0) {
+            if (dept != null){
+                personBatchStatusRecord.setStatusStr(personBatchStatusRecord.getStatusStr() + "（"+dept+"）");
+            }
+            personBatchStatusRecord.setId(searchList.get(0).getId());
+            update(personBatchStatusRecord);
+        } else {
+            if (dept != null){
+                personBatchStatusRecord.setStatusStr(personBatchStatusRecord.getStatusStr() + "（"+dept+"）");
+            }
+            save(personBatchStatusRecord);
+        }
+    }
 
     @Override
     public PersonBatchStatusRecord getPassPreCheck(PersonBatchStatusRecord personBatchStatusRecord) {

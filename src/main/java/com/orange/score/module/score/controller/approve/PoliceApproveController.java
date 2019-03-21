@@ -278,7 +278,7 @@ public class PoliceApproveController {
             identityInfo.setPoliceApproveEt(epDate);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
-                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "policeApproveStatus", 2);
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "policeApproveStatus", 2,"公安");
         }
         if (StringUtils.isNotEmpty(supplyArr)) {
             JSONArray jsonArray = JSONArray.parseArray(supplyArr);

@@ -18,5 +18,7 @@ public interface IPersonBatchStatusRecordService extends IService<PersonBatchSta
 
     void insertStatus(Integer batchId, Integer personId, String alias, Integer status);
 
+    void insertStatus(Integer batchId, Integer personId, String alias, Integer status ,String dept);
+
     PersonBatchStatusRecord getPassPreCheck(PersonBatchStatusRecord personBatchStatusRecord);
 }
