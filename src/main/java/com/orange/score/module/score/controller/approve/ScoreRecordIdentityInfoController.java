@@ -226,6 +226,7 @@ public class ScoreRecordIdentityInfoController {
             throws FileNotFoundException {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         Map params = new HashMap();
         params.put("view", view);
@@ -293,6 +294,11 @@ public class ScoreRecordIdentityInfoController {
                     msMap.put("jiaowei", minzhenList.get(0).getScoreValue());
                 } else {
                     msMap.put("jiaowei", -1);
+                }
+            }
+            if(user.getLoginName().equals("guoyulian") || user.getLoginName().equals("dongzhenling") || user.getLoginName().equals("guihuaju1") || user.getLoginName().equals("admin")){
+                if (msMap.get("opRole").equals("市住建委")){
+                    msMap.put("opRole", "市规划自然资源局");
                 }
             }
             scoreList.add(msMap);
