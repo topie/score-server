@@ -253,6 +253,7 @@ public class MaterialReceiveIdentityInfoController {
     public Result detailAll(@RequestParam Integer identityInfoId) throws FileNotFoundException {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
         Map params = new HashMap();
@@ -267,6 +268,11 @@ public class MaterialReceiveIdentityInfoController {
             if (materialInfos.size() == 0) continue;
             msMap.put("materialInfos", materialInfos);
             msMap.put("roleId", item.getOpRoleId());
+            if(user.getLoginName().equals("guoyulian") || user.getLoginName().equals("dongzhenling") || user.getLoginName().equals("guihuaju1") || user.getLoginName().equals("admin")){
+                if (item.getOpRole().equals("市住建委")){
+                    item.setOpRole("市规划自然资源局");
+                }
+            }
             msMap.put("opRole", item.getOpRole());
             mlist.add(msMap);
         }

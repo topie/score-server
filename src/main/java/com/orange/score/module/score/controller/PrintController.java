@@ -361,6 +361,11 @@ public class PrintController extends BaseController {
         List<String> departmentNames = new ArrayList<>();
         for (Integer roleId : roles) {
             Role role = roleService.findRoleById(roleId);
+            if(user.getLoginName().equals("guoyulian") || user.getLoginName().equals("dongzhenling") || user.getLoginName().equals("guihuaju1") || user.getLoginName().equals("admin")){
+                if (role.getRoleName().equals("市住建委")){
+                    role.setRoleName("市规划自然资源局");
+                }
+            }
             departmentNames.add(role.getRoleName());
         }
         if (roles.contains(3)) {
