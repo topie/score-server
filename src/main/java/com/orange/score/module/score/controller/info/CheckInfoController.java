@@ -137,6 +137,24 @@ public class CheckInfoController {
     public Result canCheck(@RequestParam Integer batchId) {
         BatchConf batchConf = iBatchConfService.findById(batchId);
         if (batchConf == null) return ResponseUtil.error("批次不存在");
+
+        /*
+        2019年3月26日
+        汇总发布前保证“守法诚信”打分项的分数为小于0的分数；
+         */
+        Condition condition2 = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria2 = condition2.createCriteria();
+        criteria2.andEqualTo("batchId", batchId);
+        criteria2.andLike("indicatorName","守法诚信");
+        criteria2.andEqualTo("status", 4);
+        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition2);
+        for (ScoreRecord scoreRecord : scoreRecords){
+            if (scoreRecord.getScoreValue().compareTo(BigDecimal.ZERO) == 1){
+                scoreRecord.setScoreValue(scoreRecord.getScoreValue().negate());
+                iScoreRecordService.update(scoreRecord);
+            }
+        }
+
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("batchId", batchId);
