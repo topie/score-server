@@ -14,12 +14,14 @@ import com.orange.score.common.utils.date.DateStyle;
 import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.model.*;
+import com.orange.score.database.security.model.Role;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.core.service.IRegionService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
+import com.orange.score.module.security.service.RoleService;
 import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -101,6 +103,9 @@ public class MaterialReceiveIdentityInfoController {
 
     @Autowired
     private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Value("${upload.folder}")
     private String uploadPath;
@@ -513,16 +518,24 @@ public class MaterialReceiveIdentityInfoController {
             str = str + "滨海";
         }
         Map<Integer, String> map = new HashMap<Integer, String>();
-        map.put(3,"人社");
-        map.put(4,"市公安局");
-        map.put(5,"市民政局");
-        map.put(6,"市教委");
-        map.put(7,"知识产权局");
-        map.put(8,"市税务局");
-        map.put(9,"市住建委");
-        map.put(10,"住房公积金中心");
-        map.put(11,"人民银行");
-        map.put(12,"市卫健委");
+//        map.put(3,"人社");
+//        map.put(4,"市公安局");
+//        map.put(5,"市民政局");
+//        map.put(6,"市教委");
+//        map.put(7,"知识产权局");
+//        map.put(8,"市税务局");
+//        map.put(9,"市住建委");
+//        map.put(10,"住房公积金中心");
+//        map.put(11,"人民银行");
+//        map.put(12,"市卫健委");
+
+        Condition condition3 = new Condition(Role.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria3 = condition3.createCriteria();
+        criteria3.andEqualTo("roleType", 0);
+        List<Role> list = roleService.findByCondition(condition3);
+        for (Role role : list){
+            map.put(role.getId(), role.getRoleName());
+        }
 
         for (int i=0;i< securityUser.getAuthorities().size();i++){
             String str2 = securityUser.getAuthorities().toString().replace("[","").replace("]","").replace(" ","");
@@ -551,7 +564,7 @@ public class MaterialReceiveIdentityInfoController {
                 }
                 iIdentityInfoService.update(identityInfo);
                 iPersonBatchStatusRecordService
-                        .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4,str);
+                        .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4,str+"-"+securityUser.getDisplayName());
             } else {
                 return ResponseUtil.error("申请人不存在！");
             }
