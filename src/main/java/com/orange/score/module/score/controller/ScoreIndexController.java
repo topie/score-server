@@ -4,6 +4,7 @@ import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.date.DateUtil;
+import com.orange.score.common.utils.date.Week;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.security.SecurityUser;
@@ -51,6 +52,10 @@ public class ScoreIndexController {
 
         condition = new Condition(IdentityInfo.class);
         criteria = condition.createCriteria();
+        Week week = DateUtil.getWeek(today);
+        if (week.getNumber() == 5){
+            today = DateUtil.addDay(today, 2);
+        }
         criteria.andEqualTo("reservationDate", DateUtil.addDay(today, 1));
         if (securityUser.getUserType() == 0) {
             result.put("address2", "市行政审批");
@@ -64,6 +69,10 @@ public class ScoreIndexController {
 
         condition = new Condition(IdentityInfo.class);
         criteria = condition.createCriteria();
+        week = DateUtil.getWeek(today);
+        if (week.getNumber() == 1){
+            today = DateUtil.addDay(today, -2);
+        }
         criteria.andEqualTo("reservationDate", DateUtil.addDay(today, -1));
         if (securityUser.getUserType() == 0) {
             result.put("address3", "市行政审批");
