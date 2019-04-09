@@ -128,10 +128,18 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
                 SearchUtil.convert(criteria, searchItems);
             }
             if (StringUtils.isNotEmpty(identityInfo.getOrderByColumn())) {
+                String[] temp = identityInfo.getOrderByColumn().split(",");
                 if (StringUtils.isNotEmpty(identityInfo.getOrderBy()) && "desc".equals(identityInfo.getOrderBy())) {
-                    condition.orderBy(identityInfo.getOrderByColumn()).desc();
+                    for (int i=0;i<temp.length-1;i++){
+                        condition.orderBy(temp[i]);
+                    }
+                    condition.orderBy(temp[temp.length-1]).desc();
                 } else {
-                    condition.orderBy(identityInfo.getOrderByColumn()).asc();
+                    for (int i=0;i<temp.length-1;i++){
+                        condition.orderBy(temp[i]);
+                    }
+                    //condition.orderBy(identityInfo.getOrderByColumn()).asc();
+                    condition.orderBy(temp[temp.length-1]).asc();
                 }
 
             } else {
