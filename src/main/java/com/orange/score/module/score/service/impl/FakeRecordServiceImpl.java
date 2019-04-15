@@ -36,6 +36,9 @@ public class FakeRecordServiceImpl extends BaseService<FakeRecord> implements IF
     public List<FakeRecord> selectByFilter(FakeRecord fakeRecord) {
         Condition condition = new Condition(FakeRecord.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        if (fakeRecord.getUserName()!="" && fakeRecord.getUserName() != null){
+            criteria.andLike("userName", "%"+fakeRecord.getUserName()+"%");
+        }
         return fakeRecordMapper.selectByCondition(condition);
     }
 }

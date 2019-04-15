@@ -38,6 +38,9 @@ public class FakeRecordCompanyServiceImpl extends BaseService<FakeRecordCompany>
     public List<FakeRecordCompany> selectByFilter(FakeRecordCompany fakeRecordCompany) {
         Condition condition = new Condition(FakeRecordCompany.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        if (fakeRecordCompany.getCompanyName() != "" && fakeRecordCompany.getCompanyName() != null){
+            criteria.andLike("companyName","%"+fakeRecordCompany.getCompanyName()+"%");
+        }
         return fakeRecordCompanyMapper.selectByCondition(condition);
     }
 }
