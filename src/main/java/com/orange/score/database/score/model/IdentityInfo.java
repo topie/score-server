@@ -205,6 +205,12 @@ public class IdentityInfo {
     @Column(name = "result_status")
     private Integer resultStatus;
 
+    /*
+    剩余预约次数
+     */
+    @Column(name = "RESERVATION_TIME")
+    private Integer reservationTime;
+
     /**
      * 创建时间
      */
@@ -275,7 +281,6 @@ public class IdentityInfo {
     public void setMaterialStatus(Integer materialStatus) {
         this.materialStatus = materialStatus;
     }
-
     //驳回材料部门的集合
     @Transient
     private Set<Integer> opuser6RoleSet;
@@ -859,4 +864,11 @@ public class IdentityInfo {
         }
     }
 
+    public Integer getReservationTime() {
+        return reservationTime;
+    }
+
+    public void setReservationTime(Integer reservationTime) {
+        this.reservationTime = reservationTime;
+    }
 }
