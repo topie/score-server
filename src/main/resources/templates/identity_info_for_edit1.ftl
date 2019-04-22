@@ -74,6 +74,48 @@
             </td>
         </tr>
         <tr>
+            <td colspan="12">剩余预约次数（正整数）：
+                <input data-id="${person.id?c}" data-name="person.reservationTime"
+                       class="edit input-large" style="height: 25px;"
+                       value="${person.reservationTime}">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12">专业：
+                <input data-id="${other.id?c}" data-name="other.profession"
+                       class="edit input-large" style="height: 25px;"
+                       value="${other.profession}">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12">实际用工单位名称：
+                <input data-id="${other.id?c}" data-name="other.companyName"
+                       class="edit input-large" style="height: 25px;width:600px;"
+                       value="${other.companyName}">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12">实际用工单位地址：
+                <input data-id="${other.id?c}" data-name="other.companyAddress"
+                       class="edit input-large" style="height: 25px;width:600px;"
+                       value="${other.companyAddress}">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12">单位座机电话：
+                <input data-id="${other.id?c}" data-name="other.companyPhone"
+                       class="edit input-large" style="height: 25px;"
+                       value="${other.companyPhone}">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12">本人手机（接收短信）：
+                <input data-id="${other.id?c}" data-name="other.selfPhone"
+                       class="edit input-large" style="height: 25px;"
+                       value="${other.selfPhone}">
+            </td>
+        </tr>
+        <tr>
             <td colspan="12">迁出地省（市自治区）：
                 <select data-id="${move.id?c}" data-name="move.moveProvince" class="edit"
                         style="height: 25px;">
@@ -107,7 +149,7 @@
         <tr>
             <td colspan="12">迁出详细地址：
                 <input data-id="${move.id?c}" data-name="move.moveAddress"
-                       class="edit input-large" style="height: 25px;"
+                       class="edit input-large" style="height: 25px;width:600px;"
                        value="${move.moveAddress}">
             </td>
         </tr>
@@ -138,7 +180,7 @@
         <tr>
             <td colspan="12">现户籍登记机关：
                 <input data-id="${move.id?c}" data-name="move.moveRegisteredOffice"
-                       class="edit input-large" style="height: 25px;"
+                       class="edit input-large" style="height: 25px;width:600px;"
                        value="${move.moveRegisteredOffice}">
             </td>
         </tr>
@@ -165,7 +207,7 @@
         <tr>
             <td colspan="12">迁入地详细地址：
                 <input data-id="${move.id?c}" data-name="move.address" class="edit input-large"
-                       style="height: 25px;"
+                       style="height: 25px;width:600px;"
                        value="${move.address}">
             </td>
         </tr>
@@ -237,7 +279,7 @@
             </td>
             <td colspan="6">邮寄地址：
                 <input data-id="${move.id?c}" data-name="move.witnessAddress"
-                       class="edit input-large" style="height: 25px;"
+                       class="edit input-large" style="height: 25px;width:600px;"
                        value="${move.witnessAddress}">
             </td>
         </tr>
