@@ -536,7 +536,6 @@ public class MaterialReceiveIdentityInfoController {
         for (Role role : list){
             map.put(role.getId(), role.getRoleName());
         }
-
         for (int i=0;i< securityUser.getAuthorities().size();i++){
             String str2 = securityUser.getAuthorities().toString().replace("[","").replace("]","").replace(" ","");
             String[] strArr = str2.split(",");
@@ -559,6 +558,7 @@ public class MaterialReceiveIdentityInfoController {
                 Set<Integer> set = identityInfo.getOpuser6RoleSet();
                 if (set != null) {
                     set.addAll(userService.findUserDepartmentRoleByUserId(securityUser.getId()));
+                    identityInfo.setOpuser6RoleSet(set);
                 } else {
                     identityInfo.setOpuser6RoleSet(new HashSet<>(userService.findUserDepartmentRoleByUserId(securityUser.getId())));
                 }
