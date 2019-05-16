@@ -81,6 +81,13 @@
             </td>
         </tr>
         <tr>
+            <td colspan="12">公安落户编号（请谨慎修改）：
+                <input data-id="${person.id?c}" data-name="person.luohuNumber"
+                       class="edit input-large" style="height: 25px;"
+                       value="${person.luohuNumber}">
+            </td>
+        </tr>
+        <tr>
             <td colspan="12">专业：
                 <input data-id="${other.id?c}" data-name="other.profession"
                        class="edit input-large" style="height: 25px;"
