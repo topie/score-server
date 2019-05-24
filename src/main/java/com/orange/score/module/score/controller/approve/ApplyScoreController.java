@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -248,6 +249,9 @@ public class ApplyScoreController {
         applyScore.setApplyRole(role.getRoleName());
         applyScore.setApproveStatus(0);
         applyScore.setApplyReason(reason);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String str = sdf.format(new Date());
+        applyScore.setApplyDate(str);
         iApplyScoreService.save(applyScore);
         return ResponseUtil.success();
     }

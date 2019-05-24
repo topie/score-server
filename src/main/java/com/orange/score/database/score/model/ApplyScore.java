@@ -1,6 +1,7 @@
 package com.orange.score.database.score.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "t_apply_score")
 public class ApplyScore {
@@ -95,6 +96,20 @@ public class ApplyScore {
      */
     @Column(name = "approve_user")
     private String approveUser;
+
+    /**
+     * 申请时间
+     */
+    @Column(name = "apply_date")
+    private String applyDate;
+
+    public String getApplyDate() {
+        return applyDate;
+    }
+
+    public void setApplyDate(String applyDate) {
+        this.applyDate = applyDate;
+    }
 
     public Integer getCompanyId() {
         return companyId;
