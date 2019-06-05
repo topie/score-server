@@ -69,6 +69,9 @@ public class ApplyCancelController {
         if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
         }
+        if (applyCancel.getBatchId() != null){
+            criteria.andEqualTo("batchId", applyCancel.getBatchId());
+        }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
 
         Set<Integer> personIdSet = new HashSet<>();
@@ -109,6 +112,9 @@ public class ApplyCancelController {
         criteria.andEqualTo("approveStatus", 0);
         if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
+        }
+        if (applyCancel.getBatchId() != null){
+            criteria.andEqualTo("batchId", applyCancel.getBatchId());
         }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
 
@@ -151,6 +157,9 @@ public class ApplyCancelController {
         if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
             criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
         }
+        if (applyCancel.getBatchId() != null){
+            criteria.andEqualTo("batchId", applyCancel.getBatchId());
+        }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         Set<Integer> personIdSet = new HashSet<>();
         for (ApplyCancel cancel : pageInfo.getList()) {
@@ -188,6 +197,12 @@ public class ApplyCancelController {
         criteria.andEqualTo("approveStatus", 2);
         if (user.getUserType() == 0 || user.getUserType() == 1)
             criteria.andEqualTo("applyUserType", user.getUserType());
+        if (StringUtils.isNotEmpty(applyCancel.getPersonIdNumber())) {
+            criteria.andEqualTo("personIdNumber", applyCancel.getPersonIdNumber());
+        }
+        if (applyCancel.getBatchId() != null){
+            criteria.andEqualTo("batchId", applyCancel.getBatchId());
+        }
         PageInfo<ApplyCancel> pageInfo = iApplyCancelService.selectByFilterAndPage(condition, pageNum, pageSize);
         Set<Integer> personIdSet = new HashSet<>();
         for (ApplyCancel cancel : pageInfo.getList()) {
