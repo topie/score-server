@@ -165,7 +165,7 @@
         ) a
         group by a.person_id_num
         ) t2
-        where upper(t1.id_number) = upper(t2.person_id_num) and t1.hall_status=6 AND t1.CANCEL_STATUS=0 and t1.BATCH_ID=#{item.id}
+        where upper(t1.id_number) = upper(t2.person_id_num) AND t1.CANCEL_STATUS=0 and t1.BATCH_ID=#{item.id}
         /*and t2.score_value>=146*/
 
         <if test="item.scoreValue!=null">
