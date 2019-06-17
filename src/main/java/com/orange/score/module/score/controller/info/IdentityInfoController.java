@@ -1086,6 +1086,49 @@ public class IdentityInfoController {
         }
     }
 
+    private static String[] headers2 = new String[]{"身份证号", "ID", "姓名","得分", "性别", "年龄", "拟落户地区","预约大厅状态","资格取消状态"};
+    private static String[] mapHeaders2 = new String[]{"PERSON_ID_NUM", "ID", "PERSON_NAME","SCORE_VALUE", "SEX", "年龄", "拟落户地区", "预约大厅状态","资格取消状态"};
+
+    @RequestMapping("/provideTotalScore")
+    @ResponseBody
+    public Result provideTotalScore(AcceptDateConf acceptDateConf, HttpServletResponse response, HttpServletRequest request) {
+        String message = "";
+        try {
+            Condition condition = new Condition(BatchConf.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("id", acceptDateConf.getBatchId());
+            List<BatchConf> list = iBatchConfService.findByCondition(condition);
+            Map argMap = new HashMap();
+            if (list.size() > 0) {
+                argMap.put("batchId", list.get(0).getId());
+                Integer scoreValue = list.get(0).getScoreValue();
+                if (scoreValue != null) {
+                    argMap.put("scoreValue", scoreValue);
+                } else {
+                    //不存在打分标准时抛出异常
+                    message = "不存在打分标准，请设置";
+                    throw new NullPointerException();
+                }
+            } else {
+                //不存在batchid时抛出异常
+                message = "该ID不存在";
+                throw new NullPointerException();
+            }
+
+            List<Map> allList = iIdentityInfoService.selectIdentityInfoRecipientList2(argMap);
+            String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System.currentTimeMillis() + ".xlsx";
+            ExcelFileUtil.exportXlsx(savePath, allList, headers2, mapHeaders2);
+            ExcelFileUtil.download(response, savePath, "申请人总分数排名.xlsx");
+            return ResponseUtil.success(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if ("".equals(message)) {
+                message = "下载失败";
+            }
+            return ResponseUtil.error(message);
+        }
+    }
+
 
     /**
      * 创建xml根节点

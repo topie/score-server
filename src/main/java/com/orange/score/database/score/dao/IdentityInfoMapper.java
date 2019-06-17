@@ -26,4 +26,6 @@ public interface IdentityInfoMapper extends Mapper<IdentityInfo> {
 
     //根据batchid和score_value的数据获取申请人
     List<Map> selectIdentityInfoRecipientList(@Param("item") Map argMap);
+
+    List<Map> selectIdentityInfoRecipientList2(@Param("item") Map argMap);
 }

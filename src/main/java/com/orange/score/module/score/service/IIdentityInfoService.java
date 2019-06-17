@@ -47,4 +47,6 @@ public interface IIdentityInfoService extends IService<IdentityInfo> {
 
     //根据batchid和score_value的数据获取申请人
     List<Map> selectIdentityInfoRecipientList(Map argMap);
+
+    List<Map> selectIdentityInfoRecipientList2(Map argMap);
 }

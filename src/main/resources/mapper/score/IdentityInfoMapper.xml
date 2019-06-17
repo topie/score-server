@@ -280,8 +280,10 @@
         t_region tr,
         t_company_info tp,
         t_house_other th
-        where t1.id_number = t2.person_id_num
-        and t1.hall_status = 6
+        where /*t1.id_number = t2.person_id_num   2019年6月17日，优化sql 语句，添加upper函数，改变筛选条件*/
+        upper(t1.id_number) = upper(t2.person_id_num) AND t1.CANCEL_STATUS=0
+        /*and t1.hall_status = 6*/
+        and t1.BATCH_ID = #{item.batchId}
         and t1.id = tm.identity_info_id
         and tm.registered_region = tof.id
         and tm.region = tr.id
@@ -289,6 +291,67 @@
         and t1.id = th.identity_info_id
         and t2.score_value &gt;
         = #{item.scoreValue}
+        order by t2.score_value desc
+    </select>
+
+    <select id="selectIdentityInfoRecipientList2" resultType="java.util.Map">
+        select t2.person_id_num,
+            t1.id,
+            t2.person_name,
+            t2.score_value,
+            case
+            when t1.sex = '1' then
+                '男'
+            when t1.sex = '2' then
+                '女'
+            else
+                '其他'
+            end sex,
+            t1.age 年龄,
+            t1.region_name 拟落户地区,
+            t1.hall_status 预约大厅状态,
+            case
+            when t1.cancel_status = 0 then
+                '正常'
+            when t1.cancel_status = 1 then
+                '取消资格'
+            else
+                '其他'
+            end 资格取消状态,
+            t1.RENSHE_ACCEPT_STATUS
+        from t_identity_info t1,
+            (select a.person_id_num,
+                 max(a.person_name) person_name,
+                 round(nvl(sum(a.SCORE), 0), 2) score_value
+             from (select t.PERSON_NAME,
+                       t.OP_ROLE,
+                       t.person_id_num,
+                       t.score_value as score
+                   from t_pb_score_record t
+                   where t.indicator_id != 3
+                         and t.indicator_id != 14
+                         and batch_id = #{item.batchId}
+                   union all
+                   select max(t.PERSON_NAME) PERSON_NAME,
+                          max(t.OP_ROLE) OP_ROLE,
+                       t.person_id_num,
+                          max(t.score_value) as score
+                   from t_pb_score_record t
+                   where t.indicator_id = 3
+                         and batch_id = #{item.batchId}
+                   group by t.person_id_num
+                   union all
+                   select max(t.PERSON_NAME) PERSON_NAME,
+                          max(t.OP_ROLE) OP_ROLE,
+                       t.person_id_num,
+                          decode(sum(t.score_value), 20, 10, 0) as score
+                   from t_pb_score_record t
+                   where t.indicator_id = 14
+                         and batch_id = #{item.batchId}
+                   group by t.person_id_num) a
+             group by a.person_id_num) t2
+        where upper(t1.id_number) = upper(t2.person_id_num)
+              and t1.batch_id = #{item.batchId}
         order by t2.score_value desc
     </select>
 
