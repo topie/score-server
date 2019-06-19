@@ -322,6 +322,15 @@ public class IdentityInfoController {
             }
         }
         params.put("materialInfos", roleMaterialInfoList);
+
+        List<MaterialInfo> roleMaterialInfoList_2 = new ArrayList<>();
+        for (MaterialInfo materialInfo : roleMaterialInfoList){
+            if (materialInfo.getArchivingStatus()!=null && materialInfo.getArchivingStatus()==1){
+                roleMaterialInfoList_2.add(materialInfo);
+            }
+        }
+        params.put("materialInfos_2", roleMaterialInfoList_2);
+
         params.put("person", person);
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
         if (companyInfo == null) {

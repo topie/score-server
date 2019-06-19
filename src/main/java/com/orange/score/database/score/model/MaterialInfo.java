@@ -91,6 +91,17 @@ public class MaterialInfo {
     @Column(name = "materialInfoRole")
     private String materialInfoRole;
 
+    @Column(name = "ARCHIVING_STATUS")
+    private Integer archivingStatus;
+
+    public Integer getArchivingStatus() {
+        return archivingStatus;
+    }
+
+    public void setArchivingStatus(Integer archivingStatus) {
+        this.archivingStatus = archivingStatus;
+    }
+
     public String getMaterialInfoRole() {
         return materialInfoRole;
     }
