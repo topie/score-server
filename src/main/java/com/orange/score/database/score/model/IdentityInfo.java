@@ -235,6 +235,13 @@ public class IdentityInfo {
     @Column(name = "police_approve_et")
     private Date policeApproveEt;
 
+    /*
+    申请人申请审核的时间
+     */
+    @Column(name = "preApprove")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date preApprove;
+
     @Column(name = "union_approve_1_et")
     private Date unionApprove1Et;
 
@@ -870,5 +877,13 @@ public class IdentityInfo {
 
     public void setReservationTime(Integer reservationTime) {
         this.reservationTime = reservationTime;
+    }
+
+    public Date getPreApprove() {
+        return preApprove;
+    }
+
+    public void setPreApprove(Date preApprove) {
+        this.preApprove = preApprove;
     }
 }

@@ -87,6 +87,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             if (identityInfo.getAcceptAddressId() != null) {
                 criteria.andEqualTo("acceptAddressId", identityInfo.getAcceptAddressId());
             }
+            if (identityInfo.getPreApprove() != null){
+                criteria.andEqualTo("preApprove",identityInfo.getPreApprove());
+            }
             /*
             2018年10月15日，增加一个锁定人的搜索条件
              */
