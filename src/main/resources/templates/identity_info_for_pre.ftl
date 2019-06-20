@@ -24,6 +24,9 @@
                 <li class="">
                     <a data-toggle="tab" href="#archiving-tab" aria-expanded="false">存档材料</a>
                 </li>
+                <li class="">
+                    <a data-toggle="tab" href="#renshe-tab" aria-expanded="false">人社材料</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -479,6 +482,170 @@
                                             </td>
                                             <td style="width:100px;height:100px" class="text-center">
                                                 <img name="picpic_2" class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
+                                                     style="cursor: pointer;border: 1px solid gray;"
+                                                     width="100" height="100"
+                                                     src="${item.onlinePersonMaterial.materialUri}">
+                                            </td>
+                                            <td>${item.onlinePersonMaterial.materialInfoName}
+                                                <br>
+                                                <a class="download btn btn-mini btn-info" target="_blank"
+                                                   href="${item.onlinePersonMaterial.materialUri}"
+                                                   download="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
+                                                    下载
+                                                </a>
+                                            </td>
+                                            <td>${item.onlinePersonMaterial.reason}</td>
+                                        </tr>
+                                    </#if>
+                                <#else>
+                                    <tr>
+                                        <td class="text-center">
+                                            未上传
+                                        </td>
+                                        <td>${item.name}</td>
+                                        <td></td>
+                                    </tr>
+                                </#if>
+                            </#list>
+                            </table>
+                            <script type="text/javascript">
+                                var hostName = window.location.host;
+                                if (hostName == "172.16.200.68") {
+                                    $(".p-img").each(function () {
+                                        var src = $(this).attr("src");
+                                        var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
+                                        $(this).attr("src", newSrc);
+                                    });
+                                    $("a.download").each(function () {
+                                        var href = $(this).attr("href");
+                                        var newHref = href.replace("218.67.246.52:80", "172.16.200.68:8092");
+                                        $(this).attr("href", newHref);
+                                    });
+                                }
+                                $("button[role=msm_btn]").on("click", function () {
+                                    var name = $(this).prev().text();
+                                    var phone = $(this).attr("phone");
+                                    $.ajax({
+                                        type: "POST",
+                                        dataType: "json",
+                                        url: App.href + "/api/score/approve/renshePrevApprove/sendCompanyMsg",
+                                        data: {
+                                            name: name,
+                                            phone: phone
+                                        },
+                                        success: function (data) {
+                                            alert("发送成功!")
+                                        },
+                                        error: function (e) {
+                                            console.error("请求异常。");
+                                        }
+                                    });
+                                });
+                                $(".p-img").off("click");
+                                $(".p-img").on("click", function () {
+                                    var img = $('<img src="' + $(this).attr("src") + '">');
+                                    $.orangeModal({
+                                        title: "图片预览",
+                                        destroy: true,
+                                        buttons: [
+                                            {
+                                                text: '旋转',
+                                                cls: 'btn btn-info',
+                                                handle: function (m) {
+                                                    m.$body.find("img").each(function (i, d) {
+                                                        var transform = $(this).css('transform');
+
+                                                        if (transform == "none") {
+                                                            $(this).css("transform", 'rotate(90deg)');
+                                                        } else {
+                                                            function getmatrix(a, b, c, d, e, f) {
+                                                                var aa = Math.round(180 * Math.asin(a) / Math.PI);
+                                                                var bb = Math.round(180 * Math.acos(b) / Math.PI);
+                                                                var cc = Math.round(180 * Math.asin(c) / Math.PI);
+                                                                var dd = Math.round(180 * Math.acos(d) / Math.PI);
+                                                                var deg = 0;
+                                                                if (aa == bb || -aa == bb) {
+                                                                    deg = dd;
+                                                                } else if (-aa + bb == 180) {
+                                                                    deg = 180 + cc;
+                                                                } else if (aa + bb == 180) {
+                                                                    deg = 360 - cc || 360 - dd;
+                                                                }
+                                                                return deg >= 360 ? 0 : deg;
+                                                            }
+
+                                                            var deg = eval('get' + transform);
+                                                            var step = 90;//每次旋转多少度
+                                                            $(this).css({'transform': 'rotate(' + (deg + step) % 360 + 'deg)'});
+                                                        }
+                                                    });
+                                                }
+                                            },
+                                            {
+                                                text: '放大',
+                                                cls: 'btn btn-info',
+                                                handle: function (m) {
+                                                    m.$body.find("img").each(function (i, d) {
+                                                        var that = this;
+                                                        $(this).css("height", $(that).height() * 1.1);
+                                                        $(this).css("width", $(that).width() * 1.1);
+                                                    });
+                                                }
+                                            }, {
+                                                text: '缩小',
+                                                cls: 'btn btn-info',
+                                                handle: function (m) {
+                                                    m.$body.find("img").each(function (i, d) {
+                                                        var that = this;
+                                                        $(this).css("height", $(that).height() * 0.9);
+                                                        $(this).css("width", $(that).width() * 0.9);
+                                                    });
+                                                }
+                                            }
+                                        ]
+                                    }).show().$body.html(img);
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2019年6月20日 添加“人社材料”tab页 -->
+                <div id="renshe-tab" class="main-cont clearfix tab-pane">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            申请人材料上传情况
+                        </div>
+                        <div id="to_point" style="display: none;position: absolute">
+
+                        </div>
+                        <!-- Table 多个表格列表组合 -->
+                        <div class="table-list-item">
+                            <table id="picTable" style="font-size: 14px;" class="table table-hover table-bordered table-condensed">
+                                <tr class="info">
+                                    <th>选择</th>
+                                    <th>预览</th>
+                                    <th class="text-info">材料名称</th>
+                                    <th class="text-info">失败原因</th>
+                                </tr>
+                            <#list materialInfos_3 as item>
+                                <#if item.onlinePersonMaterial??>
+                                    <#if item.onlinePersonMaterial.materialUri=="" && item.onlinePersonMaterial.materialId!=0>
+                                        <tr>
+                                            <td class="text-center">
+                                                未上传
+                                            </td>
+                                            <td>${item.name}</td>
+                                            <td></td>
+                                        </tr>
+                                    <#else>
+                                        <tr>
+                                            <td class="text-center">
+                                                <input name="checkMaterial" type="checkbox" checked="checked">
+                                            </td>
+                                            <td style="width:100px;height:100px" class="text-center">
+                                                <img name="picpic_3" class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
                                                      style="cursor: pointer;border: 1px solid gray;"
                                                      width="100" height="100"
                                                      src="${item.onlinePersonMaterial.materialUri}">

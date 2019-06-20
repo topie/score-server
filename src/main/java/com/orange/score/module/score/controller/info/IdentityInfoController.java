@@ -323,13 +323,21 @@ public class IdentityInfoController {
         }
         params.put("materialInfos", roleMaterialInfoList);
 
-        List<MaterialInfo> roleMaterialInfoList_2 = new ArrayList<>();
+        List<MaterialInfo> roleMaterialInfoList_2 = new ArrayList<>();//非人社部门的材料列表
         for (MaterialInfo materialInfo : roleMaterialInfoList){
             if (materialInfo.getArchivingStatus()!=null && materialInfo.getArchivingStatus()==1){
                 roleMaterialInfoList_2.add(materialInfo);
             }
         }
         params.put("materialInfos_2", roleMaterialInfoList_2);
+
+        List<MaterialInfo> roleMaterialInfoList_3 = new ArrayList<>();//人社部门的材料列表
+        for (MaterialInfo materialInfo : roleMaterialInfoList){
+            if (materialInfo.getArchivingStatus()!=null && materialInfo.getArchivingStatus()==2){
+                roleMaterialInfoList_3.add(materialInfo);
+            }
+        }
+        params.put("materialInfos_3", roleMaterialInfoList_3);
 
         params.put("person", person);
         CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
