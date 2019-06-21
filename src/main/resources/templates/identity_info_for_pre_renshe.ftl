@@ -10,7 +10,7 @@
 <div class="widget-box transparent">
     <div class="widget-header">
         <h4 class="widget-title lighter smaller">
-            申请人信息223333333333333333333333333333
+            申请人信息
         </h4>
 
         <div class="widget-toolbar no-border">
