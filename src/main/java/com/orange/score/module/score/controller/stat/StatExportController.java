@@ -1480,4 +1480,27 @@ public class StatExportController {
         ExcelFileUtil.download(response, savePath, "列表4.xlsx");
     }
 
+
+    /*
+    2019年6月20日，导出功能
+    人社预审阶段，按照日期导出申请审核的申请人列表
+     */
+    @GetMapping(value = "/export5")
+    @ResponseBody
+    public void export5(HttpServletRequest request, HttpServletResponse response,
+                        @RequestParam("preApprove") String preApprove) throws Exception {
+        Map argMap = new HashMap();
+        argMap.put("preApprove", preApprove);
+        //argMap.put("batchId", 1021);
+
+        List<Map> allList = iIdentityInfoService.selectExportList5(argMap);
+        String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
+                .currentTimeMillis() + ".xlsx";
+        ExcelFileUtil.exportXlsx(savePath, allList,
+                new String[]{"申请审核日期", "申请人姓名", "申请人身份证号", "配偶姓名", "配偶身份证号", "关系"},
+                new String[]{"PREAPPROVE", "SPNAME", "SPID_NUMBER", "NAME", "ID_NUMBER", "RELATIONSHIP"});
+        ExcelFileUtil.download(response, savePath, "待审核"+preApprove+".xlsx");
+    }
+
+
 }

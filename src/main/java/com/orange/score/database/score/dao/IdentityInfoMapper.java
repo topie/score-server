@@ -14,6 +14,8 @@ public interface IdentityInfoMapper extends Mapper<IdentityInfo> {
 
     List<Map> selectExportList1(@Param("item") Map argMap);
 
+    List<Map> selectExportList5(@Param("item") Map argMap);
+
     List<Map> selectExportList2(@Param("item") Map argMap);
 
     List<Integer> selectApprovingRedCompanyId(@Param("item") IdentityInfo identityInfo, @Param("limit") int limit);

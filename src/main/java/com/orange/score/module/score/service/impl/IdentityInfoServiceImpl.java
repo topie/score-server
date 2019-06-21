@@ -174,6 +174,11 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
     }
 
     @Override
+    public List<Map> selectExportList5(Map argMap) {
+        return identityInfoMapper.selectExportList5(argMap);
+    }
+
+    @Override
     public PageInfo<Map> selectExportList2ByPage(Map argMap, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Map> list = selectExportList2(argMap);
