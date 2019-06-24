@@ -109,8 +109,16 @@ public class RenshePrevApproveController {
         Iterator<IdentityInfo> iterator = pageInfo.getList().iterator();
         IdentityInfo info;
         CompanyInfo companyInfo;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         while (iterator.hasNext()) {
             info = iterator.next();
+
+            /*
+            2019年6月24日
+            因浏览器解析时间有8个小时的时差，所以把preApprove 的字段值赋给 regionName
+             */
+            info.setRegionName(sdf.format(info.getPreApprove()));
+
             companyInfo = iCompanyInfoService.findById(info.getCompanyId());
             if (StringUtils.isEmpty(companyInfo.getBusinessLicenseSrc())) {
                 iterator.remove();

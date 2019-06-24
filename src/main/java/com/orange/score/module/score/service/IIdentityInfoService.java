@@ -27,6 +27,8 @@ public interface IIdentityInfoService extends IService<IdentityInfo> {
 
     PageInfo<Map> selectExportList1ByPage(Map argMap, int pageNum, int pageSize);
 
+    PageInfo<Map> selectExportList5ByPage(Map argMap, int pageNum, int pageSize);
+
     List<Map> selectExportList1(Map argMap);
 
     List<Map> selectExportList5(Map argMap);

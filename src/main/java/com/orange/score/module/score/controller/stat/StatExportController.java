@@ -49,6 +49,25 @@ public class StatExportController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
+    /*
+    2019年6月24日
+    添加人社预审待审核导出
+     */
+    @GetMapping(value = "/list5")
+    @ResponseBody
+    public Result list5(@RequestParam("preApprove") String preApprove,
+                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        Map argMap = new HashMap();
+        argMap.put("preApprove", preApprove);
+        PageInfo<Map> pageInfo = iIdentityInfoService.selectExportList5ByPage(argMap, pageNum, pageSize);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (int i=0;i<pageInfo.getList().size();i++){
+            pageInfo.getList().get(i).put("PREAPPROVE",preApprove);
+        }
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
     @GetMapping(value = "/export1")
     @ResponseBody
     public void export1(HttpServletRequest request, HttpServletResponse response,
