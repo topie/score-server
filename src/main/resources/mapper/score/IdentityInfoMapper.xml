@@ -85,6 +85,12 @@
             <if test="item.batchId!=null">
                 and t1.batch_id=#{item.batchId}
             </if>
+            <if test="item.userType==0">
+                and t1.ACCEPT_ADDRESS_ID=1
+            </if>
+            <if test="item.userType==1">
+                and t1.ACCEPT_ADDRESS_ID=2
+            </if>
             <if test="item.preApprove!=null">
                 and to_char(t1.preApprove,'yyyy-MM-dd')=#{item.preApprove}
             </if>
