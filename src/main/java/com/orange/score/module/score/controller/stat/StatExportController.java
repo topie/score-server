@@ -2,6 +2,7 @@ package com.orange.score.module.score.controller.stat;
 
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
+import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.excel.ExcelFileUtil;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
@@ -10,6 +11,8 @@ import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.BatchConf;
 import com.orange.score.module.score.service.IBatchConfService;
 import com.orange.score.module.score.service.IIdentityInfoService;
+import com.orange.score.module.security.SecurityUser;
+import com.orange.score.module.security.SecurityUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,8 +61,11 @@ public class StatExportController {
     public Result list5(@RequestParam("preApprove") String preApprove,
                         @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                         @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         Map argMap = new HashMap();
         argMap.put("preApprove", preApprove);
+        argMap.put("userType", securityUser.getUserType());
         PageInfo<Map> pageInfo = iIdentityInfoService.selectExportList5ByPage(argMap, pageNum, pageSize);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (int i=0;i<pageInfo.getList().size();i++){
@@ -1508,9 +1514,12 @@ public class StatExportController {
     @ResponseBody
     public void export5(HttpServletRequest request, HttpServletResponse response,
                         @RequestParam("preApprove") String preApprove) throws Exception {
+
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         Map argMap = new HashMap();
         argMap.put("preApprove", preApprove);
-        //argMap.put("batchId", 1021);
+        argMap.put("userType", securityUser.getUserType());
 
         List<Map> allList = iIdentityInfoService.selectExportList5(argMap);
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
