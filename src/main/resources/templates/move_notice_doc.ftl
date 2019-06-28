@@ -452,6 +452,7 @@
         </tbody>
     </table>
     <p class="p2"></p>
+    <#if count!=0>
     <p class="p4">
         <span>随迁人口信息</span>
     </p>
@@ -509,6 +510,7 @@
 
         </tbody>
     </table>
+    </#if>
     <p class="p2"></p>
     <p class="p7"></p>
     <p class="p7"></p>

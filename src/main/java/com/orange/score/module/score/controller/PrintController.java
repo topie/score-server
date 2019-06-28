@@ -505,11 +505,14 @@ public class PrintController extends BaseController {
         Condition condition = new Condition(HouseRelationship.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("identityInfoId", personId);
+        criteria.andEqualTo("isRemove", 1);
         List<HouseRelationship> relationshipList = iHouseRelationshipService.findByCondition(condition);
         if (CollectionUtils.isEmpty(relationshipList)) {
             relationshipList = new ArrayList<>();
         }
         params.put("relation", relationshipList);
+        int count = relationshipList.size();
+        params.put("count", count);
         Date now = new Date();
         String nowYear = String.valueOf(DateUtil.getYear(now));
         params.put("nowYear", nowYear);
