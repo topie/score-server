@@ -15,12 +15,19 @@ import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.Version;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
-import java.io.IOException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -54,6 +61,12 @@ public class RenshePrevApproveController {
 
     @Autowired
     private ICompanyInfoService iCompanyInfoService;
+
+    @Autowired
+    private IHouseMoveService iHouseMoveService;
+
+    @Autowired
+    private IHouseProfessionService iHouseProfessionService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -299,6 +312,100 @@ public class RenshePrevApproveController {
 
         return ResponseUtil.success();
     }
+
+
+    /**
+     * 2019年6月25日
+     * 人社部门申请人待审核阶段，后台窗口人员点击后下载word文档，文档中的内容是申请人的基本信息，用以核对申请人提交的数据；
+     * @param id
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/downloadWord")
+    public void downloadWord(@RequestParam Integer id, HttpServletResponse response) throws IOException {
+        //清空缓存
+        response.reset();
+
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", id);
+        HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", id);
+        HouseProfession profession = iHouseProfessionService.findBy("identityInfoId", id);
+
+        Map<String,Object> datamap = new HashMap<String, Object>();
+        datamap.put("idNumber",(identityInfo.getIdNumber()==null) ? "-" : identityInfo.getIdNumber());// 居住证号（身份证号）
+        datamap.put("applicantTypeStr",(houseOther.getApplicantType()==null)? "-": houseOther.getApplicantType()); // 申请人类型
+        datamap.put("applicationDate", (houseOther.getApplicationDate()==null)?"-":houseOther.getApplicationDate()); // 居住证申领日期
+        datamap.put("name", identityInfo.getName()); //姓名
+        datamap.put("sex", (identityInfo.getSex()==1)? "男":"女"); // 性别
+        datamap.put("nation", identityInfo.getNation()); // 民族
+        datamap.put("birthday", identityInfo.getBirthday()); // 出生日期
+        datamap.put("politicalStatusStr", (houseOther.getPoliticalStatusStr()==null) ? "-" : houseOther.getPoliticalStatusStr()); // 政治面貌
+        datamap.put("marriageStatusStr", (houseMove.getMarriageStatusStr()==null)?"-":houseMove.getMarriageStatusStr()); // 婚姻状况
+        datamap.put("cultureDegreeStr", (houseOther.getCultureDegreeStr()==null)?"-":houseOther.getCultureDegreeStr()); // 文化程度
+        datamap.put("degreeStr", (houseOther.getDegreeStr()==null)? "-": houseOther.getDegreeStr()); // 学位
+        datamap.put("age", identityInfo.getAge());
+        datamap.put("professionTypeStr", (profession.getProfessionTypeStr()==null)? "-": profession.getProfessionTypeStr());
+        datamap.put("jobNameStr", (profession.getJobNameStr()==null)? "-" : profession.getJobNameStr());
+        datamap.put("houseNature", (houseMove.getHouseNatureStr()==null)? "-":houseMove.getHouseNatureStr());
+        datamap.put("settledNature", (houseMove.getSettledNatureStr()==null)?"-":houseMove.getSettledNatureStr());
+        datamap.put("witnessPhone", (houseMove.getWitness()==null)?"-":houseMove.getWitness());
+        datamap.put("companyName", (houseOther.getCompanyName()==null)?"-":houseOther.getCompanyName());
+        datamap.put("companyPhone", (houseOther.getCompanyPhone()==null)?"-":houseOther.getCompanyPhone());
+        datamap.put("companyAddress", (houseOther.getCompanyAddress()==null)?"-":houseOther.getCompanyAddress());
+        datamap.put("selfPhone", (houseOther.getSelfPhone()==null)?"-":houseOther.getSelfPhone());
+        datamap.put("socialSecurityPayStr", (houseOther.getSocialSecurityPayStr()==null)?"-":houseOther.getSocialSecurityPayStr());
+        datamap.put("jobLevelStr", (profession.getJobLevelStr()==null)? "-" : profession.getJobLevelStr()); // 资格证书级别
+        datamap.put("certificateCode", (profession.getCertificateCode()==null) ? "-" : profession.getCertificateCode()); // 证书编号
+        datamap.put("issuingAuthority", (profession.getIssuingAuthority()==null)? "-" : profession.getIssuingAuthority()); // 发证机关
+        datamap.put("issuingDate", (profession.getIssuingDate()==null)? "-" : profession.getIssuingDate());// 发证日期
+
+        Configuration configuration = new Configuration(new Version("2.3.0"));
+        configuration.setDefaultEncoding("utf-8");
+        // 根据某个类的相对路径指定目录名
+//        configuration.setClassForTemplateLoading(this.getClass(),"");
+
+        configuration.setDirectoryForTemplateLoading(new File("I:/"));
+
+        File outFile = new File("./申请人信息_特朗普_371482.doc");
+        Template template = configuration.getTemplate("app_info.ftl","utf-8");
+        Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile),"utf-8"),10240);
+        try {
+            template.process(datamap,out);
+            out.close();
+
+            InputStream fin = null;
+            ServletOutputStream out2 = null;
+            fin = new FileInputStream(outFile);
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("application/msword");
+
+            /*
+            设置浏览器以下载的方式处理该文件名
+            将旁边“打印申请人信息”按钮的打印内容保存成word文件下载，文件命名为“申请人信息”+申请人姓名+申请人身份证号码。
+             */
+            String fileName = URLEncoder.encode("申请人信息_"+identityInfo.getName()+"_"+identityInfo.getIdNumber()+".doc", "UTF-8");
+            response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+
+
+            out2 = response.getOutputStream();
+            byte[] buffer = new byte[1024];  // 缓冲区
+            int bytesToRead = -1;
+            // 通过循环将读入的Word文件的内容输出到浏览器中
+            while((bytesToRead = fin.read(buffer)) != -1) {
+                out2.write(buffer, 0, bytesToRead);
+            }
+
+            fin.close();
+            out2.close();
+
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @PostMapping("/disAgree")
     public Result disAgree(@RequestParam Integer id,

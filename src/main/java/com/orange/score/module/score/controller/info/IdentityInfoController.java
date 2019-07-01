@@ -882,7 +882,7 @@ public class IdentityInfoController {
             Element SQR_XM = RECORD.addElement("SQR_XM");//申请人姓名
             SQR_XM.addText(list_IdeInfo.get(0).getName());
             Element SQR_ZZ_SSXQDM = RECORD.addElement("SQR_ZZ_SSXQDM");//住址 省市县（区），与迁出地省市县（区）一致
-            SQR_ZZ_SSXQDM.addText(list_region.get(0).getPolice_code().toString());
+            SQR_ZZ_SSXQDM.addText((list_region.get(0).getPolice_code()==null)? "":list_region.get(0).getPolice_code().toString());
             Element SQR_ZZ_QHNXXDZ = RECORD.addElement("SQR_ZZ_QHNXXDZ");//住址 区划内详细地址
             SQR_ZZ_QHNXXDZ.addText(list_move.get(0).getMoveAddress());
             Element SQR_HKDJJG_GAJGJGDM = RECORD.addElement("SQR_HKDJJG_GAJGJGDM");//户口登记机关 公安机关机构代码
@@ -890,7 +890,7 @@ public class IdentityInfoController {
             Element SQR_HKDJJG_GAJGMC = RECORD.addElement("SQR_HKDJJG_GAJGMC");//户口登记机关 公安机关名称
             SQR_HKDJJG_GAJGMC.addText(list_move.get(0).getMoveRegisteredOffice());
             Element QCD_SSXQDM = RECORD.addElement("QCD_SSXQDM");//迁出地 省市县（区）
-            QCD_SSXQDM.addText(list_region.get(0).getPolice_code().toString());
+            QCD_SSXQDM.addText((list_region.get(0).getPolice_code()==null)?"":list_region.get(0).getPolice_code().toString());
             Element QCD_QHNXXDZ = RECORD.addElement("QCD_QHNXXDZ");//迁出地 区划内详细地址
             QCD_QHNXXDZ.addText(list_move.get(0).getMoveAddress());
             Element QCD_HKDJJG_GAJGJGDM = RECORD.addElement("QCD_HKDJJG_GAJGJGDM");//迁出地 户口登记机关 公安机关机构代码

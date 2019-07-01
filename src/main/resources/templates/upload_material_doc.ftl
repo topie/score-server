@@ -1,4 +1,4 @@
-<div>
+<div id="printMaterialDoc">
     <style type="text/css">
         .s1 {
             font-weight: bold;
@@ -56,7 +56,8 @@
     </p>
     <p class="p2"></p>
     <p class="p3">
-        <span class="s2">${person.name}</span>
+        <span id="printname" class="s2">${person.name}</span>
+        <span id="printidNumber" style="display: none">${person.idNumber}</span>
     </p>
     <p class="p4">
         <span class="s3">您在网上预审环节中上传了如下材料：</span>

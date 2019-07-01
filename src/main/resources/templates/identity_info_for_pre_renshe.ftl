@@ -40,7 +40,7 @@
                             <div class="panel-heading">申请人信息</div>
                             <table style="font-size: 14px;" class="table table-hover table-condensed">
                                 <tr>
-                                    <td colspan="12">居住证号（身份证号）：<strong>${person.idNumber}</strong>
+                                    <td colspan="12">居住证号（身份证号）：<strong id="infotab_idnumber">${person.idNumber}</strong>
                                     </td>
                                 </tr>
                                 <tr>
@@ -49,7 +49,7 @@
                                 </tr>
                                 <!-- 三组数据信息的 -->
                                 <tr>
-                                    <td colspan="4">姓名：<strong>${person.name}</strong></td>
+                                    <td colspan="4">姓名：<strong id="infotab_name">${person.name}</strong></td>
                                     <td colspan="4">性别：<strong><#if person.sex == 1>男<#else>女</#if></strong></td>
                                     <td colspan="4">民族：<strong>${person.nation}</strong></td>
                                 </tr>
@@ -94,12 +94,16 @@
                                     <td colspan="12">联系电话：<strong>${move.witnessPhone}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">单位名称：<strong>${other.companyName}</strong></td>
-                                    <td colspan="6">单位电话：<strong>${other.companyPhone}</strong></td>
+                                    <td colspan="12">单位名称：<strong>${other.companyName}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">单位地址：<strong>${other.companyAddress}</strong></td>
-                                    <td colspan="6">本人电话：<strong>${other.selfPhone}</strong></td>
+                                    <td colspan="12">单位电话：<strong>${other.companyPhone}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">单位地址：<strong>${other.companyAddress}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">本人电话：<strong>${other.selfPhone}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="12">是否社保缴纳：<strong>${other.socialSecurityPayStr}</strong></td>
