@@ -185,7 +185,17 @@ public class RenshePrevApproveController {
         identityInfo.setUnionApproveStatus2(2);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (IdentityInfo info : pageInfo.getList()) {
+            /*
+            2019年7月2日
+            因浏览器解析时间有8个小时的时差，所以把preApprove 的字段值赋给 regionName
+             */
+            if (info.getPreApprove()==null){
+                info.setRegionName("无");
+            }else {
+                info.setRegionName(sdf.format(info.getPreApprove()));
+            }
             if (companyIds.contains(info.getCompanyId())) {
                 info.setCompanyWarning(1);
             }
@@ -216,7 +226,17 @@ public class RenshePrevApproveController {
         identityInfo.setUnionApproveStatus2(3);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (IdentityInfo info : pageInfo.getList()) {
+            /*
+            2019年7月2日
+            因浏览器解析时间有8个小时的时差，所以把preApprove 的字段值赋给 regionName
+             */
+            if (info.getPreApprove()==null){
+                info.setRegionName("无");
+            }else {
+                info.setRegionName(sdf.format(info.getPreApprove()));
+            }
             if (companyIds.contains(info.getCompanyId())) {
                 info.setCompanyWarning(1);
             }
@@ -247,7 +267,17 @@ public class RenshePrevApproveController {
         identityInfo.setUnionApproveStatus2(4);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (IdentityInfo info : pageInfo.getList()) {
+            /*
+            2019年7月2日
+            因浏览器解析时间有8个小时的时差，所以把preApprove 的字段值赋给 regionName
+             */
+            if (info.getPreApprove()==null){
+                info.setRegionName("无");
+            }else {
+                info.setRegionName(sdf.format(info.getPreApprove()));
+            }
             if (companyIds.contains(info.getCompanyId())) {
                 info.setCompanyWarning(1);
             }
