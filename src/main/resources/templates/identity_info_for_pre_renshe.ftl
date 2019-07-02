@@ -6,6 +6,9 @@
     .table-list-item .table {
         margin-bottom: 0;
     }
+    td{
+        border: 1px solid #000;
+    }
 </style>
 <div class="widget-box transparent">
     <div class="widget-header">
@@ -37,8 +40,8 @@
                 <div id="info-tab" class="row tab-pane active">
                     <div class="col-md-12 col-sx-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading">申请人信息</div>
-                            <table style="font-size: 14px;" class="table table-hover table-condensed">
+                            <div class="panel-heading" style="text-align: center;font-size: large ;font-weight: bolder">申请人信息</div>
+                            <table style="font-size: 14px;" class="table table-hover table-condensed" border="1px solid #ccc" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td colspan="12">居住证号（身份证号）：<strong id="infotab_idnumber">${person.idNumber}</strong>
                                     </td>
@@ -49,19 +52,22 @@
                                 </tr>
                                 <!-- 三组数据信息的 -->
                                 <tr>
-                                    <td colspan="4">姓名：<strong id="infotab_name">${person.name}</strong></td>
-                                    <td colspan="4">性别：<strong><#if person.sex == 1>男<#else>女</#if></strong></td>
-                                    <td colspan="4">民族：<strong>${person.nation}</strong></td>
+                                    <td colspan="6">姓名：<strong id="infotab_name">${person.name}</strong></td>
+                                    <td colspan="6">性别：<strong><#if person.sex == 1>男<#else>女</#if></strong></td>
+                                    <#--<td colspan="4">民族：<strong>${person.nation}</strong></td>-->
                                 </tr>
                                 <tr>
-                                    <td colspan="4">出生日期：<strong>${person.birthday}</strong></td>
-                                    <td colspan="4">政治面貌：<strong>${other.politicalStatusStr}</strong></td>
-                                    <td colspan="4">婚姻状况：<strong>${move.marriageStatusStr}</strong></td>
+                                    <td colspan="6">出生日期：<strong>${person.birthday}</strong></td>
+                                    <td colspan="6">政治面貌：<strong>${other.politicalStatusStr}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4">文化程度：<strong>${other.cultureDegreeStr}</strong></td>
-                                    <td colspan="4">学位：<strong>${other.degreeStr}</strong></td>
-                                    <td colspan="4">年龄：<strong>${person.age}</strong></td>
+
+                                    <td colspan="6">婚姻状况：<strong>${move.marriageStatusStr}</strong></td>
+                                    <td colspan="6">年龄：<strong>${person.age}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">文化程度：<strong>${other.cultureDegreeStr}</strong></td>
+                                    <td colspan="6">学位：<strong>${other.degreeStr}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">职业资格：<strong>${profession.professionTypeStr}</strong></td>
@@ -116,6 +122,45 @@
                                     <td colspan="6">发证机关：<strong>${profession.issuingAuthority}</strong></td>
                                     <td colspan="6">发证日期：<strong>${profession.issuingDate}</strong></td>
                                 </tr>
+                                <#--<tr>
+                                    <td colspan="12">
+                                        <table style="font-size: 14px;"
+                                               class="table table-hover table-bordered table-condensed">
+                                            <tr class="info">
+                                                <th>与本人关系</th>
+                                                <th>姓名</th>
+                                                <th>身份证号</th>
+                                                <th>文化程度</th>
+                                                <th>是否随迁</th>
+                                            </tr>
+                                        <#list relation as ritem>
+                                            <tr>
+                                                <td>${ritem.relationship}</td>
+                                                <td>${ritem.name}</td>
+                                                <td>${ritem.idNumber}</td>
+                                                <td>${ritem.cultureDegree}</td>
+                                                <td> <#if ritem.isRemove == 1>是<#else>否</#if></td>
+                                            </tr>
+                                        </#list>
+                                        </table>
+                                    </td>
+                                </tr>-->
+                                <tr>
+                                    <td colspan="12"><hr></strong></td>
+                                </tr>
+                                <#list relation as ritem>
+                                    <#if ritem.relationship=="配偶">
+                                        <tr>
+                                            <td colspan="12">与本人关系：<strong>${ritem.relationship}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12">姓名：<strong>${ritem.name}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12">身份证号：<strong>${ritem.idNumber}</strong></td>
+                                        </tr>
+                                    </#if>
+                                </#list>
                             </table>
                         </div>
                     </div>
