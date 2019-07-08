@@ -521,9 +521,9 @@
                                                     下载
                                                 </a>
                                                 <br>
-                                                <a class="download btn btn-mini btn-primary">
-                                                    <div style="display: none" id="wjwPic_${item.onlinePersonMaterial.id?c}"><img src="${item.onlinePersonMaterial.materialUri}"></div>
-                                                    <span class="wjwPrint" src="${item.onlinePersonMaterial.materialUri}">打印</span>
+                                                <a class="download btn btn-mini btn-primary" target="_blank">
+                                                    <div style="display: none"; position: absolute; margin:0 auto;"><img style="height: 90%;width: auto" src="${item.onlinePersonMaterial.materialUri}"></div>
+                                                    <span  src="${item.onlinePersonMaterial.materialUri}" onclick="wjwprint(this)">打印</span>
                                                 </a>
                                             </td>
                                             <td>${item.onlinePersonMaterial.reason}</td>
@@ -543,7 +543,7 @@
                             <script type="text/javascript">
                                 var hostName = window.location.host;
                                 if (hostName == "172.16.200.68") {
-                                    $(".p-img,.wjwPrint").each(function () {
+                                    $(".p-img").each(function () {
                                         var src = $(this).attr("src");
                                         var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
                                         $(this).attr("src",newSrc);
@@ -554,8 +554,8 @@
                                         $(this).attr("href", newHref);
                                     });
                                 }
-                                $(".p-img,.wjwPrint").off("click");
-                                $(".p-img,.wjwPrint").on("click", function () {
+                                $(".p-img").off("click");
+                                $(".p-img").on("click", function () {
                                     var img = $('<img style="height: 80%;width: auto;" src="' + $(this).attr("src") + '">');
                                     $.orangeModal({
                                         title: "图片预览",
@@ -641,6 +641,23 @@
                                     var img = $("<a></a>").attr("href", uri).attr("download", name + type);
                                     img[0].click();
                                 });
+
+                                function wjwprint(ele) {
+                                    console.log(ele);
+                                    $(ele).prev().show();
+                                    $(ele).prev().print({
+                                        globalStyles: true,
+                                        mediaPrint: false,
+                                        stylesheet: null,
+                                        noPrintSelector: ".no-print",
+                                        iframe: true,
+                                        append: null,
+                                        prepend: null,
+                                        manuallyCopyFormValues: true,
+                                        deferred: $.Deferred()
+                                    });
+                                    $(ele).prev().hide();
+                                }
                             </script>
                         </div>
                     </div>
