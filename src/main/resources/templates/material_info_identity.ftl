@@ -520,6 +520,11 @@
                                                    download="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
                                                     下载
                                                 </a>
+                                                <br>
+                                                <a class="download btn btn-mini btn-primary">
+                                                    <div style="display: none" id="wjwPic_${item.onlinePersonMaterial.id?c}"><img src="${item.onlinePersonMaterial.materialUri}"></div>
+                                                    <span class="wjwPrint" src="${item.onlinePersonMaterial.materialUri}">打印</span>
+                                                </a>
                                             </td>
                                             <td>${item.onlinePersonMaterial.reason}</td>
                                         </tr>
@@ -538,7 +543,7 @@
                             <script type="text/javascript">
                                 var hostName = window.location.host;
                                 if (hostName == "172.16.200.68") {
-                                    $(".p-img").each(function () {
+                                    $(".p-img,.wjwPrint").each(function () {
                                         var src = $(this).attr("src");
                                         var newSrc = src.replace("218.67.246.52:80", "172.16.200.68:8092");
                                         $(this).attr("src",newSrc);
@@ -549,9 +554,9 @@
                                         $(this).attr("href", newHref);
                                     });
                                 }
-                                $(".p-img").off("click");
-                                $(".p-img").on("click", function () {
-                                    var img = $('<img src="' + $(this).attr("src") + '">');
+                                $(".p-img,.wjwPrint").off("click");
+                                $(".p-img,.wjwPrint").on("click", function () {
+                                    var img = $('<img style="height: 80%;width: auto;" src="' + $(this).attr("src") + '">');
                                     $.orangeModal({
                                         title: "图片预览",
                                         destroy: true,
@@ -606,6 +611,22 @@
                                                         var that = this;
                                                         $(this).css("height", $(that).height()*0.9);
                                                         $(this).css("width",$(that).width()*0.9);
+                                                    });
+                                                }
+                                            }, {
+                                                text: '打印',
+                                                cls: 'btn btn-info',
+                                                handle: function (m) {
+                                                    m.$body.find("img").parent().print({
+                                                        globalStyles: true,
+                                                        mediaPrint: false,
+                                                        stylesheet: null,
+                                                        noPrintSelector: ".no-print",
+                                                        iframe: true,
+                                                        append: null,
+                                                        prepend: null,
+                                                        manuallyCopyFormValues: true,
+                                                        deferred: $.Deferred()
                                                     });
                                                 }
                                             }
