@@ -980,7 +980,7 @@ public class IdentityInfoController {
                         XBDM.addText("2");
                     }
                     CSRQ = QYR.addElement("CSRQ");//出生日期
-                    System.out.println(h.getName() + ":" + h.getIdNumber());
+                    //System.out.println(h.getName() + ":" + h.getIdNumber());
                     CSRQ.addText(h.getIdNumber().replace(" ", "").substring(6, 14));
                     YHLX = QYR.addElement("YHLX");//原户类型
                     if (list_move.get(0).getHouseNature() == 4 || list_move.get(0).getHouseNature() == 5) {
