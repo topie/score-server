@@ -397,6 +397,10 @@ public class IdentityInfoController {
         List<Region> areaList = iRegionService.findByCondition(condition);
         params.put("areaList", areaList);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String downloadDate = sdf.format(new Date());
+        params.put("downloadDate", downloadDate);
+
         condition = new Condition(Office.class);
         criteria = condition.createCriteria();
         criteria.andEqualTo("regionLevel", 1);

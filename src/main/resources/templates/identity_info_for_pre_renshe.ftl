@@ -47,8 +47,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">申请人类型：<strong>${other.applicantTypeStr}</strong></td>
-                                    <td colspan="6">居住证申领日期：<strong>${other.applicationDate}</strong></td>
+                                    <td colspan="12">申请人类型：<strong>${other.applicantTypeStr}</strong></td>
                                 </tr>
                                 <!-- 三组数据信息的 -->
                                 <tr>
@@ -122,6 +121,10 @@
                                     <td colspan="6">发证机关：<strong>${profession.issuingAuthority}</strong></td>
                                     <td colspan="6">发证日期：<strong>${profession.issuingDate}</strong></td>
                                 </tr>
+                                <tr>
+                                    <td colspan="6">当前工作岗位：<strong>${other.jobTitle}</strong></td>
+                                    <td colspan="6">主要从事工作内容：<strong>${other.jobContent}</strong></td>
+                                </tr>
                                 <#--<tr>
                                     <td colspan="12">
                                         <table style="font-size: 14px;"
@@ -162,6 +165,10 @@
                                     </#if>
                                 </#list>
                             </table>
+                            <br>
+                            <div>
+                                <strong>下载时间：${downloadDate}</strong>
+                            </div>
                         </div>
                     </div>
                 </div>

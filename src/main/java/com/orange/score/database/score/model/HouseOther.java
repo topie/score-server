@@ -122,6 +122,34 @@ public class HouseOther {
     @Column(name = "c_time")
     private Date cTime;
 
+    /**
+     * 当前工作岗位
+     */
+    @Column(name = "job_title")
+    private String jobTitle;
+
+    /**
+     * 主要从事工作内容
+     */
+    @Column(name = "job_content")
+    private String jobContent;
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getJobContent() {
+        return jobContent;
+    }
+
+    public void setJobContent(String jobContent) {
+        this.jobContent = jobContent;
+    }
+
     public String getCultureDegreeStr() {
         if (cultureDegree == null) return "-";
         switch (cultureDegree) {
