@@ -39,7 +39,40 @@
             <div class="tab-content">
                 <div id="info-tab" class="row tab-pane active">
                     <div class="col-md-12 col-sx-12">
-                        <div class="panel panel-default">
+                            <div class="panel panel-default">
+                                <!-- Default panel contents -->
+                                <div class="panel-heading" style="text-align: center;font-size: large ;font-weight: bolder">注册单位信息</div>
+                                <!-- Table -->
+                                <table style="font-size: 14px;" class="table table-hover table-condensed">
+                                    <!-- 两组数据信息的 -->
+                                    <tr>
+                                        <td colspan="6">单位名称：<strong>${company.companyName}</strong></td>
+                                        <td colspan="6">机构代码：<strong>${company.societyCode}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">联系人1：<strong>${company.operator}</strong><#if renshe==true>
+                                            <button role="msm_btn" phone="${other.selfPhone}" class="btn btn-mini btn-info"
+                                                    type="button">发送短信
+                                            </button></#if></td>
+                                        <td colspan="4">身份证1：<strong>${company.idCardNumber_1}</strong></td>
+                                        <td colspan="4">联系电话1：<strong>${company.operatorMobile}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">联系人2：<strong>${company.operator2}</strong><#if renshe==true>
+                                            <button role="msm_btn" phone="${other.selfPhone}" class="btn btn-mini btn-info"
+                                                    type="button">发送短信
+                                            </button></#if></td>
+                                        <td colspan="4">身份证2：<strong>${company.idCardNumber_2}</strong></td>
+                                        <td colspan="4">联系电话2：<strong>${company.operatorMobile2}</strong></td>
+                                    </tr>
+                                    <!-- 一组数据信息的 -->
+                                    <tr>
+                                        <td colspan="12">联系地址：<strong>${company.operatorAddress}</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel panel-default">
                             <div class="panel-heading" style="text-align: center;font-size: large ;font-weight: bolder">申请人信息</div>
                             <table style="font-size: 14px;" class="table table-hover table-condensed" border="1px solid #ccc" cellpadding="0" cellspacing="0">
                                 <tr>
