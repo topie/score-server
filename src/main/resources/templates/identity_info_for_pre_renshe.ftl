@@ -146,6 +146,16 @@
                                 <tr>
                                     <td colspan="12">是否社保缴纳：<strong>${other.socialSecurityPayStr}</strong></td>
                                 </tr>
+
+                                <tr>
+                                    <td colspan="6">异地保险：<strong>${other.isAnotherInsuranceStr}</strong></td>
+                                    <td colspan="6">就业登记：<strong>${other.isApplyRegisteStr}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">开发区：<strong>${other.isInsuranceStr}</strong></td>
+                                    <td colspan="6">配偶：<strong>${other.isSpouseInsuranceStr}</strong></td>
+                                </tr>
+
                                 <tr>
                                     <td colspan="6">资格证书级别：<strong>${profession.jobLevelStr}</strong></td>
                                     <td colspan="6">证书编号：<strong>${profession.certificateCode}</strong></td>

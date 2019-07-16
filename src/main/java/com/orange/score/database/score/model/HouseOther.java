@@ -84,6 +84,30 @@ public class HouseOther {
     private String applicationDate;
 
     /**
+     * 申请人是否存在同时在异地缴纳社会保险情况, 1、是；2、否
+     */
+    @Column(name = "isAnotherInsurance")
+    private Integer isAnotherInsurance;
+
+    /**
+     * 申请人是否在申请单位进行就业登记, 1、是；2、否
+     */
+    @Column(name = "isApplyRegiste")
+    private Integer isApplyRegiste;
+
+    /**
+     * 申请人是否在2008年以前在开发区有社保缴费记录, 1、是；2、否
+     */
+    @Column(name = "isInsurance")
+    private Integer isInsurance;
+
+    /**
+     * 配偶是否在本市缴纳5险且满2年以上, 1、是；2、否
+     */
+    @Column(name = "isSpouseInsurance")
+    private Integer isSpouseInsurance;
+
+    /**
      * 是否缴纳社保, 1、是；2、否
      */
     @Column(name = "social_security_pay")
@@ -198,6 +222,19 @@ public class HouseOther {
 
     public String getSocialSecurityPayStr() {
         return socialSecurityPay == 1 ? "是" : "否";
+    }
+
+    public String getIsAnotherInsuranceStr() {
+        return isAnotherInsurance == 1 ? "是" : "否";
+    }
+    public String getIsApplyRegisteStr() {
+        return isApplyRegiste == 1 ? "是" : "否";
+    }
+    public String getIsInsuranceStr() {
+        return isInsurance == 1 ? "是" : "否";
+    }
+    public String getIsSpouseInsuranceStr() {
+        return isSpouseInsurance == 1 ? "是" : "否";
     }
 
     public String getDegreeStr() {
@@ -643,5 +680,37 @@ public class HouseOther {
      */
     public void setcTime(Date cTime) {
         this.cTime = cTime;
+    }
+
+    public Integer getIsAnotherInsurance() {
+        return isAnotherInsurance;
+    }
+
+    public void setIsAnotherInsurance(Integer isAnotherInsurance) {
+        this.isAnotherInsurance = isAnotherInsurance;
+    }
+
+    public Integer getIsApplyRegiste() {
+        return isApplyRegiste;
+    }
+
+    public void setIsApplyRegiste(Integer isApplyRegiste) {
+        this.isApplyRegiste = isApplyRegiste;
+    }
+
+    public Integer getIsInsurance() {
+        return isInsurance;
+    }
+
+    public void setIsInsurance(Integer isInsurance) {
+        this.isInsurance = isInsurance;
+    }
+
+    public Integer getIsSpouseInsurance() {
+        return isSpouseInsurance;
+    }
+
+    public void setIsSpouseInsurance(Integer isSpouseInsurance) {
+        this.isSpouseInsurance = isSpouseInsurance;
     }
 }
