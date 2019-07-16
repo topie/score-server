@@ -1384,6 +1384,74 @@ public class StatExportController {
                 return "应急救援员";
 
             }
+            case 199: {
+                return "建（构）筑物消防员";
+
+            }
+            case 200: {
+                return "电焊工";
+
+            }
+            case 201: {
+                return "气焊工";
+
+            }
+            case 202: {
+                return "电气（汽）焊工";
+
+            }
+            case 203: {
+                return "维修电工";
+
+            }
+            case 204: {
+                return "汽车修理工";
+
+            }
+            case 205: {
+                return "汽车维修钣金工";
+
+            }
+            case 206: {
+                return "汽车维修电工";
+
+            }
+            case 207: {
+                return "数控车工";
+
+            }
+            case 208: {
+                return "数控车床工";
+
+            }
+            case 209: {
+                return "车床工";
+
+            }
+            case 210: {
+                return "数控铣工";
+
+            }
+            case 211: {
+                return "装配钳工";
+
+            }
+            case 212: {
+                return "机修钳工";
+
+            }
+            case 213: {
+                return "工具钳工";
+
+            }
+            case 214: {
+                return "口腔修复工";
+
+            }
+            case 215: {
+                return "转炉炼钢工";
+
+            }
         }
         return "";
     }
