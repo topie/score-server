@@ -344,7 +344,8 @@
             </td>
             <td class="td8">
                 <p class="p5">
-                    <span class="s2">${move.houseNatureStr}</span>
+                    <#--<span class="s2">${move.houseNatureStr}</span>-->
+                        <span class="s2">无</span>
                 </p>
             </td>
         </tr>
