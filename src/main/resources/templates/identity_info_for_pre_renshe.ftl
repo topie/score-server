@@ -40,6 +40,9 @@
                 <div id="info-tab" class="row tab-pane active">
                     <div class="col-md-12 col-sx-12">
                             <div class="panel panel-default">
+                                <div>
+                                    <span>下载时间：${downloadDate}</span>
+                                </div>
                                 <!-- Default panel contents -->
                                 <div class="panel-heading" style="text-align: center;font-size: large ;font-weight: bolder">注册单位信息</div>
                                 <!-- Table -->
@@ -209,9 +212,7 @@
                                 </#list>
                             </table>
                             <br>
-                            <div>
-                                <strong>下载时间：${downloadDate}</strong>
-                            </div>
+
                         </div>
                     </div>
                 </div>
