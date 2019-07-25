@@ -281,6 +281,17 @@ public class IdentityInfo {
     @Column(name = "materialStatus")
     private Integer materialStatus;//"材料送达补正状态"
 
+    @Column(name = "isPreviewd")
+    private String isPreviewd;// 审核中心——材料送达，增加“上传材料预览”功能，是否预览过，1：是
+
+    public String getIsPreviewd() {
+        return isPreviewd;
+    }
+
+    public void setIsPreviewd(String isPreviewd) {
+        this.isPreviewd = isPreviewd;
+    }
+
     public Integer getMaterialStatus() {
         return materialStatus;
     }

@@ -11,6 +11,8 @@ public interface ScoreRecordMapper extends Mapper<ScoreRecord> {
 
     List<ScoreRecord> selectIdentityInfo(@Param("item") Map argMap);
 
+    List<ScoreRecord> selectIsPreviewed(@Param("item") Map argMap);
+
     List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIds(@Param("identityInfoId") Integer identityInfoId, @Param("roles") List<Integer> roles);
 
     List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIdsAndIndicatorId(@Param("identityInfoId") Integer identityInfoId, @Param("indicatorId") Integer indicatorId, @Param("roles") List<Integer> roles);

@@ -574,6 +574,143 @@ public class IdentityInfoController {
         return ResponseUtil.success(result);
     }
 
+    @GetMapping("/materialSupply2")
+    public Result materialSupply2(@RequestParam Integer identityInfoId) throws FileNotFoundException {
+        Map params = new HashMap();
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
+        if (person == null) {
+            person = new IdentityInfo();
+        }
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        List<Integer> indicatorIds = iIndicatorService.selectIndicatorIdByRoleIds(roles);
+        Set<Integer> roleMidSet = new HashSet<>();
+        for (Integer indicatorId : indicatorIds) {
+            List<Integer> iIds = iIndicatorService.selectBindMaterialIds(indicatorId);
+            for (Integer iId : iIds) {
+                if (!roleMidSet.contains(iId)) {
+                    roleMidSet.add(iId);
+                }
+            }
+        }
+        List<MaterialInfo> materialInfos = iMaterialInfoService.findAll();
+        List<MaterialInfo> roleMaterialInfoList = new ArrayList<>();
+        Map mMap = new HashMap();
+        Set<Integer> rolesSet = new HashSet<>(roles);
+        //该权限可以查看的所有材料
+        //添加营业执照,只有人社添加
+        CompanyInfo companyInfo = iCompanyInfoService.findById(person.getCompanyId());
+        if (companyInfo == null) {
+            companyInfo = new CompanyInfo();
+        }
+        params.put("company", companyInfo);
+        if (roles.contains(3)) {
+            MaterialInfo businessLicenseMaterialInfo = new MaterialInfo();
+            businessLicenseMaterialInfo.setId(-1);
+            businessLicenseMaterialInfo.setName("营业执照");
+            OnlinePersonMaterial businessLicenseMaterial = new OnlinePersonMaterial();
+            businessLicenseMaterial.setMaterialUri(companyInfo.getBusinessLicenseSrc());
+            businessLicenseMaterial.setId(-1);
+            businessLicenseMaterial.setPersonId(-1);
+            businessLicenseMaterial.setMaterialInfoName("营业执照");
+            businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
+            roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
+        }
+
+        for (MaterialInfo materialInfo : materialInfos) {
+            mMap.put(materialInfo.getId() + "", materialInfo.getName());
+            if (CollectionUtil.isHaveUnionBySet(rolesSet, materialInfo.getMaterialInfoRoleSet())) {
+                if (materialInfo.getIsUpload() == 1) {
+                    if (roleMidSet.contains(materialInfo.getId())) {
+                        roleMaterialInfoList.add(materialInfo);
+                    }
+                }
+            }
+        }
+
+        Condition condition = new Condition(OnlinePersonMaterial.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", person.getId());
+        criteria.andEqualTo("batchId", person.getBatchId());
+        criteria.andNotEqualTo("status", 2);
+        List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
+        List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
+        //用户上传的材料
+        for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+            if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
+                onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
+                roleUploadMaterialList.add(onlinePersonMaterial);
+            }
+        }
+        params.put("onlinePersonMaterials", roleUploadMaterialList);
+        params.put("uploadMaterialList", uploadMaterialList);
+
+        for (MaterialInfo materialInfo : roleMaterialInfoList) {
+            for (OnlinePersonMaterial onlinePersonMaterial : roleUploadMaterialList) {
+                if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
+                    materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
+                }
+            }
+        }
+        params.put("materialInfos", roleMaterialInfoList);
+
+        for (MaterialInfo materialInfo : materialInfos) {
+            for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
+                if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
+                    materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
+                }
+            }
+        }
+        params.put("allMaterialInfos", materialInfos);
+
+        params.put("person", person);
+
+        HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
+        if (other == null) {
+            other = new HouseOther();
+        }
+        params.put("other", other);
+        HouseProfession profession = iHouseProfessionService.findBy("identityInfoId", identityInfoId);
+        if (profession == null) {
+            profession = new HouseProfession();
+        }
+        params.put("profession", profession);
+        HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", identityInfoId);
+        if (houseMove == null) {
+            houseMove = new HouseMove();
+        }
+        params.put("move", houseMove);
+        condition = new Condition(HouseRelationship.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("identityInfoId", identityInfoId);
+        List<HouseRelationship> relationshipList = iHouseRelationshipService.findByCondition(condition);
+        if (CollectionUtils.isEmpty(relationshipList)) {
+            relationshipList = new ArrayList<>();
+        }
+        params.put("relation", relationshipList);
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "material_supply.ftl", params);
+        Map result = new HashMap();
+
+        condition = new Condition(MaterialAcceptRecord.class);
+        criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", identityInfoId);
+        criteria.andEqualTo("batchId", person.getBatchId());
+        List<MaterialAcceptRecord> materials = iMaterialAcceptRecordService.findByCondition(condition);
+        List<Integer> submittedMids = new ArrayList<>();
+        Set<Integer> hSet = new HashSet<>();
+        for (MaterialAcceptRecord item : materials) {
+            if (!hSet.contains(item.getMaterialId())) {
+                submittedMids.add(item.getMaterialId());
+                hSet.add(item.getMaterialId());
+            }
+        }
+        result.put("cIds", submittedMids);
+        result.put("html", html);
+        return ResponseUtil.success(result);
+    }
+
     @RequestMapping(value = "/officeOption")
     @ResponseBody
     public List<Option> options(Office office) {
