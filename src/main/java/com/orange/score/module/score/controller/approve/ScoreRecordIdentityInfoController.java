@@ -252,7 +252,7 @@ public class ScoreRecordIdentityInfoController {
             Condition condition = new Condition(IndicatorItem.class);
             tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
-            condition.orderBy("score").desc().orderBy("id").asc();
+            condition.orderBy("rensheOrder").asc().orderBy("score").desc().orderBy("id").asc();
             List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition);
             List<IndicatorItem> indicatorItems_2 = new ArrayList<IndicatorItem>();
             /*

@@ -46,6 +46,18 @@ public class IndicatorItem {
     @Column(name = "add_user")
     private String addUser;
 
+
+    @Column(name = "rensheOrder")
+    private Integer rensheOrder;
+
+    public Integer getRensheOrder() {
+        return rensheOrder;
+    }
+
+    public void setRensheOrder(Integer rensheOrder) {
+        this.rensheOrder = rensheOrder;
+    }
+
     /**
      * 获取id
      *
