@@ -190,6 +190,78 @@ public class MaterialReceiveIdentityInfoController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
+
+    /*
+    材料送达
+    2019年7月12日
+        审核中心——材料送达，增加“上传材料预览”功能。在申请人通过公安、人社两部门预审之后，申请人信息进入此列表，字段包括“申请人姓名”、“申请人身份证号码”、“申报单位”、“操作”。
+    在操作中有“预览上传材料”按钮，可查看申请人上传的材料（各部门查看权限字典表）。各部门可以就其中某一项材料提出“提示信息”，信息显示在材料上传页面，但不可补正。
+    此功能分配给除公安、人社以外的所有部门。
+     */
+    @GetMapping(value = "/beforeReceiving")
+    @ResponseBody
+    public Result beforeReceiving(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
+                            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
+                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        if (scoreRecord.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                scoreRecord.setBatchId(list.get(0).getId());
+            }
+        }
+        Map argMap = new HashMap();
+        argMap.put("status", Collections.singletonList(2));
+        argMap.put("opRoleId", roles);
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            argMap.put("acceptAddressId", 1);
+        } else if (securityUser.getUserType() == 1) {
+            argMap.put("acceptAddressId", 2);
+        }
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
+            argMap.put("personIdNum", scoreRecord.getPersonIdNum());
+        }
+        if (scoreRecord.getAcceptDate() != null && dateSearch == 1) {
+            argMap.put("acceptDate", DateUtil.DateToString(scoreRecord.getAcceptDate(), DateStyle.YYYY_MM_DD));
+        }
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonName())) {
+            argMap.put("personName", scoreRecord.getPersonName());
+        }
+        if (scoreRecord.getBatchId() != null) {
+            argMap.put("batchId", scoreRecord.getBatchId());
+        }
+        if (scoreRecord.getCompanyId() != null) {
+            argMap.put("companyId", scoreRecord.getCompanyId());
+        }
+        if (StringUtils.isNotEmpty(sort_)) {
+            String[] arr = sort_.split("_");
+            if (arr.length == 2) {
+                if ("desc".endsWith(arr[1])) {
+                    argMap.put("orderBy", CamelUtil.camelToUnderline(arr[0]));
+                    argMap.put("orderType", "desc");
+                } else {
+                    argMap.put("orderBy", CamelUtil.camelToUnderline(arr[0]));
+                    argMap.put("orderType", "asc");
+                }
+            }
+        }
+
+        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage2(argMap, pageNum, pageSize);
+        IdentityInfo identityInfo;
+        Set<Integer> rolesSet = new HashSet<>(roles);
+        Iterator<ScoreRecord> it = pageInfo.getList().iterator();
+        boolean isAdmin = userService.findUserRoleByUserId(userId).contains(1);
+
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
     @GetMapping(value = "/received")
     @ResponseBody
     public Result received(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
@@ -251,6 +323,88 @@ public class MaterialReceiveIdentityInfoController {
                 record.setEdit(1);
             }
         }
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+    /*
+    2019年7月25日
+    材料送达-待补正
+    显示窗口驳回的申请人
+     */
+    @GetMapping(value = "/refused")
+    @ResponseBody
+    public Result refused(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
+                            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
+                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        if (scoreRecord.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                scoreRecord.setBatchId(list.get(0).getId());
+            }
+        }
+        Map argMap = new HashMap();
+        argMap.put("status", Collections.singletonList(2));
+        argMap.put("opRoleId", roles);
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            argMap.put("acceptAddressId", 1);
+        } else if (securityUser.getUserType() == 1) {
+            argMap.put("acceptAddressId", 2);
+        }
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
+            argMap.put("personIdNum", scoreRecord.getPersonIdNum());
+        }
+        if (scoreRecord.getAcceptDate() != null && dateSearch == 1) {
+            argMap.put("acceptDate", DateUtil.DateToString(scoreRecord.getAcceptDate(), DateStyle.YYYY_MM_DD));
+        }
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonName())) {
+            argMap.put("personName", scoreRecord.getPersonName());
+        }
+        if (scoreRecord.getBatchId() != null) {
+            argMap.put("batchId", scoreRecord.getBatchId());
+        }
+        if (scoreRecord.getCompanyId() != null) {
+            argMap.put("companyId", scoreRecord.getCompanyId());
+        }
+        if (StringUtils.isNotEmpty(sort_)) {
+            String[] arr = sort_.split("_");
+            if (arr.length == 2) {
+                if ("desc".endsWith(arr[1])) {
+                    argMap.put("orderBy", CamelUtil.camelToUnderline(arr[0]));
+                    argMap.put("orderType", "desc");
+                } else {
+                    argMap.put("orderBy", CamelUtil.camelToUnderline(arr[0]));
+                    argMap.put("orderType", "asc");
+                }
+            }
+        }
+
+        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
+        IdentityInfo identityInfo;
+        Set<Integer> rolesSet = new HashSet<>(roles);
+        Iterator<ScoreRecord> it = pageInfo.getList().iterator();
+        boolean isAdmin = userService.findUserRoleByUserId(userId).contains(1);
+        while (it.hasNext()) {
+            ScoreRecord record = it.next();
+            if (roles.contains(4) || roles.contains(6)) {
+                record.setEdit(1);
+            }
+            identityInfo = iIdentityInfoService.findById(record.getPersonId());
+            //如果被该部门驳回，就删除该申请人
+            if (identityInfo.getMaterialStatus() == null || identityInfo.getMaterialStatus() == 2 ) {//&& !isAdmin
+                if (!CollectionUtil.isHaveUnionBySet(rolesSet, identityInfo.getOpuser6RoleSet())) {
+                    it.remove();
+                }
+            }
+        }
+
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
@@ -605,6 +759,116 @@ public class MaterialReceiveIdentityInfoController {
             }
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
             SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料需要补正，请根据提示尽快补正材料。（"+str.replace(" ","")+"）");
+        } else {
+            return ResponseUtil.error("没有勾选待补正材料！");
+        }
+
+        return ResponseUtil.success();
+    }
+
+
+    @PostMapping("/supply2")
+    public Result supply2(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        /*
+        1、获取账号的地域权限；
+        2、获取账号所在的部门；
+         */
+        String str = "";
+        if (securityUser.getUserType() == 0){
+            str = str + "市区";
+        }else if (securityUser.getUserType() == 1){
+            str = str + "滨海";
+        }
+        Map<Integer, String> map = new HashMap<Integer, String>();
+//        map.put(3,"人社");
+//        map.put(4,"市公安局");
+//        map.put(5,"市民政局");
+//        map.put(6,"市教委");
+//        map.put(7,"知识产权局");
+//        map.put(8,"市税务局");
+//        map.put(9,"市住建委");
+//        map.put(10,"住房公积金中心");
+//        map.put(11,"人民银行");
+//        map.put(12,"市卫健委");
+
+        Condition condition3 = new Condition(Role.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria3 = condition3.createCriteria();
+        criteria3.andEqualTo("roleType", 0);
+        List<Role> list = roleService.findByCondition(condition3);
+        for (Role role : list){
+            map.put(role.getId(), role.getRoleName());
+        }
+        for (int i=0;i< securityUser.getAuthorities().size();i++){
+            String str2 = securityUser.getAuthorities().toString().replace("[","").replace("]","").replace(" ","");
+            String[] strArr = str2.split(",");
+            Integer index = Integer.valueOf(strArr[i]);
+            if (map.get(index) != null){
+                str = str + map.get(index);
+            }
+        }
+
+        if (securityUser.getUserType() == 2){
+            str = "";
+            str = str + "天津落户积分管理中心";
+        }
+
+        if (!"[]".equals(supplyArr)) {
+            IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+            if (identityInfo != null) {
+                identityInfo.setMaterialStatus(1);
+                identityInfo.setOpuser5(securityUser.getDisplayName());
+                Set<Integer> set = identityInfo.getOpuser6RoleSet();
+                if (set != null) {
+                    set.addAll(userService.findUserDepartmentRoleByUserId(securityUser.getId()));
+                    identityInfo.setOpuser6RoleSet(set);
+                } else {
+                    identityInfo.setOpuser6RoleSet(new HashSet<>(userService.findUserDepartmentRoleByUserId(securityUser.getId())));
+                }
+                iIdentityInfoService.update(identityInfo);
+                iPersonBatchStatusRecordService
+                        .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4,str+"-"+securityUser.getDisplayName());
+            } else {
+                return ResponseUtil.error("申请人不存在！");
+            }
+            JSONArray jsonArray = JSONArray.parseArray(supplyArr);
+            for (Object o : jsonArray) {
+                Integer mId = ((JSONObject) o).getInteger("id");
+                String reason = ((JSONObject) o).getString("reason");
+                Condition condition = new Condition(OnlinePersonMaterial.class);
+                tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+                criteria.andEqualTo("materialInfoId", mId);
+                criteria.andEqualTo("personId", identityInfo.getId());
+                criteria.andNotEqualTo("status", 2);
+                condition.orderBy("id").desc();
+                List<OnlinePersonMaterial> materials = iOnlinePersonMaterialService.findByCondition(condition);
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                String strDate = sdf.format(date);
+                if (materials.size() > 0) {
+                    OnlinePersonMaterial onlinePersonMaterial = materials.get(0);
+                    if (StringUtils.isNotEmpty(onlinePersonMaterial.getReason())) {
+                        onlinePersonMaterial.setReason(onlinePersonMaterial.getReason() + "<br/>" + strDate + "：" + reason);
+                    } else {
+                        onlinePersonMaterial.setReason(strDate + "：" + reason);
+                    }
+
+//                    onlinePersonMaterial.setStatus(1);
+                    iOnlinePersonMaterialService.update(onlinePersonMaterial);
+                } else {
+                    OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
+                    onlinePersonMaterial.setMaterialInfoId(mId);
+                    onlinePersonMaterial.setReason(strDate + "：" + reason);
+//                     onlinePersonMaterial.setStatus(1);
+                    onlinePersonMaterial.setcTime(new Date());
+                    onlinePersonMaterial.setPersonId(identityInfo.getId());
+                    onlinePersonMaterial.setBatchId(identityInfo.getBatchId());
+                    iOnlinePersonMaterialService.save(onlinePersonMaterial);
+                }
+            }
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            //SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您所上传的材料需要补正，请根据提示尽快补正材料。（"+str.replace(" ","")+"）");
         } else {
             return ResponseUtil.error("没有勾选待补正材料！");
         }
