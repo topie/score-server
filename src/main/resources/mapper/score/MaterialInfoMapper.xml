@@ -19,6 +19,6 @@
     </select>
     <select id="findByIndicatorId" resultMap="BaseResultMap">
         select m.* from t_material_info m inner join t_relate_indicator_material r on m.id = r.material_id
-        where r.indicator_id=#{indicatorId}
+        where r.indicator_id=#{indicatorId} order by SORTCOLUMNS ASC 
     </select>
 </mapper>
