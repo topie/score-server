@@ -397,11 +397,11 @@ public class MaterialReceiveIdentityInfoController {
                 record.setEdit(1);
             }
             identityInfo = iIdentityInfoService.findById(record.getPersonId());
-            //如果被该部门驳回，就删除该申请人
+            //只保留被驳回的申请人
             if (identityInfo.getMaterialStatus() == null || identityInfo.getMaterialStatus() == 2 ) {//&& !isAdmin
-                if (!CollectionUtil.isHaveUnionBySet(rolesSet, identityInfo.getOpuser6RoleSet())) {
+                //if (!CollectionUtil.isHaveUnionBySet(rolesSet, identityInfo.getOpuser6RoleSet())) {
                     it.remove();
-                }
+                //}
             }
         }
 
