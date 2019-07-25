@@ -104,6 +104,22 @@
       group by tpb.person_id ) rtab on ltab.person_id=rtab.person_id
 
     </select>
+
+    <select id="selectIdentityInfo_1" resultMap="BaseResultMap">
+        select t1.id              PERSON_ID,
+        t1.name            PERSON_NAME,
+        t1.id_number       PERSON_ID_NUM,
+        t1.RENSHEPASS_TIME ACCEPT_DATE,
+        t1.LUOHU_NUMBER    accept_number,
+        t2.company_name    company_name
+        from t_identity_info t1,t_company_info t2
+        <where>
+            t1.batch_id in (select id from t_batch_conf where status = 1)
+            and t1.MATERIALSTATUS = 1
+            and t1.company_id=t2.id
+        </where>
+    </select>
+
     <select id="selectIsPreviewed" resultMap="BaseResultMap">
         select t1.id           person_id,
                name            person_name,

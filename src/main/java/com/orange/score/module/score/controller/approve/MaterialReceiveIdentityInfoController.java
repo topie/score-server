@@ -386,24 +386,24 @@ public class MaterialReceiveIdentityInfoController {
             }
         }
 
-        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
-        IdentityInfo identityInfo;
-        Set<Integer> rolesSet = new HashSet<>(roles);
-        Iterator<ScoreRecord> it = pageInfo.getList().iterator();
-        boolean isAdmin = userService.findUserRoleByUserId(userId).contains(1);
-        while (it.hasNext()) {
-            ScoreRecord record = it.next();
-            if (roles.contains(4) || roles.contains(6)) {
-                record.setEdit(1);
-            }
-            identityInfo = iIdentityInfoService.findById(record.getPersonId());
-            //只保留被驳回的申请人
-            if (identityInfo.getMaterialStatus() == null || identityInfo.getMaterialStatus() == 2 ) {//&& !isAdmin
-                //if (!CollectionUtil.isHaveUnionBySet(rolesSet, identityInfo.getOpuser6RoleSet())) {
-                    it.remove();
-                //}
-            }
-        }
+        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage_1(argMap, pageNum, pageSize);
+//        IdentityInfo identityInfo;
+//        Set<Integer> rolesSet = new HashSet<>(roles);
+//        Iterator<ScoreRecord> it = pageInfo.getList().iterator();
+//        boolean isAdmin = userService.findUserRoleByUserId(userId).contains(1);
+//        while (it.hasNext()) {
+//            ScoreRecord record = it.next();
+//            if (roles.contains(4) || roles.contains(6)) {
+//                record.setEdit(1);
+//            }
+//            identityInfo = iIdentityInfoService.findById(record.getPersonId());
+//            //只保留被驳回的申请人
+//            if (identityInfo.getMaterialStatus() == null || identityInfo.getMaterialStatus() == 2 ) {//&& !isAdmin
+//                //if (!CollectionUtil.isHaveUnionBySet(rolesSet, identityInfo.getOpuser6RoleSet())) {
+//                    it.remove();
+//                //}
+//            }
+//        }
 
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

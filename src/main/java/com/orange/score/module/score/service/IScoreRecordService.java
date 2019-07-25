@@ -37,6 +37,8 @@ public interface IScoreRecordService extends IService<ScoreRecord> {
 
     PageInfo<ScoreRecord> selectIdentityInfoByPage(Map argMap, int pageNum, int pageSize);
 
+    PageInfo<ScoreRecord> selectIdentityInfoByPage_1(Map argMap, int pageNum, int pageSize);
+
     PageInfo<ScoreRecord> selectIdentityInfoByPage2(Map argMap, int pageNum, int pageSize);
 
     List<ScoreRecord> selectIndicatorIdsByIdentityInfoIdAndRoleIds(Integer identityInfoId, List<Integer> roles);

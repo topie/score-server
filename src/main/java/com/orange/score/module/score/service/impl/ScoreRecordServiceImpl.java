@@ -394,6 +394,13 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
     }
 
     @Override
+    public PageInfo<ScoreRecord> selectIdentityInfoByPage_1(Map argMap, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ScoreRecord> list = scoreRecordMapper.selectIdentityInfo_1(argMap);
+        return new PageInfo<>(list);
+    }
+
+    @Override
     public PageInfo<ScoreRecord> selectIdentityInfoByPage2(Map argMap, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<ScoreRecord> list = scoreRecordMapper.selectIsPreviewed(argMap);
