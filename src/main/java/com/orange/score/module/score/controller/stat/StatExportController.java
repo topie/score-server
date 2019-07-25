@@ -1593,8 +1593,8 @@ public class StatExportController {
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[]{"申请审核日期", "申请人姓名", "申请人身份证号", "配偶姓名", "配偶身份证号", "关系"},
-                new String[]{"PREAPPROVE", "SPNAME", "SPID_NUMBER", "NAME", "ID_NUMBER", "RELATIONSHIP"});
+                new String[]{"申请审核日期", "申请人姓名", "申请人身份证号", "配偶姓名", "配偶身份证号", "关系","经办人1","经办人1身份证号","经办人2","经办人2身份证号"},
+                new String[]{"PREAPPROVE", "SPNAME", "SPID_NUMBER", "NAME", "ID_NUMBER", "RELATIONSHIP", "OPERATOR", "IDCARDNUMBER_1", "OPERATOR2", "IDCARDNUMBER_2"});
         ExcelFileUtil.download(response, savePath, "待审核"+preApprove+".xlsx");
     }
 

@@ -75,10 +75,16 @@
         t1.ID_NUMBER SPID_NUMBER,
         t2.name,
         t2.id_number,
-        t2.relationship
+        t2.relationship,
+        t3.operator,
+        t3.idcardnumber_1,
+        t3.operator2,
+        t3.idcardnumber_2
         from t_identity_info t1
         left join t_house_relationship t2
         on t1.id = t2.identity_info_id
+        left join t_company_info t3
+        on t1.company_id=t3.id
         <where>
             (t2.relationship = '配偶' or t2.relationship is null)
             and t1.UNION_APPROVE_STATUS_2=1
