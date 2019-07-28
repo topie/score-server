@@ -171,10 +171,10 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
                 2019年6月24日
                 “守法诚信【公安】”生成时自动打为0分。实际打分时，因数量稀少，公安窗口手动申请重新打分。
                  */
-                if(record.getIndicatorId()!=null && record.getIndicatorId() == 1011){
-                    record.setStatus(4);
-                    record.setScoreValue(new BigDecimal(0));
-                }
+//                if(record.getIndicatorId()!=null && record.getIndicatorId() == 1011){
+//                    record.setStatus(4);
+//                    record.setScoreValue(new BigDecimal(0));
+//                }
                 save(record);
             }
         }
