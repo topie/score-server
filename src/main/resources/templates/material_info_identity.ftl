@@ -553,6 +553,11 @@
                                         var newHref = href.replace("218.67.246.52:80", "172.16.200.68:8092");
                                         $(this).attr("href", newHref);
                                     });
+                                    $("span src").each(function () {
+                                        var src2 = $(this).attr("src");
+                                        var newSrc2 = src2.replace("218.67.246.52:80", "172.16.200.68:8092");
+                                        $(this).attr("src", newSrc2);
+                                    });
                                 }
                                 $(".p-img").off("click");
                                 $(".p-img").on("click", function () {
