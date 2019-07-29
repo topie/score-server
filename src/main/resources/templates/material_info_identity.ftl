@@ -521,7 +521,7 @@
                                                     下载
                                                 </a>
                                                 <br>
-                                                <a class="download btn btn-mini btn-primary" target="_blank">
+                                                <a class="download btn btn-mini btn-primary" target="_blank" href="${item.onlinePersonMaterial.materialUri}">
                                                     <div style="display: none"; position: absolute; margin:0 auto;"><img style="height: 90%;width: auto" src="${item.onlinePersonMaterial.materialUri}"></div>
                                                     <span  src="${item.onlinePersonMaterial.materialUri}" onclick="wjwprint(this)">打印</span>
                                                 </a>
