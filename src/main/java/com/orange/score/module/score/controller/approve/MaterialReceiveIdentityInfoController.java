@@ -240,6 +240,14 @@ public class MaterialReceiveIdentityInfoController {
         if (scoreRecord.getCompanyId() != null) {
             argMap.put("companyId", scoreRecord.getCompanyId());
         }
+        // 是否预览过：是
+        if (roles.size()>0 && dateSearch == 1){
+            argMap.put("isPreviewed", roles.get(0).toString());
+        }
+        // 是否预览过：否
+        if (dateSearch==0){
+            argMap.put("no","no");
+        }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");
             if (arr.length == 2) {
@@ -814,6 +822,9 @@ public class MaterialReceiveIdentityInfoController {
             str = str + "天津落户积分管理中心";
         }
 
+        Integer userId = SecurityUtil.getCurrentUserId();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+
         if (!"[]".equals(supplyArr)) {
             IdentityInfo identityInfo = iIdentityInfoService.findById(id);
             if (identityInfo != null) {
@@ -825,6 +836,10 @@ public class MaterialReceiveIdentityInfoController {
                     identityInfo.setOpuser6RoleSet(set);
                 } else {
                     identityInfo.setOpuser6RoleSet(new HashSet<>(userService.findUserDepartmentRoleByUserId(securityUser.getId())));
+                }
+                if (roles.size()>0){
+                    String kk =  identityInfo.getIsPreviewd() == null ? "":identityInfo.getIsPreviewd();
+                    identityInfo.setIsPreviewd(kk+roles.toString());
                 }
                 iIdentityInfoService.update(identityInfo);
                 iPersonBatchStatusRecordService

@@ -126,11 +126,16 @@
                id_number       person_id_num,
                t2.company_name company_name
         from t_identity_info t1, t_company_info t2
-        where batch_id = 1021
+        where batch_id in ( select id from t_batch_conf where status = 1 )
               and UNION_APPROVE_STATUS_1 = 2
               and UNION_APPROVE_STATUS_2 = 2
               and t1.company_id = t2.id
-              and ISPREVIEWD is null
+            <if test="item.isPreviewed != null">
+              and instr( nvl(ISPREVIEWD,'k'), #{item.isPreviewed})>0
+            </if>
+            <if test="item.no != null">
+                and instr( nvl(ISPREVIEWD,'k'), #{item.no})=0
+            </if>
 
     </select>
     <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIds" resultMap="BaseResultMap">
