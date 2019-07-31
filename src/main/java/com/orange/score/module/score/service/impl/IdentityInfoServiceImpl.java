@@ -19,6 +19,7 @@ import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.score.dto.SearchDto;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,6 +130,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
                     searchItems.add(searchItem);
                 }
                 SearchUtil.convert(criteria, searchItems);
+            }
+            if (identityInfo.getUnionApproveStatus2() != null && identityInfo.getUnionApproveStatus2() == 4 && identityInfo.getIdNumber() == "" && identityInfo.getName()== ""){
+                criteria.orEqualTo("materialStatus",1);
             }
             if (StringUtils.isNotEmpty(identityInfo.getOrderByColumn())) {
                 String[] temp = identityInfo.getOrderByColumn().split(",");
