@@ -135,7 +135,7 @@
                                     <td colspan="12">联系电话：<strong>${move.witnessPhone}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">单位名称：<strong>${other.companyName}</strong></td>
+                                    <td colspan="12">实际用工单位名称：<strong>${other.companyName}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="12">单位电话：<strong>${other.companyPhone}</strong></td>
