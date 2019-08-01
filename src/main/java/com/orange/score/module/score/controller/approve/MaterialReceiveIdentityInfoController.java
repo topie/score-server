@@ -175,7 +175,7 @@ public class MaterialReceiveIdentityInfoController {
         boolean isAdmin = userService.findUserRoleByUserId(userId).contains(1);
         while (it.hasNext()) {
             ScoreRecord record = it.next();
-            if (roles.contains(4) || roles.contains(6)) {
+            if (roles.contains(4) || roles.contains(6) || roles.contains(3)) {
                 record.setEdit(1);
             }
             identityInfo = iIdentityInfoService.findById(record.getPersonId());
@@ -436,6 +436,11 @@ public class MaterialReceiveIdentityInfoController {
             msMap.put("materialInfos", materialInfos);
             msMap.put("roleId", item.getOpRoleId());
             if(user.getLoginName().equals("guoyulian") || user.getLoginName().equals("dongzhenling") || user.getLoginName().equals("guihuaju1") || user.getLoginName().equals("admin")){
+                if (item.getOpRole().equals("市住建委")){
+                    item.setOpRole("市规划自然资源局");
+                }
+            }
+            if (user.getLoginName().length()>7 && user.getLoginName().substring(0,7).equals("guiziju")){
                 if (item.getOpRole().equals("市住建委")){
                     item.setOpRole("市规划自然资源局");
                 }

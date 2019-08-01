@@ -366,6 +366,11 @@ public class PrintController extends BaseController {
                     role.setRoleName("市规划自然资源局");
                 }
             }
+            if(user.getLoginName().length()>7 && user.getLoginName().substring(0,7).equals("guiziju")){
+                if (role.getRoleName().equals("市住建委")){
+                    role.setRoleName("市规划自然资源局");
+                }
+            }
             departmentNames.add(role.getRoleName());
         }
         if (roles.contains(3)) {

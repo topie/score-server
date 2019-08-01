@@ -301,6 +301,11 @@ public class ScoreRecordIdentityInfoController {
                     msMap.put("opRole", "市规划自然资源局");
                 }
             }
+            if (user.getLoginName().length()>7 && user.getLoginName().substring(0,7).equals("guiziju")){
+                if (msMap.get("opRole").equals("市住建委")){
+                    msMap.put("opRole", "市规划自然资源局");
+                }
+            }
             scoreList.add(msMap);
         }
         params.put("scoreList", scoreList);
