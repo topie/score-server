@@ -131,9 +131,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
                 }
                 SearchUtil.convert(criteria, searchItems);
             }
-            if (identityInfo.getUnionApproveStatus2() != null && identityInfo.getUnionApproveStatus2() == 4 && identityInfo.getIdNumber() == "" && identityInfo.getName()== ""){
-                criteria.orEqualTo("materialStatus",1);
-            }
+//            if (identityInfo.getUnionApproveStatus2() != null && identityInfo.getUnionApproveStatus2() == 4 && identityInfo.getIdNumber() == "" && identityInfo.getName()== ""){
+//                criteria.orEqualTo("materialStatus",1);
+//            }
             if (StringUtils.isNotEmpty(identityInfo.getOrderByColumn())) {
                 String[] temp = identityInfo.getOrderByColumn().split(",");
                 if (StringUtils.isNotEmpty(identityInfo.getOrderBy()) && "desc".equals(identityInfo.getOrderBy())) {
