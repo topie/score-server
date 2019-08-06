@@ -105,6 +105,17 @@ public class HouseRelationship {
     @Column(name = "approval_custody")
     private String approval_custody;//"抚养权归属"
 
+    @Column(name = "isNaturalChild")
+    private Integer isNaturalChild;//"收养子女1、是；2、否"
+
+    public Integer getIsNaturalChild() {
+        return isNaturalChild;
+    }
+
+    public void setIsNaturalChild(Integer isNaturalChild) {
+        this.isNaturalChild = isNaturalChild;
+    }
+
     //2019-1-17增加字段
 
     @Column(name = "marriageStatus")

@@ -164,11 +164,11 @@
             <td colspan="4" height="20" width="593">
                 再生育审批情况
             </td>
-            <td rowspan="2" height="40" width="187">
-                与第几任妻子/丈夫所生
-            </td>
-            <td rowspan="2" height="40" width="156">
-                抚养权归属
+            <#--<td rowspan="2" height="40" width="187">-->
+                <#--与第几任妻子/丈夫所生-->
+            <#--</td>-->
+            <td rowspan="2" colspan="2" height="40" width="156">
+                申请人本人亲生子女
             </td>
         </tr>
         <tr>
@@ -250,12 +250,13 @@
                 <td height="40" width="437">
                     ${ritem.approval_rules}
                 </td>
-                <td height="40" width="187">
-                    <#--${ritem.approval_which}-->
-                    与第${ritem.approval_index}任${ritem.approval_spouse} ${ritem.approval_which}所生
-                </td>
+                <#--<td height="40" width="187">-->
+                    <#--&lt;#&ndash;${ritem.approval_which}&ndash;&gt;-->
+                    <#--与第${ritem.approval_index}任${ritem.approval_spouse} ${ritem.approval_which}所生-->
+                <#--</td>-->
                 <td height="40" width="156">
-                    ${ritem.approval_custody}
+                    <#if ritem.isNaturalChild == 1>是</#if>
+                    <#if ritem.isNaturalChild == 2>否</#if>
                 </td>
             </tr>
         </#list>
