@@ -255,6 +255,9 @@ public class HouseRelationship {
     }
 
     public String getApproval_which() {
+        if (approval_which == null || approval_which == ""){
+            return "-";
+        }
         return approval_which;
     }
 
@@ -263,6 +266,9 @@ public class HouseRelationship {
     }
 
     public String getApproval_custody() {
+        if (this.approval_custody == null || this.approval_custody == ""){
+            return "-";
+        }
         return approval_custody;
     }
 
@@ -447,6 +453,9 @@ public class HouseRelationship {
     }
 
     public String getApproval_index() {
+        if (this.approval_index == null || this.approval_index == ""){
+            return "-";
+        }
         return approval_index;
     }
 
@@ -455,6 +464,9 @@ public class HouseRelationship {
     }
 
     public String getApproval_spouse() {
+        if (this.approval_spouse == null || this.approval_spouse == ""){
+            return "-";
+        }
         return approval_spouse;
     }
 
