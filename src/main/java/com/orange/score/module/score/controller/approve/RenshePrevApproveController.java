@@ -455,6 +455,9 @@ public class RenshePrevApproveController {
         if (StringUtils.isEmpty(identityInfo.getLockUser2())) {
             return ResponseUtil.error("该申请人的预审状态未被锁定，请先锁定！");
         }
+        if (rejectReason.length()>0){
+            rejectReason = rejectReason.replace("\r\n","");
+        }
         if (identityInfo != null) {
             identityInfo.setOpuser2(securityUser.getDisplayName());
             identityInfo.setUnionApproveStatus2(3);
