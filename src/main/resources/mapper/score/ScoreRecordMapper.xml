@@ -117,6 +117,9 @@
             t1.batch_id in (select id from t_batch_conf where status = 1)
             and t1.MATERIALSTATUS = 1
             and t1.company_id=t2.id
+            <if test="item.personIdNum!=null">
+                and t1.ID_NUMBER=#{item.personIdNum}
+            </if>
         </where>
     </select>
 
