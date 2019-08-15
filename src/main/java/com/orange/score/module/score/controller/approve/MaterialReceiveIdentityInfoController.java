@@ -246,7 +246,7 @@ public class MaterialReceiveIdentityInfoController {
         }
         // 是否预览过：否
         if (dateSearch==0){
-            argMap.put("no","no");
+            argMap.put("no",roles.get(0).toString());
         }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");

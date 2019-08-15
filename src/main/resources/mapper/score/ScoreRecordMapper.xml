@@ -142,6 +142,9 @@
             <if test="item.personIdNum!=null">
                 and t1.ID_NUMBER = #{item.personIdNum}
             </if>
+        <if test="item.acceptAddressId!=null">
+            and t1.ACCEPT_ADDRESS_ID=#{item.acceptAddressId}
+        </if>
     </select>
     <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIds" resultMap="BaseResultMap">
         select indicator_id,
