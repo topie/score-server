@@ -846,9 +846,12 @@ public class MaterialReceiveIdentityInfoController {
                     String kk =  identityInfo.getIsPreviewd() == null ? "":identityInfo.getIsPreviewd();
                     identityInfo.setIsPreviewd(kk+roles.toString());
                 }
-                iIdentityInfoService.update(identityInfo);
-                iPersonBatchStatusRecordService
-                        .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4,str+"-"+securityUser.getDisplayName());
+                /*
+                2019年8月15日
+                因为只是让窗口人员提前看看申请人的材料，不参与审核、状态的变化，所以注释掉
+                 */
+                //iIdentityInfoService.update(identityInfo);
+                //iPersonBatchStatusRecordService.insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4,str+"-"+securityUser.getDisplayName());
             } else {
                 return ResponseUtil.error("申请人不存在！");
             }
