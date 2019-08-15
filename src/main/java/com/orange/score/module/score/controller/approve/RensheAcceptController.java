@@ -9,10 +9,7 @@ import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.date.DateUtil;
-import com.orange.score.database.score.model.BatchConf;
-import com.orange.score.database.score.model.CompanyInfo;
-import com.orange.score.database.score.model.IdentityInfo;
-import com.orange.score.database.score.model.OnlinePersonMaterial;
+import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.*;
@@ -285,6 +282,49 @@ public class RensheAcceptController {
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 5);
             iScoreRecordService.insertToAppendInitRecords(identityInfo.getBatchId(), identityInfo.getId());
+        }
+        return ResponseUtil.success();
+    }
+
+    /*
+    2019年8月15日
+    添加恢复申请人到测评前的状态
+     */
+    @PostMapping("/selfTest")
+    public Result selfTest(@RequestParam Integer id) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserRoleByUserId(securityUser.getId());
+        //if (!roles.contains(1)) return ResponseUtil.error("只有管理员有该操作权限");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+//        if (identityInfo.getReservationStatus() == 10) {
+//            throw new AuthBusinessException("预约已取消");
+//        }
+        if (identityInfo != null) {
+//            if (4 == identityInfo.getRensheAcceptStatus()) {
+//                return ResponseUtil.error("该申请人已被人社受理不通过，无法进行该操作");
+//            }
+            identityInfo.setReservationStatus(1);// 信息已保存
+            identityInfo.setHallStatus(0);// 公安前置预审待审核
+            identityInfo.setUnionApproveStatus1(0);
+            identityInfo.setUnionApproveStatus2(0);
+            identityInfo.setPoliceApproveStatus(0);
+            identityInfo.setRensheAcceptStatus(0);
+            iIdentityInfoService.update(identityInfo);
+
+            /*
+            留痕记录
+             */
+            PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+            personBatchStatusRecord.setPersonId(identityInfo.getId());
+            personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+            personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+            personBatchStatusRecord.setStatusStr("恢复申请人到测评前的状态");
+            personBatchStatusRecord.setStatusTime(new Date());
+            personBatchStatusRecord.setStatusReason("恢复申请人到测评前的状态");
+            personBatchStatusRecord.setStatusTypeDesc("恢复申请人到测评前的状态");
+            personBatchStatusRecord.setStatusInt(119);
+            iPersonBatchStatusRecordService.save(personBatchStatusRecord);
         }
         return ResponseUtil.success();
     }
