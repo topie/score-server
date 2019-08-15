@@ -139,7 +139,9 @@
             <if test="item.no != null">
                 and instr( nvl(ISPREVIEWD,'k'), #{item.no})=0
             </if>
-
+            <if test="item.personIdNum!=null">
+                and t1.ID_NUMBER = #{item.personIdNum}
+            </if>
     </select>
     <select id="selectIndicatorIdsByIdentityInfoIdAndRoleIds" resultMap="BaseResultMap">
         select indicator_id,
