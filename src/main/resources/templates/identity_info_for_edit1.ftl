@@ -22,16 +22,22 @@
             </td>
         </tr>
         <tr>
-            <td colspan="6">姓名：<input data-id="${person.id?c}" data-name="person.name"
+            <td colspan="4">姓名：<input data-id="${person.id?c}" data-name="person.name"
                                       class="edit input-large" style="height: 25px;"
                                       value="${person.name}"></td>
-            <td colspan="6">性别：
+            <td colspan="4">性别：
                 <select data-id="${person.id?c}" data-name="person.sex" class="edit"
                         style="height: 25px;">
                     <option <#if person.sex==0>selected</#if> value=0>未选择</option>
                     <option <#if person.sex==1>selected</#if> value=1>男</option>
                     <option <#if person.sex==2>selected</#if> value=2>女</option>
                 </select>
+            </td>
+            <td colspan="4">年龄：
+                <input data-id="${person.id?c}" data-name="person.age"
+                       class="edit input-large" style="height: 25px;"
+                       value="${person.age}">
+            </td>
         </tr>
         <tr>
             <td colspan="4">出生日期：
