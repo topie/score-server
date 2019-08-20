@@ -45,6 +45,9 @@ public class ScoreTask {
     @Autowired
     private ICompanyInfoService iCompanyInfoService;
 
+    @Autowired
+    private IIndicatorItemService iIndicatorItemService;
+
 
     @Scheduled(cron = "3 0 0 * * ? ")
     public void batchStartTask() {
@@ -311,6 +314,79 @@ public class ScoreTask {
             }
         }
 
+    }
+
+    /**
+     * 2019年8月20日
+     * 年龄、守法诚信【公安】
+     * 以上两个打分项是每天凌晨自动打分：
+     * 1、根据申请人的年龄：35岁以下（含35岁）为20分；36-45周岁为10分；46岁以上（含46岁）为0分；
+     * 2、守法诚信【公安】为0分，因为大多数的人为0分，若需要修改的话，公安窗口会自己申请重新打分；
+     */
+    //@Scheduled(cron = "0 0/2 * * * ? ")//测试用，时间频率，每隔两分钟执行一次；
+    @Scheduled(cron = "20 0 0 * * ? ")
+    public void policeSelfScore(){
+        Condition condition_bc = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria_bc = condition_bc.createCriteria();
+        criteria_bc.andEqualTo("status", 1);
+        List<BatchConf> list_bc = iBatchConfService.findByCondition(condition_bc);
+        if (list_bc.size()>0){
+            Integer batch_id = list_bc.get(0).getId();
+
+            List<Integer> roles = new ArrayList<>();
+            roles.add(1); // 年龄
+            roles.add(1011); // 守法诚信【公安】
+
+            Condition condition = new Condition(ScoreRecord.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("batchId", batch_id);
+            criteria.andEqualTo("opRoleId", 4);// 公安部门
+            criteria.andIn("indicatorId",roles);
+            criteria.andNotEqualTo("status", 4);// 不是4状态（已打分）
+            //criteria.andEqualTo("personId", 21564);
+            List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+            if (scoreRecords.size()>0){
+                for (ScoreRecord scoreRecord : scoreRecords){
+                    IdentityInfo person = iIdentityInfoService.findById(scoreRecord.getPersonId());
+                    if (scoreRecord.getIndicatorId()==1){
+                        if (person.getAge()>=46){ // 46岁以上（含46岁）
+                            scoreRecord.setItemId(3);
+                            IndicatorItem indicatorItem = iIndicatorItemService.findById(3);
+                            scoreRecord.setScoreValue(new BigDecimal(indicatorItem.getScore()));// 根据数据库的分数获取分数，不写死，防止有人修改后台配置
+                        }else if (person.getAge()>=36){ // 36至45周岁
+                            scoreRecord.setItemId(2);
+                            IndicatorItem indicatorItem = iIndicatorItemService.findById(2);
+                            scoreRecord.setScoreValue(new BigDecimal(indicatorItem.getScore()));// 根据数据库的分数获取分数，不写死，防止有人修改后台配置
+                        } else {
+                            scoreRecord.setItemId(1); // 35岁以下（含35岁）
+                            IndicatorItem indicatorItem = iIndicatorItemService.findById(1);
+                            scoreRecord.setScoreValue(new BigDecimal(indicatorItem.getScore()));// 根据数据库的分数获取分数，不写死，防止有人修改后台配置
+                        }
+                    }
+                    if (scoreRecord.getIndicatorId()==1011){ // 若是守法诚信【公安】
+                        scoreRecord.setScoreValue(new BigDecimal(0));
+                        scoreRecord.setItemId(0);
+                    }
+                    scoreRecord.setStatus(4);
+                    scoreRecord.setScoreDate(new Date());
+                    iScoreRecordService.update(scoreRecord);
+
+                    /*
+                    留痕
+                     */
+                    PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                    personBatchStatusRecord.setPersonId(person.getId());
+                    personBatchStatusRecord.setBatchId(person.getBatchId());
+                    personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
+                    personBatchStatusRecord.setStatusStr("公安部门年龄、守法诚信自动打分");
+                    personBatchStatusRecord.setStatusTime(new Date());
+                    personBatchStatusRecord.setStatusReason("公安部门年龄、守法诚信自动打分");
+                    personBatchStatusRecord.setStatusTypeDesc("公安部门年龄、守法诚信自动打分");
+                    personBatchStatusRecord.setStatusInt(200);
+                    iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+                }
+            }
+        }
     }
 
 //    @Scheduled(cron = "0/30 * * * * ? ")
