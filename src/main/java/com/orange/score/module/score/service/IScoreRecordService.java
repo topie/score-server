@@ -47,4 +47,6 @@ public interface IScoreRecordService extends IService<ScoreRecord> {
 
     List<ScoreRecord> provideDataToPolice(BatchConf batchConf);
 
+    List<Map> exportScored(Map argMap);
+
 }

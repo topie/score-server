@@ -9,13 +9,17 @@ import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.date.DateStyle;
 import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.BatchConf;
+import com.orange.score.database.score.model.ScoreRecord;
 import com.orange.score.module.score.service.IBatchConfService;
 import com.orange.score.module.score.service.IIdentityInfoService;
+import com.orange.score.module.score.service.IScoreRecordService;
 import com.orange.score.module.security.SecurityUser;
 import com.orange.score.module.security.SecurityUtil;
+import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +31,12 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/score/stat/export")
 public class StatExportController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private IScoreRecordService iScoreRecordService;
 
     @Autowired
     private IIdentityInfoService iIdentityInfoService;
@@ -1596,6 +1606,67 @@ public class StatExportController {
                 new String[]{"申请审核日期", "申请人姓名", "申请人身份证号", "配偶姓名", "配偶身份证号", "关系","经办人1","经办人1身份证号","经办人2","经办人2身份证号"},
                 new String[]{"PREAPPROVE", "SPNAME", "SPID_NUMBER", "NAME", "ID_NUMBER", "RELATIONSHIP", "OPERATOR", "IDCARDNUMBER_1", "OPERATOR2", "IDCARDNUMBER_2"});
         ExcelFileUtil.download(response, savePath, "待审核"+preApprove+".xlsx");
+    }
+
+
+    /**
+     * 2019年9月3日
+     * 导出当前用户可见的列表内容；
+     */
+    @GetMapping(value = "/exportScored")
+    @ResponseBody
+    public void exportScored(ScoreRecord scoreRecord, HttpServletRequest request, HttpServletResponse response,
+                             @RequestParam(value = "dateSearch") int dateSearch) throws Exception {
+        Date date = scoreRecord.getScoreDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = sdf.format(date);
+
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户没有任何部门角色");
+        if (scoreRecord.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                scoreRecord.setBatchId(list.get(0).getId());
+            }
+        }
+
+        Map argMap = new HashMap();
+        argMap.put("status",4);
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser.getUserType() == 0) {
+            argMap.put("acceptAddressId",1);
+        } else if (securityUser.getUserType() == 1) {
+            argMap.put("acceptAddressId",2);
+        }
+        if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
+            argMap.put("personIdNum",scoreRecord.getPersonIdNum());
+        }
+        if (scoreRecord.getBatchId() != null) {
+            argMap.put("batchId",scoreRecord.getBatchId());
+        }
+        argMap.put("opRoleId",roles);
+        if (scoreRecord.getIndicatorId() != null) {
+            argMap.put("indicatorId",scoreRecord.getIndicatorId());
+        }
+        /*
+        如果开启日期查询，就添加打分日期的查询条件
+         */
+        if (dateSearch==1){
+            argMap.put("scoreDate",dateStr);
+        }
+
+        List<Map> allList = iScoreRecordService.exportScored(argMap);
+        String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
+                .currentTimeMillis() + ".xlsx";
+        ExcelFileUtil.exportXlsx(savePath, allList,
+                new String[]{"ID", "指标名称","申请人","申请人身份证", "企业名称","受理日期","送达日期","打分日期","打分部门","办理进度","分数"},
+                new String[]{"ID", "INDICATOR_NAME", "PERSON_NAME", "PERSON_ID_NUM", "COMPANY_NAME", "ACCEPT_DATE", "SUBMIT_DATE", "SCORE_DATE", "OP_ROLE", "STATUS","SCORE_VALUE"});
+        ExcelFileUtil.download(response, savePath, "已打分.xlsx");
+
     }
 
 

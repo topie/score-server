@@ -3,11 +3,13 @@ package com.orange.score.module.score.controller.approve;
 import com.github.pagehelper.PageInfo;
 import com.orange.score.common.core.Result;
 import com.orange.score.common.exception.AuthBusinessException;
+import com.orange.score.common.tools.excel.ExcelFileUtil;
 import com.orange.score.common.tools.freemarker.FreeMarkerUtil;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.CollectionUtil;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.core.model.Region;
 import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
@@ -22,15 +24,19 @@ import com.orange.score.module.security.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -96,6 +102,9 @@ public class ScoreRecordController {
 
     @Autowired
     private IApplyCancelService iApplyCancelService;
+
+    @Value("${upload.folder}")
+    private String uploadPath;
 
     @GetMapping(value = "/scoring")
     @ResponseBody
@@ -216,8 +225,16 @@ public class ScoreRecordController {
     @GetMapping(value = "/scored")
     @ResponseBody
     public Result scored(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
+                         @RequestParam(value = "dateSearch") int dateSearch,
                          @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                          @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+
+        Date date = scoreRecord.getScoreDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String scoreRecordStr = sdf.format(date);// 字符串格式的打分日期字段值
+        Date date2 = DateUtil.addDay(date,1);
+        String scoreRecordStr2 = sdf.format(date2);
+
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("acceptAddressId", 2);
@@ -259,6 +276,12 @@ public class ScoreRecordController {
         }
         if (scoreRecord.getIndicatorId() != null) {
             criteria.andEqualTo("indicatorId", scoreRecord.getIndicatorId());
+        }
+        /*
+        如果开启日期查询，就添加打分日期的查询条件
+         */
+        if (dateSearch==1){
+            criteria.andBetween("scoreDate",date,date2);
         }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");

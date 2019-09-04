@@ -428,6 +428,11 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
         return scoreRecordMapper.provideDataToPolice(map);
     }
 
+    @Override
+    public List<Map> exportScored(Map argMap) {
+        return scoreRecordMapper.exportScored(argMap);
+    }
+
     private BigDecimal findScoreRecordResultType0(Integer batchId, Integer personId, Integer indicatorId) {
         Condition condition = new Condition(ScoreRecord.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();

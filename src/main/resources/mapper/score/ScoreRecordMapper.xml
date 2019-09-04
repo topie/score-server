@@ -221,4 +221,44 @@
         </if>
         order by t2.score_value desc
     </select>
+    
+    <select id="exportScored" resultType="java.util.Map">
+        select person_id id,
+            INDICATOR_NAME,
+            person_name,
+            person_id_num,
+            company_name,
+            ACCEPT_DATE,
+            SUBMIT_DATE,
+            SCORE_DATE,
+            OP_ROLE,
+               case when STATUS=4 then '已打分' end status,
+               round(SCORE_VALUE,2) SCORE_VALUE
+        from t_pb_score_record
+        where 1=1
+            <if test="item.status!=null">
+                and status=#{item.status}
+            </if>
+            <if test="item.batch_id!=null">
+                and batch_id=#{item.batch_id}
+            </if>
+            <if test="item.acceptAddressId!=null">
+                and ACCEPT_ADDRESS_ID=#{item.acceptAddressId}
+            </if>
+            <if test="item.personIdNum!=null">
+                and person_id_num=#{item.personIdNum}
+            </if>
+            <if test="item.opRoleId!=null">
+                and OP_ROLE_ID in
+                <foreach item="it" collection="item.opRoleId" open="(" separator="," close=")">
+                    #{it}
+                </foreach>
+            </if>
+            <if test="item.indicatorId!=null">
+                and INDICATOR_ID = #{item.indicatorId}
+            </if>
+            <if test="item.scoreDate!=null">
+                and to_char(score_date, 'yyyy-MM-dd') = #{item.scoreDate}
+            </if>
+    </select>
 </mapper>

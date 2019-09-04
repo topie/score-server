@@ -342,7 +342,7 @@ public class ScoreTask {
             criteria.andEqualTo("batchId", batch_id);
             criteria.andEqualTo("opRoleId", 4);// 公安部门
             criteria.andIn("indicatorId",roles);
-            criteria.andEqualTo("status", 3);// 
+            criteria.andEqualTo("status", 3);//
             //criteria.andEqualTo("personId", 21564);
             List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
             if (scoreRecords.size()>0){
