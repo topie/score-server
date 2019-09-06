@@ -170,7 +170,8 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
         search.setStatusDictAlias(alias);
         search.setStatusInt(status);
         List<PersonBatchStatusRecord> searchList = personBatchStatusRecordMapper.select(search);
-        if (searchList.size() > 0) {
+        //if (searchList.size() > 0) {
+        if (0 > 0) {// 永远不会执行if中的update ，所有的记录都保存
             if (dept != null){
                 personBatchStatusRecord.setStatusStr(personBatchStatusRecord.getStatusStr() + "（"+dept+"）");
             }
