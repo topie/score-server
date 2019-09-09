@@ -36,12 +36,15 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPException;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -106,6 +109,9 @@ public class IdentityInfoController {
 
     @Autowired
     private IBatchConfService iBatchConfService;
+
+    @Autowired
+    private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
 
     @Value("${upload.folder}")
     private String uploadPath;
@@ -435,6 +441,80 @@ public class IdentityInfoController {
         result.put("cIds", submittedMids);
         result.put("html", html);
         return ResponseUtil.success(result);
+    }
+
+
+    /*
+    2019年9月5日
+    后台管理员可以修改申请人的材料接收与打分情况
+     */
+    @GetMapping("/changeMaterialAndScore")
+    public Result changeMaterialAndScore(@RequestParam Integer identityInfoId,
+                                         @RequestParam(value = "template", required = false) String template) throws FileNotFoundException {
+        Map params = new HashMap();
+
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", identityInfoId);
+        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+
+        params.put("scoreRecords",scoreRecords);
+        String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
+        String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, template + ".ftl", params);
+        Map result = new HashMap();
+        result.put("html", html);
+        return ResponseUtil.success(result);
+    }
+
+    /**
+     * 2019年9月9日
+     * 后台窗口界面修改申请人的材料接收与打分
+     * @param ids
+     * @param statuss
+     * @param scoreValues
+     * @param indicatorNames
+     * @return
+     */
+    @PostMapping("/saveChange")
+    public Result saveChange(@RequestParam String ids, @RequestParam String statuss, @RequestParam String scoreValues, @RequestParam String indicatorNames) {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        String userName =  SecurityUtil.getCurrentUserName();// 修改的用户名
+
+        JSONArray jsonArrayids = JSONArray.parseArray(ids);
+        JSONArray jsonArraystatuss = JSONArray.parseArray(statuss);
+        JSONArray jsonArrayscoreValues = JSONArray.parseArray(scoreValues);
+        JSONArray jsonArrayindicatorNames = JSONArray.parseArray(indicatorNames);
+        ScoreRecord scoreRecord = null;
+        String statusAndScore = "";
+        for (int i=0; i<jsonArrayids.size(); i++){
+            String id = ((JSONObject) jsonArrayids.get(i)).getString("id");
+            String status = ((JSONObject) jsonArraystatuss.get(i)).getString("status");
+            String scoreValue = ((JSONObject) jsonArrayscoreValues.get(i)).getString("scoreValue");
+            //String indicatorName = ((JSONObject) jsonArrayindicatorNames.get(i)).getString("indicatorName");
+            //System.out.println("参数,id："+id+",status:"+status+",scoreValue:"+scoreValue+",indicatorName:"+indicatorName);
+            scoreRecord = iScoreRecordService.findById(Integer.parseInt(id.replace(",","")));
+            statusAndScore = statusAndScore +scoreRecord.getStatus()+"-"+scoreRecord.getScoreValue()+";";
+            scoreRecord.setStatus(Integer.parseInt(status));
+            if (!StringUtils.isEmpty(scoreValue)){
+                scoreRecord.setScoreValue(new BigDecimal(scoreValue));
+            }
+            iScoreRecordService.update(scoreRecord);
+        }
+        /*
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(scoreRecord.getPersonId());
+        personBatchStatusRecord.setBatchId(scoreRecord.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(scoreRecord.getPersonIdNum());
+        personBatchStatusRecord.setStatusTypeDesc("修改材料与打分状态");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusStr(userName+"修改成功");
+        personBatchStatusRecord.setStatusReason("修改前的状态与分数ID升序："+":"+statusAndScore);
+        personBatchStatusRecord.setStatusInt(104);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+        return ResponseUtil.success();
     }
 
     @GetMapping("/materialSupply")
