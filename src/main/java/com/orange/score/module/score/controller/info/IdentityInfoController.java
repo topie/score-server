@@ -477,7 +477,7 @@ public class IdentityInfoController {
         String timeStr = sdf2.format(new Date());
         String imageStr = timeStr+"_"+fileName;
 
-        String savePath = "i:/data/upload" + "/" +SecurityUtil.getCurrentUserName()+"/" + dateStr ;
+        String savePath = "/data/upload" + "/" +SecurityUtil.getCurrentUserName()+"/" + dateStr ;
         //String savePath = "I:\\data";
         File targetFile = new File(savePath);
         if (!targetFile.exists()){
