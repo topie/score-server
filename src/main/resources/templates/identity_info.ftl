@@ -463,6 +463,7 @@
                                                    download="${item.onlinePersonMaterial.materialInfoName}_${item.onlinePersonMaterial.personId?c}">
                                                     下载
                                                 </a>
+                                                <input type="file" id="${item.id}" name="${item.id}" onchange="fileChange(this)">
                                             </td>
                                         </tr>
                                     </#if>
@@ -471,7 +472,7 @@
                                         <td class="text-center">
                                             未上传
                                         </td>
-                                        <td>${item.name}</td>
+                                        <td>${item.name}<input type="file" value="${person.id}" id="${item.id}" name="${item.id}" onchange="fileChange(this)"></td>
                                     </tr>
                                 </#if>
                             </#list>
@@ -554,6 +555,30 @@
                                         ]
                                     }).show().$body.html(img);
                                 });
+
+                                /*
+                                2019年9月11日 后台图片上传
+                                 */
+                                function fileChange(ele) {
+                                    var identityInfoId = ${person.id?c};
+                                    console.log("ele:"+ele);
+                                    console.log(ele.id);
+                                    var file = document.getElementById(ele.id);
+                                    $.ajaxFileUpload({
+                                        url: App.href + "/api/score/info/identityInfo/adminUploadImage",
+                                        type: "POST",
+                                        secureuri: false,
+                                        fileElementId: ele.id,
+                                        dataType: "json",
+                                        data:{
+                                            'id' : ele.id,
+                                            'identityInfoId':identityInfoId
+                                        },
+                                        success:function (data) {
+                                            alert("接收到后台的成功提示！")
+                                        }
+                                    });
+                                }
                             </script>
                         </div>
                     </div>

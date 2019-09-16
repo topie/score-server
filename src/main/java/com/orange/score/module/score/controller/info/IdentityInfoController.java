@@ -34,6 +34,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import tk.mybatis.mapper.entity.Condition;
 
 import javax.servlet.ServletRequest;
@@ -112,6 +114,9 @@ public class IdentityInfoController {
 
     @Autowired
     private IPersonBatchStatusRecordService iPersonBatchStatusRecordService;
+
+    @Value("${upload.folder}")
+    String uploadFolder;
 
     @Value("${upload.folder}")
     private String uploadPath;
@@ -441,6 +446,101 @@ public class IdentityInfoController {
         result.put("cIds", submittedMids);
         result.put("html", html);
         return ResponseUtil.success(result);
+    }
+
+
+    /**
+     *2019年9月11日，添加后台窗口人员上传图片
+     * @return
+     */
+    @RequestMapping(value = "/adminUploadImage", method = { RequestMethod.POST })
+    @ResponseBody
+    public Result adminUploadImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        String userName =  SecurityUtil.getCurrentUserName();// 修改的用户名
+
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        String id = request.getParameter("id"); // 上传材料的id
+        String identityInfoId = request.getParameter("identityInfoId"); // 申请人ID
+        /*
+        获取当前申请人的信息
+         */
+        IdentityInfo identityInfo = iIdentityInfoService.findById(Integer.parseInt(identityInfoId));
+
+        MultipartFile file = multipartRequest.getFile(id);
+        String fileName = file.getOriginalFilename();
+        String fileName2 = file.getName();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateStr = sdf.format(new Date());
+        String timeStr = sdf2.format(new Date());
+        String imageStr = timeStr+"_"+fileName;
+
+        String savePath = "i:/data/upload" + "/" +SecurityUtil.getCurrentUserName()+"/" + dateStr ;
+        //String savePath = "I:\\data";
+        File targetFile = new File(savePath);
+        if (!targetFile.exists()){
+            targetFile.mkdirs();
+        }
+
+        String downloadPath = "http://218.67.246.52:80/wu-score/shopPic/"+SecurityUtil.getCurrentUserName()+"/"+dateStr+"/"+imageStr;
+
+        // 开始保存
+        InputStream stream = file.getInputStream();
+        FileOutputStream fs = new FileOutputStream(savePath+"/"+imageStr);
+        byte[] buffer = new byte[1024*1024];
+        int byteread = 0;
+        while ((byteread = stream.read(buffer))!=-1){
+            fs.write(buffer,0,byteread);
+            fs.flush();
+        }
+        fs.close();
+        stream.close();
+
+        Condition condition_pm = new Condition(OnlinePersonMaterial.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria_pm = condition_pm.createCriteria();
+        criteria_pm.andEqualTo("personId", Integer.parseInt(identityInfoId));
+        criteria_pm.andEqualTo("materialInfoId", Integer.parseInt(id));
+        List<OnlinePersonMaterial> list_pm = iOnlinePersonMaterialService.findByCondition(condition_pm);
+
+        if (list_pm.size() == 0){
+            /*
+            若没有保存过同类型的材料，就保存；
+            否则覆盖原有的图片材料地址；
+             */
+            OnlinePersonMaterial onlinePersonMaterial = new OnlinePersonMaterial();
+            onlinePersonMaterial.setPersonId(identityInfo.getId());
+            onlinePersonMaterial.setBatchId(identityInfo.getBatchId());// 当前批次
+            onlinePersonMaterial.setMaterialInfoId(Integer.parseInt(id));
+            onlinePersonMaterial.setMaterialName(fileName); // 上传的图片名字
+            onlinePersonMaterial.setMaterialUri(downloadPath); // 图片地址
+            onlinePersonMaterial.setcTime(new Date()); // 创建时间
+            iOnlinePersonMaterialService.save(onlinePersonMaterial);
+        }else{
+            list_pm.get(0).setMaterialUri(downloadPath);
+            iOnlinePersonMaterialService.update(list_pm.get(0));
+        }
+
+        /*
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusTypeDesc("后台上传材料");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusStr(userName+"上传成功");
+        if (list_pm.size()==0){
+            personBatchStatusRecord.setStatusReason("窗口误操作导致");
+        }else {
+            personBatchStatusRecord.setStatusReason("修改前的图片地址："+list_pm.get(0).getMaterialUri());
+        }
+        personBatchStatusRecord.setStatusInt(105);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+
+        return ResponseUtil.success();
     }
 
 
