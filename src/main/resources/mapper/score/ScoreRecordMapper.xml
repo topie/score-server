@@ -235,7 +235,7 @@
                case when STATUS=4 then '已打分' end status,
                round(SCORE_VALUE,2) SCORE_VALUE
         from t_pb_score_record
-        where 1=1
+        where batch_id in (select ID from t_batch_conf where status = 1)
             <if test="item.status!=null">
                 and status=#{item.status}
             </if>
