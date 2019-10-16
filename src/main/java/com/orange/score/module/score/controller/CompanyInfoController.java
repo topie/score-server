@@ -72,10 +72,10 @@ public class CompanyInfoController {
     @ResponseBody
     public List<Option> options() {
         List<Option> options = new ArrayList<>();
-        List<CompanyInfo> list = iCompanyInfoService.selectByFilter(null);
-        for (CompanyInfo item : list) {
-            options.add(new Option(item.getCompanyName(), item.getId()));
-        }
+//        List<CompanyInfo> list = iCompanyInfoService.selectByFilter(null);
+//        for (CompanyInfo item : list) {
+//            options.add(new Option(item.getCompanyName(), item.getId()));
+//        }
         return options;
     }
 }
