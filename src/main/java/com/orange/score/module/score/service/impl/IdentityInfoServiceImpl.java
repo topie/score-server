@@ -17,6 +17,7 @@ import com.orange.score.database.score.model.CompanyInfo;
 import com.orange.score.database.score.model.IdentityInfo;
 import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.score.dto.SearchDto;
+import com.orange.score.module.score.service.ICompanyInfoService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.Null;
@@ -44,6 +45,10 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
 
     @Autowired
     private IIdentityInfoService iIdentityInfoService;
+
+    @Autowired
+    private ICompanyInfoService iCompanyInfoService;
+
 
     @Override
     public PageInfo<IdentityInfo> selectByFilterAndPage(IdentityInfo identityInfo, int pageNum, int pageSize) {
@@ -155,7 +160,12 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
         }
         if (tmp != null) SqlUtil.setLocalPage(tmp);
 
-        return identityInfoMapper.selectByCondition(condition);
+        List<IdentityInfo> list = identityInfoMapper.selectByCondition(condition);
+        for (IdentityInfo identityInfo1 : list){
+            CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo1.getCompanyId());
+            identityInfo1.setIsPreviewd(companyInfo.getCompanyName());
+        }
+        return list;
     }
 
     @Override
