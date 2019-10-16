@@ -169,9 +169,9 @@ public class ScoreInfoController {
         result.put("reservationStatus", reservationStatus);
         List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
         Map companyMap = new HashMap();
-        for (CompanyInfo companyInfo : companyInfos) {
-            companyMap.put(companyInfo.getId(), companyInfo.getCompanyName());
-        }
+//        for (CompanyInfo companyInfo : companyInfos) {
+//            companyMap.put(companyInfo.getId(), companyInfo.getCompanyName());
+//        }
         result.put("companyNames", companyMap);
         /*
         2018年10月12日，xgr
