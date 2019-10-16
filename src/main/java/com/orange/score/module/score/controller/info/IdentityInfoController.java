@@ -135,8 +135,7 @@ public class IdentityInfoController {
     public Result formItems() {
         List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_identity_info");
         List searchItems = iCommonQueryService.selectSearchItemsByTable("t_identity_info");
-//        List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
-        List<CompanyInfo> companyInfos = null;
+        List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);
@@ -145,9 +144,9 @@ public class IdentityInfoController {
         Map hallStatus = iDictService.selectMapByAlias("hallStatus");
         result.put("hallStatus", hallStatus);
         Map companyMap = new HashMap();
-        for (CompanyInfo companyInfo : companyInfos) {
-            companyMap.put(companyInfo.getId(), companyInfo.getCompanyName());
-        }
+//        for (CompanyInfo companyInfo : companyInfos) {
+//            companyMap.put(companyInfo.getId(), companyInfo.getCompanyName());
+//        }
         result.put("companyNames", companyMap);
         return ResponseUtil.success(result);
     }
