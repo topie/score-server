@@ -135,8 +135,7 @@ public class IdentityInfoController {
     public Result formItems() {
         List<FormItem> formItems = iCommonQueryService.selectFormItemsByTable("t_identity_info");
         List searchItems = iCommonQueryService.selectSearchItemsByTable("t_identity_info");
-        //List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
-        List<CompanyInfo> companyInfos = null;
+        List<CompanyInfo> companyInfos = iCompanyInfoService.findAll();
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);
