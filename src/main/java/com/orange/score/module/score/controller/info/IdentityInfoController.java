@@ -126,7 +126,15 @@ public class IdentityInfoController {
     public Result list(IdentityInfo identityInfo,
                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+        if (securityUser.getLoginName().equals("admin")){
+            for (IdentityInfo identityInfo1 : pageInfo.getList()){
+                // 将admin 占用“曾用名”字段；传到js 端，控制按钮出现消失的机制，只有管理员才能看到“修改材料+打分状态”
+                identityInfo1.setFormerName("100");
+            }
+        }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
