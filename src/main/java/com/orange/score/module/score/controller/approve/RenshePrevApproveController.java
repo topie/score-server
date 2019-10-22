@@ -162,6 +162,149 @@ public class RenshePrevApproveController {
         return ResponseUtil.success();
     }
 
+
+    /**
+     * 2019年10月22日
+     * 在审核中心——人社预审——已通过、未通过两个列表中，操作列加入“退回至待审核”按钮，功能为将对应申请人退回至“审核中心——人社预审——待审核”列表。此按钮权限分配给有“审核中心——人社预审”权限的用户。
+     * @param id
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/backStart")
+    public Result backStart(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        int back = identityInfo.getUnionApproveStatus2();
+        if (identityInfo.getReservationStatus()==8 ){
+            identityInfo.setUnionApproveStatus2(3); // 3：把人社退回的申请人退回至“不通过”状态，把流程卡住
+            identityInfo.setReservationStatus(12); // 12：表示窗口申请退回申请人至未审核的代码
+            iIdentityInfoService.update(identityInfo);
+
+        }
+        if (identityInfo.getReservationStatus() == 9 ){
+            identityInfo.setReservationStatus(12); // 12：表示窗口申请退回申请人至未审核的代码
+            identityInfo.setUnionApproveStatus2(3); // 3：把人社退回的申请人退回至“不通过”状态，把流程卡住
+            iIdentityInfoService.update(identityInfo);
+        }
+        if (identityInfo.getReservationStatus() == 10 && identityInfo.getPoliceApproveStatus() == 0){
+            identityInfo.setReservationStatus(12); // 12：表示窗口申请退回申请人至未审核的代码
+            identityInfo.setUnionApproveStatus2(3); // 3：把人社退回的申请人退回至“不通过”状态，把流程卡住
+            iIdentityInfoService.update(identityInfo);
+        }
+        /*
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusTypeDesc("退回至未审核-开始");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"修改成功");
+        if (back == 2){
+            personBatchStatusRecord.setStatusReason("修改前的状态："+"人社预审已通过");
+        }else if (back == 3){
+            personBatchStatusRecord.setStatusReason("修改前的状态："+"人社预审未通过");
+        }
+        personBatchStatusRecord.setStatusInt(120);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+        return ResponseUtil.success();
+    }
+
+    /**
+     * 2019年10月22日
+     * 在审核中心——人社预审——已通过、未通过两个列表中，操作列加入“退回至待审核”按钮，功能为将对应申请人退回至“审核中心——人社预审——待审核”列表。此按钮权限分配给有“审核中心——人社预审”权限的用户。
+     * @param id
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/backFinish2")
+    public Result backFinish(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        identityInfo.setReservationStatus(8);
+        identityInfo.setUnionApproveStatus2(1);
+        iIdentityInfoService.update(identityInfo);
+
+        /*
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusTypeDesc("退回至未审核-结束");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"修改成功");
+        personBatchStatusRecord.setStatusReason("退回至未审核");
+        personBatchStatusRecord.setStatusInt(121);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+        return ResponseUtil.success();
+    }
+
+    /**
+     * 2019年10月22日 退回至未审核，后台通过按钮
+     * @param identityInfo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping(value = "/backFinish")
+    @ResponseBody
+    public Result backFinish(IdentityInfo identityInfo,
+                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (identityInfo.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                identityInfo.setBatchId(list.get(0).getId());
+            }
+        }
+//        if (securityUser.getUserType() == 0) {
+//            identityInfo.setAcceptAddressId(1);
+//        } else if (securityUser.getUserType() == 1) {
+//            identityInfo.setAcceptAddressId(2);
+//        }
+        identityInfo.setReservationStatus(12);
+//        identityInfo.setOrderByColumn("reservationDate");
+//        identityInfo.setOrderBy("desc");
+//        identityInfo.setOrderByColumn("unionApprove2Et,id");
+//        identityInfo.setOrderBy("asc");
+        PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+
+        List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
+        Iterator<IdentityInfo> iterator = pageInfo.getList().iterator();
+        IdentityInfo info;
+        CompanyInfo companyInfo;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        while (iterator.hasNext()) {
+            info = iterator.next();
+
+            /*
+            2019年6月24日
+            因浏览器解析时间有8个小时的时差，所以把preApprove 的字段值赋给 regionName
+             */
+            info.setRegionName(sdf.format(info.getPreApprove()));
+
+            companyInfo = iCompanyInfoService.findById(info.getCompanyId());
+            if (StringUtils.isEmpty(companyInfo.getBusinessLicenseSrc())) {
+                iterator.remove();
+                continue;
+            }
+            if (companyIds.contains(info.getCompanyId())) {
+                info.setCompanyWarning(1);
+            }
+        }
+
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
     @GetMapping(value = "/approved")
     @ResponseBody
     public Result approved(IdentityInfo identityInfo,

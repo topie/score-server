@@ -96,6 +96,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             if (identityInfo.getPreApprove() != null){
                 criteria.andEqualTo("preApprove",identityInfo.getPreApprove());
             }
+            if (identityInfo.getReservationStatus() != null){
+                criteria.andEqualTo("reservationStatus",identityInfo.getReservationStatus());
+            }
             /*
             2018年10月15日，增加一个锁定人的搜索条件
              */
