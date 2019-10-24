@@ -151,6 +151,10 @@ public class BatchConf {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date openLoginTime;
 
+    @Column(name = "closeOrder")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date closeOrder;
+
 
     /**
      * 2019年1月4日 增加一个字段值
@@ -537,5 +541,14 @@ public class BatchConf {
 
     public void setScoreValue(Integer scoreValue) {
         this.scoreValue = scoreValue;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
+    public Date getCloseOrder() {
+        return closeOrder;
+    }
+
+    public void setCloseOrder(Date closeOrder) {
+        this.closeOrder = closeOrder;
     }
 }
