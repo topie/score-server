@@ -104,6 +104,16 @@ public class AcceptDateConfController {
         if (acceptDateConf.getAcceptDate() != null) {
             acceptDateConf.setWeekDay(DateUtil.getWeek(acceptDateConf.getAcceptDate()).getChineseName());
         }
+
+        /*
+        2019年10月30日，完善后台管理员增加预约名额
+        先获取剩余人数，在剩余人数基础上增加变动的名额
+         */
+        AcceptDateConf byId = iAcceptDateConfService.findById(acceptDateConf.getId());
+        int changeCountAm = acceptDateConf.getAmUserCount() - byId.getAmUserCount();// 上午变动
+        int changeCountPm = acceptDateConf.getPmUserCount() - byId.getPmUserCount();// 下午变动
+        acceptDateConf.setAmRemainingCount(byId.getAmRemainingCount()+changeCountAm);
+        acceptDateConf.setPmRemainingCount(byId.getPmRemainingCount() + changeCountPm);
         iAcceptDateConfService.update(acceptDateConf);
         return ResponseUtil.success();
     }
