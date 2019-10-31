@@ -262,6 +262,13 @@
                                     <td colspan="6">本人电话：<strong>${other.selfPhone}</strong></td>
                                 </tr>
                                 <tr>
+                                    <td colspan="12">申请人办公地址：<strong>${other.applyOfficeAddress}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">当前工作岗位：<strong>${other.jobTitle}</strong></td>
+                                    <td colspan="6">主要从事工作内容：<strong>${other.jobContent}</strong></td>
+                                </tr>
+                                <tr>
                                     <td colspan="4">是否社保缴纳：<strong>${other.socialSecurityPayStr}</strong></td>
                                     <td colspan="4">有无行政拘留记录：<strong>${other.detentionStr}</strong></td>
                                     <td colspan="4">有无行获刑记录：<strong>${other.penaltyStr}</strong></td>

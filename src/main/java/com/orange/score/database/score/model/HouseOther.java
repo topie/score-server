@@ -66,6 +66,20 @@ public class HouseOther {
     private String companyAddress;
 
     /**
+     * 办公地址
+     */
+    @Column(name = "APPLY_OFFICE_ADDRESS")
+    private String applyOfficeAddress;
+
+    public String getApplyOfficeAddress() {
+        return applyOfficeAddress;
+    }
+
+    public void setApplyOfficeAddress(String applyOfficeAddress) {
+        this.applyOfficeAddress = applyOfficeAddress;
+    }
+
+    /**
      * 单位电话
      */
     @Column(name = "company_phone")

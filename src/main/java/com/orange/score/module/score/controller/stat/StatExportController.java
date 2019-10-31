@@ -332,11 +332,11 @@ public class StatExportController {
         }
         String[] titles = new String[]{"受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "受理人", "实际交件日期", "打包位置", "特殊记录", "分类",
                 "备注1", "备注2", "性别", "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期",
-                "单位名称", "单位电话", "经办人姓名", "经办人电话", "实际用工单位"};
+                "单位名称", "单位电话", "经办人姓名", "经办人电话", "实际用工单位","申请人办公地址"};
         String[] fields = new String[]{"ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "OPUSER4",
                 "BLANK1", "BLANK2", "BLANK3", "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER",
                 "CULTURE_DEGREE", "JOB_LEVEL", "JOB_NAME", "CERTIFICATE_CODE", "ISSUING_AUTHORITY", "ISSUING_DATE",
-                "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE", "COMPANY_NAME_OTHER"};
+                "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE", "COMPANY_NAME_OTHER","APPLY_OFFICE_ADDRESS"};
         List<Map> columns = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
             Map column = new HashMap();
@@ -1575,11 +1575,11 @@ public class StatExportController {
         ExcelFileUtil.exportXlsx(savePath, allList,
                 new String[]{"受理编码", "身份证号码", "姓名", "本人电话", "受理日期", "受理人", "实际交件日期", "打包位置", "特殊记录", "分类", "备注1",
                         "备注2", "性别", "配偶姓名", "配偶身份证号码", "文化程度", "现有职业（专业/职业）资格级别", "工种名称", "证书编码", "发证机关", "发证日期",
-                        "单位名称", "单位电话", "经办人姓名", "经办人电话", "实际用工单位"},
+                        "单位名称", "单位电话", "经办人姓名", "经办人电话", "实际用工单位", "申请人办公地址"},
                 new String[]{"ACCEPT_NUMBER", "ID_NUMBER", "NAME", "SELF_PHONE", "ACCEPT_DATE", "OPUSER4", "BLANK1",
                         "BLANK2", "BLANK3", "BLANK4", "BLANK5", "BLANK6", "SEX", "PARTNER_NAME", "PARTNER_ID_NUMBER",
                         "CULTURE_DEGREE", "JOB_LEVEL", "JOB_NAME", "CERTIFICATE_CODE", "ISSUING_AUTHORITY",
-                        "ISSUING_DATE", "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE", "COMPANY_NAME_OTHER"});
+                        "ISSUING_DATE", "COMPANY_NAME", "COMPANY_MOBILE", "OPERATOR", "OPERATOR_MOBILE", "COMPANY_NAME_OTHER","APPLY_OFFICE_ADDRESS"});
         ExcelFileUtil.download(response, savePath, "列表4.xlsx");
     }
 
