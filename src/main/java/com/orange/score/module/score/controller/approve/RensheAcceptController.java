@@ -21,11 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenJz1012 on 2018-04-02.
@@ -411,6 +409,124 @@ public class RensheAcceptController {
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 4);
         }
+        return ResponseUtil.success();
+    }
+
+    /*
+    2019年11月19日
+    人社受理审核“已通过、未通过”退回至 待审核
+    将表 t_identity_info 的字段 RENSHE_ACCEPT_STATUS 改为5，等人社管理点击同意后，改为1（待审核）；
+     */
+    @PostMapping("/backRensheApprove")
+    public Result backRensheApprove(@RequestParam Integer id) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+
+        identityInfo.setRensheAcceptStatus(5);// 退回至待审核中
+        iIdentityInfoService.update(identityInfo);
+
+        /*
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusTypeDesc("人社受理审核退回至未审核-开始");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"修改成功");
+        personBatchStatusRecord.setStatusReason("退回至未审核进行中");
+        personBatchStatusRecord.setStatusInt(122);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+
+        return ResponseUtil.success();
+    }
+
+
+    @GetMapping(value = "/rensheBackFinish")
+    @ResponseBody
+    public Result rensheBackFinish(IdentityInfo identityInfo,
+                             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (identityInfo.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                identityInfo.setBatchId(list.get(0).getId());
+            }
+        }
+        identityInfo.setRensheAcceptStatus(5);
+        PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+
+        List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
+        Iterator<IdentityInfo> iterator = pageInfo.getList().iterator();
+        IdentityInfo info;
+        CompanyInfo companyInfo;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        while (iterator.hasNext()) {
+            info = iterator.next();
+            /*
+            2019年6月24日
+            因浏览器解析时间有8个小时的时差，所以把preApprove 的字段值赋给 regionName
+             */
+            info.setRegionName(sdf.format(info.getPreApprove()));
+
+            companyInfo = iCompanyInfoService.findById(info.getCompanyId());
+            if (StringUtils.isEmpty(companyInfo.getBusinessLicenseSrc())) {
+                iterator.remove();
+                continue;
+            }
+            if (companyIds.contains(info.getCompanyId())) {
+                info.setCompanyWarning(1);
+            }
+        }
+
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+
+
+    /*
+    2019年11月20日
+    人社受理审核阶段退回至未审核，并删除20条打分项
+     */
+    @PostMapping("/rensheBackFinish2")
+    public Result rensheBackFinish2(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        identityInfo.setRensheAcceptStatus(1);
+        iIdentityInfoService.update(identityInfo);
+
+//        ScoreRecord scoreRecord = new ScoreRecord();
+//        scoreRecord.setPersonId(id);
+//        List<ScoreRecord> scoreRecords = iScoreRecordService.selectByFilter(scoreRecord);
+
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("personId", id);
+        List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+
+        for (ScoreRecord scoreRecord1 : scoreRecords){
+            iScoreRecordService.deleteById(scoreRecord1.getId());
+        }
+        /*
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusTypeDesc("人社受理审核退回至未审核-结束");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"修改成功");
+        personBatchStatusRecord.setStatusReason("人社受理审核退回至未审核-结束");
+        personBatchStatusRecord.setStatusInt(124);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
         return ResponseUtil.success();
     }
 
