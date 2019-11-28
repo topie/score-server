@@ -132,8 +132,10 @@ public class ApplyCancelController {
                 personMap.put(identityInfo.getId(), identityInfo);
             }
             for (ApplyCancel cancel : pageInfo.getList()) {
-                cancel.setPersonName(((IdentityInfo) personMap.get(cancel.getPersonId())).getName());
-                cancel.setCompanyId(((IdentityInfo) personMap.get(cancel.getPersonId())).getCompanyId());
+                if (personMap.get(cancel.getPersonId()) != null){
+                    cancel.setPersonName(((IdentityInfo) personMap.get(cancel.getPersonId())).getName());
+                    cancel.setCompanyId(((IdentityInfo) personMap.get(cancel.getPersonId())).getCompanyId());
+                }
             }
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
