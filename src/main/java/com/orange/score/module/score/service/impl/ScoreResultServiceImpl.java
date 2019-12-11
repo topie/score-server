@@ -167,24 +167,23 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
             identityInfo.setResultStatus(1);
             identityInfo.setHallStatus(6);
             iIdentityInfoService.update(identityInfo);
-            /*
-            留痕记录 2019年12月11日
-             */
-            PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
-            personBatchStatusRecord.setPersonId(identityInfo.getId());
-            personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
-            personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
-            personBatchStatusRecord.setStatusStr("人社汇总发布");
-            personBatchStatusRecord.setStatusTime(new Date());
-            personBatchStatusRecord.setStatusReason("人社汇总发布--");
-            personBatchStatusRecord.setStatusTypeDesc("预约大厅状态");
-            personBatchStatusRecord.setStatusDictAlias("hallStatus");
-            personBatchStatusRecord.setStatusInt(6);
-            iPersonBatchStatusRecordService.save(personBatchStatusRecord);
-
 
             //iPersonBatchStatusRecordService.insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 6);
         }
+        /*
+        留痕记录 2019年12月11日
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusStr("人社汇总发布");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusReason("人社汇总发布--");
+        personBatchStatusRecord.setStatusTypeDesc("预约大厅状态");
+        personBatchStatusRecord.setStatusDictAlias("hallStatus");
+        personBatchStatusRecord.setStatusInt(6);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
     }
 
     @Override
