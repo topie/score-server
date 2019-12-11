@@ -12,10 +12,7 @@ import com.orange.score.common.utils.SearchItem;
 import com.orange.score.common.utils.SearchUtil;
 import com.orange.score.database.core.model.ColumnJson;
 import com.orange.score.database.score.dao.ScoreResultMapper;
-import com.orange.score.database.score.model.IdentityInfo;
-import com.orange.score.database.score.model.Indicator;
-import com.orange.score.database.score.model.ScoreRecord;
-import com.orange.score.database.score.model.ScoreResult;
+import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.IColumnJsonService;
 import com.orange.score.module.score.service.IIdentityInfoService;
 import com.orange.score.module.score.service.IPersonBatchStatusRecordService;
@@ -157,21 +154,36 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
                 default:
                     break;
             }
-            ScoreResult scoreResult = new ScoreResult();
-            scoreResult.setScoreValue(finalValue);
-            scoreResult.setIndicatorId(indicator.getId());
-            scoreResult.setIndicatorName(indicator.getName());
-            scoreResult.setPersonId(identityInfo.getId());
-            scoreResult.setPersonName(identityInfo.getName());
-            scoreResult.setPersonIdNum(identityInfo.getIdNumber());
-            scoreResult.setBatchId(identityInfo.getBatchId());
-            scoreResult.setcTime(new Date());
+//            ScoreResult scoreResult = new ScoreResult();
+//            scoreResult.setScoreValue(finalValue);
+//            scoreResult.setIndicatorId(indicator.getId());
+//            scoreResult.setIndicatorName(indicator.getName());
+//            scoreResult.setPersonId(identityInfo.getId());
+//            scoreResult.setPersonName(identityInfo.getName());
+//            scoreResult.setPersonIdNum(identityInfo.getIdNumber());
+//            scoreResult.setBatchId(identityInfo.getBatchId());
+//            scoreResult.setcTime(new Date());
             //iScoreResultService.save(scoreResult); //2019年12月11日 注释掉，因为汇总成绩时，一个每个申请人需要生成20条记录，而且此表中的数据对业务需求没什么作用了
             identityInfo.setResultStatus(1);
             identityInfo.setHallStatus(6);
             iIdentityInfoService.update(identityInfo);
-            iPersonBatchStatusRecordService
-                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 6);
+            /*
+            留痕记录 2019年12月11日
+             */
+            PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+            personBatchStatusRecord.setPersonId(identityInfo.getId());
+            personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+            personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+            personBatchStatusRecord.setStatusStr("人社汇总发布");
+            personBatchStatusRecord.setStatusTime(new Date());
+            personBatchStatusRecord.setStatusReason("人社汇总发布--");
+            personBatchStatusRecord.setStatusTypeDesc("预约大厅状态");
+            personBatchStatusRecord.setStatusDictAlias("hallStatus");
+            personBatchStatusRecord.setStatusInt(6);
+            iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+
+
+            //iPersonBatchStatusRecordService.insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 6);
         }
     }
 
