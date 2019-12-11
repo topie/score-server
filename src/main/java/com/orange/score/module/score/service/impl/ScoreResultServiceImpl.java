@@ -166,7 +166,7 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
             scoreResult.setPersonIdNum(identityInfo.getIdNumber());
             scoreResult.setBatchId(identityInfo.getBatchId());
             scoreResult.setcTime(new Date());
-            iScoreResultService.save(scoreResult); //2019年12月11日 注释掉，因为汇总成绩时，一个每个申请人需要生成20条记录，而且此表中的数据对业务需求没什么作用了
+            //iScoreResultService.save(scoreResult); //2019年12月11日 注释掉，因为汇总成绩时，一个每个申请人需要生成20条记录，而且此表中的数据对业务需求没什么作用了
             identityInfo.setResultStatus(1);
             identityInfo.setHallStatus(6);
             iIdentityInfoService.update(identityInfo);
