@@ -59,28 +59,28 @@ public class BatchConf {
      * 发布开始日期
      */
     @Column(name = "publish_begin")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date publishBegin;
 
     /**
      * 发布结束日期
      */
     @Column(name = "publish_end")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date publishEnd;
 
     /**
      * 公示开始日期
      */
     @Column(name = "notice_begin")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date noticeBegin;
 
     /**
      * 公示结束日期
      */
     @Column(name = "notice_end")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date noticeEnd;
 
     /**
@@ -300,7 +300,7 @@ public class BatchConf {
      *
      * @return publish_begin - 发布开始日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
     public Date getPublishBegin() {
         return publishBegin;
     }
@@ -319,7 +319,7 @@ public class BatchConf {
      *
      * @return publish_end - 发布结束日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
     public Date getPublishEnd() {
         return publishEnd;
     }
@@ -338,7 +338,7 @@ public class BatchConf {
      *
      * @return notice_begin - 公示开始日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
     public Date getNoticeBegin() {
         return noticeBegin;
     }
@@ -357,7 +357,7 @@ public class BatchConf {
      *
      * @return notice_end - 公示结束日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
     public Date getNoticeEnd() {
         return noticeEnd;
     }
