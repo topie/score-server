@@ -62,6 +62,14 @@ public class Indicator {
     @Column(name = "auto_score")
     private Integer autoScore;
 
+    /**
+     * 2019年12月18日，前台是否显示
+     * null ：空值时后台显示，且根据逻辑自动生成20个打分项；
+     * 1：后台（窗口能看到的打分项）不显示
+     */
+    @Column(name = "status")
+    private Integer status;
+
     @Transient
     private List<Integer> material;
 
@@ -242,5 +250,13 @@ public class Indicator {
      */
     public void setAddUser(String addUser) {
         this.addUser = addUser;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -137,6 +137,9 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
         CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getCompanyId());
         List<Indicator> indicators = iIndicatorService.findAll();
         for (Indicator indicator : indicators) {
+            if (indicator.getStatus()>2){
+                continue;
+            }
             ScoreRecord record = new ScoreRecord();
             record.setBatchId(batchId);
             record.setAcceptAddressId(identityInfo.getAcceptAddressId());
