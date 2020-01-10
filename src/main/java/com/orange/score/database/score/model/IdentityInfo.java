@@ -284,6 +284,17 @@ public class IdentityInfo {
     @Column(name = "isPreviewd")
     private String isPreviewd;// 审核中心——材料送达，增加“上传材料预览”功能，是否预览过，1：是
 
+    @Column(name = "is201826Doc")
+    private Integer is201826Doc;
+
+    public Integer getIs201826Doc() {
+        return is201826Doc;
+    }
+
+    public void setIs201826Doc(Integer is201826Doc) {
+        this.is201826Doc = is201826Doc;
+    }
+
     public String getIsPreviewd() {
         return isPreviewd;
     }

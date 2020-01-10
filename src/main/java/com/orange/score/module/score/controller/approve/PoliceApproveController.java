@@ -71,6 +71,9 @@ public class PoliceApproveController {
     @Autowired
     private ILuohu4Service iLuohu4Service;
 
+    @Autowired
+    private IScoreRecordService iScoreRecordService;
+
     @GetMapping(value = "/formItems")
     @ResponseBody
     public Result formItems() {
@@ -201,11 +204,13 @@ public class PoliceApproveController {
             identityInfo.setOpuser3(securityUser.getDisplayName());
             identityInfo.setHallStatus(2);
             identityInfo.setPoliceApproveStatus(3);
-            identityInfo.setRensheAcceptStatus(1);
+            //identityInfo.setRensheAcceptStatus(1);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 2);
-            identityInfo.setHallStatus(3);
+            if (identityInfo.getHallStatus() >= 3){
+                identityInfo.setHallStatus(5);
+            }
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 3);
@@ -253,6 +258,12 @@ public class PoliceApproveController {
 
             iIdentityInfoService.update(identityInfo);
         }
+
+        IdentityInfo identityInfo2 = iIdentityInfoService.findById(id);
+        if (identityInfo2.getPoliceApproveStatus()==3 && identityInfo2.getRensheAcceptStatus()==3){
+            iScoreRecordService.insertToInitRecords(identityInfo.getBatchId(), identityInfo.getId());
+        }
+
         return ResponseUtil.success();
     }
 

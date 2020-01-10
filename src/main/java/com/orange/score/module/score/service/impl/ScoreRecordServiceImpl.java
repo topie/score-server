@@ -137,9 +137,51 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
         CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo.getCompanyId());
         List<Indicator> indicators = iIndicatorService.findAll();
         for (Indicator indicator : indicators) {
+            /*
+            1：只显示后台；2：自助测评+后台显示；3：只自助测评
+             */
             if (indicator.getStatus()>2){
                 continue;
             }
+
+            /*
+            2020年1月9日
+            自有住房分数
+            1、申请人输入页面中，页面7选择“按照“津发改社会〔2018〕26号”文件计算”
+            （1）住房分数
+                打分形式：单项点选
+
+                分值项	分值
+                    有2019年12月31日前购买的住房	40分
+                    无	0分
+
+                打分部门：住建委、规自局
+
+            （2）区域分数
+                打分形式：单项点选
+
+                分值项	分值
+                    滨海新区	20分
+                    武清区、宝坻区、静海区、宁河区、蓟州区	15分
+                    其他	0分
+                打分部门：公安局
+            2、申请人输入页面中，页面7选择“不按照“津发改社会〔2018〕26号”文件计算”
+                打分形式：手动输入一位小数数字
+                打分部门：住建委、规自局
+             */
+            // “不按照“津发改社会〔2018〕26号”文件计算”
+            if (identityInfo.getIs201826Doc() == 0){
+                if (indicator.getId() == 1021 || indicator.getId() == 1022){
+                    continue;
+                }
+            }
+            // “按照“津发改社会〔2018〕26号”文件计算”
+            if (identityInfo.getIs201826Doc() == 1){
+                if (indicator.getId() == 1025){
+                    continue;
+                }
+            }
+
             ScoreRecord record = new ScoreRecord();
             record.setBatchId(batchId);
             record.setAcceptAddressId(identityInfo.getAcceptAddressId());
@@ -170,14 +212,6 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
                 record.setId(null);
                 record.setOpRoleId(roleId);
                 record.setOpRole(role.getRoleName());
-                /*
-                2019年6月24日
-                “守法诚信【公安】”生成时自动打为0分。实际打分时，因数量稀少，公安窗口手动申请重新打分。
-                 */
-//                if(record.getIndicatorId()!=null && record.getIndicatorId() == 1011){
-//                    record.setStatus(4);
-//                    record.setScoreValue(new BigDecimal(0));
-//                }
                 save(record);
             }
         }

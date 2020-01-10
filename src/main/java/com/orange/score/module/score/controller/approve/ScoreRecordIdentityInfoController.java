@@ -462,10 +462,12 @@ public class ScoreRecordIdentityInfoController {
         for (ScoreRecord item : scoreRecords) {
             if (item.getStatus() == 4) {
                 Indicator indicator1 = iIndicatorService.findById(item.getIndicatorId());
-                if (indicator1.getItemType() == 0) {
-                    sCheckList.add(item.getIndicatorId() + "_" + item.getItemId() + "_" + item.getOpRoleId());
-                } else {
-                    sTextList.add(item.getIndicatorId() + "_" + item.getScoreValue() + "_" + item.getOpRoleId());
+                if (indicator1 != null){
+                    if (indicator1.getItemType() == 0) {
+                        sCheckList.add(item.getIndicatorId() + "_" + item.getItemId() + "_" + item.getOpRoleId());
+                    } else {
+                        sTextList.add(item.getIndicatorId() + "_" + item.getScoreValue() + "_" + item.getOpRoleId());
+                    }
                 }
             }
         }

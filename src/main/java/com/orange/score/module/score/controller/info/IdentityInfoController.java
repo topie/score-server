@@ -1389,7 +1389,7 @@ public class IdentityInfoController {
      * 提供申请人收件地址的数据，excel格式的数据
      */
 
-    private static String[] headers = new String[]{"身份张号", "姓名", "总分", "性别", "落户地区", "公安编号", "迁入地户口登记机关", "拟落户地区名称", "迁入地详细地址", "收件人", "收件人电话", "收件地址", "经办人1姓名", "经办人1联系电话", "经办人2姓名", "经办人2联系电话", "本人电话", "单位电话"};
+    private static String[] headers = new String[]{"身份证号", "姓名", "总分", "性别", "落户地区", "公安编号", "迁入地户口登记机关", "拟落户地区名称", "迁入地详细地址", "收件人", "收件人电话", "收件地址", "经办人1姓名", "经办人1联系电话", "经办人2姓名", "经办人2联系电话", "本人电话", "单位电话"};
     private static String[] mapHeaders = new String[]{"PERSON_ID_NUM", "PERSON_NAME", "SCORE_VALUE", "SEX", "ACCEPT_ADDRESS", "LUOHU_NUMBER", "REGISTRATION", "AREANAME", "ADDRESS", "WITNESS", "WITNESS_PHONE", "WITNESS_ADDRESS", "OPERATOR", "OPERATOR_MOBILE", "OPERATOR2", "OPERATOR_OBILE2", "SELF_PHONE", "COMPANY_PHONE"};
 
     @RequestMapping("/identityInfoRecipient")

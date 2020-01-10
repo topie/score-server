@@ -229,7 +229,15 @@ public class RensheAcceptController {
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 5);
-            iScoreRecordService.insertToInitRecords(identityInfo.getBatchId(), identityInfo.getId());
+
+            /*
+            2019年12月30日
+            “公安前置审核”、“人社受理审核”
+             */
+            IdentityInfo identityInfo2 = iIdentityInfoService.findById(id);
+            if (identityInfo2.getPoliceApproveStatus()==3 && identityInfo2.getRensheAcceptStatus()==3){
+                iScoreRecordService.insertToInitRecords(identityInfo.getBatchId(), identityInfo.getId());
+            }
         }
         return ResponseUtil.success();
     }
