@@ -108,6 +108,28 @@ public class HouseRelationship {
     @Column(name = "isNaturalChild")
     private Integer isNaturalChild;//"收养子女1、是；2、否"
 
+    @Column(name = "isChinese")
+    private Integer isChinese;  //是否为中国国籍
+
+    @Column(name = "inTianjin")
+    private Integer inTianjin;  //配偶是否在天津就业且用人单位依法缴纳社会保险累计满24个月
+
+    public Integer getIsChinese() {
+        return isChinese;
+    }
+
+    public void setIsChinese(Integer isChinese) {
+        this.isChinese = isChinese;
+    }
+
+    public Integer getInTianjin() {
+        return inTianjin;
+    }
+
+    public void setInTianjin(Integer inTianjin) {
+        this.inTianjin = inTianjin;
+    }
+
     public Integer getIsNaturalChild() {
         return isNaturalChild;
     }

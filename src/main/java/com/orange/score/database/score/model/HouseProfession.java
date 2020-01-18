@@ -79,6 +79,105 @@ public class HouseProfession {
     @Column(name = "c_time")
     private Date cTime;
 
+    @Column(name = "awardsName")
+    private String awardsName;//"奖项名称"
+
+    @Column(name = "awardsOffical")
+    private String awardsOffical;//"授奖机关"
+
+    @Column(name = "awardsDate")
+    private String awardsDate;//"获奖日期"
+
+    @Column(name = "graduateSchool")
+    private String graduateSchool;//"毕业院校"
+
+    @Column(name = "professional")
+    private String professional;//"专    业"
+
+    @Column(name = "office")
+    private String office;//"发证机关"
+
+    @Column(name = "officeDate")
+    private String officeDate;//"发证日期"
+
+    @Column(name = "jobTypeName")
+    private String jobTypeName;//"取得相对应的高级技能证书工种名称"
+
+    @Column(name = "jobTypeDate")
+    private String jobTypeDate;//"取得相对应的高级技能证书发证日期"
+
+    public String getAwardsName() {
+        return awardsName;
+    }
+
+    public void setAwardsName(String awardsName) {
+        this.awardsName = awardsName;
+    }
+
+    public String getAwardsOffical() {
+        return awardsOffical;
+    }
+
+    public void setAwardsOffical(String awardsOffical) {
+        this.awardsOffical = awardsOffical;
+    }
+
+    public String getAwardsDate() {
+        return awardsDate;
+    }
+
+    public void setAwardsDate(String awardsDate) {
+        this.awardsDate = awardsDate;
+    }
+
+    public String getGraduateSchool() {
+        return graduateSchool;
+    }
+
+    public void setGraduateSchool(String graduateSchool) {
+        this.graduateSchool = graduateSchool;
+    }
+
+    public String getProfessional() {
+        return professional;
+    }
+
+    public void setProfessional(String professional) {
+        this.professional = professional;
+    }
+
+    public String getOffice() {
+        return office;
+    }
+
+    public void setOffice(String office) {
+        this.office = office;
+    }
+
+    public String getOfficeDate() {
+        return officeDate;
+    }
+
+    public void setOfficeDate(String officeDate) {
+        this.officeDate = officeDate;
+    }
+
+    public String getJobTypeName() {
+        return jobTypeName;
+    }
+
+    public void setJobTypeName(String jobTypeName) {
+        this.jobTypeName = jobTypeName;
+    }
+
+    public String getJobTypeDate() {
+        return jobTypeDate;
+    }
+
+    public void setJobTypeDate(String jobTypeDate) {
+        this.jobTypeDate = jobTypeDate;
+    }
+
     public Integer getProfessionTitle() {
         return professionTitle;
     }

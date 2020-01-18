@@ -172,6 +172,84 @@ public class HouseOther {
     @Column(name = "job_content")
     private String jobContent;
 
+    @Column(name = "penaltyDate")
+    private String penaltyDate;//"犯罪日期"
+
+    @Column(name = "penaltyContent")
+    private String penaltyContent;//"犯罪内容"
+
+    @Column(name = "penaltyResults")
+    private String penaltyResults;//"处罚结果"
+
+    @Column(name = "socialSecurityType")
+    private String socialSecurityType;//"缴纳类型"
+
+    // 人社相关信息
+    @Column(name = "dispatch")
+    private Integer dispatch;//"是否为派遣制用工"
+
+    @Column(name = "industry")
+    private String industry;//"实际用工单位所属行业"
+
+    @Column(name = "jobDate")
+    private String jobDate;//"自??年??月在此岗位工作"
+
+    public String getPenaltyDate() {
+        return penaltyDate;
+    }
+
+    public void setPenaltyDate(String penaltyDate) {
+        this.penaltyDate = penaltyDate;
+    }
+
+    public String getPenaltyContent() {
+        return penaltyContent;
+    }
+
+    public void setPenaltyContent(String penaltyContent) {
+        this.penaltyContent = penaltyContent;
+    }
+
+    public String getPenaltyResults() {
+        return penaltyResults;
+    }
+
+    public void setPenaltyResults(String penaltyResults) {
+        this.penaltyResults = penaltyResults;
+    }
+
+    public String getSocialSecurityType() {
+        return socialSecurityType;
+    }
+
+    public void setSocialSecurityType(String socialSecurityType) {
+        this.socialSecurityType = socialSecurityType;
+    }
+
+    public Integer getDispatch() {
+        return dispatch;
+    }
+
+    public void setDispatch(Integer dispatch) {
+        this.dispatch = dispatch;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    public String getJobDate() {
+        return jobDate;
+    }
+
+    public void setJobDate(String jobDate) {
+        this.jobDate = jobDate;
+    }
+
     public String getJobTitle() {
         return jobTitle;
     }

@@ -126,6 +126,72 @@ public class HouseMove {
     @Column(name = "moveNowAddress")
     private String moveNowAddress; //申请人现居住地址
 
+    @Column(name = "moveIsProvince")
+    private Integer moveIsProvince;//"缴纳地点（省）"
+
+    @Column(name = "moveIsCity")
+    private Integer moveIsCity;//"缴纳地点（省）"
+
+    @Column(name = "rentHouseAddress")
+    private String  rentHouseAddress; // 租赁房屋地址
+
+    @Column(name = "rentIdNumber")
+    private String  rentIdNumber; // 租赁登记备案证明编号
+
+    @Column(name = "rentHouseStartDate")
+    private String  rentHouseStartDate; // 租赁备案起始日
+
+    @Column(name = "rentHouseEndDate")
+    private String  rentHouseEndDate; // 租赁合同终止日
+
+    public Integer getMoveIsProvince() {
+        return moveIsProvince;
+    }
+
+    public void setMoveIsProvince(Integer moveIsProvince) {
+        this.moveIsProvince = moveIsProvince;
+    }
+
+    public Integer getMoveIsCity() {
+        return moveIsCity;
+    }
+
+    public void setMoveIsCity(Integer moveIsCity) {
+        this.moveIsCity = moveIsCity;
+    }
+
+    public String getRentHouseAddress() {
+        return rentHouseAddress;
+    }
+
+    public void setRentHouseAddress(String rentHouseAddress) {
+        this.rentHouseAddress = rentHouseAddress;
+    }
+
+    public String getRentIdNumber() {
+        return rentIdNumber;
+    }
+
+    public void setRentIdNumber(String rentIdNumber) {
+        this.rentIdNumber = rentIdNumber;
+    }
+
+    public String getRentHouseStartDate() {
+        return rentHouseStartDate;
+    }
+
+    public void setRentHouseStartDate(String rentHouseStartDate) {
+        this.rentHouseStartDate = rentHouseStartDate;
+    }
+
+    public String getRentHouseEndDate() {
+        return rentHouseEndDate;
+    }
+
+    public void setRentHouseEndDate(String rentHouseEndDate) {
+        this.rentHouseEndDate = rentHouseEndDate;
+    }
+
     public String getMoveNowAddress() {
         return moveNowAddress;
     }

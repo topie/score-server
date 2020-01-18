@@ -287,12 +287,134 @@ public class IdentityInfo {
     @Column(name = "is201826Doc")
     private Integer is201826Doc;
 
+
+    @Column(name = "ourHouse")
+    private String ourHouse; // 是否有自有住房
+
+    @Column(name = "ourBuyHouse")
+    private String ourBuyHouse; // 是否于2019年12月31日之前购买住房
+
+    @Column(name = "housingArea")
+    private String housingArea; // 住房所在区
+
+    @Column(name = "houseAddress")
+    private String houseAddress; // 住房详细坐落
+
+    @Column(name = "houseUse")
+    private String houseUse; // 房屋设计用途
+
+    @Column(name = "houseOurDate")
+    private String   houseOurDate; // 不动产权证取得日期
+
+    @Column(name = "houseOurNumber")
+    private String houseOurNumber; // 不动产权登记号
+
+    @Column(name = "houseProperty")
+    private String houseProperty; // 房屋产权情况
+
+    @Column(name = "housePactDate")
+    private String   housePactDate; // 购房合同签署日期
+
+    @Column(name = "housePactNumber")
+    private String housePactNumber; // 购房合同编号
+
+    @Column(name = "rightProperty")
+    private String rightProperty;// 持有
+
     public Integer getIs201826Doc() {
         return is201826Doc;
     }
 
     public void setIs201826Doc(Integer is201826Doc) {
         this.is201826Doc = is201826Doc;
+    }
+
+    public String getOurHouse() {
+        return ourHouse;
+    }
+
+    public void setOurHouse(String ourHouse) {
+        this.ourHouse = ourHouse;
+    }
+
+    public String getOurBuyHouse() {
+        return ourBuyHouse;
+    }
+
+    public void setOurBuyHouse(String ourBuyHouse) {
+        this.ourBuyHouse = ourBuyHouse;
+    }
+
+    public String getHousingArea() {
+        return housingArea;
+    }
+
+    public void setHousingArea(String housingArea) {
+        this.housingArea = housingArea;
+    }
+
+    public String getHouseAddress() {
+        return houseAddress;
+    }
+
+    public void setHouseAddress(String houseAddress) {
+        this.houseAddress = houseAddress;
+    }
+
+    public String getHouseUse() {
+        return houseUse;
+    }
+
+    public void setHouseUse(String houseUse) {
+        this.houseUse = houseUse;
+    }
+
+    public String getHouseOurDate() {
+        return houseOurDate;
+    }
+
+    public void setHouseOurDate(String houseOurDate) {
+        this.houseOurDate = houseOurDate;
+    }
+
+    public String getHouseOurNumber() {
+        return houseOurNumber;
+    }
+
+    public void setHouseOurNumber(String houseOurNumber) {
+        this.houseOurNumber = houseOurNumber;
+    }
+
+    public String getHouseProperty() {
+        return houseProperty;
+    }
+
+    public void setHouseProperty(String houseProperty) {
+        this.houseProperty = houseProperty;
+    }
+
+    public String getHousePactDate() {
+        return housePactDate;
+    }
+
+    public void setHousePactDate(String housePactDate) {
+        this.housePactDate = housePactDate;
+    }
+
+    public String getHousePactNumber() {
+        return housePactNumber;
+    }
+
+    public void setHousePactNumber(String housePactNumber) {
+        this.housePactNumber = housePactNumber;
+    }
+
+    public String getRightProperty() {
+        return rightProperty;
+    }
+
+    public void setRightProperty(String rightProperty) {
+        this.rightProperty = rightProperty;
     }
 
     public String getIsPreviewd() {
