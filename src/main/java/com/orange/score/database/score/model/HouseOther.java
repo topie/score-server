@@ -309,11 +309,11 @@ public class HouseOther {
     }
 
     public String getDetentionStr() {
-        return detention == 1 ? "是" : "否";
+        return detention == null ? "" : "";
     }
 
     public String getSocialSecurityPayStr() {
-        return socialSecurityPay == 1 ? "是" : "否";
+        return socialSecurityPay == null ? "" : "";
     }
 
     public String getIsAnotherInsuranceStr() {

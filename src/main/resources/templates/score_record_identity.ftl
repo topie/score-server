@@ -50,11 +50,6 @@
                                     <td colspan="4">身份证1：<strong>${company.idCardNumber_1}</strong></td>
                                     <td colspan="4">联系电话1：<strong>${company.operatorMobile}</strong></td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4">联系人2：<strong>${company.operator2}</strong></td>
-                                    <td colspan="4">身份证2：<strong>${company.idCardNumber_2}</strong></td>
-                                    <td colspan="4">联系电话2：<strong>${company.operatorMobile2}</strong></td>
-                                </tr>
                                 <!-- 一组数据信息的 -->
                                 <tr>
                                     <td colspan="12">联系地址：<strong>${company.operatorAddress}</strong></td>

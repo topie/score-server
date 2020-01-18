@@ -41,14 +41,9 @@
                                     <td colspan="6">机构代码：<strong>${company.societyCode}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4">联系人1：<strong>${company.operator}</strong></td>
-                                    <td colspan="4">身份证1：<strong>${company.idCardNumber_1}</strong></td>
-                                    <td colspan="4">联系电话1：<strong>${company.operatorMobile}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4">联系人2：<strong>${company.operator2}</strong></td>
-                                    <td colspan="4">身份证2：<strong>${company.idCardNumber_2}</strong></td>
-                                    <td colspan="4">联系电话2：<strong>${company.operatorMobile2}</strong></td>
+                                    <td colspan="4">联系人：<strong>${company.operator}</strong></td>
+                                    <td colspan="4">身份证：<strong>${company.idCardNumber_1}</strong></td>
+                                    <td colspan="4">联系电话：<strong>${company.operatorMobile}</strong></td>
                                 </tr>
                                 <!-- 一组数据信息的 -->
                                 <tr>
