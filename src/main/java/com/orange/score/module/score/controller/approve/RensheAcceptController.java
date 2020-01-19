@@ -481,7 +481,7 @@ public class RensheAcceptController {
             2019年6月24日
             因浏览器解析时间有8个小时的时差，所以把preApprove 的字段值赋给 regionName
              */
-            info.setRegionName(sdf.format(info.getPreApprove()));
+            //info.setRegionName(sdf.format(info.getPreApprove()));
 
             companyInfo = iCompanyInfoService.findById(info.getCompanyId());
             if (StringUtils.isEmpty(companyInfo.getBusinessLicenseSrc())) {
