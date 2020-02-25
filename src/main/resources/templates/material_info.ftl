@@ -49,6 +49,33 @@
                                 <tr>
                                     <td colspan="12">联系地址：<strong>${company.operatorAddress}</strong></td>
                                 </tr>
+                                <tr>
+                                    <td colspan="6">核准日期：${company.apprdate}</td>
+                                    <td colspan="6">住所：<strong>${company.dom}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">企业类型：${company.enttype}</td>
+                                    <td colspan="6">成立日期：<strong>${company.estdate}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">法定代表人：${company.lerep}</td>
+                                    <td colspan="6">经营期限自：<strong>${company.opfrom}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">经营范围：<strong>${company.opscope}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">经营期限至：${company.opto}</td>
+                                    <td colspan="6">注册资本：<strong>${company.regcap}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">注册资本币种：${company.regcapcur}</td>
+                                    <td colspan="6">注册号：<strong>${company.regno}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">登记机关：${company.regorg}</td>
+                                    <td colspan="6">登记状态：<strong>${company.regstate}</strong></td>
+                                </tr>
                             </table>
                         </div>
                         <div class="panel panel-default">
