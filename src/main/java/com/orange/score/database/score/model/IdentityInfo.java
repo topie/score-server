@@ -132,6 +132,50 @@ public class IdentityInfo {
     @Column(name = "thirdPregnantPromise")
     private Integer thirdPregnantPromise;//本人或配偶1.承诺 2.不承诺目前未处于政策外第三个及以上子女怀孕期间
 
+    @Column(name = "rentHouseAddress")
+    private String rentHouseAddress; // 租赁房屋地址
+
+    @Column(name = "rentIdNumber")
+    private String rentIdNumber; // 租赁登记备案证明编号
+
+    @Column(name = "rentHouseStartDate")
+    private String   rentHouseStartDate; // 租赁备案起始日
+
+    @Column(name = "rentHouseEndDate")
+    private String   rentHouseEndDate; // 租赁合同终止日
+
+    public String getRentHouseAddress() {
+        return rentHouseAddress;
+    }
+
+    public void setRentHouseAddress(String rentHouseAddress) {
+        this.rentHouseAddress = rentHouseAddress;
+    }
+
+    public String getRentIdNumber() {
+        return rentIdNumber;
+    }
+
+    public void setRentIdNumber(String rentIdNumber) {
+        this.rentIdNumber = rentIdNumber;
+    }
+
+    public String getRentHouseStartDate() {
+        return rentHouseStartDate;
+    }
+
+    public void setRentHouseStartDate(String rentHouseStartDate) {
+        this.rentHouseStartDate = rentHouseStartDate;
+    }
+
+    public String getRentHouseEndDate() {
+        return rentHouseEndDate;
+    }
+
+    public void setRentHouseEndDate(String rentHouseEndDate) {
+        this.rentHouseEndDate = rentHouseEndDate;
+    }
+
     public String getStringThirdPregnantPromise() {
         if (this.thirdPregnantPromise == null) {
             return "_";
