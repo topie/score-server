@@ -24,6 +24,12 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -84,6 +90,74 @@ public class MaterialReceiveController {
 
     @Autowired
     private IBatchConfService iBatchConfService;
+
+    /**
+     * 图片展示信息
+     *
+     * @param request
+     * @param response
+     * @param fileFolder
+     * @param fileName
+     */
+    @RequestMapping(value = "/shopPic/{userName}/{fileFolder}/{fileName}.{suffix}")
+    public void showPic(HttpServletRequest request, HttpServletResponse response,
+                        @PathVariable(value = "userName") String userName, @PathVariable(value = "fileFolder") String fileFolder,
+                        @PathVariable(value = "fileName") String fileName, @PathVariable(value = "suffix") String suffix) {
+        /*byte[] b = new byte[20];
+        try {
+            b = BASE64.decryptBASE64(fileName);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        String str = new String(b);*/
+/*
+        String[] strArr = fileName.split("\\.");*/
+
+        String fileUrl = "/data/upload/" + userName + "/" + fileFolder + "/" + fileName + "." + suffix;
+        try {
+
+            FileInputStream fileStream = new FileInputStream(fileUrl);
+            if (fileStream == null) {
+                System.out.println("没有那个文件或目录:fileUrl:" + fileUrl);
+                return;
+            }
+
+            //载入图像
+            BufferedImage buffImg = ImageIO.read(fileStream);
+            if (buffImg == null) {
+                System.out.println("载入图像为空:fileUrl:" + fileUrl);
+                return;
+            }
+
+            response.setContentType("image/" + suffix);
+            response.setCharacterEncoding("UTF-8");
+
+            ServletOutputStream sos = response.getOutputStream();
+            ImageIO.write(buffImg, suffix, sos);
+            sos.close();
+
+
+            /*File filePath = new File(fileUrl);
+            if (filePath.exists()) {
+                //读图片
+                FileInputStream inputStream = new FileInputStream(filePath);
+                int available = inputStream.available();
+                byte[] data = new byte[available];
+                inputStream.read(data);
+                inputStream.close();
+                //写图片
+                response.setContentType("image/" + suffix);
+                response.setCharacterEncoding("UTF-8");
+                OutputStream stream = new BufferedOutputStream(response.getOutputStream());
+                stream.write(data);
+                stream.flush();
+                stream.close();
+            }*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @GetMapping(value = "/receiving")
     @ResponseBody
