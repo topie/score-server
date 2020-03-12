@@ -236,8 +236,43 @@ public class IdentityInfoController {
     }
 
     @GetMapping("/detailAll")
-    public Result detailAll(@RequestParam Integer identityInfoId,
+    public Result detailAll(@RequestParam Integer identityInfoId,HttpServletRequest request,
                             @RequestParam(value = "template", required = false) String template) throws FileNotFoundException {
+
+        /*
+        2020年3月12日
+        获得访问者的 IP 地址，用其他内网IP来替换图片地址中的IP
+         */
+        String ip = request.getHeader("x-forwarded-for");
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+
+        String[] strArr = ip.split("\\.");
+        String str1 = strArr[0];
+        String str2 = strArr[1];
+        String str3 = strArr[2];
+        String str4 = strArr[3];
+
+//        String str1 = "10";
+//        String str2 = "96";
+//        String str3 = "49";
+//        String str4 = "180";
+
+        boolean flag = false;
+        if (Integer.parseInt(str1)==10 && Integer.parseInt(str2)==96 && Integer.parseInt(str3)==49){
+            int four = Integer.parseInt(str4);
+            if (four>=178 && four<=190){
+                flag = true;
+            }
+        }
+
         if (StringUtils.isEmpty(template)) {
             template = "identity_info";
         }
@@ -298,22 +333,6 @@ public class IdentityInfoController {
         criteria.andNotEqualTo("status", 2);
         List<OnlinePersonMaterial> uploadMaterialList = iOnlinePersonMaterialService.findByCondition(condition);
         List<OnlinePersonMaterial> roleUploadMaterialList = new ArrayList<>();
-        /*for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
-            onlinePersonMaterial.setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-            if (roles.contains(3) || roles.contains(4)) {
-                if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId()) && 17 != onlinePersonMaterial
-                        .getMaterialInfoId()) {
-                    onlinePersonMaterial
-                            .setMaterialInfoName((String) mMap.get(onlinePersonMaterial.getMaterialInfoId() + ""));
-                    roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-                //公安单独处理随迁信息
-                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17)
-                        .contains(onlinePersonMaterial.getId())) {
-                    roleUploadMaterialList.add(onlinePersonMaterial);
-                }
-            }
-        }*/
         //用户上传的材料
         for (OnlinePersonMaterial onlinePersonMaterial : uploadMaterialList) {
             if (roleMidSet.contains(onlinePersonMaterial.getMaterialInfoId())) {
@@ -338,6 +357,12 @@ public class IdentityInfoController {
                 if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
                     materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
                 }
+            }
+            //若访问者的IP 地址符合
+            if (flag && materialInfo.getOnlinePersonMaterial()!=null && materialInfo.getOnlinePersonMaterial().getMaterialUri()!=null){
+                String strUri = materialInfo.getOnlinePersonMaterial().getMaterialUri();
+                String newStrUri = strUri.replace("218.67.246.52:80","10.96.3.213:8091");
+                materialInfo.getOnlinePersonMaterial().setMaterialUri(newStrUri);
             }
         }
         params.put("materialInfos", roleMaterialInfoList);
@@ -375,6 +400,15 @@ public class IdentityInfoController {
             businessLicenseMaterial.setPersonId(-1);
             businessLicenseMaterial.setMaterialInfoName("营业执照");
             businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
+            /*
+            2020年3月12日
+            若符合人社部门的IP地址，就替换
+             */
+            if (flag && businessLicenseMaterial.getMaterialUri()!=null){
+                String strUri = businessLicenseMaterial.getMaterialUri();
+                String newStrUri = strUri.replace("218.67.246.52:80","10.96.3.213:8091");
+                businessLicenseMaterial.setMaterialUri(newStrUri);
+            }
             roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
         }
         HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);
