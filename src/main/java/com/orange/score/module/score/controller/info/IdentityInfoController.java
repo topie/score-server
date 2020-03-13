@@ -254,6 +254,9 @@ public class IdentityInfoController {
             ip = request.getRemoteAddr();
         }
 
+        Date date = new Date();
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf2.format(date)+";审核人员登录的IP地址："+ip);
         String[] strArr = ip.split("\\.");
         String str1 = strArr[0];
         String str2 = strArr[1];
