@@ -269,9 +269,9 @@ public class IdentityInfoController {
 //        String str4 = "180";
 
         boolean flag = false;
-        if (Integer.parseInt(str1)==10 && Integer.parseInt(str2)==96 && Integer.parseInt(str3)==49){
+        if (Integer.parseInt(str1)==172 && Integer.parseInt(str2)==20 && Integer.parseInt(str3)==211){
             int four = Integer.parseInt(str4);
-            if (four>=178 && four<=190){
+            if (four==191){
                 flag = true;
             }
         }
