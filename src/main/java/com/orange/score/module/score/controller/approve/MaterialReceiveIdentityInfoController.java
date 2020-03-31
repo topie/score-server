@@ -186,6 +186,18 @@ public class MaterialReceiveIdentityInfoController {
                 }
             }
         }
+        for (ScoreRecord scoreRecord1 : pageInfo.getList()){
+            identityInfo = iIdentityInfoService.findById(scoreRecord1.getPersonId());
+            if (identityInfo.getRightProperty()!=null && identityInfo.getRightProperty().equals("1")){
+                scoreRecord1.setScoreDetail("持有“不动产权证”");
+            }
+            if (identityInfo.getRightProperty()!=null && identityInfo.getRightProperty().equals("2")){
+                scoreRecord1.setScoreDetail("持有《天津市商品房买卖合同》或《天津市二手房买卖协议》，未取得“不动产权证”");
+            }
+            if (identityInfo.getRightProperty()==null){
+                scoreRecord1.setScoreDetail("无自有住房");
+            }
+        }
 
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -326,7 +338,18 @@ public class MaterialReceiveIdentityInfoController {
         }
 
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage(argMap, pageNum, pageSize);
+        IdentityInfo identityInfo;
         for (ScoreRecord record : pageInfo.getList()) {
+            identityInfo = iIdentityInfoService.findById(record.getPersonId());
+            if (identityInfo.getRightProperty()!=null && identityInfo.getRightProperty().equals("1")){
+                record.setScoreDetail("持有“不动产权证”");
+            }
+            if (identityInfo.getRightProperty()!=null && identityInfo.getRightProperty().equals("2")){
+                record.setScoreDetail("持有《天津市商品房买卖合同》或《天津市二手房买卖协议》，未取得“不动产权证”");
+            }
+            if (identityInfo.getRightProperty()==null){
+                record.setScoreDetail("无自有住房");
+            }
             if (roles.contains(4) || roles.contains(6)) {
                 record.setEdit(1);
             }
@@ -395,6 +418,23 @@ public class MaterialReceiveIdentityInfoController {
         }
 
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage_1(argMap, pageNum, pageSize);
+
+        IdentityInfo identityInfo;
+        for (ScoreRecord record : pageInfo.getList()) {
+            identityInfo = iIdentityInfoService.findById(record.getPersonId());
+            if (identityInfo.getRightProperty()!=null && identityInfo.getRightProperty().equals("1")){
+                record.setScoreDetail("持有“不动产权证”");
+            }
+            if (identityInfo.getRightProperty()!=null && identityInfo.getRightProperty().equals("2")){
+                record.setScoreDetail("持有《天津市商品房买卖合同》或《天津市二手房买卖协议》，未取得“不动产权证”");
+            }
+            if (identityInfo.getRightProperty()==null){
+                record.setScoreDetail("无自有住房");
+            }
+            if (roles.contains(4) || roles.contains(6)) {
+                record.setEdit(1);
+            }
+        }
 //        IdentityInfo identityInfo;
 //        Set<Integer> rolesSet = new HashSet<>(roles);
 //        Iterator<ScoreRecord> it = pageInfo.getList().iterator();
