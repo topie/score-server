@@ -142,7 +142,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">迁出详细地址：<strong>${move.moveAddress}</strong></td>
+                                    <td colspan="12">迁出详细地址：<strong>${move.currentRegisteredAddress}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">现户口性质：<select disabled style="height: 25px;">

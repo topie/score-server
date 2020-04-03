@@ -144,6 +144,17 @@ public class HouseMove {
     @Column(name = "rentHouseEndDate")
     private String  rentHouseEndDate; // 租赁合同终止日
 
+    @Column(name = "currentRegisteredAddress")
+    private String  currentRegisteredAddress; // 现户口登记地址详细地址
+
+    public String getCurrentRegisteredAddress() {
+        return currentRegisteredAddress;
+    }
+
+    public void setCurrentRegisteredAddress(String currentRegisteredAddress) {
+        this.currentRegisteredAddress = currentRegisteredAddress;
+    }
+
     public Integer getMoveIsProvince() {
         return moveIsProvince;
     }

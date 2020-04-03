@@ -171,7 +171,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">迁出详细地址：<strong>${move.moveAddress}</strong></td>
+                                    <td colspan="12">迁出详细地址：<strong>${move.currentRegisteredAddress}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="12">现居住地址：<strong>${move.moveNowAddress}</strong></td>
