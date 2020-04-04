@@ -288,6 +288,7 @@
                                                 <th>身份证号</th>
                                                 <th>文化程度</th>
                                                 <th>是否随迁</th>
+                                                <th>配偶是否在天津就业且用人单位依法缴<br>纳社会保险累计满24个月</th>
                                             </tr>
                                         <#list relation as ritem>
                                             <tr>
@@ -297,6 +298,8 @@
                                                 <td>${ritem.cultureDegree}</td>
                                                 <td> <#if ritem.isRemove == 1>是</#if>
                                                     <#if ritem.isRemove == 2>否</#if></td>
+                                                <td> <#if ritem.inTianjin == 1>是</#if>
+                                                    <#if ritem.inTianjin == 2>否</#if></td>
                                             </tr>
                                         </#list>
                                         </table>
