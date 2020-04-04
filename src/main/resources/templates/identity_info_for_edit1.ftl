@@ -161,9 +161,9 @@
         </tr>
         <tr>
             <td colspan="12">迁出详细地址：
-                <input data-id="${move.id?c}" data-name="move.moveAddress"
+                <input data-id="${move.id?c}" data-name="move.currentRegisteredAddress"
                        class="edit input-large" style="height: 25px;width:600px;"
-                       value="${move.moveAddress}">
+                       value="${move.currentRegisteredAddress}">
             </td>
         </tr>
         <tr>
