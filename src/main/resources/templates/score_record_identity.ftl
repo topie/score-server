@@ -284,6 +284,14 @@
                                     <td colspan="6">本人电话：<strong>${other.selfPhone}</strong></td>
                                 </tr>
                                 <tr>
+                                    <td colspan="6">实际用工单位所属行业：<strong>${other.industry}</strong></td>
+                                    <td colspan="6">申请人现工作岗位：<strong>${other.jobTitle}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">具体工作内容：<strong>${other.jobContent}</strong></td>
+                                    <td colspan="6">在此岗位工作起始时间：<strong>${other.jobDate}</strong></td>
+                                </tr>
+                                <tr>
                                     <td colspan="12">申请人办公地址：<strong>${other.applyOfficeAddress}</strong></td>
                                 </tr>
                                 <tr>
