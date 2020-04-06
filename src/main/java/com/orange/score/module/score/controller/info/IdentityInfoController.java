@@ -289,14 +289,14 @@ public class IdentityInfoController {
          * 2020年4月4日
          * 人社受理审核待审核时，将用户名保存下
          */
-        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(person.getLockUser2()) && !person.getLockUser2()
-                .equals(securityUser.getUsername())) {
-            return ResponseUtil.error("该申请人的审核状态已被" + person.getLockUser2() + "锁定");
-        }
-        person.setLockUser2(securityUser.getUsername());
-        person.setOpuser4(securityUser.getUsername());
-        iIdentityInfoService.update(person);
+//        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+//        if (org.apache.commons.lang3.StringUtils.isNotEmpty(person.getLockUser2()) && !person.getLockUser2()
+//                .equals(securityUser.getUsername())) {
+//            return ResponseUtil.error("该申请人的审核状态已被" + person.getLockUser2() + "锁定");
+//        }
+//        person.setLockUser2(securityUser.getUsername());
+//        person.setOpuser4(securityUser.getUsername());
+//        iIdentityInfoService.update(person);
 
         if (person == null) {
             person = new IdentityInfo();
