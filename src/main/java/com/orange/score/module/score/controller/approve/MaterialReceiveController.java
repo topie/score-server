@@ -422,12 +422,12 @@ public class MaterialReceiveController {
         if (roles.contains(3)) {
             MaterialInfo businessLicenseMaterialInfo = new MaterialInfo();
             businessLicenseMaterialInfo.setId(-1);
-            businessLicenseMaterialInfo.setName("营业执照");
+            businessLicenseMaterialInfo.setName("经办人身份证");
             OnlinePersonMaterial businessLicenseMaterial = new OnlinePersonMaterial();
             businessLicenseMaterial.setMaterialUri(companyInfo.getBusinessLicenseSrc());
             businessLicenseMaterial.setId(-1);
             businessLicenseMaterial.setPersonId(-1);
-            businessLicenseMaterial.setMaterialInfoName("营业执照");
+            businessLicenseMaterial.setMaterialInfoName("经办人身份证");
             businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
             roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
         }
