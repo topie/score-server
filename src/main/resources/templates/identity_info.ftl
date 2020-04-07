@@ -351,6 +351,11 @@
                                                     <td class="garyB">配偶现居住地详细地址:</td>
                                                     <td>${ritem.spouse_LivingAddress}</td>
                                                 </tr>
+                                                <tr>
+                                                    <td class="garyB">配偶是否在天津就业且用人单位依法缴纳社会保险累计满24个月:</td>
+                                                    <td><#if ritem.inTianjin == 1>是</#if>
+                                                        <#if ritem.inTianjin == 2>否</#if></td>
+                                                </tr>
                                             </table>
                                         <#else>
                                             <table style="font-size: 14px;"
