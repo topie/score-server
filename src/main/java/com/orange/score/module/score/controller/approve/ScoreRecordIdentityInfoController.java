@@ -112,6 +112,9 @@ public class ScoreRecordIdentityInfoController {
     @ResponseBody
     public Result scoring(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
                           @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
+                          @RequestParam(value = "rightProperty", required = false, defaultValue = "0") Integer rightProperty,
+                          @RequestParam(value = "cultureDegree", required = false, defaultValue = "0") Integer cultureDegree,
+                          @RequestParam(value = "inTianjin", required = false, defaultValue = "0") Integer inTianjin,
                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -146,6 +149,15 @@ public class ScoreRecordIdentityInfoController {
         }
         if (scoreRecord.getBatchId() != null) {
             argMap.put("batchId", scoreRecord.getBatchId());
+        }
+        if(rightProperty!=0){
+            argMap.put("rightProperty", rightProperty);
+        }
+        if(cultureDegree!=0){
+            argMap.put("cultureDegree", cultureDegree);
+        }
+        if(inTianjin!=0){
+            argMap.put("inTianjin", inTianjin);
         }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");
