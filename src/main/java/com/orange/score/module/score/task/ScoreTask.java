@@ -157,7 +157,7 @@ public class ScoreTask {
      * 0 0/5 * * * ?  ---每五分钟执行一次
      */
     //@Scheduled(cron = "0 0/2 * * * ? ")//测试用，时间频率，每隔两分钟执行一次；
-    @Scheduled(cron = "20 0 0 * * ? ")
+    //@Scheduled(cron = "20 0 0 * * ? ")
     public void autoAcceptMaterialAndMark(){
         /*
         步骤
@@ -324,7 +324,7 @@ public class ScoreTask {
      * 2、守法诚信【公安】为0分，因为大多数的人为0分，若需要修改的话，公安窗口会自己申请重新打分；
      */
     //@Scheduled(cron = "0 0/2 * * * ? ")//测试用，时间频率，每隔两分钟执行一次；
-    @Scheduled(cron = "20 0 0 * * ? ")
+    //@Scheduled(cron = "20 0 0 * * ? ")
     public void policeSelfScore(){
         Condition condition_bc = new Condition(BatchConf.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria_bc = condition_bc.createCriteria();
