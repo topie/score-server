@@ -100,6 +100,9 @@
                                     <td colspan="4">民族：<strong>${person.nation}</strong></td>
                                 </tr>
                                 <tr>
+                                    <td colspan="4">是否按照“津发改社会〔2018〕26号”文件计算：<strong><#if person.sex == 1>是<#else>否</#if></strong></td>
+                                </tr>
+                                <tr>
                                     <td colspan="4">出生日期：<strong>${person.birthday}</strong></td>
                                     <td colspan="4">政治面貌：<strong>${other.politicalStatusStr}</strong></td>
                                     <td colspan="4">婚姻状况：<strong>${move.marriageStatusStr}</strong></td>
