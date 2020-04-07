@@ -280,108 +280,108 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
                  2、公安局：如在页面1中“五年内有无刑事犯罪记录”选择“无”自动打为：
                  无	0分
                  */
-                if (record.getIndicatorId()==1020){
-                    if(identityInfo.getRentHouseAddress()==null){
-                        record.setItemId(0);
-                        record.setStatus(4);
-                        record.setScoreValue(new BigDecimal(0));
-                    }
-                }
-                // 年龄
-                if (record.getIndicatorId() == 1 && identityInfo.getAge()!=null){
-                    if(identityInfo.getAge()>45){
-                        record.setItemId(3);
-                        BigDecimal value = new BigDecimal(0);
-                        record.setScoreValue(value);
-                    }else if(identityInfo.getAge()>36){
-                        record.setItemId(2);
-                        BigDecimal value = new BigDecimal(5);
-                        record.setScoreValue(value);
-                    }else if (identityInfo.getAge()<36){
-                        record.setItemId(1);
-                        BigDecimal value = new BigDecimal(10);
-                        record.setScoreValue(value);
-                    }
-                    record.setStatus(4);
-                }
-
-                // 页面1基本信息中：“申请人是否参加住房公积金”——否         自动打分0分。
-                if (record.getIndicatorId()!=null && record.getIndicatorId() == 8){
-                    if (houseOther.getProvidentFund()!=null && houseOther.getProvidentFund()== 2){ // 1、是；2、否"
-                        record.setItemId(0);
-                        record.setStatus(4);
-                        record.setScoreValue(new BigDecimal(0));
-                    }
-                }
-                // 受教育程度，
-                if (record.getIndicatorId() == 3 ){
-                    //市教委
-                    if (record.getOpRoleId() == 6 && houseOther.getCultureDegree()!=null && (houseOther.getCultureDegree()==1011 || houseOther.getCultureDegree()==1013) ){
-                        record.setItemId(1013);
-                        record.setStatus(4);
-                        record.setScoreValue(new BigDecimal(0));
-                    }
-                    // 人社
-                    if (record.getOpRoleId() == 3 && houseOther.getCultureDegree()!=null && (houseOther.getCultureDegree()==4 || houseOther.getCultureDegree()==5 || houseOther.getCultureDegree()==1013) ){
-                        record.setItemId(1013);
-                        record.setStatus(4);
-                        record.setScoreValue(new BigDecimal(0));
-                    }
-                }
-                // 专业技术人员职业资格、职业技能水平
-                if (record.getIndicatorId() == 4){
-                    if (profession.getProfessionType()!=null && profession.getProfessionType()==1){
-                        record.setItemId(1014);
-                        record.setStatus(4);
-                        record.setScoreValue(new BigDecimal(0));
-                    }
-                }
-                //职业（工种）
-                if (record.getIndicatorId()==11){
-                    if (profession.getJobType()!=null && profession.getJobType()==30){
-                        record.setItemId(30);
-                        record.setStatus(4);
-                        record.setScoreValue(new BigDecimal(0));
-                    }
-                }
-                // 婚姻情况
-                if (record.getIndicatorId()==14 && record.getOpRoleId()!=null && record.getOpRoleId()==3){
-                    if (relationshipList.size()>0){
-                        for (HouseRelationship relationship : relationshipList){
-                            if (relationship.getRelationship()!=null && relationship.getRelationship().equalsIgnoreCase("配偶")){
-                                if (relationship.getInTianjin()!=null && relationship.getInTianjin()==2){
-                                    record.setItemId(37);
-                                    record.setStatus(4);
-                                    record.setScoreValue(new BigDecimal(0));
-                                }
-                            }
-                        }
-                    }
-                }
-                // 奖项和荣誉称号
-                if (record.getIndicatorId()==16){
-                    if (houseOther.getAwardsTitle()!=null && houseOther.getAwardsTitle()==9){
-                        record.setItemId(9);
-                        record.setStatus(4);
-                        record.setScoreValue(new BigDecimal(0));
-                    }
-                }
-                //退役军人
-                if (record.getIndicatorId()==17){
-                    if (houseOther.getSoldierMeritorious()!=null && houseOther.getSoldierMeritorious()==50){
-                        record.setItemId(50);
-                        record.setStatus(4);
-                        record.setScoreValue(new BigDecimal(0));
-                    }
-                }
-                // 5年内是否有刑事犯罪记录
-                if (record.getIndicatorId() == 902){
-                    if (houseOther.getPenalty()!=null && houseOther.getPenalty()==2){
-                        record.setItemId(1031);
-                        record.setStatus(4);
-                        record.setScoreValue(new BigDecimal(0));
-                    }
-                }
+//                if (record.getIndicatorId()==1020){
+//                    if(identityInfo.getRentHouseAddress()==null){
+//                        record.setItemId(0);
+//                        record.setStatus(4);
+//                        record.setScoreValue(new BigDecimal(0));
+//                    }
+//                }
+//                // 年龄
+//                if (record.getIndicatorId() == 1 && identityInfo.getAge()!=null){
+//                    if(identityInfo.getAge()>45){
+//                        record.setItemId(3);
+//                        BigDecimal value = new BigDecimal(0);
+//                        record.setScoreValue(value);
+//                    }else if(identityInfo.getAge()>36){
+//                        record.setItemId(2);
+//                        BigDecimal value = new BigDecimal(5);
+//                        record.setScoreValue(value);
+//                    }else if (identityInfo.getAge()<36){
+//                        record.setItemId(1);
+//                        BigDecimal value = new BigDecimal(10);
+//                        record.setScoreValue(value);
+//                    }
+//                    record.setStatus(4);
+//                }
+//
+//                // 页面1基本信息中：“申请人是否参加住房公积金”——否         自动打分0分。
+//                if (record.getIndicatorId()!=null && record.getIndicatorId() == 8){
+//                    if (houseOther.getProvidentFund()!=null && houseOther.getProvidentFund()== 2){ // 1、是；2、否"
+//                        record.setItemId(0);
+//                        record.setStatus(4);
+//                        record.setScoreValue(new BigDecimal(0));
+//                    }
+//                }
+//                // 受教育程度，
+//                if (record.getIndicatorId() == 3 ){
+//                    //市教委
+//                    if (record.getOpRoleId() == 6 && houseOther.getCultureDegree()!=null && (houseOther.getCultureDegree()==1011 || houseOther.getCultureDegree()==1013) ){
+//                        record.setItemId(1013);
+//                        record.setStatus(4);
+//                        record.setScoreValue(new BigDecimal(0));
+//                    }
+//                    // 人社
+//                    if (record.getOpRoleId() == 3 && houseOther.getCultureDegree()!=null && (houseOther.getCultureDegree()==4 || houseOther.getCultureDegree()==5 || houseOther.getCultureDegree()==1013) ){
+//                        record.setItemId(1013);
+//                        record.setStatus(4);
+//                        record.setScoreValue(new BigDecimal(0));
+//                    }
+//                }
+//                // 专业技术人员职业资格、职业技能水平
+//                if (record.getIndicatorId() == 4){
+//                    if (profession.getProfessionType()!=null && profession.getProfessionType()==1){
+//                        record.setItemId(1014);
+//                        record.setStatus(4);
+//                        record.setScoreValue(new BigDecimal(0));
+//                    }
+//                }
+//                //职业（工种）
+//                if (record.getIndicatorId()==11){
+//                    if (profession.getJobType()!=null && profession.getJobType()==30){
+//                        record.setItemId(30);
+//                        record.setStatus(4);
+//                        record.setScoreValue(new BigDecimal(0));
+//                    }
+//                }
+//                // 婚姻情况
+//                if (record.getIndicatorId()==14 && record.getOpRoleId()!=null && record.getOpRoleId()==3){
+//                    if (relationshipList.size()>0){
+//                        for (HouseRelationship relationship : relationshipList){
+//                            if (relationship.getRelationship()!=null && relationship.getRelationship().equalsIgnoreCase("配偶")){
+//                                if (relationship.getInTianjin()!=null && relationship.getInTianjin()==2){
+//                                    record.setItemId(37);
+//                                    record.setStatus(4);
+//                                    record.setScoreValue(new BigDecimal(0));
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                // 奖项和荣誉称号
+//                if (record.getIndicatorId()==16){
+//                    if (houseOther.getAwardsTitle()!=null && houseOther.getAwardsTitle()==9){
+//                        record.setItemId(9);
+//                        record.setStatus(4);
+//                        record.setScoreValue(new BigDecimal(0));
+//                    }
+//                }
+//                //退役军人
+//                if (record.getIndicatorId()==17){
+//                    if (houseOther.getSoldierMeritorious()!=null && houseOther.getSoldierMeritorious()==50){
+//                        record.setItemId(50);
+//                        record.setStatus(4);
+//                        record.setScoreValue(new BigDecimal(0));
+//                    }
+//                }
+//                // 5年内是否有刑事犯罪记录
+//                if (record.getIndicatorId() == 902){
+//                    if (houseOther.getPenalty()!=null && houseOther.getPenalty()==2){
+//                        record.setItemId(1031);
+//                        record.setStatus(4);
+//                        record.setScoreValue(new BigDecimal(0));
+//                    }
+//                }
 
                 save(record);
             }
