@@ -183,23 +183,23 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
                 打分部门：住建委、规自局
              */
             // “不按照“津发改社会〔2018〕26号”文件计算”
-            if (identityInfo.getIs201826Doc()!=null && identityInfo.getIs201826Doc() == 0){
-                if (indicator.getId() == 1021 || indicator.getId() == 1022){
-                    continue;
-                }
-            }
-            // “按照“津发改社会〔2018〕26号”文件计算”
-            if (identityInfo.getIs201826Doc()!=null && identityInfo.getIs201826Doc() == 1){
-                if (indicator.getId() == 1025){
-                    continue;
-                }
-            }
-            // 如果为空值
-            if (identityInfo.getIs201826Doc()==null){
-                if (indicator.getId() == 1021 || indicator.getId() == 1022 || indicator.getId()==1025){
-                    continue;
-                }
-            }
+//            if (identityInfo.getIs201826Doc()!=null && identityInfo.getIs201826Doc() == 0){
+//                if (indicator.getId() == 1021 || indicator.getId() == 1022){
+//                    continue;
+//                }
+//            }
+//            // “按照“津发改社会〔2018〕26号”文件计算”
+//            if (identityInfo.getIs201826Doc()!=null && identityInfo.getIs201826Doc() == 1){
+//                if (indicator.getId() == 1025){
+//                    continue;
+//                }
+//            }
+//            // 如果为空值
+//            if (identityInfo.getIs201826Doc()==null){
+//                if (indicator.getId() == 1021 || indicator.getId() == 1022 || indicator.getId()==1025){
+//                    continue;
+//                }
+//            }
 
             ScoreRecord record = new ScoreRecord();
             record.setBatchId(batchId);
