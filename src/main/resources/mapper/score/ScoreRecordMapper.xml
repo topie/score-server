@@ -61,8 +61,11 @@
             <if test="item.companyId!=null">
                 and i.company_id = #{item.companyId}
             </if>
-            <if test="item.rightProperty!=null">
+            <if test="item.rightProperty==1">
                 and i.rightProperty = #{item.rightProperty}
+            </if>
+            <if test="item.rightProperty==2">
+                and i.rightProperty !=1
             </if>
             <if test="item.cultureDegree!=null">
                 and ho.culture_degree = #{item.cultureDegree}
