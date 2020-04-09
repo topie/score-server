@@ -83,6 +83,7 @@ public class RensheAcceptController {
     @GetMapping(value = "/approving")
     @ResponseBody
     public Result approving(IdentityInfo identityInfo,
+                            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
@@ -101,6 +102,7 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(1);
+        identityInfo.setRentHouseAddress(dateSearch.toString());
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         for (IdentityInfo info : pageInfo.getList()) {
