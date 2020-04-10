@@ -63,6 +63,7 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
         SqlUtil.clearLocalPage();
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        condition.orderBy("reservationDate").asc();
         if (identityInfo != null) {
             if (identityInfo.getUnionApproveStatus1() != null) {
                 criteria.andEqualTo("unionApproveStatus1", identityInfo.getUnionApproveStatus1());
