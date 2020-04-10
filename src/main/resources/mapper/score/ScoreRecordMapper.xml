@@ -37,7 +37,7 @@
         max(sr.accept_date) accept_date,
         max(i.luohu_number) accept_number<!--当做公安落户编号-->
         from ((t_pb_score_record sr inner join t_identity_info i
-        on sr.person_id=i.id) INNER JOIN t_house_other ho on i.ID=ho.IDENTITY_INFO_ID) INNER JOIN t_house_relationship hr ON i.ID=hr.IDENTITY_INFO_ID
+        on sr.person_id=i.id) left JOIN t_house_other ho on i.ID=ho.IDENTITY_INFO_ID) left JOIN t_house_relationship hr ON i.ID=hr.IDENTITY_INFO_ID
         <where>
             i.cancel_status = 0
             <if test="item.status!=null">
