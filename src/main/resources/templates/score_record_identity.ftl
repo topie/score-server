@@ -101,7 +101,14 @@
                                     <td colspan="4">民族：<strong>${person.nation}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4">是否按照“津发改社会〔2018〕26号”文件计算：<strong><#if person.sex == 1>是<#else>否</#if></strong></td>
+                                    <td colspan="12">是否按照“津发改社会〔2018〕26号”文件计算：<strong><#if person.sex == 1>是<#else>否</#if></strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">落户类别：<strong><#if move.settledNature == 1>持有不动产权证或者房屋所有权证</#if>
+                                    <#if move.settledNature == 2>购买住房还未办理不动产权证，但持有购房合同和税收缴款书（此选项不允许子女随迁）</#if>
+                                    <#if move.settledNature == 3>无住房，但单位已设立集体户口（此选项不允许子女随迁）</#if>
+                                    <#if move.settledNature == 4>无住房，且单位也未设立集体户口，自愿落户在市、区政府下设人力资源中介机构集体户（此选项不允许子女随迁）</#if></strong>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td colspan="4">出生日期：<strong>${person.birthday}</strong></td>
