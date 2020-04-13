@@ -72,6 +72,9 @@
             <if test="item.cultureDegree!=null">
                 and ho.culture_degree = #{item.cultureDegree}
             </if>
+            <if test="item.providentFund!=null">
+                and ho.PROVIDENT_FUND = #{item.providentFund}
+            </if>
             <if test="item.inTianjin!=null">
                 and hr.inTianjin = #{item.inTianjin}
             </if>

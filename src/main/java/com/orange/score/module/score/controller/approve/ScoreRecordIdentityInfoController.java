@@ -115,6 +115,7 @@ public class ScoreRecordIdentityInfoController {
                           @RequestParam(value = "rightProperty", required = false, defaultValue = "0") Integer rightProperty,
                           @RequestParam(value = "cultureDegree", required = false, defaultValue = "0") Integer cultureDegree,
                           @RequestParam(value = "inTianjin", required = false, defaultValue = "0") Integer inTianjin,
+                          @RequestParam(value = "providentFund", required = false, defaultValue = "0") Integer providentFund,
                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -158,6 +159,9 @@ public class ScoreRecordIdentityInfoController {
         }
         if(inTianjin!=0){
             argMap.put("inTianjin", inTianjin);
+        }
+        if(providentFund!=0){
+            argMap.put("providentFund", providentFund);
         }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");
