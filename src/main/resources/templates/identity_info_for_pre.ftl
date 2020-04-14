@@ -106,7 +106,7 @@
                                     <td colspan="4">民族：<strong>${person.nation}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">是否按照“津发改社会〔2018〕26号”文件计算：<strong><#if person.sex == 1>是<#else>否</#if></strong></td>
+                                    <td colspan="12">是否按照“津发改社会〔2018〕26号”文件计算：<strong><#if person.is201826Doc == 1>是<#else>否</#if></strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="12">是否缴存住房公积金：<strong><#if other.providentFund == 1>是<#else>否</#if></strong></td>

@@ -49,18 +49,22 @@ public class PersonBatchStatusRecordController {
         for(PersonBatchStatusRecord p :pageInfo.getList()){
             if(p.getStatusInt() == 11){
                 IdentityInfo ideInfo = iIdentityInfoService.findById(p.getPersonId());
-                String reseDate = "";
-                if(ideInfo.getReservationDate()==null || ideInfo.getReservationDate().toString().equals("")){
-                    reseDate = "空";
-                } else{
-                    reseDate = sdf.format(ideInfo.getReservationDate());
+                if (ideInfo !=null){
+                    String reseDate = "";
+                    if(ideInfo.getReservationDate()==null || ideInfo.getReservationDate().toString().equals("")){
+                        reseDate = "空";
+                    } else{
+                        reseDate = sdf.format(ideInfo.getReservationDate());
+                    }
+                    p.setStatusStr(p.getStatusStr()+"  (预约日期："+reseDate+")");
                 }
-                p.setStatusStr(p.getStatusStr()+"  (预约日期："+reseDate+")");
             }
             if(p.getStatusInt() == 7){
                 IdentityInfo ideInfo2 = iIdentityInfoService.findById(p.getPersonId());
-                String loc = (ideInfo2.getAcceptAddress().equals("市级行政许可中心")) ? "市区" : "滨海";
-                p.setStatusStr(p.getStatusStr() + "("+loc+")");
+                if (ideInfo2!=null){
+                    String loc = (ideInfo2.getAcceptAddress().equals("市级行政许可中心")) ? "市区" : "滨海";
+                    p.setStatusStr(p.getStatusStr() + "("+loc+")");
+                }
             }
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
