@@ -104,6 +104,18 @@
                                     <td colspan="12">是否按照“津发改社会〔2018〕26号”文件计算：<strong><#if person.is201826Doc == 1>是<#else>否</#if></strong></td>
                                 </tr>
                                 <tr>
+                                    <td colspan="12">租赁房屋地址：<strong>${move.rentHouseAddress}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">租赁登记备案证明编号：<strong>${move.rentIdNumber}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">租赁备案起始日：<strong>${move.rentHouseStartDate}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">租赁合同终止日：<strong>${move.rentHouseEndDate}</strong></td>
+                                </tr>
+                                <tr>
                                     <td colspan="12">是否缴存住房公积金：<strong><#if other.providentFund == 1>是<#else>否</#if></strong></td>
                                 </tr>
                                 <tr>
