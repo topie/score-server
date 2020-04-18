@@ -222,6 +222,11 @@ public class PrintController extends BaseController {
         }
         HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", identityInfoId);
         if (houseMove != null) {
+            Region region = iRegionService.findById(houseMove.getMoveProvince());// 省
+            Region region2 = iRegionService.findById(houseMove.getMoveCity());// 市
+            Region region3 = iRegionService.findById(houseMove.getMoveRegion());// 县
+            String strAdd = region.getName()+region2.getName()+region3.getName()+houseMove.getCurrentRegisteredAddress();
+            houseMove.setMoveAddress(strAdd);
             params.put("houseMove", houseMove);
         }
         HouseOther other = iHouseOtherService.findBy("identityInfoId", identityInfoId);

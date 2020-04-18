@@ -1049,7 +1049,16 @@ public class MaterialReceiveIdentityInfoController {
             stringMap.put(40, identityInfo.getIdNumber());
             stringMap.put(41, houseMove.getMarriageStatusStr());
             stringMap.put(42, "-");
-            stringMap.put(43, houseMove.getMoveAddress());
+            /**
+             * 2020年4月18日
+             * 获取申请人户籍所在地的信息
+             */
+            Region region = iRegionService.findById(houseMove.getMoveProvince());// 省
+            Region region2 = iRegionService.findById(houseMove.getMoveCity());// 市
+            Region region3 = iRegionService.findById(houseMove.getMoveRegion());// 县
+            String strAdd = region.getName()+region2.getName()+region3.getName()+houseMove.getCurrentRegisteredAddress();
+
+            stringMap.put(43, strAdd);
             stringMap.put(49, houseMove.getMoveNowAddress());
             stringMap.put(54, "配偶情况");
             stringMap.put(55, houseRelationshipSpouse.getName());
