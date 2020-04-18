@@ -1158,7 +1158,7 @@ public class MaterialReceiveIdentityInfoController {
             }
             stringMap.put(startIndex, "本人及配偶承诺目前" + identityInfo.getStringPregnantPromise() + " " + pregnantWeek + "周");
             startIndex += 5;
-            stringMap.put(startIndex, "本人及配偶承诺目前" + identityInfo.getStringThirdPregnantPromise() + "政策外第三个及以上子女怀孕期间");
+            stringMap.put(startIndex, "本人及配偶承诺目前未政策外生育（或收养）第三个及以上子女，未处于政策外怀孕第三个及以上子女：" + identityInfo.getStringThirdPregnantPromise() );
             int stringIndex = 0;
             XSSFFont font = workBook.createFont();
             font.setFontName("宋体");

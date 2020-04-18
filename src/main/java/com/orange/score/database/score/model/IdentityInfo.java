@@ -181,10 +181,10 @@ public class IdentityInfo {
             return "_";
         } else {
             switch (this.thirdPregnantPromise) {
-                case 2:
-                    return "处于";
                 case 1:
-                    return "未处于";
+                    return "是";
+                case 2:
+                    return "否";
                 default:
                     return "_";
             }
