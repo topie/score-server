@@ -11,22 +11,22 @@
     <table style="font-size: 14px;" class="table table-bordered table-hover table-condensed">
         <tr>
             <td colspan="6">居住证号（身份证号）：
-                <input data-id="${person.id?c}" data-name="person.idNumber"
+                <input data-id="${person.id?c}" disabled data-name="person.idNumber"
                        class="edit input-large" style="height: 25px;"
                        value="${person.idNumber}">
             </td>
             <td colspan="6">居住证申领日期：
-                <input data-id="${other.id?c}" data-name="other.applicationDate"
+                <input data-id="${other.id?c}" disabled data-name="other.applicationDate"
                        class="edit input-large" style="height: 25px;"
                        value="${other.applicationDate}">
             </td>
         </tr>
         <tr>
-            <td colspan="4">姓名：<input data-id="${person.id?c}" data-name="person.name"
+            <td colspan="4">姓名：<input data-id="${person.id?c}" disabled  data-name="person.name"
                                       class="edit input-large" style="height: 25px;"
                                       value="${person.name}"></td>
             <td colspan="4">性别：
-                <select data-id="${person.id?c}" data-name="person.sex" class="edit"
+                <select data-id="${person.id?c}" data-name="person.sex" disabled  class="edit"
                         style="height: 25px;">
                     <option <#if person.sex==0>selected</#if> value=0>未选择</option>
                     <option <#if person.sex==1>selected</#if> value=1>男</option>
@@ -34,19 +34,19 @@
                 </select>
             </td>
             <td colspan="4">年龄：
-                <input data-id="${person.id?c}" data-name="person.age"
+                <input data-id="${person.id?c}"  disabled  data-name="person.age"
                        class="edit input-large" style="height: 25px;"
                        value="${person.age}">
             </td>
         </tr>
         <tr>
             <td colspan="4">出生日期：
-                <input data-id="${person.id?c}" data-name="person.birthday"
+                <input data-id="${person.id?c}" disabled  data-name="person.birthday"
                        class="edit input-large" style="height: 25px;"
                        value="${person.birthday}">
             </td>
             <td colspan="4">政治面貌：
-                <select data-id="${other.id?c}" data-name="other.politicalStatus" class="edit"
+                <select data-id="${other.id?c}" disabled  data-name="other.politicalStatus" class="edit"
                         style="height: 25px;">
                     <option <#if other.politicalStatus==1>selected</#if> value="1">中共党员</option>
                     <option <#if other.politicalStatus==2>selected</#if> value="2">中共预备党员
@@ -81,7 +81,7 @@
         </tr>
         <tr>
             <td colspan="12">剩余预约次数（正整数）：
-                <input data-id="${person.id?c}" data-name="person.reservationTime"
+                <input data-id="${person.id?c}" disabled  data-name="person.reservationTime"
                        class="edit input-large" style="height: 25px;"
                        value="${person.reservationTime}">
             </td>
@@ -95,35 +95,35 @@
         </tr>
         <tr>
             <td colspan="12">专业：
-                <input data-id="${other.id?c}" data-name="other.profession"
+                <input data-id="${other.id?c}" data-name="other.profession" disabled
                        class="edit input-large" style="height: 25px;"
                        value="${other.profession}">
             </td>
         </tr>
         <tr>
             <td colspan="12">实际用工单位名称：
-                <input data-id="${other.id?c}" data-name="other.companyName"
+                <input data-id="${other.id?c}" data-name="other.companyName" disabled
                        class="edit input-large" style="height: 25px;width:600px;"
                        value="${other.companyName}">
             </td>
         </tr>
         <tr>
             <td colspan="12">实际用工单位地址：
-                <input data-id="${other.id?c}" data-name="other.companyAddress"
+                <input data-id="${other.id?c}" data-name="other.companyAddress" disabled
                        class="edit input-large" style="height: 25px;width:600px;"
                        value="${other.companyAddress}">
             </td>
         </tr>
         <tr>
             <td colspan="12">单位座机电话：
-                <input data-id="${other.id?c}" data-name="other.companyPhone"
+                <input data-id="${other.id?c}" data-name="other.companyPhone" disabled
                        class="edit input-large" style="height: 25px;"
                        value="${other.companyPhone}">
             </td>
         </tr>
         <tr>
             <td colspan="12">本人手机（接收短信）：
-                <input data-id="${other.id?c}" data-name="other.selfPhone"
+                <input data-id="${other.id?c}" data-name="other.selfPhone" disabled
                        class="edit input-large" style="height: 25px;"
                        value="${other.selfPhone}">
             </td>

@@ -108,6 +108,7 @@ public class ScoreRecordIdentityInfoController {
     @Autowired
     private IApplyCancelService iApplyCancelService;
 
+    // 待打分
     @GetMapping(value = "/scoring")
     @ResponseBody
     public Result scoring(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
