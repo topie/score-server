@@ -177,6 +177,9 @@ public class IdentityInfoController {
         return ResponseUtil.success();
     }
 
+    /*
+    保存后台的数据
+     */
     @PostMapping("/updateEdit")
     public Result updateEdit(@RequestParam Integer identityInfoId, @RequestParam String editInfo)
             throws InvocationTargetException, IllegalAccessException {
@@ -226,6 +229,22 @@ public class IdentityInfoController {
         log.setLogContent("修改" + identityInfo.getName() + "信息");
         log.setLogUser(securityUser.getLoginName());
         iLogService.save(log);
+
+        /*
+        2020年4月21日
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"修改");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusReason(securityUser.getLoginName()+"修改");
+        personBatchStatusRecord.setStatusTypeDesc(securityUser.getLoginName()+"修改");
+        personBatchStatusRecord.setStatusInt(1010);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+
         return ResponseUtil.success();
     }
 

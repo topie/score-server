@@ -269,13 +269,13 @@ public class HouseOther {
     public String getCultureDegreeStr() {
         if (cultureDegree == null) return "-";
         switch (cultureDegree) {
-            case 11:
+            case 1013:
                 return "无";
             case 4:
                 return "本科及以上学历";
             case 5:
                 return "大专学历";
-            case 6:
+            case 1011:
                 return "高级技工学校高级班";
         }
         return "无";

@@ -72,10 +72,10 @@
             <td colspan="4">文化程度：
                 <select data-id="${other.id?c}" data-name="other.cultureDegree" class="edit"
                         style="height: 25px;">
-                    <option <#if other.cultureDegree==11>selected</#if> value="11">无</option>
+                    <option <#if other.cultureDegree==1013>selected</#if> value="1013">无</option>
                     <option <#if other.cultureDegree==4>selected</#if> value="4">本科及以上学历</option>
                     <option <#if other.cultureDegree==5>selected</#if> value="5">大专学历</option>
-                    <option <#if other.cultureDegree==6>selected</#if> value="6">高级技工学校高级班</option>
+                    <option <#if other.cultureDegree==1011>selected</#if> value="1011">高级技工学校高级班</option>
                 </select>
             </td>
         </tr>
@@ -183,10 +183,10 @@
             <td colspan="6">落户性质：
                 <select data-id="${move.id?c}" data-name="move.settledNature" class="edit"
                         style="height: 25px;">
-                    <option <#if move.settledNature==1>selected</#if> value="1">本单位集体户口</option>
-                    <option <#if move.settledNature==2>selected</#if> value="2">非本单位集体户口
-                    </option>
-                    <option <#if move.settledNature==3>selected</#if> value="3">家庭户口</option>
+                    <option <#if move.settledNature==1>selected</#if> value="1">持有不动产权证或者房屋所有权证</option>
+                    <option <#if move.settledNature==2>selected</#if> value="2">购买住房还未办理不动产权证，但持有购房合同和税收缴款书（此选项不允许子女随迁）</option>
+                    <option <#if move.settledNature==3>selected</#if> value="3">无住房，但单位已设立集体户口（此选项不允许子女随迁）</option>
+                    <option <#if move.settledNature==4>selected</#if> value="4">无住房，且单位也未设立集体户口，自愿落户在市、区政府下设人力资源中介机构集体户（此选项不允许子女随迁）</option>
                 </select>
             </td>
         </tr>
