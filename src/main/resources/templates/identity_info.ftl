@@ -155,14 +155,14 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">本人及配偶承诺目前
+                                    <td colspan="12">本人及配偶承诺目前未政策外生育（或收养）第三个及以上子女，未处于政策外怀孕第三个及以上子女
                                         <select disabled style="height: 25px;">
                                             <option <#if person.thirdPregnantPromise==0>selected</#if> value="0">&nbsp;&nbsp;</option>
-                                            <option <#if person.thirdPregnantPromise==1>selected</#if> value="1">处于
+                                            <option <#if person.thirdPregnantPromise==1>selected</#if> value="1">是
                                             </option>
-                                            <option <#if person.thirdPregnantPromise==2>selected</#if> value="2">未处于
+                                            <option <#if person.thirdPregnantPromise==2>selected</#if> value="2">否
                                             </option>
-                                        </select>政策外第三个及以上子女怀孕期间
+                                        </select>
                                     </td>
                                 </tr>
                                 <tr>
