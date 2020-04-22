@@ -120,6 +120,7 @@ public class MaterialReceiveIdentityInfoController {
                             @RequestParam(value = "rightProperty", required = false, defaultValue = "0") Integer rightProperty,
                             @RequestParam(value = "cultureDegree", required = false, defaultValue = "0") Integer cultureDegree,
                             @RequestParam(value = "inTianjin", required = false, defaultValue = "0") Integer inTianjin,
+                            @RequestParam(value = "soldierMeritorious", required = false, defaultValue = "0") Integer soldierMeritorious,
                             @RequestParam(value = "providentFund", required = false, defaultValue = "0") Integer providentFund,
                             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
@@ -167,6 +168,9 @@ public class MaterialReceiveIdentityInfoController {
         }
         if(inTianjin!=0){
             argMap.put("inTianjin", inTianjin);
+        }
+        if(soldierMeritorious!=0){
+            argMap.put("soldierMeritorious", soldierMeritorious);
         }
         if(providentFund!=0){
             argMap.put("providentFund", providentFund);
@@ -303,6 +307,11 @@ public class MaterialReceiveIdentityInfoController {
     public Result received(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
                            @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                           @RequestParam(value = "rightProperty", required = false, defaultValue = "0") Integer rightProperty,
+                           @RequestParam(value = "cultureDegree", required = false, defaultValue = "0") Integer cultureDegree,
+                           @RequestParam(value = "inTianjin", required = false, defaultValue = "0") Integer inTianjin,
+                           @RequestParam(value = "soldierMeritorious", required = false, defaultValue = "0") Integer soldierMeritorious,
+                           @RequestParam(value = "providentFund", required = false, defaultValue = "0") Integer providentFund,
                            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
@@ -339,6 +348,21 @@ public class MaterialReceiveIdentityInfoController {
         }
         if (scoreRecord.getCompanyId() != null) {
             argMap.put("companyId", scoreRecord.getCompanyId());
+        }
+        if(rightProperty!=0){
+            argMap.put("rightProperty", rightProperty);
+        }
+        if(cultureDegree!=0){
+            argMap.put("cultureDegree", cultureDegree);
+        }
+        if(inTianjin!=0){
+            argMap.put("inTianjin", inTianjin);
+        }
+        if(soldierMeritorious!=0){
+            argMap.put("soldierMeritorious", soldierMeritorious);
+        }
+        if(providentFund!=0){
+            argMap.put("providentFund", providentFund);
         }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");
@@ -383,6 +407,11 @@ public class MaterialReceiveIdentityInfoController {
     public Result refused(ScoreRecord scoreRecord, @RequestParam(value = "sort_", required = false) String sort_,
                             @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
                             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                          @RequestParam(value = "rightProperty", required = false, defaultValue = "0") Integer rightProperty,
+                          @RequestParam(value = "cultureDegree", required = false, defaultValue = "0") Integer cultureDegree,
+                          @RequestParam(value = "inTianjin", required = false, defaultValue = "0") Integer inTianjin,
+                          @RequestParam(value = "soldierMeritorious", required = false, defaultValue = "0") Integer soldierMeritorious,
+                          @RequestParam(value = "providentFund", required = false, defaultValue = "0") Integer providentFund,
                             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
@@ -419,6 +448,21 @@ public class MaterialReceiveIdentityInfoController {
         }
         if (scoreRecord.getCompanyId() != null) {
             argMap.put("companyId", scoreRecord.getCompanyId());
+        }
+        if(rightProperty!=0){
+            argMap.put("rightProperty", rightProperty);
+        }
+        if(cultureDegree!=0){
+            argMap.put("cultureDegree", cultureDegree);
+        }
+        if(inTianjin!=0){
+            argMap.put("inTianjin", inTianjin);
+        }
+        if(soldierMeritorious!=0){
+            argMap.put("soldierMeritorious", soldierMeritorious);
+        }
+        if(providentFund!=0){
+            argMap.put("providentFund", providentFund);
         }
         if (StringUtils.isNotEmpty(sort_)) {
             String[] arr = sort_.split("_");

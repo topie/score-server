@@ -75,6 +75,9 @@
             <if test="item.providentFund!=null">
                 and ho.PROVIDENT_FUND = #{item.providentFund}
             </if>
+            <if test="item.soldierMeritorious!=null">
+                and ho.soldier_meritorious = #{item.soldierMeritorious}
+            </if>
             <if test="item.inTianjin!=null">
                 and hr.inTianjin = #{item.inTianjin}
             </if>
