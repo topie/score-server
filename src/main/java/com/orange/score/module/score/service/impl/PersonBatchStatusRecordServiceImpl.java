@@ -186,6 +186,49 @@ public class PersonBatchStatusRecordServiceImpl extends BaseService<PersonBatchS
     }
 
     @Override
+    public void insertStatus2(Integer batchId, Integer personId, String alias, Integer status, String dept, String statusReason) {
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setBatchId(batchId);
+        personBatchStatusRecord.setPersonId(personId);
+        personBatchStatusRecord.setStatusReason(statusReason);
+        IdentityInfo identityInfo = iIdentityInfoService.findById(personId);
+        if (identityInfo == null) {
+            throw new DefaultBusinessException("用户信息不存在!");
+        }
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusDictAlias(alias);
+        personBatchStatusRecord.setStatusInt(status);
+        personBatchStatusRecord.setStatusTime(new Date());
+        Dict dict = new Dict();
+        dict.setAlias(alias);
+        dict.setValue(status);
+        List<Dict> dicts = iDictService.selectByFilter(dict);
+        if (dicts.size() > 0) {
+            personBatchStatusRecord.setStatusStr(dicts.get(0).getText());
+            personBatchStatusRecord.setStatusTypeDesc(dicts.get(0).getAliasName());
+        }
+        PersonBatchStatusRecord search = new PersonBatchStatusRecord();
+        search.setBatchId(batchId);
+        search.setPersonId(personId);
+        search.setStatusDictAlias(alias);
+        search.setStatusInt(status);
+        List<PersonBatchStatusRecord> searchList = personBatchStatusRecordMapper.select(search);
+        //if (searchList.size() > 0) {
+        if (0 > 0) {// 永远不会执行if中的update ，所有的记录都保存
+            if (dept != null){
+                personBatchStatusRecord.setStatusStr(personBatchStatusRecord.getStatusStr() + "（"+dept+"）");
+            }
+            personBatchStatusRecord.setId(searchList.get(0).getId());
+            update(personBatchStatusRecord);
+        } else {
+            if (dept != null){
+                personBatchStatusRecord.setStatusStr(personBatchStatusRecord.getStatusStr() + "（"+dept+"）");
+            }
+            save(personBatchStatusRecord);
+        }
+    }
+
+    @Override
     public PersonBatchStatusRecord getPassPreCheck(PersonBatchStatusRecord personBatchStatusRecord) {
         return personBatchStatusRecordMapper.getPassPreCheck(personBatchStatusRecord);
     }

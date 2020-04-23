@@ -770,6 +770,13 @@ public class MaterialReceiveIdentityInfoController {
         return ResponseUtil.success();
     }
 
+    /**
+     * 材料待补正
+     * @param id
+     * @param supplyArr
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/supply")
     public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
@@ -831,7 +838,7 @@ public class MaterialReceiveIdentityInfoController {
                 }
                 iIdentityInfoService.update(identityInfo);
                 iPersonBatchStatusRecordService
-                        .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4,str+"-"+securityUser.getDisplayName());
+                        .insertStatus2(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4,str+"-"+securityUser.getDisplayName(), supplyArr);
             } else {
                 return ResponseUtil.error("申请人不存在！");
             }

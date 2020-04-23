@@ -167,7 +167,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="6">现户口性质：<select data-id="${move.id?c}" data-name="move.houseNature"
+            <td colspan="12">现户口性质：<select data-id="${move.id?c}" data-name="move.houseNature"
                                           class="edit" style="height: 25px;">
                 <option <#if move.houseNature==1>selected</#if> value="1">未落常住户口</option>
                 <option <#if move.houseNature==2>selected</#if> value="2">非农业家庭户口</option>
@@ -180,7 +180,7 @@
                 <option <#if move.houseNature==9>selected</#if> value="9">地方城镇居民户口</option>
                 <option <#if move.houseNature==10>selected</#if> value="10">其他户口</option>
             </select></td>
-            <td colspan="6">落户性质：
+            <#--<td colspan="6">落户性质：
                 <select data-id="${move.id?c}" data-name="move.settledNature" class="edit"
                         style="height: 25px;">
                     <option <#if move.settledNature==1>selected</#if> value="1">持有不动产权证或者房屋所有权证</option>
@@ -188,7 +188,7 @@
                     <option <#if move.settledNature==3>selected</#if> value="3">无住房，但单位已设立集体户口（此选项不允许子女随迁）</option>
                     <option <#if move.settledNature==4>selected</#if> value="4">无住房，且单位也未设立集体户口，自愿落户在市、区政府下设人力资源中介机构集体户（此选项不允许子女随迁）</option>
                 </select>
-            </td>
+            </td>-->
         </tr>
         <tr>
             <td colspan="12">现户籍登记机关：
