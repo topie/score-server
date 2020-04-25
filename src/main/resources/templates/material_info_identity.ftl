@@ -298,11 +298,11 @@
                                     <td colspan="6">邮寄地址：<strong>${move.witnessAddress}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">单位名称：<strong>${other.companyName}</strong></td>
-                                    <td colspan="6">单位电话：<strong>${other.companyPhone}</strong></td>
+                                    <td colspan="6">实际用工单位名称：<strong>${other.companyName}</strong></td>
+                                    <td colspan="6">实际用工单位电话：<strong>${other.companyPhone}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">单位地址：<strong>${other.companyAddress}</strong></td>
+                                    <td colspan="6">实际用工单位地址：<strong>${other.companyAddress}</strong></td>
                                     <td colspan="6">本人电话：<strong>${other.selfPhone}</strong></td>
                                 </tr>
                                 <tr>
