@@ -165,6 +165,16 @@ public class BatchConf {
 
 
 
+    //关闭企业、个人注册时间
+    @Column(name = "closeRegisterTime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date closeRegisterTime;
+
+    //打开企业、个人注册时间
+    @Column(name = "openRegisterTime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date openRegisterTime;
+
     /**
      * 获取id
      *
@@ -550,5 +560,23 @@ public class BatchConf {
 
     public void setCloseOrder(Date closeOrder) {
         this.closeOrder = closeOrder;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
+    public Date getCloseRegisterTime() {
+        return closeRegisterTime;
+    }
+
+    public void setCloseRegisterTime(Date closeRegisterTime) {
+        this.closeRegisterTime = closeRegisterTime;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
+    public Date getOpenRegisterTime() {
+        return openRegisterTime;
+    }
+
+    public void setOpenRegisterTime(Date openRegisterTime) {
+        this.openRegisterTime = openRegisterTime;
     }
 }
