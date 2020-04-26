@@ -311,7 +311,7 @@ public class IdentityInfoController {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         List<Integer> roles = userService.findUserRoleByUserId(securityUser.getId());
         if(roles.contains(3)){
-            person.setLockUser2(securityUser.getUsername());
+            //person.setLockUser2(securityUser.getUsername());
             person.setOpuser4(securityUser.getUsername());
             iIdentityInfoService.update(person);
         }

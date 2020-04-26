@@ -130,7 +130,7 @@ public class RenshePrevApproveController {
             2019年6月24日
             因浏览器解析时间有8个小时的时差，所以把preApprove 的字段值赋给 regionName
              */
-            info.setRegionName(sdf.format(info.getPreApprove()));
+            //info.setRegionName(sdf.format(info.getPreApprove()));
 
             companyInfo = iCompanyInfoService.findById(info.getCompanyId());
             if (StringUtils.isEmpty(companyInfo.getBusinessLicenseSrc())) {
@@ -150,9 +150,9 @@ public class RenshePrevApproveController {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-        if (1 != identityInfo.getUnionApproveStatus2() && 4 != identityInfo.getUnionApproveStatus2()) {
-            return ResponseUtil.error("该申请人不是待审核状态或待补件，锁定无效");
-        }
+//        if (1 != identityInfo.getUnionApproveStatus2() && 4 != identityInfo.getUnionApproveStatus2()) {
+//            return ResponseUtil.error("该申请人不是待审核状态或待补件，锁定无效");
+//        }
         if (StringUtils.isNotEmpty(identityInfo.getLockUser2()) && !identityInfo.getLockUser2()
                 .equals(securityUser.getUsername())) {
             return ResponseUtil.error("该申请人的预审状态已被" + identityInfo.getLockUser2() + "锁定");
