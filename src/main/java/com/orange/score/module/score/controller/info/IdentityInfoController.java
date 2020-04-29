@@ -128,6 +128,21 @@ public class IdentityInfoController {
                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
+
+        /**
+         * 2020年4月29日
+         * 增加企业信息查询的字段，因为 IdentityInfo 对象中没有公司名字的字段值，用 rentHouseAddress 来代替
+         * 先通过名字查询到公司ID，再把公司ID作为查询条件开始查询
+         */
+        if (identityInfo.getRentHouseAddress()!=null && identityInfo.getRentHouseAddress()!=""){
+            CompanyInfo companyInfo = new CompanyInfo();
+            companyInfo.setCompanyName(identityInfo.getRentHouseAddress());
+            List<CompanyInfo> list = iCompanyInfoService.selectByFilter(companyInfo);
+            if (list.size()>0){
+                identityInfo.setCompanyId(list.get(list.size()-1).getId());
+            }
+        }
+
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         if (securityUser.getLoginName().equals("admin")){
             for (IdentityInfo identityInfo1 : pageInfo.getList()){
