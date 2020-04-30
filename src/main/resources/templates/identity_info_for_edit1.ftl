@@ -45,7 +45,7 @@
                        class="edit input-large" style="height: 25px;"
                        value="${person.birthday}">
             </td>
-            <td colspan="4">政治面貌：
+            <#--<td colspan="4">政治面貌：
                 <select data-id="${other.id?c}" disabled  data-name="other.politicalStatus" class="edit"
                         style="height: 25px;">
                     <option <#if other.politicalStatus==1>selected</#if> value="1">中共党员</option>
@@ -68,7 +68,7 @@
                     </option>
                     <option <#if other.politicalStatus==13>selected</#if> value="13">群众</option>
                 </select>
-            </td>
+            </td>-->
             <td colspan="4">文化程度：
                 <select data-id="${other.id?c}" data-name="other.cultureDegree" class="edit"
                         style="height: 25px;">
