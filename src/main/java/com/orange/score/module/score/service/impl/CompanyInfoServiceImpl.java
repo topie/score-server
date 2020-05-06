@@ -37,7 +37,7 @@ public class CompanyInfoServiceImpl extends BaseService<CompanyInfo> implements 
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if(companyInfo!=null){
             if (StringUtils.isNotEmpty(companyInfo.getCompanyName())) {
-                criteria.andLike("companyName", "%" + companyInfo.getCompanyName() + "%");
+                criteria.andLike("companyName", "" + companyInfo.getCompanyName() + "");
             }
             if (StringUtils.isNotEmpty(companyInfo.getSocietyCode())) {
                 criteria.andLike("societyCode", "%" + companyInfo.getSocietyCode() + "%");
