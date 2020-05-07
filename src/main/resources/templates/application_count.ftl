@@ -36,9 +36,15 @@
         <td>${reservationSum_2}</td>
     </tr>
     <tr>
-        <td>受理审核的人数</td>
+        <td>人社受理审核通过的人数</td>
         <td>${acceptedCheck}</td>
         <td>${acceptedCheck_1}</td>
         <td>${acceptedCheck_2}</td>
+    </tr>
+    <tr>
+        <td>人社、公安审核都通过的人数</td>
+        <td>${acceptedCheckRensheGongan}</td>
+        <td>${acceptedCheckRensheGongan_1}</td>
+        <td>${acceptedCheckRensheGongan_2}</td>
     </tr>
 </table>

@@ -1098,6 +1098,7 @@ public class IdentityInfoController {
         int applyedInterPre = 0;//已通过网上预审的人数
         int reservationSum = 0;//已预约的人数
         int acceptedCheck = 0;//人社受理审核通过的人数
+        int acceptedCheckRensheGongan = 0;//人社受理审核通过 且 公安前置审核通过 的人数
 
         //市区
         int passSeltTest_1 = 0;//已经通过自助测评的人数
@@ -1105,6 +1106,7 @@ public class IdentityInfoController {
         int applyedInterPre_1 = 0;//已通过网上预审的人数
         int reservationSum_1 = 0;//已预约的人数
         int acceptedCheck_1 = 0;//人社受理审核通过的人数
+        int acceptedCheckRensheGongan_1 = 0;//人社受理审核通过 且 公安前置审核通过 的人数
 
         //滨海新区
         int passSeltTest_2 = 0;//已经通过自助测评的人数
@@ -1112,6 +1114,7 @@ public class IdentityInfoController {
         int applyedInterPre_2 = 0;//已通过网上预审的人数
         int reservationSum_2 = 0;//已预约的人数
         int acceptedCheck_2 = 0;//人社受理审核通过的人数
+        int acceptedCheckRensheGongan_2 = 0;//人社受理审核通过 且 公安前置审核通过 的人数
 
         for (IdentityInfo ideInfo : identityInfoList) {
             if (ideInfo.getReservationStatus() >= 6) {
@@ -1129,6 +1132,9 @@ public class IdentityInfoController {
             if (ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3) {
                 acceptedCheck++;
             }
+            if(ideInfo.getRensheAcceptStatus()==3 && ideInfo.getPoliceApproveStatus()==3){
+                acceptedCheckRensheGongan++;
+            }
 
             //市区
             if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 1) {
@@ -1143,6 +1149,10 @@ public class IdentityInfoController {
             if (ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 1) {
                 acceptedCheck_1++;
             }
+            if(ideInfo.getRensheAcceptStatus()==3 && ideInfo.getPoliceApproveStatus()==3 && ideInfo.getAcceptAddressId() == 1) {
+                acceptedCheckRensheGongan_1++;
+            }
+
             //滨海新区
             if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 2) {
                 applyingInterPre_2++;
@@ -1156,6 +1166,9 @@ public class IdentityInfoController {
             if (ideInfo.getReservationStatus() == 11 && ideInfo.getRensheAcceptStatus() == 3 && ideInfo.getAcceptAddressId() == 2) {
                 acceptedCheck_2++;
             }
+            if(ideInfo.getRensheAcceptStatus()==3 && ideInfo.getPoliceApproveStatus()==3 && ideInfo.getAcceptAddressId() == 2) {
+                acceptedCheckRensheGongan_2++;
+            }
         }
 
         Map params = new HashMap();
@@ -1165,16 +1178,19 @@ public class IdentityInfoController {
         params.put("applyedInterPre", applyedInterPre + "");
         params.put("reservationSum", reservationSum + "");
         params.put("acceptedCheck", acceptedCheck + "");
+        params.put("acceptedCheckRensheGongan", acceptedCheckRensheGongan + "");
 
         params.put("applyingInterPre_1", applyingInterPre_1 + "");
         params.put("applyedInterPre_1", applyedInterPre_1 + "");
         params.put("reservationSum_1", reservationSum_1 + "");
         params.put("acceptedCheck_1", acceptedCheck_1 + "");
+        params.put("acceptedCheckRensheGongan_1", acceptedCheckRensheGongan_1 + "");
 
         params.put("applyingInterPre_2", applyingInterPre_2 + "");
         params.put("applyedInterPre_2", applyedInterPre_2 + "");
         params.put("reservationSum_2", reservationSum_2 + "");
         params.put("acceptedCheck_2", acceptedCheck_2 + "");
+        params.put("acceptedCheckRensheGongan_2", acceptedCheckRensheGongan_2 + "");
 
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "application_count.ftl", params);
