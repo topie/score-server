@@ -488,7 +488,7 @@
                                                 <#if mitem.id==1 || mitem.id==2>
                                                     <tr>
                                                         <td class="text-center">
-                                                            <input name="material"
+                                                            <input name="material" ${mitem.category}
                                                                    value="${item.indicator.id?c}_${mitem.id?c}_${item.roleId?c}"
                                                                    type="checkbox"/>
                                                         </td>
@@ -499,7 +499,7 @@
                                                 <#if mitem.id!=1 && mitem.id!=2>
                                                     <tr>
                                                         <td class="text-center">
-                                                            <input name="material"
+                                                            <input name="material" ${mitem.category}
                                                                    value="${item.indicator.id?c}_${mitem.id?c}_${item.roleId?c}"
                                                                    type="checkbox"/>
                                                         </td>
@@ -528,7 +528,7 @@
                                         <#list item.materialInfos as mitem>
                                             <tr>
                                                 <td class="text-center">
-                                                    <input name="material"
+                                                    <input name="material" ${mitem.category}
                                                            value="${item.indicator.id?c}_${mitem.id?c}_${item.roleId?c}"
                                                            type="checkbox"/>
                                                 </td>

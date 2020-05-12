@@ -523,17 +523,39 @@ public class MaterialReceiveIdentityInfoController {
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) throw new AuthBusinessException("用户未设置角色");
+        IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
         Map params = new HashMap();
         List<Map> mlist = new ArrayList<>();
         List<ScoreRecord> indicatorIdList = iScoreRecordService
                 .selectIndicatorIdsByIdentityInfoIdAndRoleIds(identityInfoId, roles);
+
+        OnlinePersonMaterial onlinePersonMaterial2 = new OnlinePersonMaterial();
+        onlinePersonMaterial2.setBatchId(person.getBatchId());
+        onlinePersonMaterial2.setPersonId(person.getId());
+        List<OnlinePersonMaterial> onlinePersonMaterials= iOnlinePersonMaterialService.selectByFilter(onlinePersonMaterial2);
+
         for (ScoreRecord item : indicatorIdList) {
             Map msMap = new HashMap();
             Indicator indicator = iIndicatorService.findById(item.getIndicatorId());
             msMap.put("indicator", indicator);
             List<MaterialInfo> materialInfos = iMaterialInfoService.findByIndicatorId(item.getIndicatorId());
             if (materialInfos.size() == 0) continue;
+            /**
+             * 2020年5月11日
+             * 接收材料自动勾选
+             * 1、先获取申请人的上传材料项；
+             * 2、与材料字典表比对，比对上就 checked
+             */
+            for (MaterialInfo materialInfo: materialInfos){
+                for (OnlinePersonMaterial op: onlinePersonMaterials){
+                    if ((int)materialInfo.getId()==(int)op.getMaterialInfoId()){
+                        materialInfo.setCategory("checked");
+                    }
+                }
+            }
             msMap.put("materialInfos", materialInfos);
+
+
             msMap.put("roleId", item.getOpRoleId());
             if(user.getLoginName().equals("guoyulian") || user.getLoginName().equals("dongzhenling") || user.getLoginName().equals("guihuaju1") || user.getLoginName().equals("admin")){
                 if (item.getOpRole().equals("市住建委")){
@@ -549,7 +571,6 @@ public class MaterialReceiveIdentityInfoController {
             mlist.add(msMap);
         }
         params.put("mlist", mlist);
-        IdentityInfo person = iIdentityInfoService.findById(identityInfoId);
         if (person == null) {
             person = new IdentityInfo();
         }
