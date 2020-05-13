@@ -517,7 +517,45 @@ public class MaterialReceiveIdentityInfoController {
     }
 
     @GetMapping("/detailAll")
-    public Result detailAll(@RequestParam Integer identityInfoId) throws FileNotFoundException {
+    public Result detailAll(@RequestParam Integer identityInfoId ,HttpServletRequest request) throws FileNotFoundException {
+
+        /*
+        2020年3月12日
+        获得访问者的 IP 地址，用其他内网IP来替换图片地址中的IP
+         */
+        String ip = request.getHeader("x-forwarded-for");
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+
+        Date date = new Date();
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf2.format(date)+";审核人员登录的IP地址："+ip);
+        String[] strArr = ip.split("\\.");
+        String str1 = strArr[0];
+        String str2 = strArr[1];
+        String str3 = strArr[2];
+        String str4 = strArr[3];
+
+//        String str1 = "10";
+//        String str2 = "96";
+//        String str3 = "49";
+//        String str4 = "180";
+
+        boolean flag = false;
+        if (Integer.parseInt(str1)==172 && Integer.parseInt(str2)==20 && Integer.parseInt(str3)==211){
+            int four = Integer.parseInt(str4);
+            if (four==191){
+                flag = true;
+            }
+        }
+
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
@@ -640,6 +678,12 @@ public class MaterialReceiveIdentityInfoController {
                     materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
                 }
             }
+            //若访问者的IP 地址符合
+            if (flag && materialInfo.getOnlinePersonMaterial()!=null && materialInfo.getOnlinePersonMaterial().getMaterialUri()!=null){
+                String strUri = materialInfo.getOnlinePersonMaterial().getMaterialUri();
+                String newStrUri = strUri.replace("218.67.246.52:80","10.96.3.213:8091");
+                materialInfo.getOnlinePersonMaterial().setMaterialUri(newStrUri);
+            }
         }
 
         params.put("materialInfos", roleMaterialInfoList);
@@ -660,6 +704,15 @@ public class MaterialReceiveIdentityInfoController {
             businessLicenseMaterial.setPersonId(-1);
             businessLicenseMaterial.setMaterialInfoName("经办人身份证");
             businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
+            /*
+            2020年3月12日
+            若符合人社部门的IP地址，就替换
+             */
+            if (flag && businessLicenseMaterial.getMaterialUri()!=null){
+                String strUri = businessLicenseMaterial.getMaterialUri();
+                String newStrUri = strUri.replace("218.67.246.52:80","10.96.3.213:8091");
+                businessLicenseMaterial.setMaterialUri(newStrUri);
+            }
             roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
         }
 
