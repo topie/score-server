@@ -336,6 +336,11 @@ public class ScoreRecordController {
         if (isDone!=null && isDone!="" && isDone.equals("1")){
             criteria.andEqualTo("idreviewend",isDone);
         }
+        if (user.getUserType() == 0) {
+            criteria.andEqualTo("acceptAddressId", 1);
+        } else if (user.getUserType() == 1) {
+            criteria.andEqualTo("acceptAddressId", 2);
+        }
         criteria.andIn("opRoleId",roles);
         condition.orderBy("toreviewtime");
         condition.orderBy("personIdNum");
