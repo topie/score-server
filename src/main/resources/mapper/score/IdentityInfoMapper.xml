@@ -67,6 +67,9 @@
             <if test="item.idNumber!=null">
                 and i.id_number=#{item.idNumber}
             </if>
+            <if test="item.acceptAddressId!=null">
+                and i.ACCEPT_ADDRESS_ID=#{item.acceptAddressId}
+            </if>
         </where>
     </select>
     <select id="selectExportList5" resultType="java.util.Map">
@@ -120,6 +123,9 @@
             </if>
             <if test="item.idNumber!=null">
                 and i.id_number=#{item.idNumber}
+            </if>
+            <if test="item.acceptAddressId!=null">
+                and i.ACCEPT_ADDRESS_ID=#{item.acceptAddressId}
             </if>
         </where>
     </select>

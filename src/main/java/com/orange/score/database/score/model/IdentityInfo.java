@@ -365,6 +365,40 @@ public class IdentityInfo {
     @Column(name = "rightProperty")
     private String rightProperty;// 持有
 
+    @Column(name = "istoreview")
+    private Integer istoreview;//"申请人是否申请复核过；1：是；2：否
+
+    @Column(name = "toreviewtime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date toreviewtime;//"申请人是否申请复的时间"
+
+    @Column(name = "cancelReason")
+    private String cancelReason;// 申请人的复核理由
+
+    public Integer getIstoreview() {
+        return istoreview;
+    }
+
+    public void setIstoreview(Integer istoreview) {
+        this.istoreview = istoreview;
+    }
+
+    public Date getToreviewtime() {
+        return toreviewtime;
+    }
+
+    public void setToreviewtime(Date toreviewtime) {
+        this.toreviewtime = toreviewtime;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
     public Integer getIs201826Doc() {
         return is201826Doc;
     }

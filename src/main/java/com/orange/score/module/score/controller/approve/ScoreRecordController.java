@@ -299,6 +299,83 @@ public class ScoreRecordController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
+    /**
+     * 2020年5月25日
+     * 查询申请复核的申请人
+     * @return
+     */
+    @GetMapping(value = "/toReview")
+    @ResponseBody
+    public Result toReview(ScoreRecord scoreRecord,@RequestParam(value = "isDone", required = false) String isDone,
+                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize){
+
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        // 查询申请时间不为空，申请审核理由不为空
+        Condition condition = new Condition(ScoreRecord.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        BatchConf batchConf = new BatchConf();
+        batchConf.setStatus(1);
+        List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+        if (list.size() > 0) {
+            criteria.andEqualTo("batchId",list.get(0).getId());
+        }
+        criteria.andIsNotNull("toreviewtime"); // 申请复核时间不为空
+        if (scoreRecord.getPersonIdNum()!=null && scoreRecord.getPersonIdNum()!=""){
+            criteria.andLike("personIdNum",scoreRecord.getPersonIdNum());
+        }
+        if (scoreRecord.getIndicatorId()!=null && scoreRecord.getIndicatorId()!=0){
+            criteria.andEqualTo("indicatorId",scoreRecord.getIndicatorId());
+        }
+        if (isDone!=null && isDone!="" && isDone.equals("0")){
+            criteria.andIsNull("idreviewend");
+        }
+        if (isDone!=null && isDone!="" && isDone.equals("1")){
+            criteria.andEqualTo("idreviewend",isDone);
+        }
+        criteria.andIn("opRoleId",roles);
+        condition.orderBy("toreviewtime");
+        condition.orderBy("personIdNum");
+
+
+        PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectByFilterAndPage(condition, pageNum, pageSize);
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+
+    /**
+     * 2020年5月25日
+     * @param id
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/clickHandle")
+    public Result rensheBackFinish2(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        ScoreRecord scoreRecord = iScoreRecordService.findById(id);
+        scoreRecord.setIdreviewend(1);
+        iScoreRecordService.update(scoreRecord);
+
+        /*
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(scoreRecord.getPersonId());
+        personBatchStatusRecord.setBatchId(scoreRecord.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(scoreRecord.getPersonIdNum());
+        personBatchStatusRecord.setStatusTypeDesc("窗口点击开始复核");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"点击");
+        personBatchStatusRecord.setStatusReason("窗口点击开始复核");
+        personBatchStatusRecord.setStatusInt(1240);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+        return ResponseUtil.success();
+    }
+
     /*审核打分*/
     @GetMapping("/detailAll")
     public Result detailAll(@RequestParam Integer identityInfoId, @RequestParam Integer indicatorId,

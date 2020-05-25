@@ -58,6 +58,17 @@ public class StatExportController {
         if (StringUtils.isNotEmpty(idNumber)) {
             argMap.put("idNumber", idNumber);
         }
+        /**
+         * 2020年5月13日
+         * 数据导出，分市区、滨海新区
+         */
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if((int)securityUser.getUserType()==0){
+            argMap.put("acceptAddressId", 1);
+        }else if((int)securityUser.getUserType()==1){
+            argMap.put("acceptAddressId", 2);
+        }
+
         PageInfo<Map> pageInfo = iIdentityInfoService.selectExportList1ByPage(argMap, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -76,6 +87,15 @@ public class StatExportController {
         Map argMap = new HashMap();
         argMap.put("preApprove", preApprove);
         argMap.put("userType", securityUser.getUserType());
+        /**
+         * 2020年5月13日
+         * 数据导出，分市区、滨海新区
+         */
+        if((int)securityUser.getUserType()==0){
+            argMap.put("acceptAddressId", 1);
+        }else if((int)securityUser.getUserType()==1){
+            argMap.put("acceptAddressId", 2);
+        }
         PageInfo<Map> pageInfo = iIdentityInfoService.selectExportList5ByPage(argMap, pageNum, pageSize);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (int i=0;i<pageInfo.getList().size();i++){
@@ -93,6 +113,16 @@ public class StatExportController {
         argMap.put("batchId", batchId);
         if (StringUtils.isNotEmpty(idNumber)) {
             argMap.put("idNumber", idNumber);
+        }
+        /**
+         * 2020年5月13日
+         * 数据导出，分市区、滨海新区
+         */
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if((int)securityUser.getUserType()==0){
+            argMap.put("acceptAddressId", 1);
+        }else if((int)securityUser.getUserType()==1){
+            argMap.put("acceptAddressId", 2);
         }
         List<Map> allList = iIdentityInfoService.selectExportList1(argMap);
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
@@ -117,6 +147,16 @@ public class StatExportController {
         if (StringUtils.isNotEmpty(idNumber)) {
             argMap.put("idNumber", idNumber);
         }
+        /**
+         * 2020年5月13日
+         * 数据导出，分市区、滨海新区
+         */
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if((int)securityUser.getUserType()==0){
+            argMap.put("acceptAddressId", 1);
+        }else if((int)securityUser.getUserType()==1){
+            argMap.put("acceptAddressId", 2);
+        }
         PageInfo<Map> pageInfo = iIdentityInfoService.selectExportList2ByPage(argMap, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
@@ -130,6 +170,16 @@ public class StatExportController {
         argMap.put("batchId", batchId);
         if (StringUtils.isNotEmpty(idNumber)) {
             argMap.put("idNumber", idNumber);
+        }
+        /**
+         * 2020年5月13日
+         * 数据导出，分市区、滨海新区
+         */
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if((int)securityUser.getUserType()==0){
+            argMap.put("acceptAddressId", 1);
+        }else if((int)securityUser.getUserType()==1){
+            argMap.put("acceptAddressId", 2);
         }
         List<Map> allList = iIdentityInfoService.selectExportList2(argMap);
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
@@ -177,6 +227,16 @@ public class StatExportController {
         }
         if (acceptAddressId != null) {
             argMap.put("acceptAddressId", acceptAddressId);
+        }
+        /**
+         * 2020年5月13日
+         * 数据导出，分市区、滨海新区
+         */
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if((int)securityUser.getUserType()==0){
+            argMap.put("acceptAddressId", 1);
+        }else if((int)securityUser.getUserType()==1){
+            argMap.put("acceptAddressId", 2);
         }
         String[] titles = new String[]{"区县名称", "部门名称", "申报批次名称", "身份证号", "姓名", "单位名称", "评分指标名称", "得分值", "状态", "受理人",
                 "受理时间", "送达人", "送达时间", "打分人", "打分时间"};
@@ -265,6 +325,16 @@ public class StatExportController {
         }
         if (acceptAddressId != null) {
             argMap.put("acceptAddressId", acceptAddressId);
+        }
+        /**
+         * 2020年5月13日
+         * 数据导出，分市区、滨海新区
+         */
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if((int)securityUser.getUserType()==0){
+            argMap.put("acceptAddressId", 1);
+        }else if((int)securityUser.getUserType()==1){
+            argMap.put("acceptAddressId", 2);
         }
         List<Map> allList = iIdentityInfoService.selectExportList3(argMap);
         for (Map map : allList) {
@@ -1637,9 +1707,9 @@ public class StatExportController {
         Map argMap = new HashMap();
         argMap.put("status",4);
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
-        if (securityUser.getUserType() == 0) {
+        if ((int)securityUser.getUserType() == 0) {
             argMap.put("acceptAddressId",1);
-        } else if (securityUser.getUserType() == 1) {
+        } else if ((int)securityUser.getUserType() == 1) {
             argMap.put("acceptAddressId",2);
         }
         if (StringUtils.isNotEmpty(scoreRecord.getPersonIdNum())) {
