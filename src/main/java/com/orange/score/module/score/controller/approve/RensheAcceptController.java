@@ -323,11 +323,11 @@ public class RensheAcceptController {
         PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
         personBatchStatusRecord.setPersonId(identityInfo.getId());
         personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
-        personBatchStatusRecord.setPersonIdNumber(identityInfo.getName());
-        personBatchStatusRecord.setStatusTypeDesc("窗口点击开始复核-取消资格");
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusTypeDesc("窗口点击开始复核取消资格的申请人");
         personBatchStatusRecord.setStatusTime(new Date());
         personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"点击");
-        personBatchStatusRecord.setStatusReason("窗口点击开始复核-取消资格");
+        personBatchStatusRecord.setStatusReason("窗口点击开始复核取消资格的申请人");
         personBatchStatusRecord.setStatusInt(1241);
         iPersonBatchStatusRecordService.save(personBatchStatusRecord);
         return ResponseUtil.success();
