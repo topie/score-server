@@ -366,7 +366,7 @@ public class IdentityInfo {
     private String rightProperty;// 持有
 
     @Column(name = "istoreview")
-    private Integer istoreview;//"申请人是否申请复核过；1：是；2：否
+    private Integer istoreview;//"申请人是否申请复核过；1：是；2：受理审核
 
     @Column(name = "toreviewtime")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

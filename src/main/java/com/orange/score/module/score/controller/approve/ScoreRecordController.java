@@ -372,10 +372,10 @@ public class ScoreRecordController {
         personBatchStatusRecord.setPersonId(scoreRecord.getPersonId());
         personBatchStatusRecord.setBatchId(scoreRecord.getBatchId());
         personBatchStatusRecord.setPersonIdNumber(scoreRecord.getPersonIdNum());
-        personBatchStatusRecord.setStatusTypeDesc("窗口点击开始复核");
+        personBatchStatusRecord.setStatusTypeDesc("窗口点击开始复核打分指标项");
         personBatchStatusRecord.setStatusTime(new Date());
         personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"点击");
-        personBatchStatusRecord.setStatusReason("窗口点击开始复核");
+        personBatchStatusRecord.setStatusReason("窗口点击开始复核打分指标项");
         personBatchStatusRecord.setStatusInt(1240);
         iPersonBatchStatusRecordService.save(personBatchStatusRecord);
         return ResponseUtil.success();

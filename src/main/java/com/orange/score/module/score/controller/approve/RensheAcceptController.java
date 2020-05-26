@@ -262,6 +262,77 @@ public class RensheAcceptController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
+    /**
+     * 2020年5月26日
+     * 取消资格的申请人积分查询后，发现自己被取消资格了，就申请复核
+     * @return
+     */
+    @GetMapping(value = "/toReview")
+    @ResponseBody
+    public Result toReview(IdentityInfo identityInfo,
+                           @RequestParam(value = "dateSearch", required = false, defaultValue = "0") Integer dateSearch,
+                           @RequestParam(value = "isDone", required = false) String isDone,
+                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                           @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize){
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        if (isDone!=null && isDone!="" && Integer.parseInt(isDone)==1){
+            identityInfo.setIstoreview(1); // 未处理
+        }
+        if (isDone!=null && isDone!="" && Integer.parseInt(isDone)==2){
+            identityInfo.setIstoreview(2); // 窗口受理申请人的复核
+        }
+        if (isDone!=null && isDone!="" && Integer.parseInt(isDone)==12){
+            identityInfo.setIstoreview(null); // 窗口受理申请人的复核
+        }
+        if (securityUser.getUserType() == 0) {
+            identityInfo.setAcceptAddressId(1);
+        } else if (securityUser.getUserType() == 1) {
+            identityInfo.setAcceptAddressId(2);
+        }
+        if (identityInfo.getBatchId() == null) {
+            BatchConf batchConf = new BatchConf();
+            batchConf.setStatus(1);
+            List<BatchConf> list = iBatchConfService.selectByFilter(batchConf);
+            if (list.size() > 0) {
+                identityInfo.setBatchId(list.get(0).getId());
+            }
+        }
+        PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
+
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+    /**
+     * 2020年5月25日
+     * @param id
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/clickHandle")
+    public Result clickHandle(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        identityInfo.setIstoreview(2); // 申请复核完毕
+        iIdentityInfoService.update(identityInfo);
+
+        /*
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getName());
+        personBatchStatusRecord.setStatusTypeDesc("窗口点击开始复核-取消资格");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"点击");
+        personBatchStatusRecord.setStatusReason("窗口点击开始复核-取消资格");
+        personBatchStatusRecord.setStatusInt(1241);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+        return ResponseUtil.success();
+    }
+
     /*
     人社受理审核-待审核-通过 “按钮”
      */

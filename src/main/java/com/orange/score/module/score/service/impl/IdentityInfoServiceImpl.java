@@ -103,6 +103,12 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             if (identityInfo.getReservationStatus() != null){
                 criteria.andEqualTo("reservationStatus",identityInfo.getReservationStatus());
             }
+            if (identityInfo.getIstoreview()!=null){
+                criteria.andEqualTo("istoreview",identityInfo.getIstoreview());
+            }
+            if (identityInfo.getIstoreview()==null){
+                criteria.andLessThan("istoreview",3); // 审核中 加 受理复核
+            }
             /*
             2018年10月15日，增加一个锁定人的搜索条件
              */
