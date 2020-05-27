@@ -430,7 +430,7 @@ public class MaterialReceiveIdentityInfoController {
         /*
         2020年5月27日，优化一个逻辑，触发时间为2020年7月30
          */
-        Date date0 = DateUtil.StringToDate("2010-07-30","yyyy-MM-dd");
+        Date date0 = DateUtil.StringToDate("2020-07-3","yyyy-MM-dd");
         if (System.currentTimeMillis()>date0.getTime()){
             argMap.put("opRoleId", roles);
         }
