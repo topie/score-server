@@ -143,6 +143,9 @@
             <if test="item.personName!=null">
                 and t1.name=#{item.personName}
             </if>
+            <if test="item.acceptAddressId!=null">
+                and t1.ACCEPT_ADDRESS_ID=#{item.acceptAddressId}
+            </if>
         </where>
     </select>
 

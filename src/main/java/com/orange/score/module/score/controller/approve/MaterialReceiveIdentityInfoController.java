@@ -911,6 +911,20 @@ public class MaterialReceiveIdentityInfoController {
                     identityInfo.setOpuser6RoleSet(new HashSet<>(userService.findUserDepartmentRoleByUserId(securityUser.getId())));
                 }
                 iIdentityInfoService.update(identityInfo);
+
+                Integer userId = SecurityUtil.getCurrentUserId();
+                List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+                Condition condition = new Condition(ScoreRecord.class);
+                tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+                criteria.andIn("opRoleId", roles);
+                criteria.andEqualTo("personId", identityInfo.getId());
+                List<ScoreRecord> minzhenList = iScoreRecordService.findByCondition(condition);
+                for(ScoreRecord scoreRecord : minzhenList){
+                    scoreRecord.setStatus(5); // 材料待补正
+                    iScoreRecordService.update(scoreRecord);
+                }
+
+
                 iPersonBatchStatusRecordService
                         .insertStatus2(identityInfo.getBatchId(), identityInfo.getId(), "materialStatus", 4,str+"-"+securityUser.getDisplayName(), supplyArr);
             } else {
