@@ -427,7 +427,13 @@ public class MaterialReceiveIdentityInfoController {
         }
         Map argMap = new HashMap();
         argMap.put("status", Collections.singletonList(2));
-        argMap.put("opRoleId", roles);
+        /*
+        2020年5月27日，优化一个逻辑，触发时间为2020年7月30
+         */
+        Date date0 = DateUtil.StringToDate("2010-07-30","yyyy-MM-dd");
+        if (System.currentTimeMillis()>date0.getTime()){
+            argMap.put("opRoleId", roles);
+        }
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser.getUserType() == 0) {
             argMap.put("acceptAddressId", 1);
