@@ -283,7 +283,7 @@ public class RensheAcceptController {
             identityInfo.setIstoreview(2); // 窗口受理申请人的复核
         }
         if (isDone!=null && isDone!="" && Integer.parseInt(isDone)==12){
-            identityInfo.setIstoreview(null); // 窗口受理申请人的复核
+            identityInfo.setIstoreview(12); // 窗口受理申请人的复核
         }
         if (securityUser.getUserType() == 0) {
             identityInfo.setAcceptAddressId(1);
