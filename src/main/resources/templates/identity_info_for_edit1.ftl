@@ -332,6 +332,9 @@
                                 <td>
                                     <select data-name="relation.isRemove" data-id="${ritem.id?c}"
                                             class="edit"">
+                                    <option value="" <#if ritem.isRemove == null>selected</#if> >
+
+                                    </option>
                                     <option value="1" <#if ritem.isRemove == 1>selected</#if> >
                                         是
                                     </option>
