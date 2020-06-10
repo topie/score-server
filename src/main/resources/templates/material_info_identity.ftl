@@ -569,10 +569,14 @@
                                     <#else>
                                         <tr>
                                             <td style="width:100px;height:100px" class="text-center">
-                                                <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
-                                                     style="cursor: pointer;border: 1px solid gray;"
-                                                     width="100" height="100"
-                                                     src="${item.onlinePersonMaterial.materialUri}">
+                                                <#if item.onlinePersonMaterial.materialUri!=null>
+                                                    <img class="p-img" id="img_${item.onlinePersonMaterial.id?c}"
+                                                         style="cursor: pointer;border: 1px solid gray;"
+                                                         width="100" height="100"
+                                                         src="${item.onlinePersonMaterial.materialUri}">
+                                                <#else>
+                                                    未上传
+                                                </#if>
                                             </td>
                                             <td>${item.onlinePersonMaterial.materialInfoName}
                                                 <br>
