@@ -351,7 +351,7 @@
                                 </tr>
                             <#list materialInfos as item>
                                 <#if item.onlinePersonMaterial??>
-                                    <#if item.onlinePersonMaterial.materialUri=="">
+                                    <#if item.onlinePersonMaterial.materialInfoId=="">
                                         <tr>
                                             <td class="text-center">
                                                 未上传
