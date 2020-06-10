@@ -280,6 +280,13 @@
                                     <td colspan="6">邮寄地址：<strong>${move.witnessAddress}</strong></td>
                                 </tr>
                                 <tr>
+                                    <td colspan="6">犯罪日期：<strong>${other.penaltyDate}</strong></td>
+                                    <td colspan="6">处罚结果：<strong>${other.penaltyResults}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">犯罪内容：<strong>${other.penaltyContent}</strong></td>
+                                </tr>
+                                <tr>
                                     <td colspan="6">实际用工单位名称：<strong>${other.companyName}</strong></td>
                                     <td colspan="6">实际用工单位电话：<strong>${other.companyPhone}</strong></td>
                                 </tr>
