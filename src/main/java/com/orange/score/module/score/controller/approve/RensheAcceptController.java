@@ -559,7 +559,7 @@ public class RensheAcceptController {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
-
+        identityInfo.setRensheAcceptStatusBak(identityInfo.getRensheAcceptStatus()); // 保存退回时的状态
         identityInfo.setRensheAcceptStatus(5);// 退回至待审核中
         iIdentityInfoService.update(identityInfo);
 
@@ -663,6 +663,31 @@ public class RensheAcceptController {
         personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"修改成功");
         personBatchStatusRecord.setStatusReason("人社受理审核退回至未审核-结束");
         personBatchStatusRecord.setStatusInt(124);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+        return ResponseUtil.success();
+    }
+
+    @PostMapping("/rensheBackFinish3")
+    public Result rensheBackFinish3(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        identityInfo.setRensheAcceptStatus(identityInfo.getRensheAcceptStatusBak());
+        iIdentityInfoService.update(identityInfo);
+
+
+        /*
+        留痕记录
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusTypeDesc("驳回");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"驳回成功");
+        personBatchStatusRecord.setStatusReason("驳回");
+        personBatchStatusRecord.setStatusInt(1250);
         iPersonBatchStatusRecordService.save(personBatchStatusRecord);
         return ResponseUtil.success();
     }

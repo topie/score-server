@@ -243,6 +243,9 @@ public class IdentityInfo {
     @Column(name = "renshe_accept_status")
     private Integer rensheAcceptStatus;
 
+    @Column(name = "renshe_accept_status_bak")
+    private Integer rensheAcceptStatusBak;
+
     @Column(name = "cancel_status")
     private Integer cancelStatus;
 
@@ -1107,5 +1110,13 @@ public class IdentityInfo {
 
     public void setPreApprove(Date preApprove) {
         this.preApprove = preApprove;
+    }
+
+    public Integer getRensheAcceptStatusBak() {
+        return rensheAcceptStatusBak;
+    }
+
+    public void setRensheAcceptStatusBak(Integer rensheAcceptStatusBak) {
+        this.rensheAcceptStatusBak = rensheAcceptStatusBak;
     }
 }
