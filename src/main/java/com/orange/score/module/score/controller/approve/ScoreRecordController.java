@@ -323,7 +323,7 @@ public class ScoreRecordController {
         if (list.size() > 0) {
             criteria.andEqualTo("batchId",list.get(0).getId());
         }
-        criteria.andIsNotNull("toreviewtime"); // 申请复核时间不为空
+        criteria.andIsNotNull("toreviewreason"); // 申请复核时间不为空
         if (scoreRecord.getPersonIdNum()!=null && scoreRecord.getPersonIdNum()!=""){
             criteria.andLike("personIdNum",scoreRecord.getPersonIdNum());
         }
