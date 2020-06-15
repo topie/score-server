@@ -22,4 +22,6 @@ public interface ScoreRecordMapper extends Mapper<ScoreRecord> {
     List<ScoreRecord> provideDataToPolice(@Param("item") Map argMap);
 
     List<Map> exportScored(@Param("item") Map argMap);
+
+    List<Map> exportReview(@Param("item") Map argMap,@Param("roles") List<Integer> roles);
 }

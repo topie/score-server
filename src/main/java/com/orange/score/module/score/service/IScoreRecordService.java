@@ -49,4 +49,6 @@ public interface IScoreRecordService extends IService<ScoreRecord> {
 
     List<Map> exportScored(Map argMap);
 
+    List<Map> exportReview(Map argMap,List<Integer> roles);
+
 }

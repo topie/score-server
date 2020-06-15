@@ -291,4 +291,28 @@
                 and to_char(score_date, 'yyyy-MM-dd') = #{item.scoreDate}
             </if>
     </select>
+
+    <select id="exportReview" resultType="java.util.Map">
+        select ACCEPT_NUMBER,
+        INDICATOR_NAME,
+        PERSON_NAME,
+        PERSON_ID_NUM,
+        PERSON_MOBILE_PHONE,
+        COMPANY_NAME,
+        OP_ROLE,
+        OP_USER,
+        TOREVIEWTIME,
+        TOREVIEWREASON,
+        IDREVIEWEND
+        from t_pb_score_record
+        where batch_id in (select ID from t_batch_conf where status = 1)
+        and op_role_id in
+            <foreach item="item" collection="roles" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        <if test="item.acceptAddressId!=null">
+            and ACCEPT_ADDRESS_ID=#{item.acceptAddressId}
+        </if>
+        and TOREVIEWREASON is not null
+    </select>
 </mapper>

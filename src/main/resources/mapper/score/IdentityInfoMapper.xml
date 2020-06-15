@@ -382,4 +382,20 @@
         order by t2.score_value desc
     </select>
 
+    <select id="exportDisqualified" resultType="java.util.Map">
+        select ACCEPT_NUMBER,
+            name,
+            id_number,
+            CANCELREASON,
+            TOREVIEWTIME,
+            ISTOREVIEW
+        from t_identity_info
+        where batch_id = 1040
+              and TOREVIEWTIME is not null
+              and ISTOREVIEW in (1, 2)
+            <if test="item.acceptAddressId!=null">
+                and i.accept_address_id = #{item.acceptAddressId}
+            </if>
+    </select>
+
 </mapper>

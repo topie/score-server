@@ -269,6 +269,11 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
     }
 
     @Override
+    public List<Map> exportDisqualified(Map argMap) {
+        return identityInfoMapper.exportDisqualified(argMap);
+    }
+
+    @Override
     public List<IdentityInfo> selectByFilter2(IdentityInfo identityInfo) {
 //        identityInfoMapper.selectByFilter2();
         Condition condition = new Condition(IdentityInfo.class);

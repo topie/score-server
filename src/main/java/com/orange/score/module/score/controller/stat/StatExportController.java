@@ -21,9 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Condition;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1736,6 +1738,69 @@ public class StatExportController {
                 new String[]{"ID", "指标名称","申请人","申请人身份证", "企业名称","受理日期","送达日期","打分日期","打分部门","办理进度","分数"},
                 new String[]{"ID", "INDICATOR_NAME", "PERSON_NAME", "PERSON_ID_NUM", "COMPANY_NAME", "ACCEPT_DATE", "SUBMIT_DATE", "SCORE_DATE", "OP_ROLE", "STATUS","SCORE_VALUE"});
         ExcelFileUtil.download(response, savePath, "已打分.xlsx");
+
+    }
+
+
+    /*
+    2020年6月15日
+    不见面复核--申请人分数导出
+     */
+    @GetMapping(value = "/exportReview")
+    @ResponseBody
+    public void exportReview(HttpServletRequest request, HttpServletResponse response)  throws Exception {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+
+
+        Map argMap = new HashMap();
+        if (user.getUserType() == 0) {
+            argMap.put("acceptAddressId",1);
+        } else if (user.getUserType() == 1) {
+            argMap.put("acceptAddressId",2);
+        }
+
+        List<Map> allList = iScoreRecordService.exportReview(argMap, roles);
+
+        String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
+                .currentTimeMillis() + ".xlsx";
+        ExcelFileUtil.exportXlsx(savePath, allList,
+                new String[]{"受理编号", "指标名称",              "申请人",       "申请人身份证", "企业名称",       "手机号",              "部门",      "审核人",   "申请时间","办理进度 1：已处理","申请人的复核原因"},
+                new String[]{"ACCEPT_NUMBER", "INDICATOR_NAME", "PERSON_NAME", "PERSON_ID_NUM", "COMPANY_NAME", "PERSON_MOBILE_PHONE", "OP_ROLE", "OP_USER", "TOREVIEWTIME", "IDREVIEWEND","TOREVIEWREASON"});
+        ExcelFileUtil.download(response, savePath, "申请复核-分数复核.xlsx");
+
+    }
+
+
+    /*
+    2020年6月15日
+    不见面复核--取消资格导出
+     */
+    @GetMapping(value = "/exportDisqualified")
+    @ResponseBody
+    public void exportDisqualified(HttpServletRequest request, HttpServletResponse response)  throws Exception {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        if (userId == null) throw new AuthBusinessException("用户未登录");
+        SecurityUser user = SecurityUtil.getCurrentSecurityUser();
+        List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+
+
+        Map argMap = new HashMap();
+        if (user.getUserType() == 0) {
+            argMap.put("acceptAddressId",1);
+        } else if (user.getUserType() == 1) {
+            argMap.put("acceptAddressId",2);
+        }
+
+        List<Map> allList = iIdentityInfoService.exportDisqualified(argMap);
+        String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
+                .currentTimeMillis() + ".xlsx";
+        ExcelFileUtil.exportXlsx(savePath, allList,
+                new String[]{"受理编号",       "申请人姓名","申请人身份证", "申请理由",      "申请日期",     "是否符合完毕 1：开始；2：完毕"},
+                new String[]{"ACCEPT_NUMBER", "NAME",       "ID_NUMBER",   "CANCELREASON", "TOREVIEWTIME", "ISTOREVIEW"});
+        ExcelFileUtil.download(response, savePath, "取消资格名单.xlsx");
 
     }
 

@@ -30,4 +30,6 @@ public interface IdentityInfoMapper extends Mapper<IdentityInfo> {
     List<Map> selectIdentityInfoRecipientList(@Param("item") Map argMap);
 
     List<Map> selectIdentityInfoRecipientList2(@Param("item") Map argMap);
+
+    List<Map> exportDisqualified(@Param("item") Map argMap);
 }

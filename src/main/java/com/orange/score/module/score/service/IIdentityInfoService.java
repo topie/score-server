@@ -53,4 +53,6 @@ public interface IIdentityInfoService extends IService<IdentityInfo> {
     List<Map> selectIdentityInfoRecipientList(Map argMap);
 
     List<Map> selectIdentityInfoRecipientList2(Map argMap);
+
+    List<Map> exportDisqualified(Map argMap);
 }
