@@ -220,26 +220,35 @@
         (
         /*select t.PERSON_NAME, t.OP_ROLE,t.person_id_num,t.score_value as score from t_pb_score_record t where
         t.indicator_id!=3 and t.indicator_id!=14 2020年2月19日 替换sql 语句*/
-        select min(t.PERSON_NAME) PERSON_NAME, min(t.OP_ROLE) OP_ROLE,min(t.person_id_num) person_id_num,sum(t.score_value)  score from t_pb_score_record t where t.indicator_id!=3 and t.indicator_id!=14 and batch_id = #{batch_id}  group by t.indicator_id
-        <if test="item.id!=null">
-            and batch_id = #{item.id}
-        </if>
+        /* 2020年6月19日 */
+        select t.PERSON_NAME, t.OP_ROLE, t.person_id_num, t.score_value as score  from t_pb_score_record t where t.indicator_id not in (3,14,1003,1022, 1025, 1030, 1021, 1031)
+            <if test="item.id!=null">
+                and batch_id = #{item.id}
+            </if>
         union all
-        select max(t.PERSON_NAME) PERSON_NAME, max(t.OP_ROLE) OP_ROLE, t.person_id_num, max(t.score_value) as score from
-        t_pb_score_record t where t.indicator_id=3
-        /*and t.batch_id = 1011*/
-        <if test="item.id!=null">
-            and t.batch_id = #{item.id}
-        </if>
-        group by t.person_id_num
+        select max(t.PERSON_NAME) PERSON_NAME, max(t.OP_ROLE) OP_ROLE, t.person_id_num, max(t.score_value) as score from  t_pb_score_record t where t.indicator_id=3
+            <if test="item.id!=null">
+                and t.batch_id = #{item.id}
+            </if>
+            group by t.person_id_num
         union all
-        select max(t.PERSON_NAME) PERSON_NAME, max(t.OP_ROLE) OP_ROLE, t.person_id_num,
-        decode(sum(t.score_value),20,10,0) as score from t_pb_score_record t where t.indicator_id=14
-        /*and t.batch_id = 1011 */
-        <if test="item.id!=null">
-            and t.batch_id = #{item.id}
-        </if>
-        group by t.person_id_num
+        select max(t.PERSON_NAME) PERSON_NAME, max(t.OP_ROLE) OP_ROLE, t.person_id_num,decode(sum(t.score_value),40,20,0) as score from t_pb_score_record t where t.indicator_id=14
+            <if test="item.id!=null">
+                and t.batch_id = #{item.id}
+            </if>
+            group by t.person_id_num
+        union all
+        select t1.PERSON_NAME, t1.OP_ROLE, t1.person_id_num, t1.score_value as score        from t_pb_score_record t1, t_identity_info t2
+        where  t1.INDICATOR_id in ('1022')        and t1.person_id = t2.id    and t2.is201826doc = 1
+            <if test="item.id!=null">
+                and t1.batch_id = #{item.id}
+            </if>
+        union all
+        select  min(person_name) person_name,min(op_role) op_role,min(PERSON_ID_NUM) person_id_num,sum(score_value) score from t_pb_score_record  where INDICATOR_id in ('1025', '1030', '1021', '1031')
+            <if test="item.id!=null">
+                and t.batch_id = #{item.id}
+            </if>
+            group by person_id_num
         ) a
         group by a.person_id_num
         ) t2
