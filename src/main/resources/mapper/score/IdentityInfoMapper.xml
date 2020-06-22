@@ -142,7 +142,35 @@
     </select>
     <select id="selectExportList3" resultType="java.util.Map">
         select
-        r.*,c.batch_name,i.accept_address
+        r.ID	,
+        r.ACCEPT_NUMBER	,
+        r.BATCH_ID	,
+        r.INDICATOR_ID	,
+        r.INDICATOR_NAME	,
+        r.PERSON_ID	,
+        r.PERSON_NAME	,
+        r.PERSON_ID_NUM	,
+        r.PERSON_MOBILE_PHONE	,
+        r.COMPANY_ID	,
+        r.COMPANY_NAME	,
+        r.STATUS	,
+        round(r.SCORE_VALUE,2)	SCORE_VALUE,
+        r.ITEM_ID	,
+        r.ACCEPT_DATE	,
+        r.SUBMIT_DATE	,
+        r.SCORE_DATE	,
+        r.OP_USER_ID	,
+        r.OP_USER	,
+        r.OP_ROLE_ID	,
+        r.OP_ROLE	,
+        r.SCORE_DETAIL	,
+        r.C_TIME	,
+        r.ACCEPT_ADDRESS_ID	,
+        r.ORIGINAL_SCORE_VALUE	,
+        r.ISDEDUCTED	,
+        r.TOREVIEWREASON	,
+        r.TOREVIEWTIME	,
+        r.IDREVIEWEND	,c.batch_name,i.accept_address
         from t_pb_score_record r
         left join t_identity_info i
         on r.person_id = i.id

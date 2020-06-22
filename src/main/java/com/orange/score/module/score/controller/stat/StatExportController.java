@@ -241,10 +241,10 @@ public class StatExportController {
             argMap.put("acceptAddressId", 2);
         }
         String[] titles = new String[]{"区县名称", "部门名称", "申报批次名称", "身份证号", "姓名", "单位名称", "评分指标名称", "得分值", "状态", "受理人",
-                "受理时间", "送达人", "送达时间", "打分人", "打分时间"};
+                "受理时间", "送达人", "送达时间", "打分人", "打分时间","市区1滨海2"};
         String[] fields = new String[]{"ACCEPT_ADDRESS", "OP_ROLE", "BATCH_NAME", "PERSON_ID_NUM", "PERSON_NAME",
                 "COMPANY_NAME", "INDICATOR_NAME", "SCORE_VALUE", "STATUS", "ACCEPT_PERSON", "ACCEPT_DATE", "OP_USER",
-                "SUBMIT_DATE", "OP_USER", "SCORE_DATE"};
+                "SUBMIT_DATE", "OP_USER", "SCORE_DATE","ACCEPT_ADDRESS_ID"};
         List<Map> columns = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
             Map column = new HashMap();
@@ -362,10 +362,10 @@ public class StatExportController {
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
                 new String[]{"区县名称", "部门名称", "申报批次名称", "身份证号", "姓名", "单位名称", "评分指标名称", "得分值", "状态", "受理人", "受理时间",
-                        "送达人", "送达时间", "打分人", "打分时间"},
+                        "送达人", "送达时间", "打分人", "打分时间","市区1滨海2"},
                 new String[]{"ACCEPT_ADDRESS", "OP_ROLE", "BATCH_NAME", "PERSON_ID_NUM", "PERSON_NAME",
                         "COMPANY_NAME", "INDICATOR_NAME", "SCORE_VALUE", "STATUS", "ACCEPT_PERSON", "ACCEPT_DATE",
-                        "OP_USER", "SUBMIT_DATE", "OP_USER", "SCORE_DATE"});
+                        "OP_USER", "SUBMIT_DATE", "OP_USER", "SCORE_DATE","ACCEPT_ADDRESS_ID"});
         ExcelFileUtil.download(response, savePath, "列表3.xlsx");
     }
 
