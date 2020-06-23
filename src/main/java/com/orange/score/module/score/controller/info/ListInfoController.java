@@ -8,20 +8,20 @@ import com.orange.score.common.utils.ResponseUtil;
 import com.orange.score.common.utils.date.DateStyle;
 import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.BatchConf;
+import com.orange.score.database.score.model.ScoreRecord;
 import com.orange.score.database.score.model.ScoreResult;
 import com.orange.score.module.core.service.ICommonQueryService;
 import com.orange.score.module.core.service.IDictService;
 import com.orange.score.module.score.service.IBatchConfService;
+import com.orange.score.module.score.service.IScoreRecordService;
 import com.orange.score.module.score.service.IScoreResultService;
 import com.orange.score.module.score.thread.SendTaskSingleThread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Condition;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -45,6 +45,9 @@ public class ListInfoController {
 
     @Autowired
     private ExecutorService executorService;
+
+    @Autowired
+    private IScoreRecordService iScoreRecordService;
 
     @GetMapping(value = "/batch/list")
     @ResponseBody
@@ -119,6 +122,28 @@ public class ListInfoController {
         if (batchConf == null) return ResponseUtil.error("批次不存在");
         batchConf.setProcess(4);
         iBatchConfService.update(batchConf);
+        /**
+         * 2020年6月23日
+         * 统计汇总分数
+         * 原因：积分修改的越来越恶心，导致以往的名单公示查询时间越来越慢，需要优化
+         */
+        Condition condition = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+        criteria.andEqualTo("status", 1);
+        List<BatchConf> list = iBatchConfService.findByCondition(condition);
+        iScoreResultService.deleteByBatchId(list.get(0).getId());
+        //iScoreResultService.deleteByBatchId(100);
+        List<ScoreRecord> scoreRecords = iScoreRecordService.provideDataToPolice(list.get(0));
+        for (ScoreRecord scoreRecord : scoreRecords){
+            ScoreResult scoreResult = new ScoreResult();
+            scoreResult.setScoreValue(scoreRecord.getScoreValue());
+            scoreResult.setPersonId(scoreRecord.getPersonId());
+            scoreResult.setPersonName(scoreRecord.getPersonName());
+            scoreResult.setPersonIdNum(scoreRecord.getPersonIdNum());
+            scoreResult.setBatchId(list.get(0).getId());
+            scoreResult.setcTime(new Date());
+            iScoreResultService.save(scoreResult);
+        }
         return ResponseUtil.success();
     }
 

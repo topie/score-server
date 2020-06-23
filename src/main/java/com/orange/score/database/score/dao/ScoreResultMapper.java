@@ -12,4 +12,6 @@ public interface ScoreResultMapper extends Mapper<ScoreResult> {
     List<ScoreResult> selectRankByBatchId(@Param("batchId") Integer batchId);
 
     int selectCountByFilter(@Param("item") ScoreRecord scoreRecord);
+
+    void deleteByBatchId(@Param("batchId") Integer batchId);
 }

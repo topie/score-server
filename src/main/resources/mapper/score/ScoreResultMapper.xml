@@ -33,4 +33,8 @@
         and indicator_id=#{item.indicatorId}
         and item_id=#{item.itemId}
     </select>
+
+    <delete id="deleteByBatchId" >
+        delete from t_pb_score_result where batch_id=#{batchId}
+    </delete>
 </mapper>

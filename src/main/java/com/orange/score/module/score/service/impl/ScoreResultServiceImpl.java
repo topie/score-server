@@ -194,6 +194,11 @@ public class ScoreResultServiceImpl extends BaseService<ScoreResult> implements 
     }
 
     @Override
+    public void deleteByBatchId(Integer batchId) {
+        scoreResultMapper.deleteByBatchId(batchId);
+    }
+
+    @Override
     public int selectCountByFilter(ScoreRecord scoreRecord) {
         return scoreResultMapper.selectCountByFilter(scoreRecord);
     }
