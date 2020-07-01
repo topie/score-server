@@ -1404,7 +1404,7 @@ public class IdentityInfoController {
                     GMSFHM = QYR.addElement("GMSFHM");//公民身份号码
                     GMSFHM.addText(h.getIdNumber().replace(" ", ""));
                     XM = QYR.addElement("XM");//姓名
-                    XM.addText(h.getName());
+                    XM.addText(h.getName()==null ? "":h.getName());
                     XBDM = QYR.addElement("XBDM");//性别
                     if (h.getRelationship().equals("子")) {
                         XBDM.addText("1");
@@ -1413,7 +1413,7 @@ public class IdentityInfoController {
                     }
                     CSRQ = QYR.addElement("CSRQ");//出生日期
                     //System.out.println(h.getName() + ":" + h.getIdNumber());
-                    CSRQ.addText(h.getIdNumber().replace(" ", "").substring(6, 14));
+                    CSRQ.addText(h.getIdNumber()==null ||  h.getIdNumber().length()<18? "" : h.getIdNumber().replace(" ", "").substring(6, 14));
                     YHLX = QYR.addElement("YHLX");//原户类型
                     if (list_move.get(0).getHouseNature() == 4 || list_move.get(0).getHouseNature() == 5) {
                         YHLX.addText("20");
@@ -1492,8 +1492,8 @@ public class IdentityInfoController {
      * 提供申请人收件地址的数据，excel格式的数据
      */
 
-    private static String[] headers = new String[]{"身份证号", "姓名", "总分", "性别", "落户地区", "公安编号", "迁入地户口登记机关", "拟落户地区名称", "迁入地详细地址", "收件人", "收件人电话", "收件地址", "经办人1姓名", "经办人1联系电话", "经办人2姓名", "经办人2联系电话", "本人电话", "单位电话"};
-    private static String[] mapHeaders = new String[]{"PERSON_ID_NUM", "PERSON_NAME", "SCORE_VALUE", "SEX", "ACCEPT_ADDRESS", "LUOHU_NUMBER", "REGISTRATION", "AREANAME", "ADDRESS", "WITNESS", "WITNESS_PHONE", "WITNESS_ADDRESS", "OPERATOR", "OPERATOR_MOBILE", "OPERATOR2", "OPERATOR_OBILE2", "SELF_PHONE", "COMPANY_PHONE"};
+    private static String[] headers = new String[]{"身份证号", "姓名", "总分", "性别", "落户地区", "公安编号", "迁入地户口登记机关", "拟落户地区名称", "迁入地详细地址", "收件人", "收件人电话", "收件地址", "经办人1姓名", "经办人1联系电话",  "本人电话", "单位电话"};
+    private static String[] mapHeaders = new String[]{"PERSON_ID_NUM", "PERSON_NAME", "SCORE_VALUE", "SEX", "ACCEPT_ADDRESS", "LUOHU_NUMBER", "REGISTRATION", "AREANAME", "ADDRESS", "WITNESS", "WITNESS_PHONE", "WITNESS_ADDRESS", "OPERATOR", "OPERATOR_MOBILE",   "SELF_PHONE", "COMPANY_PHONE"};
 
     @RequestMapping("/identityInfoRecipient")
     @ResponseBody

@@ -313,30 +313,7 @@
         th.self_phone,
         th.company_phone
         from t_identity_info t1,
-        (select a.person_id_num,
-        max(a.person_name)             person_name,
-        round(nvl(sum(a.SCORE), 0), 2) score_value
-        from (
-                 select min(t.PERSON_NAME) PERSON_NAME, min(t.OP_ROLE) OP_ROLE,min(t.person_id_num) person_id_num,sum(t.score_value)  score from t_pb_score_record t where t.indicator_id!=3 and t.indicator_id!=14 and batch_id = #{batch_id}  group by t.indicator_id
-        union all
-        select max(t.PERSON_NAME)    PERSON_NAME,
-        max(t.OP_ROLE)        OP_ROLE,
-        t.person_id_num,
-        max(t.score_value) as score
-        from t_pb_score_record t
-        where t.indicator_id = 3
-        and t.batch_id = #{item.batchId}
-        group by t.person_id_num
-        union all
-        select max(t.PERSON_NAME)                       PERSON_NAME,
-        max(t.OP_ROLE)                           OP_ROLE,
-        t.person_id_num,
-        decode(sum(t.score_value), 20, 10, 0) as score
-        from t_pb_score_record t
-        where t.indicator_id = 14
-        and t.batch_id = #{item.batchId}
-        group by t.person_id_num) a
-        group by a.person_id_num) t2,
+        ( select PERSON_NAME,PERSON_ID_NUM,SCORE_VALUE from t_pb_score_result where batch_id=#{item.batchId} ) t2,
         t_house_move tm,
         t_office tof,
         t_region tr,
@@ -351,8 +328,6 @@
         and tm.region = tr.id
         and t1.company_id = tp.id
         and t1.id = th.identity_info_id
-        and t2.score_value &gt;
-        = #{item.scoreValue}
         order by t2.score_value desc
     </select>
 
@@ -382,29 +357,7 @@
             end 资格取消状态,
             t1.RENSHE_ACCEPT_STATUS
         from t_identity_info t1,
-            (select a.person_id_num,
-                 max(a.person_name) person_name,
-                 round(nvl(sum(a.SCORE), 0), 2) score_value
-             from (select min(t.PERSON_NAME) PERSON_NAME, min(t.OP_ROLE) OP_ROLE,min(t.person_id_num) person_id_num,sum(t.score_value)  score from t_pb_score_record t where t.indicator_id!=3 and t.indicator_id!=14 and batch_id = #{batch_id}  group by t.indicator_id
-                   union all
-                   select max(t.PERSON_NAME) PERSON_NAME,
-                          max(t.OP_ROLE) OP_ROLE,
-                       t.person_id_num,
-                          max(t.score_value) as score
-                   from t_pb_score_record t
-                   where t.indicator_id = 3
-                         and batch_id = #{item.batchId}
-                   group by t.person_id_num
-                   union all
-                   select max(t.PERSON_NAME) PERSON_NAME,
-                          max(t.OP_ROLE) OP_ROLE,
-                       t.person_id_num,
-                          decode(sum(t.score_value), 20, 10, 0) as score
-                   from t_pb_score_record t
-                   where t.indicator_id = 14
-                         and batch_id = #{item.batchId}
-                   group by t.person_id_num) a
-             group by a.person_id_num) t2
+            ( select PERSON_NAME,PERSON_ID_NUM,SCORE_VALUE from t_pb_score_result where batch_id=#{item.batchId} ) t2
         where upper(t1.id_number) = upper(t2.person_id_num)
               and t1.batch_id = #{item.batchId}
         order by t2.score_value desc
