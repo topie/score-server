@@ -1325,7 +1325,7 @@ public class IdentityInfoController {
             Element QCD_SSXQDM = RECORD.addElement("QCD_SSXQDM");//迁出地 省市县（区）
             QCD_SSXQDM.addText((list_region.get(0).getPolice_code()==null)?"":list_region.get(0).getPolice_code().toString());
             Element QCD_QHNXXDZ = RECORD.addElement("QCD_QHNXXDZ");//迁出地 区划内详细地址
-            QCD_QHNXXDZ.addText(list_move.get(0).getMoveAddress());
+            QCD_QHNXXDZ.addText(list_move.get(0).getCurrentRegisteredAddress());
             Element QCD_HKDJJG_GAJGJGDM = RECORD.addElement("QCD_HKDJJG_GAJGJGDM");//迁出地 户口登记机关 公安机关机构代码
             QCD_HKDJJG_GAJGJGDM.addText("");
             Element QCD_HKDJJG_GAJGMC = RECORD.addElement("QCD_HKDJJG_GAJGMC");//迁出地 户口登记机关 公安机关名称
