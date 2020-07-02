@@ -1252,7 +1252,7 @@ public class IdentityInfoController {
          */
         Element DATA = PACKAGE.addElement("DATA");
         for (int i = 0; i < scoreRecords.size(); i++) {
-            System.out.println("到第几个了："+i);
+            System.out.println("到第几个了："+i+" 姓名与身份证号："+scoreRecords.get(i).getPersonName()+"-"+scoreRecords.get(i).getPersonIdNum());
             /*
             1、获取申请人的信息
             a、申请人的信息；
