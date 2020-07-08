@@ -1204,7 +1204,7 @@ public class MaterialReceiveIdentityInfoController {
             String strAdd = region.getName()+region2.getName()+region3.getName()+houseMove.getCurrentRegisteredAddress();
 
             stringMap.put(43, strAdd);
-            stringMap.put(49, houseMove.getMoveNowAddress());
+            stringMap.put(49, houseMove.getWitnessAddress());
             stringMap.put(54, "配偶情况");
             stringMap.put(55, houseRelationshipSpouse.getName());
             stringMap.put(56, houseRelationshipSpouse.getFormerName());
@@ -1312,7 +1312,7 @@ public class MaterialReceiveIdentityInfoController {
             }
             stringMap.put(startIndex, "本人及配偶承诺目前" + identityInfo.getStringPregnantPromise() + " " + pregnantWeek + "周");
             startIndex += 5;
-            stringMap.put(startIndex, "本人及配偶承诺目前未政策外生育（或收养）第三个及以上子女，未处于政策外怀孕第三个及以上子女：" + identityInfo.getStringThirdPregnantPromise() );
+            stringMap.put(startIndex, identityInfo.getStringThirdPregnantPromise()+ "政策外生育（或收养）第三个及以上子女，"+identityInfo.getStringContractOrCertificate()+"政策外怀孕第三个及以上子女："  );
             int stringIndex = 0;
             XSSFFont font = workBook.createFont();
             font.setFontName("宋体");

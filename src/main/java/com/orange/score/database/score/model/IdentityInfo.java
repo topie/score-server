@@ -132,6 +132,9 @@ public class IdentityInfo {
     @Column(name = "thirdPregnantPromise")
     private Integer thirdPregnantPromise;//本人或配偶1.承诺 2.不承诺目前未处于政策外第三个及以上子女怀孕期间
 
+    @Column(name = "contractOrCertificate")
+    private Integer contractOrCertificate;
+
     @Column(name = "rentHouseAddress")
     private String rentHouseAddress; // 租赁房屋地址
 
@@ -182,9 +185,24 @@ public class IdentityInfo {
         } else {
             switch (this.thirdPregnantPromise) {
                 case 1:
-                    return "是";
+                    return "未处于";
                 case 2:
-                    return "否";
+                    return "处于";
+                default:
+                    return "_";
+            }
+        }
+    }
+
+    public String getStringContractOrCertificate() {
+        if (this.contractOrCertificate == null) {
+            return "_";
+        } else {
+            switch (this.contractOrCertificate) {
+                case 1:
+                    return "未处于";
+                case 2:
+                    return "处于";
                 default:
                     return "_";
             }
@@ -797,6 +815,14 @@ public class IdentityInfo {
 
     public void setRensheAcceptStatus(Integer rensheAcceptStatus) {
         this.rensheAcceptStatus = rensheAcceptStatus;
+    }
+
+    public Integer getContractOrCertificate() {
+        return contractOrCertificate;
+    }
+
+    public void setContractOrCertificate(Integer contractOrCertificate) {
+        this.contractOrCertificate = contractOrCertificate;
     }
 
     public Integer getReservationStatus() {

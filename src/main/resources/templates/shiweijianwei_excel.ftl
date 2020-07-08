@@ -70,7 +70,7 @@
                 ${houseMove.moveAddress}
             </td>
             <td colspan="5" height="20" width="1123">
-                ${houseMove.moveNowAddress}
+                ${houseMove.witnessAddress}
             </td>
         </tr>
         <tr>
@@ -271,7 +271,7 @@
                 本人及配偶承诺目前${person.getStringPregnantPromise()} ${person.pregnantWeek}周
             </td>
             <td colspan="5" height="20" width="508">
-                本人及配偶承诺目前未政策外生育（或收养）第三个及以上子女，未处于政策外怀孕第三个及以上子女：${person.getStringThirdPregnantPromise()}
+                本人及配偶承诺目前 ${person.getStringThirdPregnantPromise()} 政策外生育（或收养）第三个及以上子女，${person.getStringContractOrCertificate()} 政策外怀孕第三个及以上子女
             </td>
             <td colspan="6" height="20" width="1217">
             </td>
