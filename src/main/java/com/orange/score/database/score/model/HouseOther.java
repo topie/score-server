@@ -110,6 +110,12 @@ public class HouseOther {
     private Integer isApplyRegiste;
 
     /**
+     * 2014年以前是否缴存开发区社保中心公积金：1:是;2:否
+     */
+    @Column(name = "kaifaquFund")
+    private Integer kaifaquFund;
+
+    /**
      * 申请人是否在2008年以前在开发区有社保缴费记录, 1、是；2、否
      */
     @Column(name = "isInsurance")
@@ -412,6 +418,14 @@ public class HouseOther {
                 return "事业单位";
         }
         return "-";
+    }
+
+    public Integer getKaifaquFund() {
+        return kaifaquFund;
+    }
+
+    public void setKaifaquFund(Integer kaifaquFund) {
+        this.kaifaquFund = kaifaquFund;
     }
 
     /**
