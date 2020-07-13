@@ -200,11 +200,12 @@ public class MaterialReceiveIdentityInfoController {
             }
             identityInfo = iIdentityInfoService.findById(record.getPersonId());
             //如果被该部门驳回，就删除该申请人
-            if (identityInfo.getMaterialStatus() != null && identityInfo.getMaterialStatus() == 1 && !isAdmin) {
+            // 2020年7月13日
+            /*if (identityInfo.getMaterialStatus() != null && identityInfo.getMaterialStatus() == 1 && !isAdmin) {
                 if (CollectionUtil.isHaveUnionBySet(rolesSet, identityInfo.getOpuser6RoleSet())) {
                     it.remove();
                 }
-            }
+            }*/
         }
         for (ScoreRecord scoreRecord1 : pageInfo.getList()){
             identityInfo = iIdentityInfoService.findById(scoreRecord1.getPersonId());
@@ -426,7 +427,7 @@ public class MaterialReceiveIdentityInfoController {
             }
         }
         Map argMap = new HashMap();
-        argMap.put("status", Collections.singletonList(2));
+        argMap.put("status", Collections.singletonList(5));
         /*
         2020年5月27日，优化一个逻辑，触发时间为2020年7月30
          */
