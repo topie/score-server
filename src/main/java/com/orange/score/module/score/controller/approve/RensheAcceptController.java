@@ -115,6 +115,7 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(1);
+        identityInfo.setRensheOrGongan(2);// 公安不通过的件，人社不再审核
         identityInfo.setRentHouseAddress(dateSearch.toString()); // 借用 RentHouseAddress 字段
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
@@ -223,6 +224,14 @@ public class RensheAcceptController {
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        String str2 = securityUser.getAuthorities().toString().replace("[","").replace("]","").replace(" ","");
+        String[] strArr = str2.split(",");
+        int a = 0;
+        for(int i=0;i<strArr.length;i++){
+            if (strArr[i].equals("3")){
+                a=1;
+            }
+        }
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         /**
          * 2020年4月29日
@@ -257,6 +266,9 @@ public class RensheAcceptController {
         for (IdentityInfo info : pageInfo.getList()) {
             if (companyIds.contains(info.getCompanyId())) {
                 info.setCompanyWarning(1);
+            }
+            if (a==1){
+                info.setRensheOrGongan(4);// 人社不通过
             }
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));

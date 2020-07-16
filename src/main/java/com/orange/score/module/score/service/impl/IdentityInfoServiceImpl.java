@@ -109,6 +109,12 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             if (identityInfo.getIstoreview()!=null && identityInfo.getIstoreview()>10){
                 criteria.andLessThan("istoreview",3); // 审核中 加 受理复核
             }
+            if (identityInfo.getRensheOrGongan() != null && identityInfo.getRensheOrGongan()==1){
+                criteria.andNotEqualTo("rensheAcceptStatus",4);// 公安待审核中不应该存在人社未通过的件，减少重复的工作量
+            }
+            if (identityInfo.getRensheOrGongan() != null && identityInfo.getRensheOrGongan()==2){
+                criteria.andNotEqualTo("policeApproveStatus",4);// 人社待审核中不应该存在公安未通过的件，减少重复的工作量
+            }
             /*
             2018年10月15日，增加一个锁定人的搜索条件
              */

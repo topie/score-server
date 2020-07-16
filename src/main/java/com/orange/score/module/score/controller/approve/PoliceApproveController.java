@@ -110,6 +110,7 @@ public class PoliceApproveController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setPoliceApproveStatus(1);
+        identityInfo.setRensheOrGongan(1);// 表示人社未通过审核
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }

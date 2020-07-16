@@ -396,6 +396,17 @@ public class IdentityInfo {
     @Column(name = "cancelReason")
     private String cancelReason;// 申请人的复核理由
 
+    @Column(name = "rensheOrGongan")
+    private Integer rensheOrGongan;// 不录入数据，只作为一个状态判断
+
+    public Integer getRensheOrGongan() {
+        return rensheOrGongan;
+    }
+
+    public void setRensheOrGongan(Integer rensheOrGongan) {
+        this.rensheOrGongan = rensheOrGongan;
+    }
+
     public Integer getIstoreview() {
         return istoreview;
     }
