@@ -204,6 +204,33 @@ public class PoliceApproveController {
         return ResponseUtil.success();
     }
 
+    @PostMapping("/disAgree2")
+    public Result disAgree2(@RequestParam Integer id,
+                            @RequestParam(value = "reasonType", required = false, defaultValue = "其它") String reasonType,
+                            @RequestParam(value = "rejectReason", required = false, defaultValue = "") String rejectReason)
+            throws IOException {
+
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (identityInfo.getReservationStatus() == 10) {
+            throw new AuthBusinessException("预约已取消");
+        }
+        if (identityInfo != null) {
+            if (3 == identityInfo.getRensheAcceptStatus()) {
+                return ResponseUtil.error("该申请人已被人社受理通过，无法进行该操作");
+            }
+            identityInfo.setOpuser4(securityUser.getDisplayName());
+            identityInfo.setHallStatus(1);
+            identityInfo.setPoliceApproveStatus(4);
+            identityInfo.setRejectReason(identityInfo.getRejectReason()+";" + rejectReason);
+            iIdentityInfoService.update(identityInfo);
+            iPersonBatchStatusRecordService
+                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 1);
+        }
+        return ResponseUtil.success();
+    }
+
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
