@@ -186,6 +186,17 @@
                                     <td colspan="12">联系电话：<strong>${move.witnessPhone}</strong></td>
                                 </tr>
                                 <tr>
+                                    <td colspan="12">是否为派遣制用工：<strong>${other.dispatchStr}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">是否具有劳务派遣经营许可证：<strong>${other.isDispatchLicenseStr}</strong></td>
+                                    <td colspan="6">劳务派遣经营许可证编号：<strong>${other.dispatchLicenseNum}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">劳务派遣经营许可证是否在有效期内：<strong>${other.isDispatchLicenseDateStr}</strong></td>
+                                    <td colspan="6">是否签订派遣协议：<strong>${other.isSignDispatchStr}</strong></td>
+                                </tr>
+                                <tr>
                                     <td colspan="12">实际用工单位名称：<strong>${other.companyName}</strong></td>
                                 </tr>
                                 <tr>
