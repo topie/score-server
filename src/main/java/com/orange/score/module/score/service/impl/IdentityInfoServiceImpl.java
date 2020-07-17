@@ -100,6 +100,9 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             if (identityInfo.getPreApprove() != null){
                 criteria.andEqualTo("preApprove",identityInfo.getPreApprove());
             }
+            if (identityInfo.getLuohuNumber() != null && identityInfo.getLuohuNumber().trim() !=""){
+                criteria.andLike("luohuNumber",identityInfo.getLuohuNumber());
+            }
             if (identityInfo.getReservationStatus() != null){
                 criteria.andEqualTo("reservationStatus",identityInfo.getReservationStatus());
             }
