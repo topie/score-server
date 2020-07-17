@@ -190,6 +190,20 @@ public class PoliceApproveController {
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
 
+    // 2020年7月17日 待审核 公安部门锁定正在审核的人，不让别的部门审核
+    @PostMapping("/lock")
+    public Result lock(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        if (StringUtils.isNotEmpty(identityInfo.getLockUser1()) && !identityInfo.getLockUser1().equals(securityUser.getUsername())) {
+            return ResponseUtil.error("该申请人的预审状态已被" + identityInfo.getLockUser1() + "锁定");
+        }
+        identityInfo.setLockUser1(securityUser.getUsername());
+        iIdentityInfoService.update(identityInfo);
+        return ResponseUtil.success();
+    }
+
     @PostMapping("/agree")
     public Result agree(@RequestParam Integer id) {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
