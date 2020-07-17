@@ -223,7 +223,7 @@ public class PoliceApproveController {
             identityInfo.setOpuser4(securityUser.getDisplayName());
             identityInfo.setHallStatus(1);
             identityInfo.setPoliceApproveStatus(4);
-            identityInfo.setRejectReason(identityInfo.getRejectReason()+";" + rejectReason);
+            identityInfo.setRejectReason((identityInfo.getRejectReason()==null ? "" : identityInfo.getRejectReason()+";") + rejectReason);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 1);
