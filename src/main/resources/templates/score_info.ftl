@@ -347,6 +347,7 @@
                                                 <th>文化程度</th>
                                                 <th>是否随迁</th>
                                                 <th>配偶是否在天津就业且用人单位依法缴<br>纳社会保险累计满24个月</th>
+                                                <th>配偶是否是现役军人</th>
                                             </tr>
                                         <#list relation as ritem>
                                             <tr>
@@ -358,6 +359,8 @@
                                                     <#if ritem.isRemove == 2>否</#if></td>
                                                 <td> <#if ritem.inTianjin == 1>是</#if>
                                                     <#if ritem.inTianjin == 2>否</#if></td>
+                                                <td> <#if ritem.isSpousesoldier == 1>是</#if>
+                                                    <#if ritem.isSpousesoldier == 2>否</#if></td>
                                             </tr>
                                         </#list>
                                         </table>

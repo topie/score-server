@@ -114,6 +114,17 @@ public class HouseRelationship {
     @Column(name = "inTianjin")
     private Integer inTianjin;  //配偶是否在天津就业且用人单位依法缴纳社会保险累计满24个月
 
+    @Column(name = "isSpousesoldier")
+    private Integer isSpousesoldier;  //配偶是否是现役军人
+
+    public Integer getIsSpousesoldier() {
+        return isSpousesoldier;
+    }
+
+    public void setIsSpousesoldier(Integer isSpousesoldier) {
+        this.isSpousesoldier = isSpousesoldier;
+    }
+
     public Integer getIsChinese() {
         return isChinese;
     }
@@ -472,6 +483,12 @@ public class HouseRelationship {
                     return "";
             }
         }
+    }
+    public String getIsSpousesoldierStr(){
+        if (this.isSpousesoldier==null){
+            return "";
+        }
+        return isSpousesoldier==1?"是":"否";
     }
 
     public String getApproval_index() {

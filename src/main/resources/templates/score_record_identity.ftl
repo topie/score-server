@@ -421,6 +421,11 @@
                                                     <td><#if ritem.inTianjin == 1>是</#if>
                                                         <#if ritem.inTianjin == 2>否</#if></td>
                                                 </tr>
+                                                <tr>
+                                                    <td class="garyB">配偶是否是现役军人:</td>
+                                                    <td><#if ritem.isSpousesoldier == 1>是</#if>
+                                                        <#if ritem.isSpousesoldier == 2>否</#if></td>
+                                                </tr>
                                             </table>
                                         <#else>
                                             <table style="font-size: 14px;"
