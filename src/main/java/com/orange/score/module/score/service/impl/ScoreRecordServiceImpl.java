@@ -67,6 +67,9 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
     @Autowired
     private IMaterialAcceptRecordService iMaterialAcceptRecordService;
 
+    @Autowired
+    private IIndicatorItemService iIndicatorItemService;
+
     @Override
     public PageInfo<ScoreRecord> selectByFilterAndPage(ScoreRecord scoreRecord, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -157,50 +160,6 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
                 continue;
             }
 
-            /*
-            2020年1月9日
-            自有住房分数
-            1、申请人输入页面中，页面7选择“按照“津发改社会〔2018〕26号”文件计算”
-            （1）住房分数
-                打分形式：单项点选
-
-                分值项	分值
-                    有2019年12月31日前购买的住房	40分
-                    无	0分
-
-                打分部门：住建委、规自局
-
-            （2）区域分数
-                打分形式：单项点选
-
-                分值项	分值
-                    滨海新区	20分
-                    武清区、宝坻区、静海区、宁河区、蓟州区	15分
-                    其他	0分
-                打分部门：公安局
-            2、申请人输入页面中，页面7选择“不按照“津发改社会〔2018〕26号”文件计算”
-                打分形式：手动输入一位小数数字
-                打分部门：住建委、规自局
-             */
-            // “不按照“津发改社会〔2018〕26号”文件计算”
-//            if (identityInfo.getIs201826Doc()!=null && identityInfo.getIs201826Doc() == 0){
-//                if (indicator.getId() == 1021 || indicator.getId() == 1022){
-//                    continue;
-//                }
-//            }
-//            // “按照“津发改社会〔2018〕26号”文件计算”
-//            if (identityInfo.getIs201826Doc()!=null && identityInfo.getIs201826Doc() == 1){
-//                if (indicator.getId() == 1025){
-//                    continue;
-//                }
-//            }
-//            // 如果为空值
-//            if (identityInfo.getIs201826Doc()==null){
-//                if (indicator.getId() == 1021 || indicator.getId() == 1022 || indicator.getId()==1025){
-//                    continue;
-//                }
-//            }
-
             ScoreRecord record = new ScoreRecord();
             record.setBatchId(batchId);
             record.setAcceptAddressId(identityInfo.getAcceptAddressId());
@@ -289,30 +248,41 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
 //                }
 //                // 年龄
 //                if (record.getIndicatorId() == 1 && identityInfo.getAge()!=null){
+//                    Condition condition2 = new Condition(IndicatorItem.class);
+//                    tk.mybatis.mapper.entity.Example.Criteria criteria2 = condition2.createCriteria();
+//                    criteria2.andEqualTo("indicatorId", 1);
+//                    condition2.orderBy("score").desc().orderBy("id").asc();
+//                    List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition2);
+//                    Map<Integer,Integer> map = new HashMap();
+//                    for(IndicatorItem indicatorItem : indicatorItems){
+//                        map.put(indicatorItem.getId(),indicatorItem.getScore());
+//                    }
+//
 //                    if(identityInfo.getAge()>45){
 //                        record.setItemId(3);
-//                        BigDecimal value = new BigDecimal(0);
+//                        BigDecimal value = new BigDecimal(map.get(3));
 //                        record.setScoreValue(value);
 //                    }else if(identityInfo.getAge()>36){
 //                        record.setItemId(2);
-//                        BigDecimal value = new BigDecimal(5);
+//                        BigDecimal value = new BigDecimal(map.get(2));
 //                        record.setScoreValue(value);
 //                    }else if (identityInfo.getAge()<36){
 //                        record.setItemId(1);
-//                        BigDecimal value = new BigDecimal(10);
+//                        BigDecimal value = new BigDecimal(map.get(1));
 //                        record.setScoreValue(value);
 //                    }
 //                    record.setStatus(4);
+//                    record.setScoreDate(new Date());
 //                }
-//
-//                // 页面1基本信息中：“申请人是否参加住房公积金”——否         自动打分0分。
-//                if (record.getIndicatorId()!=null && record.getIndicatorId() == 8){
-//                    if (houseOther.getProvidentFund()!=null && houseOther.getProvidentFund()== 2){ // 1、是；2、否"
-//                        record.setItemId(0);
-//                        record.setStatus(4);
-//                        record.setScoreValue(new BigDecimal(0));
-//                    }
-//                }
+
+                // 页面1基本信息中：“申请人是否参加住房公积金”——否         自动打分0分。
+                if (record.getIndicatorId()!=null && record.getIndicatorId() == 8){
+                    if (houseOther.getProvidentFund()!=null && houseOther.getProvidentFund()== 2){ // 1、是；2、否"
+                        //record.setItemId(0);
+                        record.setStatus(3);
+                        //record.setScoreValue(new BigDecimal(0));
+                    }
+                }
 //                // 受教育程度，
 //                if (record.getIndicatorId() == 3 ){
 //                    //市教委
@@ -380,6 +350,7 @@ public class ScoreRecordServiceImpl extends BaseService<ScoreRecord> implements 
 //                        record.setItemId(1031);
 //                        record.setStatus(4);
 //                        record.setScoreValue(new BigDecimal(0));
+//                        record.setScoreDate(new Date());
 //                    }
 //                }
 
