@@ -642,6 +642,8 @@ public class RenshePrevApproveController {
             identityInfo.setRensheAcceptStatus(4);
             identityInfo.setRejectReason((identityInfo.getRejectReason()==null ? "" : identityInfo.getRejectReason()+";")+reasonType + " " + rejectReason);
             iIdentityInfoService.update(identityInfo);
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：您好，您不符合积分受理条件，不予受理，请登录申报单位用户查询本人具体信息。（人社）");
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 4);
         }
@@ -739,7 +741,8 @@ public class RenshePrevApproveController {
 
     @PostMapping("/sendCompanyMsg")
     public Result sendCompanyMsg(@RequestParam String phone, @RequestParam String name) throws IOException {
-        SmsUtil.send(phone, "您单位的两位经办人,只有一人符合条件,请经办人" + name + "于预约日期到窗口办理相关手续。");
+        //SmsUtil.send(phone, "您单位的两位经办人,只有一人符合条件,请经办人" + name + "于预约日期到窗口办理相关手续。");
+        SmsUtil.send(phone, "系统提示,您好,用人单位及经办人信息有误，请及时修改信息。（人社）");
         return ResponseUtil.success();
     }
 }

@@ -169,7 +169,7 @@ public class PoliceApproveController {
     @ResponseBody
     public Result rejected(IdentityInfo identityInfo,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize)  throws IOException  {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         if (identityInfo.getBatchId() == null) {
@@ -217,14 +217,13 @@ public class PoliceApproveController {
             throw new AuthBusinessException("预约已取消");
         }
         if (identityInfo != null) {
-            if (3 == identityInfo.getRensheAcceptStatus()) {
-                return ResponseUtil.error("该申请人已被人社受理通过，无法进行该操作");
-            }
             identityInfo.setOpuser4(securityUser.getDisplayName());
             identityInfo.setHallStatus(1);
             identityInfo.setPoliceApproveStatus(4);
             identityInfo.setRejectReason((identityInfo.getRejectReason()==null ? "" : identityInfo.getRejectReason()+";") + rejectReason);
             iIdentityInfoService.update(identityInfo);
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：您好，您不符合积分公安审核条件，不予通过，请登录申报单位用户查询本人具体信息。");
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 1);
         }
@@ -232,7 +231,7 @@ public class PoliceApproveController {
     }
 
     @PostMapping("/agree")
-    public Result agree(@RequestParam Integer id) {
+    public Result agree(@RequestParam Integer id)  throws IOException {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
@@ -254,6 +253,8 @@ public class PoliceApproveController {
                 identityInfo.setHallStatus(5);
             }
             iIdentityInfoService.update(identityInfo);
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：您好，您已通过积分公安审核，请登录申报单位用户查询本人具体信息。");
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 3);
             HouseMove houseMove = iHouseMoveService.findBy("identityInfoId", identityInfo.getId());

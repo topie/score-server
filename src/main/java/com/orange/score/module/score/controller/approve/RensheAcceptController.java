@@ -8,6 +8,7 @@ import com.orange.score.common.exception.AuthBusinessException;
 import com.orange.score.common.tools.plugins.FormItem;
 import com.orange.score.common.utils.PageConvertUtil;
 import com.orange.score.common.utils.ResponseUtil;
+import com.orange.score.common.utils.SmsUtil;
 import com.orange.score.common.utils.date.DateUtil;
 import com.orange.score.database.score.model.*;
 import com.orange.score.module.core.service.ICommonQueryService;
@@ -58,6 +59,9 @@ public class RensheAcceptController {
 
     @Autowired
     private ICompanyInfoService iCompanyInfoService;
+
+    @Autowired
+    private IHouseOtherService iHouseOtherService;
 
     @GetMapping(value = "/formItems")
     @ResponseBody
@@ -349,7 +353,7 @@ public class RensheAcceptController {
     人社受理审核-待审核-通过 “按钮”
      */
     @PostMapping("/agree")
-    public Result agree(@RequestParam Integer id) {
+    public Result agree(@RequestParam Integer id)  throws IOException  {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
@@ -379,6 +383,8 @@ public class RensheAcceptController {
             if (identityInfo2.getPoliceApproveStatus()==3 && identityInfo2.getRensheAcceptStatus()==3){
                 iScoreRecordService.insertToInitRecords(identityInfo.getBatchId(), identityInfo.getId());
             }
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：您好，您已通过积分人社审核，予以受理，请登录申报单位用户查询本人具体信息。");
         }
         return ResponseUtil.success();
     }
@@ -477,7 +483,7 @@ public class RensheAcceptController {
     }
 
     @PostMapping("/supply")
-    public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) {
+    public Result supply(@RequestParam Integer id, @RequestParam("supplyArr") String supplyArr) throws IOException  {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
@@ -497,6 +503,8 @@ public class RensheAcceptController {
             identityInfo.setRensheAcceptSupplyEt(epDate);
             identityInfo.setRensheAcceptStatus(2);
             iIdentityInfoService.update(identityInfo);
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：您好，您上传的材料需要补正，请在三个工作日内尽快补正材料。（人社）");
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "rensheAcceptStatus", 2);
         }
@@ -540,7 +548,7 @@ public class RensheAcceptController {
     }
 
     @PostMapping("/disAgree")
-    public Result disAgree(@RequestParam Integer id) {
+    public Result disAgree(@RequestParam Integer id) throws IOException  {
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         IdentityInfo identityInfo = iIdentityInfoService.findById(id);
@@ -555,6 +563,8 @@ public class RensheAcceptController {
             identityInfo.setHallStatus(4);
             identityInfo.setRensheAcceptStatus(4);
             iIdentityInfoService.update(identityInfo);
+            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
+            SmsUtil.send(houseOther.getSelfPhone(), "系统提示：您好，您不符合积分受理条件，不予受理，请登录申报单位用户查询本人具体信息。（人社）");
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 4);
         }
