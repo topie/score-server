@@ -169,6 +169,18 @@ public class ScoreRecord {
     @Column(name = "idreviewend")
     private Integer idreviewend;// 申请复核是否完毕，1：结束
 
+    // 部门补正的时间
+    @Column(name = "supplyDate")
+    private Date supplyDate;
+
+    public Date getSupplyDate() {
+        return supplyDate;
+    }
+
+    public void setSupplyDate(Date supplyDate) {
+        this.supplyDate = supplyDate;
+    }
+
     public String getToreviewreason() {
         return toreviewreason;
     }

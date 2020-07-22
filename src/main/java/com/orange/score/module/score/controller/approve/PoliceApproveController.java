@@ -221,6 +221,7 @@ public class PoliceApproveController {
             identityInfo.setHallStatus(1);
             identityInfo.setPoliceApproveStatus(4);
             identityInfo.setRejectReason((identityInfo.getRejectReason()==null ? "" : identityInfo.getRejectReason()+";") + rejectReason);
+            identityInfo.setPoliceSupplyDate(new Date()); // 公安补正的时间
             iIdentityInfoService.update(identityInfo);
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
             SmsUtil.send(houseOther.getSelfPhone(), "系统提示：您好，您不符合积分公安审核条件，不予通过，请登录申报单位用户查询本人具体信息。");

@@ -641,6 +641,7 @@ public class RenshePrevApproveController {
             identityInfo.setHallStatus(4);
             identityInfo.setRensheAcceptStatus(4);
             identityInfo.setRejectReason((identityInfo.getRejectReason()==null ? "" : identityInfo.getRejectReason()+";")+reasonType + " " + rejectReason);
+            identityInfo.setRensheSupplyDate(new Date());
             iIdentityInfoService.update(identityInfo);
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
             SmsUtil.send(houseOther.getSelfPhone(), "系统提示：您好，您不符合积分受理条件，不予受理，请登录申报单位用户查询本人具体信息。（人社）");

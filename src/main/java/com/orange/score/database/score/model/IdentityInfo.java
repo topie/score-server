@@ -313,6 +313,30 @@ public class IdentityInfo {
     @Column(name = "union_approve_2_et")
     private Date unionApprove2Et;
 
+    //公安材料补正时间
+    @Column(name = "policeSupplyDate")
+    private Date policeSupplyDate;
+
+    //人社材料补正时间
+    @Column(name = "rensheSupplyDate")
+    private Date rensheSupplyDate;
+
+    public Date getPoliceSupplyDate() {
+        return policeSupplyDate;
+    }
+
+    public void setPoliceSupplyDate(Date policeSupplyDate) {
+        this.policeSupplyDate = policeSupplyDate;
+    }
+
+    public Date getRensheSupplyDate() {
+        return rensheSupplyDate;
+    }
+
+    public void setRensheSupplyDate(Date rensheSupplyDate) {
+        this.rensheSupplyDate = rensheSupplyDate;
+    }
+
     @Transient
     private String etStatus;
 

@@ -928,6 +928,7 @@ public class MaterialReceiveIdentityInfoController {
                 List<ScoreRecord> minzhenList = iScoreRecordService.findByCondition(condition);
                 for(ScoreRecord scoreRecord : minzhenList){
                     scoreRecord.setStatus(5); // 材料待补正
+                    scoreRecord.setSupplyDate(new Date());
                     iScoreRecordService.update(scoreRecord);
                 }
 
