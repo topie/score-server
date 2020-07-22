@@ -62,6 +62,20 @@ public class AcceptDateConf {
     @Column(name = "pm_remaining_count")
     private Integer pmRemainingCount;
 
+    /**
+     * 是否是工作日：0：不是；1：是
+     */
+    @Column(name = "isWorkingDay")
+    private Integer isWorkingDay;
+
+    public Integer getIsWorkingDay() {
+        return isWorkingDay;
+    }
+
+    public void setIsWorkingDay(Integer isWorkingDay) {
+        this.isWorkingDay = isWorkingDay;
+    }
+
     public Integer getAddressId() {
         return addressId;
     }

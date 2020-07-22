@@ -56,10 +56,14 @@ public class AcceptDateConfController {
         for (AcceptAddress acceptAddress : list) {
             addressMap.put(acceptAddress.getId(), acceptAddress.getAddress());
         }
+        Map isWorkingDayMap = new HashMap();
+        isWorkingDayMap.put("0","不是");
+        isWorkingDayMap.put("1","是");
         Map result = new HashMap<>();
         result.put("formItems", formItems);
         result.put("searchItems", searchItems);
         result.put("addressMap", addressMap);
+        result.put("isWorkingDayMap", isWorkingDayMap);
         return ResponseUtil.success(result);
     }
 
