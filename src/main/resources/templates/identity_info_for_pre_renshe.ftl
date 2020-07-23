@@ -200,10 +200,13 @@
                                     <td colspan="12">实际用工单位名称：<strong>${other.companyName}</strong></td>
                                 </tr>
                                 <tr>
+                                    <td colspan="12">申请人实际办公地址：<strong>${other.applyOfficeAddress}</strong></td>
+                                </tr>
+                                <tr>
                                     <td colspan="12">单位电话：<strong>${other.companyPhone}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">单位地址：<strong>${other.companyAddress}</strong></td>
+                                    <td colspan="12">实际用工单位现经营地址：<strong>${other.companyAddress}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="12">本人电话：<strong>${other.selfPhone}</strong></td>

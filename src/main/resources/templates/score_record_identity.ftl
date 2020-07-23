@@ -337,8 +337,11 @@
                                     <td colspan="6">实际用工单位电话：<strong>${other.companyPhone}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">实际用工单位地址：<strong>${other.companyAddress}</strong></td>
+                                    <td colspan="6">实际用工单位现经营地址：<strong>${other.companyAddress}</strong></td>
                                     <td colspan="6">本人电话：<strong>${other.selfPhone}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">申请人实际办公地址：<strong>${other.applyOfficeAddress}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">实际用工单位所属行业：<strong>${other.industry}</strong></td>
@@ -349,7 +352,7 @@
                                     <td colspan="6">在此岗位工作起始时间：<strong>${other.jobDate}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="12">申请人办公地址：<strong>${other.applyOfficeAddress}</strong></td>
+                                    <td colspan="12">申请人实际办公地址：<strong>${other.applyOfficeAddress}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">当前工作岗位：<strong>${other.jobTitle}</strong></td>

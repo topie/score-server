@@ -108,7 +108,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="12">实际用工单位地址：
+            <td colspan="12">实际用工单位现经营地址：
                 <input data-id="${other.id?c}" data-name="other.companyAddress" disabled
                        class="edit input-large" style="height: 25px;width:600px;"
                        value="${other.companyAddress}">
