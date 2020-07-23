@@ -57,7 +57,7 @@
                                 </tr>
                                 <!-- 一组数据信息的 -->
                                 <tr>
-                                    <td colspan="12">联系地址：<strong>${company.operatorAddress}</strong></td>
+                                    <td colspan="12">实际经营地址：<strong>${company.operatorAddress}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">核准日期：${company.apprdate}</td>
