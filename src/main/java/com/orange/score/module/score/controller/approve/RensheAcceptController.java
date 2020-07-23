@@ -217,6 +217,7 @@ public class RensheAcceptController {
             if (companyIds.contains(info.getCompanyId())) {
                 info.setCompanyWarning(1);
             }
+            info.setRensheOrGongan(4);
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
     }
