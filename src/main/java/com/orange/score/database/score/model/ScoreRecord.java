@@ -181,6 +181,16 @@ public class ScoreRecord {
         this.supplyDate = supplyDate;
     }
 
+    private String supplyDateStr;
+
+    public String getSupplyDateStr() {
+        return supplyDateStr;
+    }
+
+    public void setSupplyDateStr(String supplyDateStr) {
+        this.supplyDateStr = supplyDateStr;
+    }
+
     public String getToreviewreason() {
         return toreviewreason;
     }

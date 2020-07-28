@@ -487,6 +487,7 @@ public class MaterialReceiveIdentityInfoController {
         PageInfo<ScoreRecord> pageInfo = iScoreRecordService.selectIdentityInfoByPage_1(argMap, pageNum, pageSize);
 
         IdentityInfo identityInfo;
+        Map argMap2 = new HashMap();
         for (ScoreRecord record : pageInfo.getList()) {
             identityInfo = iIdentityInfoService.findById(record.getPersonId());
             if (identityInfo.getRightProperty()!=null && identityInfo.getRightProperty().equals("1")){
@@ -501,6 +502,13 @@ public class MaterialReceiveIdentityInfoController {
             if (roles.contains(4) || roles.contains(6)) {
                 record.setEdit(1);
             }
+            argMap2.put("personId",record.getPersonId());
+            argMap2.put("opRoleId", roles);
+            ScoreRecord scoreRecord1 = iScoreRecordService.getSupplyDate(argMap2);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            record.setSupplyDateStr(sdf.format(scoreRecord1.getSupplyDate()));
+            // 临时存放数据，用完清空，供下次使用
+            argMap2.clear();
         }
 //        IdentityInfo identityInfo;
 //        Set<Integer> rolesSet = new HashSet<>(roles);

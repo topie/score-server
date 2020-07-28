@@ -157,6 +157,23 @@
         </where>
     </select>
 
+    <select id="getSupplyDate" resultMap="BaseResultMap">
+        select min(SUPPLYDATE) SUPPLYDATE
+        from t_pb_score_record t1
+        <where>
+            t1.batch_id in (select id from t_batch_conf where status = 1)
+            <if test="item.personId!=null">
+                and t1.person_id=#{item.personId}
+            </if>
+            <if test="item.opRoleId!=null">
+                and t1.OP_ROLE_ID in
+                <foreach item="it" collection="item.opRoleId" open="(" separator="," close=")">
+                    #{it}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
     <select id="selectIsPreviewed" resultMap="BaseResultMap">
         select t1.id           person_id,
                name            person_name,
