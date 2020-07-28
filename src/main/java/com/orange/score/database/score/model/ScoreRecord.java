@@ -181,6 +181,7 @@ public class ScoreRecord {
         this.supplyDate = supplyDate;
     }
 
+    @Column(name = "supplyDateStr")
     private String supplyDateStr;
 
     public String getSupplyDateStr() {

@@ -389,6 +389,95 @@ public class ScoreTask {
         }
     }
 
+    /**
+     * 2020年7月28日
+     * 年龄、守法诚信【公安】
+     * 以上两个打分项是每天凌晨自动打分：
+     * 1、根据申请人的年龄：35岁以下（含35岁）为20分；36-45周岁为10分；46岁以上（含46岁）为0分；
+     * 2、有无刑事犯罪记录，为无时打0分；
+     *
+     * 取消材料接收环节，对前置审核通过的申请人直接进入打分环节；
+     */
+    //@Scheduled(cron = "0 0/2 * * * ? ")//测试用，时间频率，每隔两分钟执行一次；
+    @Scheduled(cron = "20 0 0 * * ? ")
+    public void policeSelfScore2(){
+        Condition condition_bc = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria_bc = condition_bc.createCriteria();
+        criteria_bc.andEqualTo("status", 1);
+        List<BatchConf> list_bc = iBatchConfService.findByCondition(condition_bc);
+        if (list_bc.size()>0){
+            Integer batch_id = list_bc.get(0).getId();
+
+            Condition condition = new Condition(ScoreRecord.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("batchId", batch_id);
+            criteria.andEqualTo("opRoleId", 4);// 公安部门
+            criteria.andLessThanOrEqualTo("status", 3);// 小于等于 3
+            //criteria.andEqualTo("personId", 483454);
+            List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+
+            Condition condition2 = new Condition(IndicatorItem.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria2 = condition2.createCriteria();
+            criteria2.andEqualTo("indicatorId", 1);
+            condition2.orderBy("score").desc().orderBy("id").asc();
+            List<IndicatorItem> indicatorItems = iIndicatorItemService.findByCondition(condition2);
+            Map<Integer,Integer> map = new HashMap();
+            for(IndicatorItem indicatorItem : indicatorItems){
+                map.put(indicatorItem.getId(),indicatorItem.getScore());
+            }
+
+            IdentityInfo person;
+            HouseOther houseOther;
+            if (scoreRecords.size()>0){
+                for (ScoreRecord scoreRecord : scoreRecords){
+                    person = iIdentityInfoService.findById(scoreRecord.getPersonId());
+                    houseOther = iHouseOtherService.findBy("identityInfoId", scoreRecord.getPersonId());
+                    if (scoreRecord.getIndicatorId()==1){
+                        if(person.getAge()>45){
+                            scoreRecord.setItemId(3);
+                            BigDecimal value = new BigDecimal(map.get(3));
+                            scoreRecord.setScoreValue(value);
+                        }else if(person.getAge()>36){
+                            scoreRecord.setItemId(2);
+                            BigDecimal value = new BigDecimal(map.get(2));
+                            scoreRecord.setScoreValue(value);
+                        }else if (person.getAge()<36){
+                            scoreRecord.setItemId(1);
+                            BigDecimal value = new BigDecimal(map.get(1));
+                            scoreRecord.setScoreValue(value);
+                        }
+                        scoreRecord.setStatus(4);
+                        scoreRecord.setScoreDate(new Date());
+                    }else if (scoreRecord.getIndicatorId() == 902){
+                        if (houseOther.getPenalty()!=null && houseOther.getPenalty()==2){
+                            scoreRecord.setItemId(1031);
+                            scoreRecord.setStatus(4);
+                            scoreRecord.setScoreValue(new BigDecimal(0));
+                            scoreRecord.setScoreDate(new Date());
+                        }
+                    }else{
+                        scoreRecord.setStatus(3);
+                    }
+                    iScoreRecordService.update(scoreRecord);
+
+                    /*
+                    留痕
+                     */
+                    PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                    personBatchStatusRecord.setPersonId(person.getId());
+                    personBatchStatusRecord.setBatchId(person.getBatchId());
+                    personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
+                    personBatchStatusRecord.setStatusStr("公安部门年龄、5年内是否有刑事犯罪记录，材料送达;");
+                    personBatchStatusRecord.setStatusTime(new Date());
+                    personBatchStatusRecord.setStatusReason("公安部门年龄、5年内是否有刑事犯罪记录，材料送达");
+                    personBatchStatusRecord.setStatusTypeDesc("公安部门年龄、5年内是否有刑事犯罪记录，材料送达");
+                    personBatchStatusRecord.setStatusInt(201);
+                    iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+                }
+            }
+        }
+    }
+
 //    @Scheduled(cron = "0/30 * * * * ? ")
     //    public void supplyEpTask() {
     //        Date now = new Date();
