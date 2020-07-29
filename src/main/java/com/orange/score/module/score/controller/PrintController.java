@@ -398,6 +398,15 @@ public class PrintController extends BaseController {
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "accept_doc.ftl", params);
         Map result = new HashMap<>();
         result.put("html", html);
+        /*
+        2020年7月29日
+        添加人社、教委的判断，当后台的审核人员是人社、教委时，添加字段，用来显示浏览器端的打印弹窗
+         */
+        if(roles.contains(3) || roles.contains(6)){
+            result.put("code", 666);
+        }else {
+            result.put("code", 120);
+        }
         return ResponseUtil.success(result);
     }
 
