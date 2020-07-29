@@ -61,6 +61,7 @@
         on i.id=p.identity_info_id
         left join t_company_info c on i.company_id=c.id
         <where>
+            i.police_approve_status= 3 and i.renshe_accept_status = 3
             <if test="item.batchId!=null">
                 and i.batch_id=#{item.batchId}
             </if>
@@ -91,6 +92,7 @@
         <where>
             (t2.relationship = '配偶' or t2.relationship is null)
             and t1.UNION_APPROVE_STATUS_2=1
+            and t1.police_approve_status= 3 and t1.renshe_accept_status = 3
             <if test="item.batchId!=null">
                 and t1.batch_id=#{item.batchId}
             </if>
@@ -118,6 +120,7 @@
         left join t_house_move m
         on i.id=m.identity_info_id
         <where>
+            i.police_approve_status= 3 and i.renshe_accept_status = 3
             <if test="item.batchId!=null">
                 and i.batch_id=#{item.batchId}
             </if>
@@ -177,6 +180,7 @@
         left join t_batch_conf c
         on r.batch_id=c.id
         <where>
+            i.police_approve_status= 3 and i.renshe_accept_status = 3
             <if test="item.batchId!=null">
                 and r.batch_id = #{item.batchId}
             </if>
@@ -256,6 +260,7 @@
         left join t_house_relationship r on i.id=r.identity_info_id and r.relationship='配偶'
         left join t_pb_status_record sr on i.id=sr.person_id and status_dict_alias='hallStatus' and status_int=5
         <where>
+            i.police_approve_status= 3
             <if test="item.batchId!=null">
                 and i.batch_id = #{item.batchId} and i.reservation_status = 11 and i.renshe_accept_status = 3
             </if>
@@ -278,6 +283,7 @@
                 <![CDATA[ and TO_CHAR(sr.status_time,'yyyy-mm-dd') <= #{item.acceptDateEnd}  ]]>
             </if>
         </where>
+        order by i.accept_number asc
     </select>
 
     <!--2018-10-15 查询锁定人的名单-->
