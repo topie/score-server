@@ -119,27 +119,8 @@ public class FakeRecordController {
     @PostMapping("/update")
     public Result update(FakeRecord fakeRecord) {
         iFakeRecordService.update(fakeRecord);
-
-        FakeRecord fakeRecord2 = iFakeRecordService.findById(fakeRecord.getId());
-        Condition condition = new Condition(IdentityInfo.class);
-        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-        criteria.andEqualTo("idNumber", fakeRecord2.getIdNumber());
-        criteria.andEqualTo("batchId", fakeRecord2.getBatchCode());
-        List<IdentityInfo> list = iIdentityInfoService.findByCondition(condition);
-
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
-
-        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
-        personBatchStatusRecord.setPersonId(list.get(0).getId());
-        personBatchStatusRecord.setBatchId(list.get(0).getBatchId());
-        personBatchStatusRecord.setPersonIdNumber(list.get(0).getIdNumber());
-        personBatchStatusRecord.setStatusStr(securityUser.getLoginName() + "-更新虚假材料信息");
-        personBatchStatusRecord.setStatusTime(new Date());
-        personBatchStatusRecord.setStatusReason("更新虚假材料信息");
-        personBatchStatusRecord.setStatusTypeDesc("更新虚假材料信息");
-        personBatchStatusRecord.setStatusInt(103);
-        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
 
         return ResponseUtil.success();
     }

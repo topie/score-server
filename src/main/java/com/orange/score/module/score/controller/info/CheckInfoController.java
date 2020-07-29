@@ -269,6 +269,7 @@ public class CheckInfoController {
                 Condition condition = new Condition(ScoreRecord.class);
                 tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
                 criteria.andEqualTo("personIdNum", fakeRecord.getIdNumber());
+                criteria.andEqualTo("batchId",batchId);
                 List<String> indicators = Arrays.asList(fakeRecord.getIndicatorRole().split(","));
                 List<Integer> list = new ArrayList<Integer>();
                 for(int i=0;i<indicators.size();i++){
