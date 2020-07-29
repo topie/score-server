@@ -455,9 +455,10 @@ public class ScoreTask {
                             scoreRecord.setScoreValue(new BigDecimal(0));
                             scoreRecord.setScoreDate(new Date());
                         }
-                    }else{
-                        scoreRecord.setStatus(3);
                     }
+                    /*else{
+                        scoreRecord.setStatus(3);
+                    }*/
                     iScoreRecordService.update(scoreRecord);
 
                     /*
