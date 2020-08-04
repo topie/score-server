@@ -282,7 +282,10 @@ public class CheckInfoController {
                         BigDecimal fakeScore = new BigDecimal(-30);
                         scoreRecord.setOriginalScoreValue(scoreRecord.getScoreValue());//保存原始分数
                         scoreRecord.setIsDeducted("1");//已经扣过分，状态位变化
-                        scoreRecord.setScoreValue(scoreRecord.getScoreValue().add(fakeScore));
+                        scoreRecord.setStatus(4);
+                        scoreRecord.setItemId(1031);
+                        scoreRecord.setOpRole("点击按钮生成");
+                        scoreRecord.setScoreValue(fakeScore);
                         iScoreRecordService.update(scoreRecord);
                     }
                 }
