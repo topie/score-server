@@ -78,7 +78,10 @@
             <if test="item.soldierMeritorious!=null">
                 and ho.soldier_meritorious = #{item.soldierMeritorious}
             </if>
-            <if test="item.inTianjin!=null">
+            <if test="item.inTianjin==1">
+                and (hr.inTianjin = #{item.inTianjin} or hr.isSpousesoldier=1)
+            </if>
+            <if test="item.inTianjin==2">
                 and hr.inTianjin = #{item.inTianjin}
             </if>
             <if test="item.personName!=null">
