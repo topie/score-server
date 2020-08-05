@@ -479,6 +479,58 @@ public class ScoreTask {
         }
     }
 
+    /**
+     * 2020年8月5日
+     * 将人社部门的守法诚信打分项自动设置为0分
+     */
+    //@Scheduled(cron = "0 0/2 * * * ? ")//测试用，时间频率，每隔两分钟执行一次；
+    @Scheduled(cron = "20 0 0 * * ? ")
+    public void shoufachengxin(){
+        Condition condition_bc = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria_bc = condition_bc.createCriteria();
+        criteria_bc.andEqualTo("status", 1);
+        List<BatchConf> list_bc = iBatchConfService.findByCondition(condition_bc);
+        if (list_bc.size()>0){
+            Integer batch_id = list_bc.get(0).getId();
+
+            Condition condition = new Condition(ScoreRecord.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("batchId", batch_id);
+            criteria.andEqualTo("opRoleId", 3);// 人社部门
+            criteria.andEqualTo("indicatorId", 1010);// 守法诚信
+            criteria.andIsNull("isDeducted"); //
+            criteria.andLessThanOrEqualTo("status", 3);// 小于等于 3
+            //criteria.andEqualTo("personId", 483454);
+            List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+
+            IdentityInfo person;
+            if (scoreRecords.size()>0){
+                for (ScoreRecord scoreRecord : scoreRecords){
+                    person = iIdentityInfoService.findById(scoreRecord.getPersonId());
+                    scoreRecord.setStatus(4);
+                    scoreRecord.setScoreValue(new BigDecimal(0));
+                    scoreRecord.setItemId(1031);
+                    scoreRecord.setScoreDate(new Date());
+                    iScoreRecordService.update(scoreRecord);
+
+                    /*
+                    留痕
+                     */
+                    PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                    personBatchStatusRecord.setPersonId(person.getId());
+                    personBatchStatusRecord.setBatchId(person.getBatchId());
+                    personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
+                    personBatchStatusRecord.setStatusStr("守法诚信自动打0分;");
+                    personBatchStatusRecord.setStatusTime(new Date());
+                    personBatchStatusRecord.setStatusReason("守法诚信自动打0分");
+                    personBatchStatusRecord.setStatusTypeDesc("守法诚信自动打0分");
+                    personBatchStatusRecord.setStatusInt(202);
+                    iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+                }
+            }
+        }
+    }
+
 //    @Scheduled(cron = "0/30 * * * * ? ")
     //    public void supplyEpTask() {
     //        Date now = new Date();
