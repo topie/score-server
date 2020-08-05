@@ -355,7 +355,7 @@
         from t_identity_info t1,
         ( select PERSON_NAME,PERSON_ID_NUM,SCORE_VALUE from t_pb_score_result where batch_id=#{item.batchId} ) t2,
         t_house_move tm,
-        t_office tof,
+        t_office_2 tof,
         t_region tr,
         t_company_info tp,
         t_house_other th
