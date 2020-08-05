@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import sun.rmi.server.InactiveGroupException;
 import tk.mybatis.mapper.entity.Condition;
 
 import javax.servlet.http.HttpServletRequest;
@@ -104,6 +105,90 @@ public class StatExportController {
             pageInfo.getList().get(i).put("PREAPPROVE",preApprove);
         }
         return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+    /*
+    2020年8月4日
+    市区
+	导出申请审核的：
+		姓名、
+		身份证号、
+		第三页“是否具有国家职业资格”；
+		按照申请审核日期
+     */
+    @GetMapping(value = "/list6")
+    @ResponseBody
+    public Result list6(@RequestParam("reservationDate") String reservationDate,
+                        @RequestParam("personName") String personName,
+                        @RequestParam("flag") Integer flag,
+                        @RequestParam("personIdNum") String personIdNum,
+                        @RequestParam("professionType") String professionType,
+                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        Map argMap = new HashMap();
+        if(flag==1){
+            argMap.put("reservationDate", reservationDate);
+        }
+        if(personName!=null && personName!=""){ // 姓名
+            argMap.put("personName", personName);
+        }
+        if(personIdNum!=null && personIdNum!=""){ // 身份证号
+            argMap.put("personIdNum", personIdNum);
+        }
+        if (professionType!=null && professionType!=""){ // 是否具有国家职业资格
+            argMap.put("professionType", Integer.parseInt(professionType));
+        }
+
+        PageInfo<Map> pageInfo = iIdentityInfoService.selectExportList6ByPage(argMap, pageNum, pageSize);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (int i=0;i<pageInfo.getList().size();i++){
+            if(pageInfo.getList().get(i).get("RESERVATIONDATE")!=null){
+                pageInfo.getList().get(i).put("RESERVATIONDATE",sdf.format(pageInfo.getList().get(i).get("RESERVATIONDATE")));
+            }
+        }
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+
+
+    /*
+    2020年8月5日，导出列表6--“是否具有国家职业资格”
+     */
+    @GetMapping(value = "/export6")
+    @ResponseBody
+    public void export6(HttpServletRequest request, HttpServletResponse response,
+                        @RequestParam("reservationDate") String reservationDate,
+                        @RequestParam("personName") String personName,
+                        @RequestParam("flag") Integer flag,
+                        @RequestParam("personIdNum") String personIdNum,
+                        @RequestParam("professionType") String professionType) throws Exception {
+
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        Map argMap = new HashMap();
+        if(flag==1){
+            argMap.put("reservationDate", reservationDate);
+        }
+        if(personName!=null && personName!=""){ // 姓名
+            argMap.put("personName", personName);
+        }
+        if(personIdNum!=null && personIdNum!=""){ // 身份证号
+            argMap.put("personIdNum", personIdNum);
+        }
+        if (professionType!=null && professionType!=""){ // 是否具有国家职业资格
+            argMap.put("professionType", Integer.parseInt(professionType));
+        }
+
+        List<Map> allList = iIdentityInfoService.selectExportList6(argMap);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
+                .currentTimeMillis() + ".xlsx";
+        ExcelFileUtil.exportXlsx(savePath, allList,
+                new String[]{ "申请人姓名", "申请人身份证号", "申请审核日期","是否具有国家职业资格"},
+                new String[]{"PERSONNAME", "PERSONIDNUM", "RESERVATIONDATE", "PROFESSIONTYPE"});
+        ExcelFileUtil.download(response, savePath, "列表6是否具有国家职业资格.xlsx");
     }
 
     @GetMapping(value = "/export1")

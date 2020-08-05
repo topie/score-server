@@ -107,6 +107,40 @@
             </if>
         </where>
     </select>
+
+    <select id="selectExportList6" resultType="java.util.Map">
+        select t1.name PERSONNAME,
+                t1.id_number PERSONIDNUM,
+                t1.reservation_date RESERVATIONDATE,
+                case
+                when t2.profession_type = 1 then
+                '无'
+                when t2.profession_type = 2 then
+                '具有专业技术人员职业资格'
+                when t2.profession_type = 3 then
+                '具有技能人员职业资格'
+                end PROFESSIONTYPE
+        from t_identity_info t1, t_house_profession t2
+        <where>
+            t1.id = t2.identity_info_id
+            and t1.batch_id in (select id from t_batch_conf where status=1)
+            and t1.accept_address_id = 1
+            <if test="item.personName!=null">
+                and t1.name=#{item.personName}
+            </if>
+            <if test="item.personIdNum!=null">
+                and t1.id_number=#{item.personIdNum}
+            </if>
+            <if test="item.professionType!=null">
+                and t2.profession_type=#{item.professionType}
+            </if>
+            <if test="item.reservationDate!=null">
+                and to_char(t1.reservation_date,'yyyy-MM-dd')=#{item.reservationDate}
+            </if>
+            order by t1.reservation_date asc
+        </where>
+    </select>
+
     <select id="selectExportList2" resultType="java.util.Map">
         select
         i.accept_number,o.applicant_type,i.id_number,i.name,
