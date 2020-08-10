@@ -713,7 +713,45 @@ public class IdentityInfoController {
     }
 
     @GetMapping("/materialSupply")
-    public Result materialSupply(@RequestParam Integer identityInfoId) throws FileNotFoundException {
+    public Result materialSupply(HttpServletRequest request,@RequestParam Integer identityInfoId) throws FileNotFoundException {
+
+        /*
+        2020年3月12日
+        获得访问者的 IP 地址，用其他内网IP来替换图片地址中的IP
+         */
+        String ip = request.getHeader("x-forwarded-for");
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+
+        Date date = new Date();
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf2.format(date)+";审核人员登录的IP地址："+ip);
+        String[] strArr = ip.split("\\.");
+        String str1 = strArr[0];
+        String str2 = strArr[1];
+        String str3 = strArr[2];
+        String str4 = strArr[3];
+
+//        String str1 = "10";
+//        String str2 = "96";
+//        String str3 = "49";
+//        String str4 = "180";
+
+        boolean flag = false;
+        if (Integer.parseInt(str1)==172 && Integer.parseInt(str2)==20 && Integer.parseInt(str3)==211){
+            int four = Integer.parseInt(str4);
+            if (four==191){
+                flag = true;
+            }
+        }
+
         Map params = new HashMap();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
@@ -789,6 +827,13 @@ public class IdentityInfoController {
                 if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
                     materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
                 }
+            }
+
+            //若访问者的IP 地址符合
+            if (flag && materialInfo.getOnlinePersonMaterial()!=null && materialInfo.getOnlinePersonMaterial().getMaterialUri()!=null){
+                String strUri = materialInfo.getOnlinePersonMaterial().getMaterialUri();
+                String newStrUri = strUri.replace("218.67.246.52:80","10.96.3.213:8091");
+                materialInfo.getOnlinePersonMaterial().setMaterialUri(newStrUri);
             }
         }
         params.put("materialInfos", roleMaterialInfoList);
@@ -850,7 +895,45 @@ public class IdentityInfoController {
     }
 
     @GetMapping("/materialSupply2")
-    public Result materialSupply2(@RequestParam Integer identityInfoId) throws FileNotFoundException {
+    public Result materialSupply2(HttpServletRequest request,@RequestParam Integer identityInfoId) throws FileNotFoundException {
+
+        /*
+        2020年3月12日
+        获得访问者的 IP 地址，用其他内网IP来替换图片地址中的IP
+         */
+        String ip = request.getHeader("x-forwarded-for");
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+
+        Date date = new Date();
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf2.format(date)+";审核人员登录的IP地址："+ip);
+        String[] strArr = ip.split("\\.");
+        String str1 = strArr[0];
+        String str2 = strArr[1];
+        String str3 = strArr[2];
+        String str4 = strArr[3];
+
+//        String str1 = "10";
+//        String str2 = "96";
+//        String str3 = "49";
+//        String str4 = "180";
+
+        boolean flag = false;
+        if (Integer.parseInt(str1)==172 && Integer.parseInt(str2)==20 && Integer.parseInt(str3)==211){
+            int four = Integer.parseInt(str4);
+            if (four==191){
+                flag = true;
+            }
+        }
+
         Map params = new HashMap();
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
@@ -890,6 +973,17 @@ public class IdentityInfoController {
             businessLicenseMaterial.setPersonId(-1);
             businessLicenseMaterial.setMaterialInfoName("经办人身份证");
             businessLicenseMaterialInfo.setOnlinePersonMaterial(businessLicenseMaterial);
+
+            /*
+            2020年3月12日
+            若符合人社部门的IP地址，就替换
+             */
+            if (flag && businessLicenseMaterial.getMaterialUri()!=null){
+                String strUri = businessLicenseMaterial.getMaterialUri();
+                String newStrUri = strUri.replace("218.67.246.52:80","10.96.3.213:8091");
+                businessLicenseMaterial.setMaterialUri(newStrUri);
+            }
+
             roleMaterialInfoList.add(0, businessLicenseMaterialInfo);
         }
 
@@ -926,6 +1020,12 @@ public class IdentityInfoController {
                 if (materialInfo.getId().intValue() == onlinePersonMaterial.getMaterialInfoId().intValue()) {
                     materialInfo.setOnlinePersonMaterial(onlinePersonMaterial);
                 }
+            }
+            //若访问者的IP 地址符合
+            if (flag && materialInfo.getOnlinePersonMaterial()!=null && materialInfo.getOnlinePersonMaterial().getMaterialUri()!=null){
+                String strUri = materialInfo.getOnlinePersonMaterial().getMaterialUri();
+                String newStrUri = strUri.replace("218.67.246.52:80","10.96.3.213:8091");
+                materialInfo.getOnlinePersonMaterial().setMaterialUri(newStrUri);
             }
         }
         params.put("materialInfos", roleMaterialInfoList);
@@ -1082,12 +1182,100 @@ public class IdentityInfoController {
         return options;
     }
 
+    public static boolean isIDNumber(String IDNumber) {
+        if (IDNumber == null || "".equals(IDNumber)) {
+            return false;
+        }
+        // 定义判别用户身份证号的正则表达式（15位或者18位，最后一位可以为字母）
+        String regularExpression = "(^[1-9]\\d{5}(18|19|20)\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$)|" +
+                "(^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}$)";
+        //假设18位身份证号码:41000119910101123X  410001 19910101 123X
+        //^开头
+        //[1-9] 第一位1-9中的一个      4
+        //\\d{5} 五位数字           10001（前六位省市县地区）
+        //(18|19|20)                19（现阶段可能取值范围18xx-20xx年）
+        //\\d{2}                    91（年份）
+        //((0[1-9])|(10|11|12))     01（月份）
+        //(([0-2][1-9])|10|20|30|31)01（日期）
+        //\\d{3} 三位数字            123（第十七位奇数代表男，偶数代表女）
+        //[0-9Xx] 0123456789Xx其中的一个 X（第十八位为校验值）
+        //$结尾
+
+        //假设15位身份证号码:410001910101123  410001 910101 123
+        //^开头
+        //[1-9] 第一位1-9中的一个      4
+        //\\d{5} 五位数字           10001（前六位省市县地区）
+        //\\d{2}                    91（年份）
+        //((0[1-9])|(10|11|12))     01（月份）
+        //(([0-2][1-9])|10|20|30|31)01（日期）
+        //\\d{3} 三位数字            123（第十五位奇数代表男，偶数代表女），15位身份证不含X
+        //$结尾
+
+
+        boolean matches = IDNumber.matches(regularExpression);
+
+        //判断第18位校验值
+        if (matches) {
+
+            if (IDNumber.length() == 18) {
+                try {
+                    char[] charArray = IDNumber.toCharArray();
+                    //前十七位加权因子
+                    int[] idCardWi = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
+                    //这是除以11后，可能产生的11位余数对应的验证码
+                    String[] idCardY = {"1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"};
+                    int sum = 0;
+                    for (int i = 0; i < idCardWi.length; i++) {
+                        int current = Integer.parseInt(String.valueOf(charArray[i]));
+                        int count = current * idCardWi[i];
+                        sum += count;
+                    }
+                    char idCardLast = charArray[17];
+                    int idCardMod = sum % 11;
+                    if (idCardY[idCardMod].toUpperCase().equals(String.valueOf(idCardLast).toUpperCase())) {
+                        return true;
+                    } else {
+                        //System.out.println(IDNumber);
+//                        System.out.println("身份证最后一位:" + String.valueOf(idCardLast).toUpperCase() +
+//                                "错误,正确的应该是:" + idCardY[idCardMod].toUpperCase());
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("异常:" + IDNumber);
+                    return false;
+                }
+            }
+
+        }
+        return matches;
+    }
+
     /*
     全程监控——积分批次管理，列表中操作列加入“人数统计”按钮
      */
     @RequestMapping("/applicationCount")
     @ResponseBody
     public Result applicationCount(AcceptDateConf acceptDateConf) throws FileNotFoundException {
+
+        /*
+        2020年7月3日，解决随迁子女的身份证号校验的问题
+         */
+        /*Condition condition2 = new Condition(HouseRelationship.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria2 = condition2.createCriteria();
+        criteria2.andGreaterThan("identityInfoId", 33982);
+        criteria2.andNotEqualTo("relationship","配偶");
+        criteria2.andEqualTo("isRemove",1);
+        criteria2.andIsNotNull("idNumber");
+        List<HouseRelationship> list = iHouseRelationshipService.findByCondition(condition2);
+        for(HouseRelationship houseRelationship : list){
+            if(!isIDNumber(houseRelationship.getIdNumber())){
+                System.out.println("有问题的身份证号：'"+houseRelationship.getIdNumber()+"',");
+            }
+        }*/
+
+
         Condition condition = new Condition(IdentityInfo.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         if (acceptDateConf.getBatchId() != null) {
