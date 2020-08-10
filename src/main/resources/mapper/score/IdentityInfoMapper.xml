@@ -111,6 +111,7 @@
     <select id="selectExportList6" resultType="java.util.Map">
         select t1.name PERSONNAME,
                 t1.id_number PERSONIDNUM,
+                t3.company_name COMPANYNAME,
                 t1.reservation_date RESERVATIONDATE,
                 case
                 when t2.profession_type = 1 then
@@ -120,11 +121,12 @@
                 when t2.profession_type = 3 then
                 '具有技能人员职业资格'
                 end PROFESSIONTYPE
-        from t_identity_info t1, t_house_profession t2
+        from t_identity_info t1, t_house_profession t2,t_company_info t3
         <where>
             t1.id = t2.identity_info_id
             and t1.batch_id in (select id from t_batch_conf where status=1)
             and t1.accept_address_id = 1
+            and t1.company_id = t3.id
             <if test="item.personName!=null">
                 and t1.name=#{item.personName}
             </if>

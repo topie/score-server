@@ -186,8 +186,8 @@ public class StatExportController {
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[]{ "申请人姓名", "申请人身份证号", "申请审核日期","是否具有国家职业资格"},
-                new String[]{"PERSONNAME", "PERSONIDNUM", "RESERVATIONDATE", "PROFESSIONTYPE"});
+                new String[]{ "申请人姓名", "申请人身份证号", "申请单位名称","申请审核日期","是否具有国家职业资格"},
+                new String[]{"PERSONNAME", "PERSONIDNUM","COMPANYNAME", "RESERVATIONDATE", "PROFESSIONTYPE"});
         ExcelFileUtil.download(response, savePath, "列表6是否具有国家职业资格.xlsx");
     }
 
