@@ -143,6 +143,28 @@
         </where>
     </select>
 
+
+
+    <select id="selectExportList7" resultType="java.util.Map">
+        select t1.name NAME,
+            t1.id_number ID_NUMBER,
+            t1.luohu_number   LUOHU_NUMBER,
+            t2.name            SQRNAME,
+            t2.id_number      SQRID_NUMBER,
+            t2.relationship   RELATIONSHIP,
+            t2.culture_degree CULTURE_DEGREE,
+            case when t2.is_remove=1 then '随迁'  when t2.is_remove=2 then '不随迁' else '无' end ISREMOVE
+          from t_identity_info t1 left join t_house_relationship t2 on t1.id = t2.identity_info_id
+            <where>
+              t1.batch_id in (select id from t_batch_conf where status=1)
+              and t1.accept_address_id = 1
+              and t1.police_approve_status = 3
+              order by t1.id asc
+            </where>
+    </select>
+
+
+
     <select id="selectExportList2" resultType="java.util.Map">
         select
         i.accept_number,o.applicant_type,i.id_number,i.name,

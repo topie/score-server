@@ -191,6 +191,27 @@ public class StatExportController {
         ExcelFileUtil.download(response, savePath, "列表6是否具有国家职业资格.xlsx");
     }
 
+
+    /*
+    2020年8月5日，导出列表6--“是否具有国家职业资格”
+     */
+    @GetMapping(value = "/export7")
+    @ResponseBody
+    public void export7(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+
+        List<Map> allList = iIdentityInfoService.selectExportList7();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
+                .currentTimeMillis() + ".xlsx";
+        ExcelFileUtil.exportXlsx(savePath, allList,
+                new String[]{ "申请人姓名", "申请人身份证号", "落户编号","随迁人姓名","随迁人身份证号","关系","学历","是否随迁"},
+                new String[]{"NAME", "ID_NUMBER","LUOHU_NUMBER", "SQRNAME", "SQRID_NUMBER", "RELATIONSHIP", "CULTURE_DEGREE","ISREMOVE"});
+        ExcelFileUtil.download(response, savePath, "导出公安已通过名单.xlsx");
+    }
+
     @GetMapping(value = "/export1")
     @ResponseBody
     public void export1(HttpServletRequest request, HttpServletResponse response,
