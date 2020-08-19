@@ -640,7 +640,7 @@ public class RenshePrevApproveController {
             identityInfo.setOpuser4(securityUser.getDisplayName());
             identityInfo.setHallStatus(4);
             identityInfo.setRensheAcceptStatus(4);
-            identityInfo.setRejectReason((identityInfo.getRejectReason()==null ? "" : identityInfo.getRejectReason()+";")+reasonType + " " + rejectReason);
+            identityInfo.setRejectReason(reasonType + " " + rejectReason);
             identityInfo.setRensheSupplyDate(new Date());
             iIdentityInfoService.update(identityInfo);
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
