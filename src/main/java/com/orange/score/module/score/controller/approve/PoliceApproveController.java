@@ -204,6 +204,40 @@ public class PoliceApproveController {
         return ResponseUtil.success();
     }
 
+
+    /**
+     * 2020年8月19日
+     * 公安前置审核 操作
+     * @param id
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/policeBackStar")
+    public Result policeBackStar(@RequestParam Integer id) throws IOException {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        IdentityInfo identityInfo = iIdentityInfoService.findById(id);
+        identityInfo.setPoliceApproveStatus(1); // 公安前置审核待审核
+        iIdentityInfoService.update(identityInfo);
+
+        /*
+        留痕
+         */
+        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+        personBatchStatusRecord.setPersonId(identityInfo.getId());
+        personBatchStatusRecord.setBatchId(identityInfo.getBatchId());
+        personBatchStatusRecord.setPersonIdNumber(identityInfo.getIdNumber());
+        personBatchStatusRecord.setStatusStr(securityUser.getUsername()+"公安退回至待审核;");
+        personBatchStatusRecord.setStatusTime(new Date());
+        personBatchStatusRecord.setStatusReason(securityUser.getUsername()+"公安退回至待审核");
+        personBatchStatusRecord.setStatusTypeDesc(securityUser.getUsername()+"公安退回至待审核");
+        personBatchStatusRecord.setStatusInt(252);
+        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+
+        return ResponseUtil.success();
+    }
+
+
     @PostMapping("/disAgree2")
     public Result disAgree2(@RequestParam Integer id,
                             @RequestParam(value = "reasonType", required = false, defaultValue = "其它") String reasonType,
