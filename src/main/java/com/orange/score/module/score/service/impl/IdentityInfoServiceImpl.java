@@ -38,7 +38,7 @@ import java.util.Map;
 public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implements IIdentityInfoService {
 
     @Autowired
-    private IdentityInfoMapper identityInfoMapper;
+    protected IdentityInfoMapper identityInfoMapper;
 
     @Autowired
     private IColumnJsonService iColumnJsonService;
@@ -91,8 +91,18 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
             if (identityInfo.getBatchId() != null) {
                 criteria.andEqualTo("batchId", identityInfo.getBatchId());
             }
-            if (identityInfo.getCompanyId() != null) {
-                criteria.andEqualTo("companyId", identityInfo.getCompanyId());
+//            if (identityInfo.getCompanyId() != null) {
+//                criteria.andEqualTo("companyId", identityInfo.getCompanyId());
+//            }
+            if(identityInfo.getRentHouseAddress()!=null && identityInfo.getRentHouseAddress()!=""){
+                CompanyInfo companyInfo = new CompanyInfo();
+                companyInfo.setCompanyName(identityInfo.getRentHouseAddress());
+                List<CompanyInfo> list = iCompanyInfoService.selectByFilter(companyInfo);
+                List<Integer> listCcompanyId = new ArrayList<>();
+                for(CompanyInfo companyInfo1 :list){
+                    listCcompanyId.add(companyInfo1.getId());
+                }
+                criteria.andIn("companyId",listCcompanyId);
             }
             if (identityInfo.getAcceptAddressId() != null) {
                 criteria.andEqualTo("acceptAddressId", identityInfo.getAcceptAddressId());
