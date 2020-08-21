@@ -120,6 +120,9 @@ public class RensheAcceptController {
         }
         identityInfo.setRensheAcceptStatus(1);
         identityInfo.setRensheOrGongan(2);// 公安不通过的件，人社不再审核
+        if(identityInfo.getRentHouseAddress()!=null && identityInfo.getRentHouseAddress()!=""){
+            identityInfo.setRentIdNumber(identityInfo.getRentHouseAddress());
+        }
         identityInfo.setRentHouseAddress(dateSearch.toString()); // 借用 RentHouseAddress 字段
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
@@ -165,6 +168,9 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(2);
+        if(identityInfo.getRentHouseAddress()!=null && identityInfo.getRentHouseAddress()!=""){
+            identityInfo.setRentIdNumber(identityInfo.getRentHouseAddress());
+        }
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
         for (IdentityInfo info : pageInfo.getList()) {
@@ -210,6 +216,9 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(3);
+        if(identityInfo.getRentHouseAddress()!=null && identityInfo.getRentHouseAddress()!=""){
+            identityInfo.setRentIdNumber(identityInfo.getRentHouseAddress());
+        }
         identityInfo.setRentHouseAddress(dateSearch.toString()); // 借用 RentHouseAddress 字段
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
@@ -265,6 +274,9 @@ public class RensheAcceptController {
             identityInfo.setAcceptAddressId(2);
         }
         identityInfo.setRensheAcceptStatus(4);
+        if(identityInfo.getRentHouseAddress()!=null && identityInfo.getRentHouseAddress()!=""){
+            identityInfo.setRentIdNumber(identityInfo.getRentHouseAddress());
+        }
         identityInfo.setRentHouseAddress(dateSearch.toString()); // 借用 RentHouseAddress 字段
         List<Integer> companyIds = iIdentityInfoService.selectApprovingRedCompanyId(identityInfo, 5);
         PageInfo<IdentityInfo> pageInfo = iIdentityInfoService.selectByFilterAndPage(identityInfo, pageNum, pageSize);
