@@ -48,6 +48,9 @@ public class ScoreTask {
     @Autowired
     private IIndicatorItemService iIndicatorItemService;
 
+    @Autowired
+    private IHouseRelationshipService iHouseRelationshipService;
+
 
     @Scheduled(cron = "3 0 0 * * ? ")
     public void batchStartTask() {
@@ -480,6 +483,111 @@ public class ScoreTask {
         }
     }
 
+
+    /**
+     * 2020年9月7日
+     * 只做市区的件
+     *
+     * 1、市民政局：填写申请人信息页面第1页，“配偶是否在天津就业且用人单位依法缴纳社会保险累计满24个月”、“配偶是否是现役军人”两项都选择“否”，
+     * 自动接收文件并打为0分。
+     *
+     * 2、市退役军人事务局：填写申请人信息页面第6页，“服役期间立功情况”选择“无”，
+     * 自动接收文件并打为0分。
+     */
+    //@Scheduled(cron = "0 0/2 * * * ? ")//测试用，时间频率，每隔两分钟执行一次；
+    @Scheduled(cron = "20 0 0 * * ? ")
+    public void minzhegAndTuiyijunren(){
+        Condition condition_bc = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria_bc = condition_bc.createCriteria();
+        criteria_bc.andEqualTo("status", 1);
+        List<BatchConf> list_bc = iBatchConfService.findByCondition(condition_bc);
+        if (list_bc.size()>0){
+            Integer batch_id = list_bc.get(0).getId();
+
+            List<Integer> roles = new ArrayList<Integer>();
+            roles.add(5); // 民政
+            roles.add(1050); // 退役军人事务局
+            Condition condition = new Condition(ScoreRecord.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("batchId", batch_id);
+            criteria.andIn("opRoleId",roles);
+            criteria.andIsNull("scoreValue"); // 分数为空
+            criteria.andEqualTo("acceptAddressId", 1); // 市区
+            //criteria.andEqualTo("personId", 483454);
+            List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+
+
+
+            IdentityInfo person;
+            HouseOther houseOther;
+            HouseRelationship houseRelationship;
+            if (scoreRecords.size()>0){
+                for (ScoreRecord scoreRecord : scoreRecords){
+                    person = iIdentityInfoService.findById(scoreRecord.getPersonId());
+                    houseOther = iHouseOtherService.findBy("identityInfoId", scoreRecord.getPersonId());
+
+                    condition = new Condition(HouseRelationship.class);
+                    criteria = condition.createCriteria();
+                    criteria.andEqualTo("identityInfoId",scoreRecord.getPersonId());
+                    criteria.andEqualTo("relationship","配偶");
+                    criteria.andEqualTo("inTianjin","2");
+                    criteria.andEqualTo("isSpousesoldier","2");
+
+                    //criteria.andEqualTo("personId", 483454);
+                    List<HouseRelationship> houseRelationships = iHouseRelationshipService.findByCondition(condition);
+
+
+                    if (scoreRecord.getOpRoleId()==5){
+                        if(houseRelationships.size()>0){
+                            scoreRecord.setItemId(1031);
+                            scoreRecord.setStatus(4);
+                            scoreRecord.setScoreValue(new BigDecimal(0));
+                            scoreRecord.setScoreDate(new Date());
+                            iScoreRecordService.update(scoreRecord);
+
+                            /*
+                            留痕
+                             */
+                            PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                            personBatchStatusRecord.setPersonId(person.getId());
+                            personBatchStatusRecord.setBatchId(person.getBatchId());
+                            personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
+                            personBatchStatusRecord.setStatusStr("民政，系统打0分");
+                            personBatchStatusRecord.setStatusTime(new Date());
+                            personBatchStatusRecord.setStatusReason("民政，系统打0分");
+                            personBatchStatusRecord.setStatusTypeDesc("民政，系统打0分");
+                            personBatchStatusRecord.setStatusInt(203);
+                            iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+                        }
+                    }else if (scoreRecord.getOpRoleId() == 1050){
+                        if (houseOther.getSoldierMeritorious()!=null && houseOther.getSoldierMeritorious()==50){
+                            scoreRecord.setItemId(1031);
+                            scoreRecord.setStatus(4);
+                            scoreRecord.setScoreValue(new BigDecimal(0));
+                            scoreRecord.setScoreDate(new Date());
+                            iScoreRecordService.update(scoreRecord);
+
+                            /*
+                            留痕
+                             */
+                            PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                            personBatchStatusRecord.setPersonId(person.getId());
+                            personBatchStatusRecord.setBatchId(person.getBatchId());
+                            personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
+                            personBatchStatusRecord.setStatusStr("退役军人事务局，系统打0分");
+                            personBatchStatusRecord.setStatusTime(new Date());
+                            personBatchStatusRecord.setStatusReason("退役军人事务局，系统打0分");
+                            personBatchStatusRecord.setStatusTypeDesc("退役军人事务局，系统打0分");
+                            personBatchStatusRecord.setStatusInt(204);
+                            iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     /**
      * 2020年8月5日
      * 将人社部门的守法诚信打分项自动设置为0分
@@ -532,72 +640,4 @@ public class ScoreTask {
         }
     }
 
-//    @Scheduled(cron = "0/30 * * * * ? ")
-    //    public void supplyEpTask() {
-    //        Date now = new Date();
-    //        Condition condition = new Condition(IdentityInfo.class);
-    //        tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
-    //        criteria.andEqualTo("unionApproveStatus1", 4);
-    //        criteria.andGreaterThanOrEqualTo("unionApprove1Et", now);
-    //        List<IdentityInfo> list = iIdentityInfoService.findByCondition(condition);
-    //        for (IdentityInfo identityInfo : list) {
-    //            identityInfo.setUnionApproveStatus1(3);
-    //            identityInfo.setReservationStatus(9);
-    //            iIdentityInfoService.update(identityInfo);
-    //            iPersonBatchStatusRecordService
-    //                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus1", 3);
-    //            iPersonBatchStatusRecordService
-    //                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 9);
-    //            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-    //            try {
-    //                SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您的申请信息网上预审未通过。");
-    //            } catch (IOException e) {
-    //                e.printStackTrace();
-    //            }
-    //        }
-    //
-    //        criteria = condition.createCriteria();
-    //        criteria.andEqualTo("unionApproveStatus2", 4);
-    //        criteria.andGreaterThanOrEqualTo("unionApprove2Et", now);
-    //        for (IdentityInfo identityInfo : list) {
-    //            identityInfo.setUnionApproveStatus2(3);
-    //            identityInfo.setReservationStatus(9);
-    //            iIdentityInfoService.update(identityInfo);
-    //            iPersonBatchStatusRecordService
-    //                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "unionApproveStatus2", 3);
-    //            iPersonBatchStatusRecordService
-    //                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "reservationStatus", 9);
-    //            HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
-    //            try {
-    //                SmsUtil.send(houseOther.getSelfPhone(), "系统提示：" + identityInfo.getName() + "，您的申请信息网上预审未通过。");
-    //            } catch (IOException e) {
-    //                e.printStackTrace();
-    //            }
-    //        }
-    //
-    //        criteria = condition.createCriteria();
-    //        criteria.andEqualTo("rensheAcceptStatus", 2);
-    //        criteria.andGreaterThanOrEqualTo("rensheAcceptSupplyEt", now);
-    //        for (IdentityInfo identityInfo : list) {
-    //            identityInfo.setHallStatus(4);
-    //            identityInfo.setRensheAcceptStatus(4);
-    //            iIdentityInfoService.update(identityInfo);
-    //            iPersonBatchStatusRecordService
-    //                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 4);
-    //
-    //        }
-    //
-    //        criteria = condition.createCriteria();
-    //        criteria.andEqualTo("policeApproveStatus", 2);
-    //        criteria.andGreaterThanOrEqualTo("policeApproveEt", now);
-    //        for (IdentityInfo identityInfo : list) {
-    //            identityInfo.setPoliceApproveStatus(4);
-    //            identityInfo.setHallStatus(1);
-    //            iIdentityInfoService.update(identityInfo);
-    //            iPersonBatchStatusRecordService
-    //                    .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 1);
-    //
-    //        }
-    //
-    //    }
 }
