@@ -441,7 +441,7 @@ public class ScoreTask {
                             scoreRecord.setItemId(3);
                             BigDecimal value = new BigDecimal(map.get(3));
                             scoreRecord.setScoreValue(value);
-                        }else if(person.getAge()>36){
+                        }else if(person.getAge()>=36){
                             scoreRecord.setItemId(2);
                             BigDecimal value = new BigDecimal(map.get(2));
                             scoreRecord.setScoreValue(value);
