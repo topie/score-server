@@ -452,32 +452,46 @@ public class ScoreTask {
                         }
                         scoreRecord.setStatus(4);
                         scoreRecord.setScoreDate(new Date());
+                        iScoreRecordService.update(scoreRecord);
+
+                        /*
+                        留痕
+                         */
+                        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                        personBatchStatusRecord.setPersonId(person.getId());
+                        personBatchStatusRecord.setBatchId(person.getBatchId());
+                        personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
+                        personBatchStatusRecord.setStatusStr("公安部门年龄，材料送达;");
+                        personBatchStatusRecord.setStatusTime(new Date());
+                        personBatchStatusRecord.setStatusReason("公安部门年龄，材料送达");
+                        personBatchStatusRecord.setStatusTypeDesc("公安部门年龄，材料送达");
+                        personBatchStatusRecord.setStatusInt(201);
+                        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
                     }else if (scoreRecord.getIndicatorId() == 902){
                         if (houseOther.getPenalty()!=null && houseOther.getPenalty()==2){
                             scoreRecord.setItemId(1031);
                             scoreRecord.setStatus(4);
                             scoreRecord.setScoreValue(new BigDecimal(0));
                             scoreRecord.setScoreDate(new Date());
+
+                            iScoreRecordService.update(scoreRecord);
+
+                            /*
+                            留痕
+                             */
+                            PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                            personBatchStatusRecord.setPersonId(person.getId());
+                            personBatchStatusRecord.setBatchId(person.getBatchId());
+                            personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
+                            personBatchStatusRecord.setStatusStr("公安部门5年内是否有刑事犯罪记录，材料送达;");
+                            personBatchStatusRecord.setStatusTime(new Date());
+                            personBatchStatusRecord.setStatusReason("公安部门5年内是否有刑事犯罪记录，材料送达");
+                            personBatchStatusRecord.setStatusTypeDesc("公安部门5年内是否有刑事犯罪记录，材料送达");
+                            personBatchStatusRecord.setStatusInt(201);
+                            iPersonBatchStatusRecordService.save(personBatchStatusRecord);
                         }
                     }
-                    /*else{
-                        scoreRecord.setStatus(3);
-                    }*/
-                    iScoreRecordService.update(scoreRecord);
-
-                    /*
-                    留痕
-                     */
-                    PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
-                    personBatchStatusRecord.setPersonId(person.getId());
-                    personBatchStatusRecord.setBatchId(person.getBatchId());
-                    personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
-                    personBatchStatusRecord.setStatusStr("公安部门年龄、5年内是否有刑事犯罪记录，材料送达;");
-                    personBatchStatusRecord.setStatusTime(new Date());
-                    personBatchStatusRecord.setStatusReason("公安部门年龄、5年内是否有刑事犯罪记录，材料送达");
-                    personBatchStatusRecord.setStatusTypeDesc("公安部门年龄、5年内是否有刑事犯罪记录，材料送达");
-                    personBatchStatusRecord.setStatusInt(201);
-                    iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+                    
                 }
             }
         }
