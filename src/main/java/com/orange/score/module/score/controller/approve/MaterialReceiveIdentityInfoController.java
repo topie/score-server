@@ -876,9 +876,9 @@ public class MaterialReceiveIdentityInfoController {
          */
         String str = "";
         if (securityUser.getUserType() == 0){
-            str = str + "市区";
+            str = str + "市区居住证积分受理点-";
         }else if (securityUser.getUserType() == 1){
-            str = str + "滨海";
+            str = str + "滨海新区居住证积分受理点-";
         }
         Map<Integer, String> map = new HashMap<Integer, String>();
 //        map.put(3,"人社");
@@ -1001,9 +1001,9 @@ public class MaterialReceiveIdentityInfoController {
          */
         String str = "";
         if (securityUser.getUserType() == 0){
-            str = str + "市区";
+            str = str + "市区居住证积分受理点-";
         }else if (securityUser.getUserType() == 1){
-            str = str + "滨海";
+            str = str + "滨海新区居住证积分受理点-";
         }
         Map<Integer, String> map = new HashMap<Integer, String>();
 //        map.put(3,"人社");
