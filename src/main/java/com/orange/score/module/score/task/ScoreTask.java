@@ -51,6 +51,9 @@ public class ScoreTask {
     @Autowired
     private IHouseRelationshipService iHouseRelationshipService;
 
+    @Autowired
+    private IHouseMoveService iHouseMoveService;
+
 
     @Scheduled(cron = "3 0 0 * * ? ")
     public void batchStartTask() {
@@ -491,7 +494,7 @@ public class ScoreTask {
                             iPersonBatchStatusRecordService.save(personBatchStatusRecord);
                         }
                     }
-                    
+
                 }
             }
         }
@@ -527,7 +530,7 @@ public class ScoreTask {
             criteria.andIn("opRoleId",roles);
             criteria.andIsNull("scoreValue"); // 分数为空
             criteria.andEqualTo("acceptAddressId", 1); // 市区
-            //criteria.andEqualTo("personId", 483454);
+            //criteria.andEqualTo("personId", 484843);
             List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
 
 
@@ -535,10 +538,12 @@ public class ScoreTask {
             IdentityInfo person;
             HouseOther houseOther;
             HouseRelationship houseRelationship;
+            HouseMove houseMove;
             if (scoreRecords.size()>0){
                 for (ScoreRecord scoreRecord : scoreRecords){
                     person = iIdentityInfoService.findById(scoreRecord.getPersonId());
                     houseOther = iHouseOtherService.findBy("identityInfoId", scoreRecord.getPersonId());
+                    houseMove = iHouseMoveService.findBy("identityInfoId", scoreRecord.getPersonId());
 
                     condition = new Condition(HouseRelationship.class);
                     criteria = condition.createCriteria();
@@ -552,7 +557,14 @@ public class ScoreTask {
 
 
                     if (scoreRecord.getOpRoleId()==5){
-                        if(houseRelationships.size()>0){
+                        /*
+                        2020年10月10日
+                        条件再加上，婚姻状况是如下的，打0分
+                            “未婚 2 ”、
+                            “丧偶 3”、
+                            “离异 4 ”
+                         */
+                        if(houseRelationships.size()>0 || houseMove.getMarriageStatus()<5){
                             scoreRecord.setItemId(1031);
                             scoreRecord.setStatus(4);
                             scoreRecord.setScoreValue(new BigDecimal(0));
