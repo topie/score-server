@@ -366,20 +366,6 @@ public class IdentityInfoController {
                 }
             }
         }
-       /* for (MaterialInfo materialInfo : materialInfos) {
-            mMap.put(materialInfo.getId() + "", materialInfo.getName());
-            if (roles.contains(3) || roles.contains(4)) {
-                if (materialInfo.getIsUpload() == 1) {
-                    if (roleMidSet.contains(materialInfo.getId()) && 17 != materialInfo.getId()) {
-                        roleMaterialInfoList.add(materialInfo);
-                    }
-                }
-                //公安单独处理随迁信息
-                if (roles.contains(4) && Arrays.asList(1011, 1017, 1013, 1014, 17).contains(materialInfo.getId())) {
-                    roleMaterialInfoList.add(materialInfo);
-                }
-            }
-        }*/
         condition = new Condition(OnlinePersonMaterial.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
         criteria.andEqualTo("personId", person.getId());
@@ -1290,6 +1276,8 @@ public class IdentityInfoController {
         int reservationSum = 0;//已预约的人数
         int acceptedCheck = 0;//人社受理审核通过的人数
         int acceptedCheckRensheGongan = 0;//人社受理审核通过 且 公安前置审核通过 的人数
+        int fieldPassGonganAndRenshe = 0;// 2020年10月10日 未通过公安、人社任何一个部门审核的全部人数
+        int renshePassing = 0; // 2020年10月10日 人社受理审核待审核
 
         //市区
         int passSeltTest_1 = 0;//已经通过自助测评的人数
@@ -1298,6 +1286,8 @@ public class IdentityInfoController {
         int reservationSum_1 = 0;//已预约的人数
         int acceptedCheck_1 = 0;//人社受理审核通过的人数
         int acceptedCheckRensheGongan_1 = 0;//人社受理审核通过 且 公安前置审核通过 的人数
+        int fieldPassGonganAndRenshe_1 = 0;// 2020年10月10日 未通过公安、人社任何一个部门审核的全部人数
+        int renshePassing_1 = 0; // 2020年10月10日 人社受理审核待审核
 
         //滨海新区
         int passSeltTest_2 = 0;//已经通过自助测评的人数
@@ -1306,6 +1296,8 @@ public class IdentityInfoController {
         int reservationSum_2 = 0;//已预约的人数
         int acceptedCheck_2 = 0;//人社受理审核通过的人数
         int acceptedCheckRensheGongan_2 = 0;//人社受理审核通过 且 公安前置审核通过 的人数
+        int fieldPassGonganAndRenshe_2 = 0;// 2020年10月10日 未通过公安、人社任何一个部门审核的全部人数
+        int renshePassing_2 = 0; // 2020年10月10日 人社受理审核待审核
 
         for (IdentityInfo ideInfo : identityInfoList) {
             if (ideInfo.getReservationStatus() >= 6) {
@@ -1326,6 +1318,12 @@ public class IdentityInfoController {
             if(ideInfo.getRensheAcceptStatus()==3 && ideInfo.getPoliceApproveStatus()==3){
                 acceptedCheckRensheGongan++;
             }
+            if(ideInfo.getRensheAcceptStatus()==4 || ideInfo.getPoliceApproveStatus()==4){
+                fieldPassGonganAndRenshe++;
+            }
+            if(ideInfo.getRensheAcceptStatus()==1){
+                renshePassing++;
+            }
 
             //市区
             if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 1) {
@@ -1342,6 +1340,12 @@ public class IdentityInfoController {
             }
             if(ideInfo.getRensheAcceptStatus()==3 && ideInfo.getPoliceApproveStatus()==3 && ideInfo.getAcceptAddressId() == 1) {
                 acceptedCheckRensheGongan_1++;
+            }
+            if((ideInfo.getRensheAcceptStatus()==4 || ideInfo.getPoliceApproveStatus()==4) && ideInfo.getAcceptAddressId() == 1) {
+                fieldPassGonganAndRenshe_1++;
+            }
+            if(ideInfo.getRensheAcceptStatus()==1 && ideInfo.getAcceptAddressId() == 1) {
+                renshePassing_1++;
             }
 
             //滨海新区
@@ -1360,6 +1364,12 @@ public class IdentityInfoController {
             if(ideInfo.getRensheAcceptStatus()==3 && ideInfo.getPoliceApproveStatus()==3 && ideInfo.getAcceptAddressId() == 2) {
                 acceptedCheckRensheGongan_2++;
             }
+            if((ideInfo.getRensheAcceptStatus()==4 || ideInfo.getPoliceApproveStatus()==4) && ideInfo.getAcceptAddressId() == 2) {
+                fieldPassGonganAndRenshe_2++;
+            }
+            if(ideInfo.getRensheAcceptStatus()==1 && ideInfo.getAcceptAddressId() == 2) {
+                renshePassing_2++;
+            }
         }
 
         Map params = new HashMap();
@@ -1370,18 +1380,24 @@ public class IdentityInfoController {
         params.put("reservationSum", reservationSum + "");
         params.put("acceptedCheck", acceptedCheck + "");
         params.put("acceptedCheckRensheGongan", acceptedCheckRensheGongan + "");
+        params.put("fieldPassGonganAndRenshe", fieldPassGonganAndRenshe + "");
+        params.put("renshePassing", renshePassing + "");
 
         params.put("applyingInterPre_1", applyingInterPre_1 + "");
         params.put("applyedInterPre_1", applyedInterPre_1 + "");
         params.put("reservationSum_1", reservationSum_1 + "");
         params.put("acceptedCheck_1", acceptedCheck_1 + "");
         params.put("acceptedCheckRensheGongan_1", acceptedCheckRensheGongan_1 + "");
+        params.put("fieldPassGonganAndRenshe_1", fieldPassGonganAndRenshe_1 + "");
+        params.put("renshePassing_1", renshePassing_1 + "");
 
         params.put("applyingInterPre_2", applyingInterPre_2 + "");
         params.put("applyedInterPre_2", applyedInterPre_2 + "");
         params.put("reservationSum_2", reservationSum_2 + "");
         params.put("acceptedCheck_2", acceptedCheck_2 + "");
         params.put("acceptedCheckRensheGongan_2", acceptedCheckRensheGongan_2 + "");
+        params.put("fieldPassGonganAndRenshe_2", fieldPassGonganAndRenshe_2 + "");
+        params.put("renshePassing_2", renshePassing_2 + "");
 
         String templatePath = ResourceUtils.getFile("classpath:templates/").getPath();
         String html = FreeMarkerUtil.getHtmlStringFromTemplate(templatePath, "application_count.ftl", params);

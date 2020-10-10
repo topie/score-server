@@ -47,4 +47,16 @@
         <td>${acceptedCheckRensheGongan_1}</td>
         <td>${acceptedCheckRensheGongan_2}</td>
     </tr>
+    <tr>
+        <td>人社、公安任一部门审核都未通过的人数</td>
+        <td>${fieldPassGonganAndRenshe}</td>
+        <td>${fieldPassGonganAndRenshe_1}</td>
+        <td>${fieldPassGonganAndRenshe_2}</td>
+    </tr>
+    <tr>
+        <td>人社受理审核待审核人数</td>
+        <td>${renshePassing}</td>
+        <td>${renshePassing_1}</td>
+        <td>${renshePassing_2}</td>
+    </tr>
 </table>
