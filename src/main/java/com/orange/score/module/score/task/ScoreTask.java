@@ -666,4 +666,64 @@ public class ScoreTask {
         }
     }
 
+    /**
+     * 2020年10月15日
+     * 市教委窗口要求，申请人填写信息第4页，“文化程度”选项，选择“高级技工学校高级班”或“无”的申请人，每日定时做自动接收。
+        信息流转与市民政局、市退役军人局一致，只修改市区，不修改滨海新区。
+     */
+    //@Scheduled(cron = "0 0/2 * * * ? ")//测试用，时间频率，每隔两分钟执行一次；
+    @Scheduled(cron = "20 0 0 * * ? ")
+    public void wenhuachengdu(){
+        Condition condition_bc = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria_bc = condition_bc.createCriteria();
+        criteria_bc.andEqualTo("status", 1);
+        List<BatchConf> list_bc = iBatchConfService.findByCondition(condition_bc);
+        if (list_bc.size()>0){
+            Integer batch_id = list_bc.get(0).getId();
+
+            Condition condition = new Condition(ScoreRecord.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("batchId", batch_id);
+            criteria.andEqualTo("opRoleId", 6);// 市教委
+            criteria.andEqualTo("indicatorId", 3);// 受教育程度
+            criteria.andIsNull("scoreValue"); // 分数为空
+            criteria.andEqualTo("acceptAddressId", 1); // 市区
+            //criteria.andEqualTo("personId", 483480);
+            List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+
+            IdentityInfo person;
+            HouseOther houseOther;
+            if (scoreRecords.size()>0){
+                for (ScoreRecord scoreRecord : scoreRecords){
+                    person = iIdentityInfoService.findById(scoreRecord.getPersonId());
+                    houseOther = iHouseOtherService.findBy("identityInfoId", scoreRecord.getPersonId());
+                    if(houseOther.getCultureDegree()==1011 || houseOther.getCultureDegree()==1013){ // 1011,1013
+                        scoreRecord.setStatus(4);
+                        scoreRecord.setScoreValue(new BigDecimal(0));
+                        scoreRecord.setItemId(1031);
+                        scoreRecord.setScoreDate(new Date());
+                        iScoreRecordService.update(scoreRecord);
+
+                        /*
+                        留痕
+                         */
+                        PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                        personBatchStatusRecord.setPersonId(person.getId());
+                        personBatchStatusRecord.setBatchId(person.getBatchId());
+                        personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
+                        personBatchStatusRecord.setStatusStr("文化程度自动打0分;");
+                        personBatchStatusRecord.setStatusTime(new Date());
+                        personBatchStatusRecord.setStatusReason("文化程度自动打0分");
+                        personBatchStatusRecord.setStatusTypeDesc("文化程度自动打0分");
+                        personBatchStatusRecord.setStatusInt(205);
+                        iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+                    }
+
+                }
+            }
+        }
+    }
+
+
+
 }
