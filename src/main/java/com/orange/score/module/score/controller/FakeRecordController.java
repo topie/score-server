@@ -69,7 +69,7 @@ public class FakeRecordController {
         criteria.andEqualTo("batchId", fakeRecord.getBatchCode());
         List<IdentityInfo> list = iIdentityInfoService.findByCondition(condition);
         if (list.size() == 0){
-            return ResponseUtil.error("请输入正确的身份证号，批次信息");
+            return ResponseUtil.error("请输入正确的身份证号，信息");
         } else {
             iFakeRecordService.save(fakeRecord);
             SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
