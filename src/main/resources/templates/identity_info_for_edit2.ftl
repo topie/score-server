@@ -74,6 +74,14 @@
                        value="${other.profession}">
             </td>
         </tr>-->
+        <td colspan="12">是否为派遣制用工：
+            <select data-id="${other.id?c}" data-name="other.dispatch"   class="edit"
+                    style="height: 25px;">
+                <option <#if other.dispatch==0>selected</#if> value=0>未选择</option>
+                <option <#if other.dispatch==1>selected</#if> value=1>是</option>
+                <option <#if other.dispatch==2>selected</#if> value=2>否</option>
+            </select>
+        </td>
         <tr>
             <td colspan="12">实际用工单位名称：
                 <input data-id="${other.id?c}" data-name="other.companyName"
