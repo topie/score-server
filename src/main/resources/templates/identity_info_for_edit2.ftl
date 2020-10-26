@@ -61,13 +61,6 @@
             </td>
         </tr>
         <tr>
-            <td colspan="12">剩余预约次数（正整数）：
-                <input data-id="${person.id?c}"   data-name="person.reservationTime"
-                       class="edit input-large" style="height: 25px;"
-                       value="${person.reservationTime}">
-            </td>
-        </tr>
-        <tr>
             <td colspan="12">公安落户编号（请谨慎修改）：
                 <input data-id="${person.id?c}" data-name="person.luohuNumber"
                        class="edit input-large" style="height: 25px;"
