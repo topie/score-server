@@ -68,7 +68,12 @@ public class FakeRecordController {
         criteria.andEqualTo("idNumber", fakeRecord.getIdNumber());
         criteria.andEqualTo("batchId", fakeRecord.getBatchCode());
         List<IdentityInfo> list = iIdentityInfoService.findByCondition(condition);
-        if (list.size() == 0){
+        /**
+         * 2020年10月29日
+         * 因为要录入这个系统第一次用之前的申请人的虚假情况，所以不能在数据库查询申请人是否在库里
+         * 跳过这个if判断，直接进入else 逻辑
+         */
+        if (false){
             return ResponseUtil.error("请输入正确的身份证号，信息");
         } else {
             iFakeRecordService.save(fakeRecord);
