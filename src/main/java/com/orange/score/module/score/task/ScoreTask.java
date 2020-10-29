@@ -418,9 +418,9 @@ public class ScoreTask {
             tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
             criteria.andEqualTo("batchId", batch_id);
             criteria.andEqualTo("opRoleId", 4);// 公安部门
-            //criteria.andLessThanOrEqualTo("status", 3);// 小于等于 3
-            criteria.andIsNull("scoreValue"); // 分数为空
-            //criteria.andEqualTo("personId", 483454);
+            criteria.andLessThanOrEqualTo("status", 3);// 小于等于 3
+            //criteria.andIsNull("scoreValue"); // 分数为空
+            //criteria.andEqualTo("personId", 493713);
             List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
 
             Condition condition2 = new Condition(IndicatorItem.class);
