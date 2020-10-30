@@ -76,14 +76,13 @@ public class FakeRecordController {
         if (false){
             return ResponseUtil.error("请输入正确的身份证号，信息");
         } else {
+            fakeRecord.setCreateTime(new Date());
             iFakeRecordService.save(fakeRecord);
             SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
             if (securityUser == null) throw new AuthBusinessException("用户未登录");
 
             PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
-            personBatchStatusRecord.setPersonId(list.get(0).getId());
-            personBatchStatusRecord.setBatchId(list.get(0).getBatchId());
-            personBatchStatusRecord.setPersonIdNumber(list.get(0).getIdNumber());
+            personBatchStatusRecord.setPersonIdNumber(fakeRecord.getIdNumber());
             personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"-录入虚假材料信息");
             personBatchStatusRecord.setStatusTime(new Date());
             personBatchStatusRecord.setStatusReason("申请人提供虚假信息办理积分落户");
@@ -108,9 +107,7 @@ public class FakeRecordController {
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
 
         PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
-        personBatchStatusRecord.setPersonId(list.get(0).getId());
-        personBatchStatusRecord.setBatchId(list.get(0).getBatchId());
-        personBatchStatusRecord.setPersonIdNumber(list.get(0).getIdNumber());
+        personBatchStatusRecord.setPersonIdNumber(fakeRecord.getIdNumber());
         personBatchStatusRecord.setStatusStr(securityUser.getLoginName()+"-删除虚假材料信息");
         personBatchStatusRecord.setStatusTime(new Date());
         personBatchStatusRecord.setStatusReason("删除虚假材料信息");
