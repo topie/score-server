@@ -700,7 +700,7 @@ public class ScoreTask {
                     if(houseOther.getCultureDegree()==1011 || houseOther.getCultureDegree()==1013){ // 1011,1013
                         scoreRecord.setStatus(4);
                         scoreRecord.setScoreValue(new BigDecimal(0));
-                        scoreRecord.setItemId(1031);
+                        scoreRecord.setItemId(1013);
                         scoreRecord.setScoreDate(new Date());
                         iScoreRecordService.update(scoreRecord);
 
