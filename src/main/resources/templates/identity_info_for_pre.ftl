@@ -325,7 +325,7 @@
                                 <tr>
                                     <td colspan="4">是否社保缴纳：<strong>${other.socialSecurityPayStr}</strong></td>
                                     <td colspan="4">有无行政拘留记录：<strong>${other.detentionStr}</strong></td>
-                                    <td colspan="4">有无行获刑记录：<strong>${other.penaltyStr}</strong></td>
+                                    <td colspan="4">有无获刑记录：<strong>${other.penaltyStr}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">资格证书级别：<strong>${profession.jobLevelStr}</strong></td>
