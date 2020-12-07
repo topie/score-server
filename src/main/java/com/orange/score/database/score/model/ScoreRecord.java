@@ -142,6 +142,10 @@ public class ScoreRecord {
     @Column(name = "accept_address_id")
     private Integer acceptAddressId;
 
+    // 市区用以区分规自局/住建委  1：规自局；2：住建委
+    @Column(name = "guizijuOrZhujianwei")
+    private Integer guizijuOrZhujianwei;
+
     /**
      * 创建时间
      */
@@ -647,5 +651,13 @@ public class ScoreRecord {
 
     public void setIsDeducted(String isDeducted) {
         this.isDeducted = isDeducted;
+    }
+
+    public Integer getGuizijuOrZhujianwei() {
+        return guizijuOrZhujianwei;
+    }
+
+    public void setGuizijuOrZhujianwei(Integer guizijuOrZhujianwei) {
+        this.guizijuOrZhujianwei = guizijuOrZhujianwei;
     }
 }

@@ -724,6 +724,69 @@ public class ScoreTask {
         }
     }
 
+    /**
+     * 2020年12月7日
+     * 因为市区的规自局、住建委分家的原因，但是滨海新区不分家还是一个部门处理件，
+     * 最后给申请人呈现的是4个打分项合并为一个指标项：住房，当申请人复核分数时无法区分把申请的理由分发给哪个部门（规自局、住建委）
+     * 这个定时任务就是解决这个问题的
+     */
+    //@Scheduled(cron = "0 0/2 * * * ? ")//测试用，时间频率，每隔两分钟执行一次；
+    @Scheduled(cron = "20 0 0 * * ? ")
+    public void toreviewGuizijuAndZhujianwei(){
+        Condition condition_bc = new Condition(BatchConf.class);
+        tk.mybatis.mapper.entity.Example.Criteria criteria_bc = condition_bc.createCriteria();
+        criteria_bc.andEqualTo("status", 1);
+        List<BatchConf> list_bc = iBatchConfService.findByCondition(condition_bc);
+        if (list_bc.size()>0){
+            Integer batch_id = list_bc.get(0).getId();
+
+            List<Integer> roles = new ArrayList<Integer>();
+            roles.add(9); // 住建委
+            roles.add(1060); // 规自局
+
+            Condition condition = new Condition(ScoreRecord.class);
+            tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("batchId", batch_id);
+            criteria.andIn("opRoleId",roles);
+            criteria.andIsNull("guizijuOrZhujianwei"); // 规自局住建委的状态为空
+            criteria.andEqualTo("acceptAddressId", 1); // 市区
+            //criteria.andEqualTo("personId", 483480);
+            List<ScoreRecord> scoreRecords = iScoreRecordService.findByCondition(condition);
+
+            IdentityInfo person;
+            HouseOther houseOther;
+            HouseMove houseMove;
+            if (scoreRecords.size()>0){
+                for (ScoreRecord scoreRecord : scoreRecords){
+                    person = iIdentityInfoService.findById(scoreRecord.getPersonId());
+                    houseOther = iHouseOtherService.findBy("identityInfoId", scoreRecord.getPersonId());
+                    houseMove = iHouseMoveService.findBy("identityInfoId", scoreRecord.getPersonId());
+                    if((person.getRightProperty()!=null && Integer.parseInt(person.getRightProperty())==1)
+                            && (houseMove.getRentHouseAddress()==null || (houseMove.getRentHouseAddress()!=null &&  houseMove.getRentHouseAddress().length()<10))){
+                        scoreRecord.setGuizijuOrZhujianwei(1);
+                        iScoreRecordService.update(scoreRecord);
+                    } else{
+                        scoreRecord.setGuizijuOrZhujianwei(2);
+                        iScoreRecordService.update(scoreRecord);
+                    }
+                    /*
+                        留痕
+                         */
+                    PersonBatchStatusRecord personBatchStatusRecord = new PersonBatchStatusRecord();
+                    personBatchStatusRecord.setPersonId(person.getId());
+                    personBatchStatusRecord.setBatchId(person.getBatchId());
+                    personBatchStatusRecord.setPersonIdNumber(person.getIdNumber());
+                    personBatchStatusRecord.setStatusStr("区分规自局1-住建委-2");
+                    personBatchStatusRecord.setStatusTime(new Date());
+                    personBatchStatusRecord.setStatusReason("区分规自局1-住建委-2");
+                    personBatchStatusRecord.setStatusTypeDesc("区分规自局1-住建委-2");
+                    personBatchStatusRecord.setStatusInt(206);
+                    iPersonBatchStatusRecordService.save(personBatchStatusRecord);
+                }
+            }
+        }
+    }
+
 
 
 }

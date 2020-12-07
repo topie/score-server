@@ -307,6 +307,7 @@ public class ScoreRecordController {
     @GetMapping(value = "/toReview")
     @ResponseBody
     public Result toReview(ScoreRecord scoreRecord,@RequestParam(value = "isDone", required = false) String isDone,
+                           @RequestParam(value = "guizijuOrZhujianwei", required = false) String guizijuOrZhujianwei,
                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                            @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize){
 
@@ -314,6 +315,9 @@ public class ScoreRecordController {
         if (userId == null) throw new AuthBusinessException("用户未登录");
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        if (roles.contains(1060)){
+            roles.add(9);
+        }
         // 查询申请时间不为空，申请审核理由不为空
         Condition condition = new Condition(ScoreRecord.class);
         tk.mybatis.mapper.entity.Example.Criteria criteria = condition.createCriteria();
@@ -335,6 +339,12 @@ public class ScoreRecordController {
         }
         if (isDone!=null && isDone!="" && isDone.equals("1")){
             criteria.andEqualTo("idreviewend",isDone);
+        }
+        //市区用以区分规自局/住建委
+        // 1：规自局；2：住建委
+        int aa = Integer.parseInt(guizijuOrZhujianwei);
+        if(aa>0){
+            criteria.andEqualTo("guizijuOrZhujianwei", aa);
         }
         if (user.getUserType() == 0) {
             criteria.andEqualTo("acceptAddressId", 1);
