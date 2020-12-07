@@ -175,6 +175,17 @@ public class BatchConf {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date openRegisterTime;
 
+
+    //积分开放查询的时候的开始时间
+    @Column(name = "queryTimeStart")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date queryTimeStart;
+
+    //积分开放查询的时候的结束时间
+    @Column(name = "queryTimeEnd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date queryTimeEnd;
+
     /**
      * 获取id
      *
@@ -578,5 +589,23 @@ public class BatchConf {
 
     public void setOpenRegisterTime(Date openRegisterTime) {
         this.openRegisterTime = openRegisterTime;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
+    public Date getQueryTimeStart() {
+        return queryTimeStart;
+    }
+
+    public void setQueryTimeStart(Date queryTimeStart) {
+        this.queryTimeStart = queryTimeStart;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Shanghai")
+    public Date getQueryTimeEnd() {
+        return queryTimeEnd;
+    }
+
+    public void setQueryTimeEnd(Date queryTimeEnd) {
+        this.queryTimeEnd = queryTimeEnd;
     }
 }
