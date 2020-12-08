@@ -435,7 +435,7 @@
             TOREVIEWTIME,
             ISTOREVIEW
         from t_identity_info
-        where batch_id = 1040
+        where batch_id in (select id from t_batch_conf where status=1)
               and TOREVIEWTIME is not null
               and ISTOREVIEW in (1, 2)
             <if test="item.acceptAddressId!=null">
