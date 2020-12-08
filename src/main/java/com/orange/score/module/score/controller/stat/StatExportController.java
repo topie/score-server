@@ -1854,14 +1854,24 @@ public class StatExportController {
      */
     @GetMapping(value = "/exportReview")
     @ResponseBody
-    public void exportReview(HttpServletRequest request, HttpServletResponse response)  throws Exception {
+    public void exportReview(HttpServletRequest request, HttpServletResponse response,
+                             @RequestParam(value = "guizijuOrZhujianwei", required = false) String guizijuOrZhujianwei)  throws Exception {
         Integer userId = SecurityUtil.getCurrentUserId();
         if (userId == null) throw new AuthBusinessException("用户未登录");
         SecurityUser user = SecurityUtil.getCurrentSecurityUser();
         List<Integer> roles = userService.findUserDepartmentRoleByUserId(userId);
+        if (roles.contains(1060)){
+            roles.add(9);
+        }
+        //市区用以区分规自局/住建委
+        // 1：规自局；2：住建委
+        int aa = Integer.parseInt(guizijuOrZhujianwei);
 
 
         Map argMap = new HashMap();
+        if(aa>0){
+            argMap.put("guizijuOrZhujianwei",guizijuOrZhujianwei);
+        }
         if (user.getUserType() == 0) {
             argMap.put("acceptAddressId",1);
         } else if (user.getUserType() == 1) {

@@ -342,6 +342,9 @@
         <if test="item.acceptAddressId!=null">
             and ACCEPT_ADDRESS_ID=#{item.acceptAddressId}
         </if>
+        <if test="item.guizijuOrZhujianwei!=null">
+            and guizijuOrZhujianwei=#{item.guizijuOrZhujianwei}
+        </if>
         and TOREVIEWREASON is not null
     </select>
 </mapper>
