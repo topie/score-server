@@ -67,6 +67,37 @@
                        value="${person.luohuNumber}">
             </td>
         </tr>
+
+        <tr>
+            <td colspan="6">是否于2020年4月2日之前购买住房：
+                <select data-id="${person.id?c}" data-name="person.ourBuyHouse"   class="edit"
+                        style="height: 25px;">
+                    <option <#if person.ourBuyHouse==0>selected</#if> value=0>未选择</option>
+                    <option <#if person.ourBuyHouse==1>selected</#if> value=1>是</option>
+                    <option <#if person.ourBuyHouse==2>selected</#if> value=2>否</option>
+                </select>
+            </td>
+            <td colspan="6">是否按照“津发改社会〔2018〕26号”文件积分：
+                <select data-id="${person.id?c}" data-name="person.is201826Doc"   class="edit"
+                        style="height: 25px;">
+                    <option <#if person.is201826Doc==0>selected</#if> value=0>未选择</option>
+                    <option <#if person.is201826Doc==1>selected</#if> value=1>是</option>
+                    <option <#if person.is201826Doc==2>selected</#if> value=2>否</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="12">选择凭合同还是产权证计算分数：
+                <select data-id="${person.id?c}" data-name="person.rightProperty"   class="edit"
+                        style="height: 25px;">
+                    <option <#if person.rightProperty==0>selected</#if> value=0>未选择</option>
+                    <option <#if person.rightProperty==1>selected</#if> value=1>凭《不动产权证》积分</option>
+                    <option <#if person.rightProperty==2>selected</#if> value=2>凭《天津市商品房买卖合同》或《天津市二手房买卖协议》积分</option>
+                </select>
+            </td>
+        </tr>
+
         <#--<tr>
             <td colspan="12">专业：
                 <input data-id="${other.id?c}" data-name="other.profession"
