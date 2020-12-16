@@ -409,11 +409,12 @@ public class IdentityInfoController {
 
         List<MaterialInfo> roleMaterialInfoList_2 = new ArrayList<>();//非人社部门的材料列表
         for (MaterialInfo materialInfo : materialInfos){
-            if (materialInfo.getArchivingStatus()!=null && materialInfo.getArchivingStatus()==1 &&
-                    flag && materialInfo.getOnlinePersonMaterial()!=null && materialInfo.getOnlinePersonMaterial().getMaterialUri()!=null){
-                String strUri = materialInfo.getOnlinePersonMaterial().getMaterialUri();
-                String newStrUri = strUri.replace("218.67.246.52:80","10.96.3.213:8091");
-                materialInfo.getOnlinePersonMaterial().setMaterialUri(newStrUri);
+            if (materialInfo.getArchivingStatus()!=null && materialInfo.getArchivingStatus()==1 ){
+                if(flag && materialInfo.getOnlinePersonMaterial()!=null && materialInfo.getOnlinePersonMaterial().getMaterialUri()!=null){
+                    String strUri = materialInfo.getOnlinePersonMaterial().getMaterialUri();
+                    String newStrUri = strUri.replace("218.67.246.52:80","10.96.3.213:8091");
+                    materialInfo.getOnlinePersonMaterial().setMaterialUri(newStrUri);
+                }
                 roleMaterialInfoList_2.add(materialInfo);
             }
         }
