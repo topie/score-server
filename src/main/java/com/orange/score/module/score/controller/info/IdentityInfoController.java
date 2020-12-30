@@ -1527,7 +1527,7 @@ public class IdentityInfoController {
             Element SQR_ZZ_SSXQDM = RECORD.addElement("SQR_ZZ_SSXQDM");//住址 省市县（区），与迁出地省市县（区）一致
             SQR_ZZ_SSXQDM.addText((list_region.get(0).getPolice_code()==null)? "":list_region.get(0).getPolice_code().toString());
             Element SQR_ZZ_QHNXXDZ = RECORD.addElement("SQR_ZZ_QHNXXDZ");//住址 区划内详细地址
-            SQR_ZZ_QHNXXDZ.addText(list_move.get(0).getMoveAddress());
+            SQR_ZZ_QHNXXDZ.addText(list_move.get(0).getCurrentRegisteredAddress()); // 2020年12月29日 修改为现户口登记地址
             Element SQR_HKDJJG_GAJGJGDM = RECORD.addElement("SQR_HKDJJG_GAJGJGDM");//户口登记机关 公安机关机构代码
             SQR_HKDJJG_GAJGJGDM.addText("");
             Element SQR_HKDJJG_GAJGMC = RECORD.addElement("SQR_HKDJJG_GAJGMC");//户口登记机关 公安机关名称
@@ -1573,14 +1573,14 @@ public class IdentityInfoController {
             QYR.addAttribute("NO", new Integer(index).toString());// 顺序号
             QYR.addAttribute("SID", "010123");// 顺序号
             Element YSQRGX_JTGXDM = QYR.addElement("YSQRGX_JTGXDM");//与申请人关系_家庭关系，01：本人，20：子，30：女
-            YSQRGX_JTGXDM.addText("01");
+            YSQRGX_JTGXDM.addText("01.");
             Element GMSFHM = QYR.addElement("GMSFHM");//公民身份号码
             GMSFHM.addText(list_IdeInfo.get(0).getIdNumber().replace(" ", ""));
             Element XM = QYR.addElement("XM");//姓名
             XM.addText(list_IdeInfo.get(0).getName());
             Element XBDM = QYR.addElement("XBDM");//性别
             String id_number = list_IdeInfo.get(0).getIdNumber();
-            if (id_number.substring(id_number.length() - 2, id_number.length() - 1).equals("1")) {
+            if (list_IdeInfo.get(0).getSex()==1) {
                 XBDM.addText("1");
             } else {
                 XBDM.addText("2");
@@ -1608,9 +1608,9 @@ public class IdentityInfoController {
                     QYR.addAttribute("SID", "010123");// 顺序号
                     YSQRGX_JTGXDM = QYR.addElement("YSQRGX_JTGXDM");//与申请人关系_家庭关系
                     if (h.getRelationship().equals("子")) {
-                        YSQRGX_JTGXDM.addText("20");
+                        YSQRGX_JTGXDM.addText("20.");
                     } else {
-                        YSQRGX_JTGXDM.addText("30");
+                        YSQRGX_JTGXDM.addText("30.");
                     }
                     GMSFHM = QYR.addElement("GMSFHM");//公民身份号码
                     GMSFHM.addText(h.getIdNumber().replace(" ", ""));
