@@ -1588,7 +1588,7 @@ public class IdentityInfoController {
             Element CSRQ = QYR.addElement("CSRQ");//出生日期
             CSRQ.addText(list_IdeInfo.get(0).getIdNumber().replace(" ", "").substring(6, 14));
             Element YHLX = QYR.addElement("YHLX");//原户类型，10 家庭户，20集体户
-            if (list_move.get(0).getHouseNature() == 4 || list_move.get(0).getHouseNature() == 5) {
+            if (list_move.get(0).getHouseNature() !=null && (list_move.get(0).getHouseNature() == 4 || list_move.get(0).getHouseNature() == 5)) {
                 YHLX.addText("20");
             } else {
                 YHLX.addText("10");
