@@ -30,8 +30,8 @@
     </#if>
     <#if renshe==true>
     <p style="text-indent:36.0pt;text-align:left;white-space:pre-wrap;"><br/></p>
-    <p style="font-size:14.0pt;text-align:left;white-space:pre-wrap;"><span style="color:#000000;white-space:pre-wrap;">市人力社保局窗口审核留存的原件，申请人（或者经办人）请于本期入户名单公示后</span><span
-            style="color:#000000;white-space:pre-wrap;">6</span><span style="color:#000000;white-space:pre-wrap;">个月内持申请人身份证和本凭证取回，逾期不再承担保管职责。</span>
+    <p style="font-size:14.0pt;text-align:left;white-space:pre-wrap;"><span style="color:#000000;white-space:pre-wrap;"></span><span
+            style="color:#000000;white-space:pre-wrap;"></span><span style="color:#000000;white-space:pre-wrap;"></span>
     </p>
     <#else>
     <p style="text-indent:36.0pt;text-align:left;white-space:pre-wrap;"><br/></p>
