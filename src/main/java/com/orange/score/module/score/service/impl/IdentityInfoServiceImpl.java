@@ -244,8 +244,8 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
     }
 
     @Override
-    public List<Map> selectExportList7() {
-        return identityInfoMapper.selectExportList7();
+    public List<Map> selectExportList7(Map argMap) {
+        return identityInfoMapper.selectExportList7(argMap);
     }
 
     @Override

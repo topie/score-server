@@ -201,8 +201,14 @@ public class StatExportController {
 
         SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        Map argMap = new HashMap();
+        if((int)securityUser.getUserType()==0){
+            argMap.put("acceptAddressId", 1);
+        }else if((int)securityUser.getUserType()==1){
+            argMap.put("acceptAddressId", 2);
+        }
 
-        List<Map> allList = iIdentityInfoService.selectExportList7();
+        List<Map> allList = iIdentityInfoService.selectExportList7(argMap);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
