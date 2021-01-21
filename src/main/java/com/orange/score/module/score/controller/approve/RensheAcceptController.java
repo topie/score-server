@@ -575,6 +575,7 @@ public class RensheAcceptController {
             identityInfo.setOpuser4(securityUser.getDisplayName());
             identityInfo.setHallStatus(4);
             identityInfo.setRensheAcceptStatus(4);
+            identityInfo.setRenshePassTime(new Date());
             iIdentityInfoService.update(identityInfo);
             HouseOther houseOther = iHouseOtherService.findBy("identityInfoId", identityInfo.getId());
             SmsUtil.send(houseOther.getSelfPhone(), "系统提示：您好，您不符合积分受理条件，不予受理，请登录申报单位用户查询本人具体信息。（人社）");
