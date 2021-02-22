@@ -203,7 +203,8 @@ public class StatExportController {
         if (securityUser == null) throw new AuthBusinessException("用户未登录");
         Map argMap = new HashMap();
         if((int)securityUser.getUserType()==0){
-            argMap.put("acceptAddressId", 1);
+            // 2021年2月22日 市区导出全部的数据，滨海区只导出滨海的数据
+            //argMap.put("acceptAddressId", 1);
         }else if((int)securityUser.getUserType()==1){
             argMap.put("acceptAddressId", 2);
         }
