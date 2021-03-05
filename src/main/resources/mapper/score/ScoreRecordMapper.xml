@@ -290,7 +290,7 @@
             ACCEPT_DATE,
             SUBMIT_DATE,
             SCORE_DATE,
-            OP_ROLE,
+            OP_ROLE,OP_USER,
                case when STATUS=4 then '已打分' end status,
                round(SCORE_VALUE,2) SCORE_VALUE
         from t_pb_score_record

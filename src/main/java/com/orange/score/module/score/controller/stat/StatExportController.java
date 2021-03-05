@@ -1848,8 +1848,8 @@ public class StatExportController {
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[]{"ID", "指标名称","申请人","申请人身份证", "企业名称","受理日期","送达日期","打分日期","打分部门","办理进度","分数"},
-                new String[]{"ID", "INDICATOR_NAME", "PERSON_NAME", "PERSON_ID_NUM", "COMPANY_NAME", "ACCEPT_DATE", "SUBMIT_DATE", "SCORE_DATE", "OP_ROLE", "STATUS","SCORE_VALUE"});
+                new String[]{"ID", "指标名称","申请人","申请人身份证", "企业名称","受理日期","送达日期","打分日期","打分部门","办理人","办理进度","分数"},
+                new String[]{"ID", "INDICATOR_NAME", "PERSON_NAME", "PERSON_ID_NUM", "COMPANY_NAME", "ACCEPT_DATE", "SUBMIT_DATE", "SCORE_DATE", "OP_ROLE","OP_USER", "STATUS","SCORE_VALUE"});
         ExcelFileUtil.download(response, savePath, "已打分.xlsx");
 
     }
