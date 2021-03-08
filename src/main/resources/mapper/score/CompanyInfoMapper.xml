@@ -20,4 +20,9 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
   </resultMap>
+  
+  <select id="getCompanyInfoByIdentityInfoId" resultType="com.orange.score.database.score.model.CompanyInfo">
+    select * from t_company_info where id = ( select COMPANY_ID from t_identity_info where id = #{identityInfoId} )
+  </select>
+  
 </mapper>

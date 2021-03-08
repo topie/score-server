@@ -13,4 +13,6 @@ public interface ICompanyInfoService extends IService<CompanyInfo> {
     PageInfo<CompanyInfo> selectByFilterAndPage(CompanyInfo companyInfo, int pageNum, int pageSize);
 
     List<CompanyInfo> selectByFilter(CompanyInfo companyInfo);
+
+    CompanyInfo getCompanyInfoByIdentityInfoId(Integer id);
 }

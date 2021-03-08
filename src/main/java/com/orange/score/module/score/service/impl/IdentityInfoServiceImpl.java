@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -193,9 +194,11 @@ public class IdentityInfoServiceImpl extends BaseService<IdentityInfo> implement
         if (tmp != null) SqlUtil.setLocalPage(tmp);
 
         List<IdentityInfo> list = identityInfoMapper.selectByCondition(condition);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (IdentityInfo identityInfo1 : list){
             CompanyInfo companyInfo = iCompanyInfoService.findById(identityInfo1.getCompanyId());
             identityInfo1.setIsPreviewd(companyInfo.getCompanyName());
+            identityInfo1.setRentHouseAddress(sdf.format(companyInfo.getCreateTime()));
         }
         return list;
     }

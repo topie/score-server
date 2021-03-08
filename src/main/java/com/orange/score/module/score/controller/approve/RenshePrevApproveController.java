@@ -21,7 +21,13 @@ import freemarker.template.TemplateException;
 import freemarker.template.Version;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import tk.mybatis.mapper.entity.Condition;
 
 import javax.servlet.ServletOutputStream;
@@ -159,6 +165,93 @@ public class RenshePrevApproveController {
         }
         identityInfo.setLockUser2(securityUser.getUsername());
         iIdentityInfoService.update(identityInfo);
+        return ResponseUtil.success();
+    }
+
+    /*
+    2021年3月8日
+    1、根据申请人的 ID 拿到申请单位的信息；
+    2、再根据拿到的单位信息（统一社会信用代码、公司名字）通过接口拿到最新的企业信息
+    3、把最新的企业信息更新到数据库
+     */
+    @PostMapping("/updateCompanyInfo")
+    public Result updateCompanyInfo(@RequestParam Integer id){
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null){
+            throw new AuthBusinessException("用户登录");
+        }
+        CompanyInfo companyInfo = iCompanyInfoService.getCompanyInfoByIdentityInfoId(id);
+        String uniscid = companyInfo.getOrgno();
+        String companyName = companyInfo.getEntname();
+        String url = "http://60.28.163.53:9000/yztb/rest/certificate";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        MultiValueMap<String,String> multiValueMap = new LinkedMultiValueMap<>();
+        String otherParam = "{'orgno':'"+uniscid+"','entname':'"+companyName+"'}";
+
+        multiValueMap.add("otherParam", otherParam);
+        multiValueMap.add("busiCode", "xxx");
+        multiValueMap.add("certCode", "tj_scw_cer_007");
+        multiValueMap.add("itemCode", "xxx");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(multiValueMap,headers);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
+        String str1 = responseEntity.getBody();
+        JSONObject jsonObject1 = JSONObject.parseObject(str1);
+        JSONArray jsonArray = jsonObject1.getJSONArray("certs");
+        JSONObject jsonObject2 = JSONObject.parseObject(jsonArray.get(0).toString());
+        JSONArray jsonArray1 = jsonObject2.getJSONArray("certData");
+        JSONObject jsonObject3 = JSONObject.parseObject(jsonArray1.get(0).toString());
+
+        if(jsonObject3.get("apprdate")!=null){
+            companyInfo.setApprdate(jsonObject3.get("apprdate").toString());
+        }
+        if (jsonObject3.get("dom")!=null){
+            companyInfo.setDom(jsonObject3.get("dom").toString());
+        }
+        if(jsonObject3.get("entname")!=null){
+            companyInfo.setEntname(jsonObject3.get("entname").toString());
+        }
+        if(jsonObject3.get("enttype")!=null){
+            companyInfo.setEnttype(jsonObject3.get("enttype").toString());
+        }
+        if(jsonObject3.get("estdate")!=null){
+            companyInfo.setEstdate(jsonObject3.get("estdate").toString());
+        }
+        if(jsonObject3.get("lerep")!=null){
+            companyInfo.setLerep(jsonObject3.get("lerep").toString());
+        }
+        if(jsonObject3.get("opfrom")!=null){
+            companyInfo.setOpfrom(jsonObject3.get("opfrom").toString());
+        }
+        if(jsonObject3.get("opscope")!=null){
+            companyInfo.setOpscope(jsonObject3.get("opscope").toString());
+        }
+        if(jsonObject3.get("opto")!=null){
+            companyInfo.setOpto(jsonObject3.get("opto").toString());
+        }
+        if(jsonObject3.get("regcap")!=null){
+            companyInfo.setRegcap(jsonObject3.get("regcap").toString());
+        }
+        if(jsonObject3.get("regcapcur")!=null){
+            companyInfo.setRegcapcur(jsonObject3.get("regcapcur").toString());
+        }
+        if(jsonObject3.get("regno")!=null){
+            companyInfo.setRegno(jsonObject3.get("regno").toString());
+        }
+        if(jsonObject3.get("regorg")!=null){
+            companyInfo.setRegorg(jsonObject3.get("regorg").toString());
+        }
+        if(jsonObject3.get("regstate")!=null){
+            companyInfo.setRegstate(jsonObject3.get("regstate").toString());
+        }
+        if(jsonObject3.get("orgno")!=null){
+            companyInfo.setOrgno(jsonObject3.get("orgno").toString());
+        }
+        if(jsonObject3.get("compform")!=null){
+            companyInfo.setCompform(jsonObject3.get("compform").toString());
+        }
+        iCompanyInfoService.update(companyInfo);
         return ResponseUtil.success();
     }
 

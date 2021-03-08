@@ -45,5 +45,11 @@ public class CompanyInfoServiceImpl extends BaseService<CompanyInfo> implements 
         }
         return companyInfoMapper.selectByCondition(condition);
     }
+
+    @Override
+    public CompanyInfo getCompanyInfoByIdentityInfoId(Integer id) {
+        return companyInfoMapper.getCompanyInfoByIdentityInfoId(id);
+    }
+
 }
 
