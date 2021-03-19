@@ -280,6 +280,9 @@ public class PoliceApproveController {
             identityInfo.setOpuser3(securityUser.getDisplayName());
             identityInfo.setHallStatus(2);
             identityInfo.setPoliceApproveStatus(3);
+            // 添加公安前置审核时间 2021年3月19日
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            identityInfo.setRentHouseEndDate(sdf.format(new Date()));
             //identityInfo.setRensheAcceptStatus(1);
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
@@ -425,6 +428,9 @@ public class PoliceApproveController {
             identityInfo.setOpuser3(securityUser.getDisplayName());
             identityInfo.setPoliceApproveStatus(4);
             identityInfo.setHallStatus(1);
+            // 添加公安前置审核时间 2021年3月19日
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            identityInfo.setRentHouseEndDate(sdf.format(new Date()));
             iIdentityInfoService.update(identityInfo);
             iPersonBatchStatusRecordService
                     .insertStatus(identityInfo.getBatchId(), identityInfo.getId(), "hallStatus", 1);

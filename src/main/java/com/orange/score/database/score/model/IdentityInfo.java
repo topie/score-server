@@ -145,7 +145,7 @@ public class IdentityInfo {
     private String   rentHouseStartDate; // 租赁备案起始日
 
     @Column(name = "rentHouseEndDate")
-    private String   rentHouseEndDate; // 租赁合同终止日
+    private String   rentHouseEndDate; // 租赁合同终止日，2021年3月19日变为公安前置审核通过时间
 
     public String getRentHouseAddress() {
         return rentHouseAddress;

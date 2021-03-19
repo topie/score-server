@@ -214,8 +214,8 @@ public class StatExportController {
         String savePath = request.getSession().getServletContext().getRealPath("/") + uploadPath + "/" + System
                 .currentTimeMillis() + ".xlsx";
         ExcelFileUtil.exportXlsx(savePath, allList,
-                new String[]{ "申请人姓名", "申请人身份证号", "落户编号","随迁人姓名","随迁人身份证号","关系","学历","是否随迁"},
-                new String[]{"NAME", "ID_NUMBER","LUOHU_NUMBER", "SQRNAME", "SQRID_NUMBER", "RELATIONSHIP", "CULTURE_DEGREE","ISREMOVE"});
+                new String[]{ "申请人姓名", "申请人身份证号", "落户编号","随迁人姓名","随迁人身份证号","关系","学历","是否随迁","年龄分值依据时间节点","公安通过时间","审核人"},
+                new String[]{"NAME", "ID_NUMBER","LUOHU_NUMBER", "SQRNAME", "SQRID_NUMBER", "RELATIONSHIP", "CULTURE_DEGREE","ISREMOVE","C_TIME","RENTHOUSEENDDATE","OPUSER3"});
         ExcelFileUtil.download(response, savePath, "导出公安已通过名单.xlsx");
     }
 
