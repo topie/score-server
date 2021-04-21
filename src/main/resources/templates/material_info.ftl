@@ -100,6 +100,10 @@
                                     <td colspan="6">是否按照“津发改社会〔2018〕26号”文件计算：<strong><#if person.is201826Doc == 1>是<#else>否</#if></strong></td>
                                 </tr>
                                 <tr>
+                                    <td colspan="6">不动产权证取得日期：<strong>${person.houseOurDate}</strong></td>
+                                    <td colspan="6">购房合同签署日期：<strong>${person.housePactDate}</strong></td>
+                                </tr>
+                                <tr>
                                     <td colspan="12">租赁房屋地址：<strong>${move.rentHouseAddress}</strong></td>
                                 </tr>
                                 <tr>
