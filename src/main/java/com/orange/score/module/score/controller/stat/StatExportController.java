@@ -193,6 +193,37 @@ public class StatExportController {
 
 
     /*
+    2021年4月21日
+    市政务服务办协调处：
+    根据工作需要，现申请新增一项统计功能。请协调技术部门增加。
+    功能名称：人社受理审核统计
+    功能位置：统计分析——数据导出
+    输入参数：开始日期、结束日期
+    功能描述：统计当期从开始日期到结束日期期间，市区人社受理审核通过、不通过人数。
+    权限分配：宋光川、杨静、刘旭、孙芝伟
+     */
+    @GetMapping(value = "/list7_1")
+    @ResponseBody
+    public Result list7_1(@RequestParam("startDate") String startDate,
+                        @RequestParam("endDate") String endDate,
+                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                        @RequestParam(value = "pageSize", required = false, defaultValue = "15") int pageSize) {
+        SecurityUser securityUser = SecurityUtil.getCurrentSecurityUser();
+        if (securityUser == null) throw new AuthBusinessException("用户未登录");
+        Map argMap = new HashMap();
+        if(startDate!=null && startDate!=""){ // 姓名
+            argMap.put("startDate", startDate);
+        }
+        if(endDate!=null && endDate!=""){ // 身份证号
+            argMap.put("endDate", endDate);
+        }
+
+        PageInfo<Map> pageInfo = iIdentityInfoService.selectExportList7_1ByPage(argMap, pageNum, pageSize);
+        return ResponseUtil.success(PageConvertUtil.grid(pageInfo));
+    }
+
+
+    /*
     2020年8月5日，导出列表6--“是否具有国家职业资格”
      */
     @GetMapping(value = "/export7")

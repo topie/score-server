@@ -169,6 +169,31 @@
               order by t1.id asc
             </where>
     </select>
+    
+    
+    <select id="selectExportList7_1" resultType="java.util.Map">
+        SELECT COUNT(1) SUM,
+               CASE
+               WHEN RENSHE_ACCEPT_STATUS = 3 THEN
+                   '通过'
+               WHEN RENSHE_ACCEPT_STATUS = 4 THEN
+                   '不通过'
+               END RENSHE_ACCEPT_STATUS
+        FROM T_IDENTITY_INFO
+        <where>
+            BATCH_ID  in (select id from t_batch_conf where status=1)
+            AND ACCEPT_ADDRESS_ID = 1
+            AND RENSHE_ACCEPT_STATUS IN (3, 4)
+            <if test="item.startDate!=null">
+                and to_char(C_TIME,'yyyy-MM-dd') &gt; = #{item.startDate}
+            </if>
+            <if test="item.endDate!=null">
+                and to_char(C_TIME,'yyyy-MM-dd') &lt; = #{item.endDate}
+            </if>
+            GROUP BY RENSHE_ACCEPT_STATUS
+            ORDER BY RENSHE_ACCEPT_STATUS ASC
+        </where>
+    </select>
 
 
 
