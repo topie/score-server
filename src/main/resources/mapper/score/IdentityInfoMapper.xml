@@ -172,27 +172,29 @@
     
     
     <select id="selectExportList7_1" resultType="java.util.Map">
-        SELECT COUNT(1) SUM,
-               CASE
-               WHEN RENSHE_ACCEPT_STATUS = 3 THEN
-                   '通过'
-               WHEN RENSHE_ACCEPT_STATUS = 4 THEN
-                   '不通过'
-               END RENSHE_ACCEPT_STATUS
-        FROM T_IDENTITY_INFO
+        select count(1) sum,'通过' renshe_accept_status  from t_identity_info
         <where>
-            BATCH_ID  in (select id from t_batch_conf where status=1)
-            AND ACCEPT_ADDRESS_ID = 1
-            AND RENSHE_ACCEPT_STATUS IN (3, 4)
-            <if test="item.startDate!=null">
-                and to_char(C_TIME,'yyyy-MM-dd') &gt; = #{item.startDate}
-            </if>
-            <if test="item.endDate!=null">
-                and to_char(C_TIME,'yyyy-MM-dd') &lt; = #{item.endDate}
-            </if>
-            GROUP BY RENSHE_ACCEPT_STATUS
-            ORDER BY RENSHE_ACCEPT_STATUS ASC
+            batch_id  in (select id from t_batch_conf where status=1)
+            and accept_address_id = 1
+            and renshe_accept_status in (3)
+            and to_char(RENSHEPASS_TIME,'yyyy-mm-dd') &gt;= #{item.startDate}
+            and to_char(RENSHEPASS_TIME,'yyyy-mm-dd') &lt; = #{item.endDate}
         </where>
+
+        union all
+
+        select count(1) sum,  '不通过' renshe_accept_status
+        from t_identity_info t1, t_pb_status_record t2
+        <where>
+            t1.batch_id in (select id from t_batch_conf where status = 1)
+            and t1.id = t2.person_id
+            and t1.renshe_accept_status = 4
+            and t1.accept_address_id = 1
+            and t2.status_str = '人社受理不通过'
+            and to_char(STATUS_TIME, 'yyyy-mm-dd') &gt; = #{item.startDate}
+            and to_char(STATUS_TIME, 'yyyy-mm-dd') &lt; = #{item.endDate}
+        </where>
+
     </select>
 
 
