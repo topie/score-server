@@ -97,8 +97,10 @@
                                     <td colspan="4">民族：<strong>${person.nation}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6">是否于2020年4月2日之前购买住房：<strong><#if person.ourBuyHouse == 1>是<#else>否</#if></strong></td>
-                                    <td colspan="6">是否按照“津发改社会〔2018〕26号”文件计算：<strong><#if person.is201826Doc == 1>是<#else>否</#if></strong></td>
+                                    <td colspan="6">是否于2020年4月2日之前购买住房：<strong>
+                                    <#if person.ourBuyHouse == 1>是<#elseif person.ourBuyHouse == 2>否<#else></#if></strong></td>
+                                    <td colspan="6">是否按照“津发改社会〔2018〕26号”文件计算：<strong>
+                                    <#if person.is201826Doc == 1>是<#elseif person.is201826Doc == 2>否<#else></#if></strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6">不动产权证取得日期：<strong>${person.houseOurDate}</strong></td>

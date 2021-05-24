@@ -8,14 +8,14 @@
     <tr>
         <td>已在系统注册人数</td>
         <td>${registerSum}</td>
-        <td>--</td>
-        <td>--</td>
+        <td>${registerSum_1}</td>
+        <td>${registerSum_2}</td>
     </tr>
     <tr>
         <td>已通过自助测评人数</td>
         <td>${passSeltTest}</td>
-        <td>--</td>
-        <td>--</td>
+        <td>${passSeltTest_1}</td>
+        <td>${passSeltTest_2}</td>
     </tr>
     <tr>
         <td>已申请网上预审的人数</td>

@@ -1285,6 +1285,7 @@ public class IdentityInfoController {
         int renshePassing = 0; // 2020年10月10日 人社受理审核待审核
 
         //市区
+        int registerSum_1 = 0;// 已在系统注册人数
         int passSeltTest_1 = 0;//已经通过自助测评的人数
         int applyingInterPre_1 = 0;//已申请网上预审的人数
         int applyedInterPre_1 = 0;//已通过网上预审的人数
@@ -1295,6 +1296,7 @@ public class IdentityInfoController {
         int renshePassing_1 = 0; // 2020年10月10日 人社受理审核待审核
 
         //滨海新区
+        int registerSum_2 = 0;// 已在系统注册人数
         int passSeltTest_2 = 0;//已经通过自助测评的人数
         int applyingInterPre_2 = 0;//已申请网上预审的人数
         int applyedInterPre_2 = 0;//已通过网上预审的人数
@@ -1331,6 +1333,12 @@ public class IdentityInfoController {
             }
 
             //市区
+            if(ideInfo.getAcceptAddressId()==1){
+                registerSum_1++;
+            }
+            if (ideInfo.getReservationStatus() >= 6 && ideInfo.getAcceptAddressId() == 1) {
+                passSeltTest_1++;
+            }
             if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 1) {
                 applyingInterPre_1++;
             }
@@ -1354,6 +1362,12 @@ public class IdentityInfoController {
             }
 
             //滨海新区
+            if(ideInfo.getAcceptAddressId()==2){
+                registerSum_2++;
+            }
+            if (ideInfo.getReservationStatus() >= 6 && ideInfo.getAcceptAddressId() == 2) {
+                passSeltTest_2++;
+            }
             if (ideInfo.getReservationStatus() >= 8 && ideInfo.getAcceptAddressId() == 2) {
                 applyingInterPre_2++;
             }
@@ -1388,6 +1402,8 @@ public class IdentityInfoController {
         params.put("fieldPassGonganAndRenshe", fieldPassGonganAndRenshe + "");
         params.put("renshePassing", renshePassing + "");
 
+        params.put("registerSum_1", registerSum_1);
+        params.put("passSeltTest_1", passSeltTest_1 + "");
         params.put("applyingInterPre_1", applyingInterPre_1 + "");
         params.put("applyedInterPre_1", applyedInterPre_1 + "");
         params.put("reservationSum_1", reservationSum_1 + "");
@@ -1396,6 +1412,8 @@ public class IdentityInfoController {
         params.put("fieldPassGonganAndRenshe_1", fieldPassGonganAndRenshe_1 + "");
         params.put("renshePassing_1", renshePassing_1 + "");
 
+        params.put("registerSum_2", registerSum_2);
+        params.put("passSeltTest_2", passSeltTest_2 + "");
         params.put("applyingInterPre_2", applyingInterPre_2 + "");
         params.put("applyedInterPre_2", applyedInterPre_2 + "");
         params.put("reservationSum_2", reservationSum_2 + "");
