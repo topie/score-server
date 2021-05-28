@@ -537,6 +537,7 @@
                                                 未上传
                                             </td>
                                             <td>${item.name}</td>
+                                            <td></td>
                                         </tr>
                                     <#else>
                                         <tr>
@@ -555,6 +556,7 @@
                                                 </a>
                                                 <input type="file" id="${item.id}" name="${item.id}" onchange="fileChange(this)">
                                             </td>
+                                            <td>${item.onlinePersonMaterial.reason}</td>
                                         </tr>
                                     </#if>
                                 <#else>
@@ -563,6 +565,7 @@
                                             未上传
                                         </td>
                                         <td>${item.name}<input type="file" value="${person.id}" id="${item.id}" name="${item.id}" onchange="fileChange(this)"></td>
+                                        <td></td>
                                     </tr>
                                 </#if>
                             </#list>
